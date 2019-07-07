@@ -1,0 +1,186 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>水单</li>
+			<li>核销</li>
+			<li class="active">添加</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline"
+				id="receiptOutRel" data-url="payPoRela/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="receiptId" name="id">
+					<table id="js_dataTable" data-url="recReceiptOutRel/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/recReceiptOutRel/add" data-url="recReceiptOutRel/add">保存</button>
+					<button type="button" data-url="html/pay/receipt/receiptOutStoreCheck.html"class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			}, {
+		           title: '项目',
+		           field: 'projectName',
+		           width: 80,
+		           align: 'center'
+		       }, {
+		           title: '客户',
+		           field: 'custName',
+		           width: 210,
+		           align: 'center'
+		       }, {
+		           title: '经营单位',
+		           field: 'busiUnit',
+		           width: 100,
+		           align: 'center'
+		       },{
+		           title: '币种',
+		           field: 'currencyTypeName',
+		           width: 70,
+		           align: 'center'
+		       },{
+		           title: '单据类型',
+		           field: 'billTypeName',
+		           width: 70,
+		           align: 'center'
+		       },{
+		           title:' 单据日期',
+		           field: 'createAt',
+		           width: 70,
+		           align: 'center'
+		       },{
+		           title: '回款金额',
+		           field: 'receivedAmount',
+		           width: 70,
+		           align: 'center',
+			       	formatter : function(value , row , index) {
+			    		return value==null ? "": value.toThounds();
+			        }
+		       },{
+		           title: '核销金额',
+		           field: 'writeOffAmount',
+		           width: 70,
+		           align: 'center',
+			       	formatter : function(value , row , index) {
+			    		return value==null ? "": value.toThounds();
+			        }
+		       }];
+	var balance = 0;
+	options.initPage = function() {
+		console.log(options.param.id);
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			receiptId : options.param.id
+		}, null, {
+// 			onLoadSuccess : function(data) {
+// 				balance = data.options.totalAmount;
+// 				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>选中总额：<span class='select-sum'>0</span> &nbsp;&nbsp;&nbsp;余额: <span class='select-result'>"+data.options.totalAmount.toThounds()+"</span></td></tr>");
+// 			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		}
+		);
+		$('#js_dataTable').on("input", ".receipt-price", function(){
+			getSelectData();
+	    });
+	};
+	
+	function getSelectData(){
+		var total = 0;
+		$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+			var value = $(this).closest("tr").find(".receipt-price").val();
+			if(value){
+				total = total + parseFloat(value);
+			}
+		})
+		$("#js_dataTable .select-sum").text(total.toThounds());
+		$("#js_dataTable .select-result").text((balance - total).toThounds());
+	}
+
+	$("#save").click(function() {
+		var saveUrl = $(this).data("url");
+		var dtlArr = [];
+		var lineList = [];
+		var recList = [];
+		var isValid = true;
+		
+		
+		var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+		if (selectedRows.length == 0) {
+			layer.msg("请选择");
+			isValid = false;
+		}else{
+			for (var i = 0; i < selectedRows.length; i++) {
+		        var id = selectedRows[i].id;
+		        var billType=selectedRows[i].billType;
+		        var writeOffAmount=selectedRows[i].writeOffAmount;
+		        if(billType== 3){
+		        	dtlArr.push({
+						"id" : id,
+					});
+		        }if(billType== 33 ){
+		        	lineList.push({
+						"id" : id,
+					});
+		        }if(billType== 36 ){
+		        	recList.push({
+						"recId" : id,
+						"writeOffAmount":writeOffAmount,
+					});
+		        }
+		       	
+		    }
+		}
+		if (isValid) {
+			var saveData = {
+				relList : dtlArr,
+				orderLines : lineList,
+				rels : recList,
+				receiptId : options.param.id
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						GLOBAL.go("html/pay/receipt/receiptOutStoreCheck.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType,$("#save"));
+		}
+	});
+
+	GLOBAL.goBack();
+</script>

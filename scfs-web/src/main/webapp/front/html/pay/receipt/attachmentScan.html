@@ -1,0 +1,158 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<style>
+</style>
+<div class="wrapper">
+     <section class="content-header my-content-header">
+		  <ol class="breadcrumb">
+		    <li>当前位置</li>
+		    <li>资金</li>
+		    <li>水单</li>
+		    <li class="active">浏览</li>
+		  </ol>
+ 	 </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" ><a class="tab-item" data-url="html/pay/receipt/receiptCheckScan.html">基础信息</a></li>
+                    <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptRelCheckScan.html">应收核销</a></li>
+                    <li role="presentation" class="three"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptOutStoreCheckScan.html">核销</a></li>
+                    <li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptAdvanCheckScan.html">预收明细</a></li>
+                    	<li role="presentation" class="four"><a class="tab-item"data-url="html/pay/receipt/receiptCopeCheckScan.html">应付核销</a></li>
+					<li role="presentation" class="five"><a class="tab-item"  data-url="html/pay/receipt/receiptPrepaidCheckScan.html">预付明细</a></li>
+                    <li role="presentation" class="active"><a class="tab-item" data-url="html/pay/receipt/attachmentScan.html">附件</a></li>
+                    <li role="presentation" class="state"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptVoucherScan.html">水单凭证</a></li>
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                <table id="js_dataTable" data-url="/bankReceiptFile/query"></table>
+                <form class="form-horizontal form-inline" id="form1" data-url="bankReceiptFile/upload" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <table class="table table-bordered table-hover no-margin">
+                        	<tr>
+                        		<td></td>
+                        		<td class="text-left"><h5><b style="color: red">附件不能大于50M</b></h5></td>
+                        	</tr>
+                            <tr>
+                                <td width="180" class="text-right"><b>上传附件： </b></td>
+                                <td class="text-left">
+                                    <span type="button" id="upload">导入文件</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <button type="button" id="download" data-permissionUrl="/bankReceiptFileList/download" class="btn btn-primary btn-sm">批量下载</button>
+                <button type="button" data-url="html/pay/receipt/receiptSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </section>
+</div>
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script src="../../js/pay/receiptCommon.js"></script> 
+<script>
+window.operateEvents = {
+    'click .download': function(e, value, row, index) {
+        var url = GLOBAL.host + "bankReceiptFile/downLoad?fileId=" + row.id;
+        GLOBAL.preview({type: row.type, url: url});
+    },
+
+};
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="download" href="javascript:void(0)">',
+        '<span class="btn btn-primary btn-sm">下载</span>',
+        '</a>  '
+    ].join('');
+}
+/*数据表格*/
+var tabCols = [{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '文件名称',
+    field: 'name',
+    width: 92,
+    align: 'center'
+}, {
+    title: '文件类型',
+    field: 'type',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传时间',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'operta',
+    width: 100,
+    align: 'center',
+    events: operateEvents,
+    formatter: operateFormatter
+}];
+
+options.initPage = function() {
+	var tabId = options.param.type;
+	showTab(tabId);
+    var state = options.param.state;
+	if(state==3){
+		$(".nav>li.state").show();	
+	}
+    if(tabId == 9 || tabId == 10){
+    	$(".nav>li.state").hide();
+    }
+	
+    var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols, {
+        busId: options.param.id
+    });
+}
+
+$("#back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+$("#upload").upload({
+    url: GLOBAL.host + "bankReceiptFile/upload",
+    param: {
+        busId: options.param.id,
+        busType: 10
+    },
+    success: function() {
+        GLOBAL.tableRefresh($('#js_dataTable'), {
+            busId: options.param.id
+        });
+    }
+});
+$("#download").click(function() {
+    var ids = GLOBAL.selectIds($('#js_dataTable'));
+    if (ids) {
+        var url = GLOBAL.host + "bankReceiptFileList/downLoad?ids=" + ids;
+        window.open(url);
+    }
+
+});
+
+
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+GLOBAL.goBack();
+</script>

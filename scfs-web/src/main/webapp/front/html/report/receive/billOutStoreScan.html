@@ -1,0 +1,183 @@
+    	
+	<div class="wrapper">
+		<!--引入面包屑-->
+		<section class="product-wrap">
+			<div class="box no-margin">
+				<form class="form-horizontal" id="billOutStoreScanForm"
+					data-url="billOutStore/detail">
+					<div class="box-body">
+						<ul class="nav nav-tabs">
+							<li role="presentation" class="active"><a class="tab-item"
+								data-url="billOutStoreScan.html">基础信息</a></li>
+							<li role="presentation"><a class="tab-item"
+								data-url="billOutStoreDtlScan.html">发货明细</a></li>
+							<li role="presentation"><a class="tab-item"
+								data-url="billOutStorePickDtlScan.html">拣货明细</a></li>
+							<li role="presentation"><a class="tab-item"
+								data-url="attachmentScan.html">附件</a></li>
+						</ul>
+						<table class="table table-bordered table-hover no-margin">
+							<tr>
+								<td width="180" class="text-right"><b>出库编号：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="billNo" name="billNo"></label></td>
+							</tr>
+							<tr>
+								<td width="180" class="text-right"><b>出库附属编号：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="affiliateNo" name="affiliateNo"></label></td>
+							</tr>
+							<tr>
+								<td width="180" class="text-right"><b>出库类型：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="billTypeName" name="billTypeName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>项目：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="projectName" name="projectName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>发货仓库：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="warehouseName" name="warehouseName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>接收仓库：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="receiveWarehouseName" name="receiveWarehouseName"></label>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>送货地址：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="customerAddress" name="customerAddress"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>客户：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="customerName" name="customerName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>要求发货日期：</b></td>
+								<td class="text-left"><label type="text"
+									class="js-initform" id="requiredSendDate"
+									name="requiredSendDate"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>运输方式：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="transferModeName" name="transferModeName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>币种：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="currencyTypeName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>签收标准：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="signStandardName" name="signStandardName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>签收人：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="certificateName" name="certificateName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>身份证：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="certificateId" name="certificateId"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>公章：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="officialSeal" name="officialSeal"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>状态：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="statusName" name="statusName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>出库人：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="deliverer" name="deliverer"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>出库时间：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="deliverTime" name="deliverTime"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>创建人：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="creator"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>创建时间：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="createAt"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>备注：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="remark" name="remark"></label></td>
+							</tr>
+						</table>
+						<div class="mt15">
+							<h4 class="mb10">审核记录</h4>
+							<table id="js_audit_dataTable"
+								data-url="billOutStore/auditflow/audit/query"></table>
+						</div>
+					</div>
+					<div class="box-footer text-center">
+						<button type="button" id="closeWin" class="btn btn-default btn-sm">关闭</button>
+				    </div>
+				</form>
+			</div>
+		</section>
+	</div>
+<script>
+	var auditTabCols = [ {
+		title : '序号',
+		field : 'columnsNumber',
+		width : '5%'
+	}, {
+		title : '流程节点',
+		field : "stateName",
+		width : '15%'
+	}, {
+		title : '处理人',
+		field : "dealName",
+		width : '15%'
+	}, {
+		title : '处理意见',
+		field : "suggestion",
+		width : '25%'
+	}, {
+		title : '开始时间',
+		field : "createTime",
+		width : '15%'
+	}, {
+		title : "处理时间",
+		field : "dealTime",
+		width : '15%'
+	}, {
+		title : "处理状态",
+		field : "auditStateName",
+		width : '10%'
+	} ];
+	GLOBAL.getEditData($("#billOutStoreScanForm"), options.param.id);
+    
+    GLOBAL.initTable($('#js_audit_dataTable'), auditTabCols, {
+      billOutStoreId: options.param.id
+    }, null, {
+        pagination: false
+    });
+    
+    $("#closeWin").click(function(){
+		window.close();
+	});
+</script>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="poList" var="po"
+			varType="com.scfs.domain.po.excel.PurchaseOrderExcel">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">po.appendNo</mapping>
+				<mapping row="2" col="1">po.projectNo</mapping>
+				<mapping row="2" col="2">po.supplierNo</mapping>
+				<mapping row="2" col="3">po.customerNo</mapping>
+				<mapping row="2" col="4">po.currencyName</mapping>
+				<mapping row="2" col="5">po.orderTime</mapping>
+				<mapping row="2" col="6">po.perdictTime</mapping>
+				<mapping row="2" col="7">po.warehouseNo</mapping>
+				<mapping row="2" col="8">po.remark</mapping>
+				<mapping row="2" col="9">po.goodsNo</mapping>
+				<mapping row="2" col="10">po.goodsNum</mapping>
+				<mapping row="2" col="11">po.goodsPrice</mapping>
+				<mapping row="2" col="12">po.discountAmount</mapping>
+				<mapping row="2" col="13">po.batchNum</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

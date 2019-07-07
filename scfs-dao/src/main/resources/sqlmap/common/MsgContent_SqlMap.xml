@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.common.MsgContentDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.MsgContent">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="to_accounts" property="toAccounts" jdbcType="VARCHAR" />
+		<result column="cc_accounts" property="ccAccounts" jdbcType="VARCHAR" />
+		<result column="msg_title" property="msgTitle" jdbcType="VARCHAR" />
+		<result column="msg_type" property="msgType" jdbcType="TINYINT" />
+		<result column="is_send" property="isSend" jdbcType="TINYINT" />
+		<result column="send_count" property="sendCount" jdbcType="TINYINT" />
+		<result column="send_at" property="sendAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.scfs.domain.common.entity.MsgContent"
+		extends="BaseResultMap">
+		<result column="msg_content" property="msgContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, to_accounts, cc_accounts, msg_title, msg_type, is_send,
+		send_count,
+		send_at,
+		creator,creator_id, create_at, update_at,
+		is_delete,remark
+	</sql>
+	<sql id="Blob_Column_List">
+		msg_content
+	</sql>
+	<select id="queryMsgContentById" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tb_msg_content
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="querySendMsgList" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tb_msg_content
+    <![CDATA[
+    where send_count < 5 AND is_delete=0 AND is_send in(1,3) FOR  UPDATE
+  ]]>
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.MsgContent">
+		insert into tb_msg_content
+		(id, to_accounts, cc_accounts,
+		msg_title, msg_type, is_send,
+		send_count, send_at, creator,creator_id,
+		create_at, update_at,
+		is_delete,remark,
+		msg_content)
+		values (#{id,jdbcType=INTEGER},
+		#{toAccounts,jdbcType=VARCHAR},
+		#{ccAccounts,jdbcType=VARCHAR},
+		#{msgTitle,jdbcType=VARCHAR}, #{msgType,jdbcType=TINYINT},
+		#{isSend,jdbcType=TINYINT},
+		#{sendCount,jdbcType=TINYINT},#{sendAt,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR},#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+		#{msgContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.MsgContent">
+		update tb_msg_content
+		set
+		is_send = #{isSend,jdbcType=TINYINT},
+		send_count =
+		#{sendCount,jdbcType=TINYINT},
+		send_at = now(),
+		remark=#{remark},
+		update_at = now()
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

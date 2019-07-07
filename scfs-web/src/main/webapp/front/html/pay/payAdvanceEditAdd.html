@@ -1,0 +1,203 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>资金</li>
+		<li>付款</li>
+		<li>预收单明细编辑</li>
+		<li class="active">添加</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="poAdvanceDtlEditAddForm" >
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="payId" name="id">
+					<table id="js_dataTable" data-url="payAdvanRela/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/payAdvanRela/add"
+						data-url="payAdvanRela/add">保存</button>
+					<button type="button" data-url="html/pay/payAdvanceEdit.html"
+						class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{
+		title : '项目',
+		field : 'projectName',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '客户',
+		field : 'cusName',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '水单日期',
+		field : 'receiptDate',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '经营单位',
+		field : 'busiUnitName',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '水单类型',
+		field : 'receiptTypeName',
+		width : 70,
+		align : 'center'
+	},
+	{
+		title : '币种',
+		field : 'currencyTypeName',
+		width : 70,
+		align : 'center'
+	},
+	{
+		title : '已付金额',
+		field : 'paidAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	},
+	{
+		title : '余额',
+		field : 'payableAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	}, {
+		title : '本次付款金额',
+		field : 'opertaList2',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<input type="text"class="form-control advance-price" value=' + row.payableAmount + ' >';
+		}
+	} ];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+			id : options.param.id
+		}, null, {
+			onLoadSuccess : function(data) {
+				balance = data.options.totalAmount;
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>选中预收金额：<span class='select-sum'>0</span> &nbsp;&nbsp;&nbsp;");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		});
+	};
+	
+	function getSelectData(){
+		var total = 0;
+		$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+			var value = $(this).closest("tr").find(".advance-price").val();				
+			total = total + parseFloat(value);
+		})
+		$("#js_dataTable .select-sum").text(total.toThounds());
+	}
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+
+				var selectedRows = $('#js_dataTable').bootstrapTable(
+						'getSelections');
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var payableAmount = selectedRows[i].payableAmount;
+						var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+						var $advancePrice = $(
+								'#js_dataTable tbody tr[data-uniqueid="' + id
+										+ '"]').find(".advance-price");
+						var advancePrice = $advancePrice.val();
+						if (advancePrice == "") {
+							layer.msg("不能为空");
+							$advancePrice.focus();
+							isValid = false;
+						}
+						if (!pattern.test(advancePrice)) {
+							layer.msg("请输入正确格式");
+							$advancePrice.focus();
+							isValid = false;
+						} 
+						if(payableAmount*1 < advancePrice*1){
+							layer.msg("金额不足!");
+							$advancePrice.focus();
+							isValid = false;
+						}else {
+							dtlArr.push({
+								"advanceId" : id,
+								"payAmount" : advancePrice
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+						relList : dtlArr,
+						payId : options.param.id
+					};
+					var setContentType = true;
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								GLOBAL.go("html/pay/payAdvanceEdit.html");
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, setContentType,$("#save"));
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

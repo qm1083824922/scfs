@@ -1,0 +1,740 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li>条款</li>
+            <li class="active">风控审核</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="form1" data-url="projectItem/info/audit">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <h3>风控审核</h3>
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="200" class="text-right"><b>编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="itemNo"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="200" class="text-right"><b>项目：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectName"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="200" class="text-right"><b>主客户：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="primaryCustomerName"> </label>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td width="200" class="text-right"><b>客户：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="customerName"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>业务类型：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="businessType"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>有效期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="startDate"></label> -
+                                <label class="js-initform" id="endDate"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>额度总额：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="totalAmountValue"></label>
+                                <label class="js-initform" id="amountCurrencyValue"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>单笔额度：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="singleAmountValue"></label>
+                                <label class="js-initform" id="amountCurrencyValue"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>结算类型：</b></td>
+                            <td class="text-left" id="service">
+                                <label class="js-initform" id="isFundAccountName"> </label>
+                            </td>
+                        </tr>
+                        <tr id="paypalCalcType1">
+                            <td class="text-right"><b>结算计费方式： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="paypalCalcTypeName"> </label>
+                            </td>
+                        </tr>
+	                    <tr id = "paypalSegment1">
+	                     	<td class="text-right"><b >分段规则：</b></td> 
+	                     	<td class="text-left"> 
+	                        	<div class="segment-input-box">
+								</div>
+	                     	</td> 
+	                    </tr>
+                        <tr id="fundAccountPeriod1">
+                            <td class="text-right"><b>合作账期： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="fundAccountPeriod"> </label>天
+                            </td>
+                        </tr>
+                        <tr id="fundMonthRate1">
+                            <td class="text-right"><b>日服务费率： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="fundMonthRate"> </label>
+                            </td>
+                        </tr>
+                        <tr id="dayPenalRate1">
+                            <td class="text-right"><b>日违约金费率： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="dayPenalRate"> </label>
+                            </td>
+                        </tr>
+                        <tr id="penalGracePeriod1">
+                            <td class="text-right"><b id="penalGracePeriod1">违约宽限期： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="penalGracePeriod"> </label>天
+                            </td>
+                        </tr>
+                        <tr id="minSaleDay1">
+                            <td class="text-right"><b>最低消费天数：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="minSaleDay"> </label>天
+                            </td>
+                        </tr>
+                        <tr id="dayRules1">
+	                       <td class="text-right"><b>天数规则：</b></td> 
+	                       <td class="text-left">
+	                            <label class="js-initform" id="dayRulesValue"> </label>天
+		                   </td>
+                    	</tr>
+                        <tr id="fixedpoints1">
+                            <td class="text-right"><b>是否固定点数： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="fixedpointsValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="spreadfixedpoints1">
+                            <td class="text-right"><b id="priceregular">价差固定点数： </b></td>
+                            <td class="text-left" id="service">
+                                <label class="js-initform" id="spreadfixedpoints"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>计算操作费：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isOperateAccountValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="operateFeeRate1">
+                            <td class="text-right"><b>操作服务费率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="operateFeeRate"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+		                    <td class="text-right"><b>项目客户结算方式：</b></td> 
+		                    <td class="text-left">
+		                          <label class="js-initform"  id="settleTypeValue"  > </label> 
+		                     </td>
+		                  </tr>
+                        <tr>
+                            <td class="text-right"><b>项目对账方式：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectchecktypeValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="projectcheckdate1">
+                            <td class="text-right"><b>项目对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectcheckdate"> </label>号
+                            </td>
+                        </tr>
+                        <tr id="projectcheckdate2">
+                            <td class="text-right"><b>项目对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectCheckWeekName"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>客户对账方式：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="clientchecktypeValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="clientCheckDay1">
+                            <td class="text-right"><b>客户对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="clientCheckDay"></label>号
+                            </td>
+                        </tr>
+                        <tr id="clientCheckDay2">
+                            <td class="text-right"><b>客户对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="clientCheckWeekName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>供应商对账方式：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="supplierchecktypeValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="supplierCheckDay1">
+                            <td class="text-right"><b>供应商对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="supplierCheckDay"></label>号
+                            </td>
+                        </tr>
+                        <tr id="supplierCheckDay2">
+                            <td class="text-right"><b>供应商对账日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform " id="supplierCheckWeekName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>预收客户比例：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="payRate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>代理出口：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isAgencyExportValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="agencyExportRate1">
+                            <td class="text-right"><b>代理出口费率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="agencyExportRate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>代理进口：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isagencyimportValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="agencyimportrate1">
+                            <td class="text-right"> <b>代理进口费率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="agencyimportrate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>结算汇率：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="accountRateTypeValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="bankId1">
+                            <td class="text-right"><b>银行名称：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="bankName"> </label>
+                            </td>
+                        </tr>
+                        <tr id="accountRate1">
+                            <td class="text-right"><b>固定汇率：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="accountRate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>签收标准：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="signStandardValue"></label>
+                            </td>
+                        </tr>
+                        <tr id="certificateName1" style="display: none;">
+                            <td class="text-right"><b>姓名：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="certificateName"></label>
+                            </td>
+                        </tr>
+                        <tr id="certificateId1" style="display: none;">
+                            <td class="text-right"><b>身份证号码：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="certificateId"></label>
+                            </td>
+                        </tr>
+                        <tr id="officialSeal1" style="display: none;">
+                            <td class="text-right"><b>公章名：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="officialSeal"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>库龄期限：</b></td>
+                            <td class="text-left" id="regular">
+                                <label class="js-initform" id="libraryAge"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>备注：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="remark"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="box-body">
+                    <h4>附件</h4>
+                    <table id="js_dataTable"></table>
+                    <p class="text-center mt10">
+                        <button type="button" data-url="projectItemFileList/downLoad" class="btn btn-primary btn-sm attachment-down">批量下载</button>
+                    </p>
+
+                    <h4>审核记录</h4>
+                    <table id="js_audit_dataTable" data-url="projectItem/auditflow/audit/query"></table>
+                </div>
+                <!-- .box-body -->
+                <div class="box-footer text-center">
+                    <div class="form-inline" style="width:500px; margin:auto">
+                        <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                        <p class="mt20">
+                            <button type="button" data-url="projectItem/risk/audit" data-permissionUrl="/projectItem/risk/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                            <button type="button" data-url="projectItem/unpass/audit" data-permissionUrl="/projectItem/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                            <button type="button" data-url="projectItem/risk/audit" data-permissionUrl="/projectItem/risk/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                            <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                        </p>
+                        <p class="mt20 psigh" style="display:none">
+                            <label class="control-label pull-rihgt">加签给:</label>
+                            <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                            <button type="button" data-url="projectItem/sigh/audit" data-permissionUrl="/projectItem/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                        </p>
+                        <p class="mt20 pdeliver" style="display:none">
+                            <label class="control-label pull-rihgt">转交给:</label>
+                            <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                            <button type="button" data-url="projectItem/deliver/audit" data-permissionUrl="/projectItem/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                        </p>
+                    </div>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+}, {
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+}, {
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+}, {
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+}, {
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+}, {
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+window.operateEvents = {
+    'click .download': function(e, value, row, index) {
+        options.param.id = row.id;
+        var url = GLOBAL.host + "projectItemFile/downLoad?fileId=" + row.id;
+        GLOBAL.preview({
+            type: row.type,
+            url: url
+        });
+    },
+
+};
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="download" href="javascript:void(0)">',
+        '<span class="btn btn-primary btn-sm">下载</span>',
+        '</a>  '
+    ].join('');
+}
+/*数据表格*/
+var fileCols = [{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '文件名称',
+    field: 'name',
+    width: 92,
+    align: 'center'
+}, {
+    title: '文件类型',
+    field: 'type',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传时间',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'operta',
+    width: 100,
+    align: 'center',
+    events: operateEvents,
+    formatter: operateFormatter
+}];
+
+options.initPage = function() {
+
+    var $from = $("#form1");
+    var url = $from.data("url");
+    GLOBAL.ajax(url, {
+        projectItemId: options.param.poId
+    }, function(e) {
+        if (e.success) {
+            var data = e.items.projectItem;
+            if (data) {
+                $(".js-initform", $from).each(function() {
+                    var $this = $(this);
+                    var id = $this.attr("id");
+                    data[id] = data[id] == null ? "" : data[id];
+
+                    if (this.nodeName.toLowerCase() == "label") {
+                        if (data[id] || data[id] == 0) {
+                            $this.text(data[id]);
+                        }
+                    } else {
+                        $this.val(data[id]);
+                    }
+                });
+                GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+                    projectItemId: options.param.poId
+                }, null, {
+                    pagination: false
+                });
+                GLOBAL.ajax('audit/id/query', {
+                    id: options.param.id
+                }, function(e) {
+                    var data = e.items;
+                    if (data) {
+                        if (data.auditType == 1 || data.auditType == 2) {
+                            $(".psigh,.pdeliver").show();
+                        } else {
+                            $(".punpass").hide();
+                        }
+                    }
+                });
+                
+                if ($("#isFundAccountName").html() == "资金占用") {
+            	    $("#paypalCalcType1").show();  
+            	    $("#paypalSegment1").hide();
+                    $("#fundAccountPeriod1").show();
+                    $("#fundMonthRate1").show();
+                    $("#dayPenalRate1").show();
+                    $("#penalGracePeriod1").show();
+                    $("#minSaleDay1").show();
+                    $("#dayRules1").show();
+                    $("#fixedpoints1").hide();
+                    $("#spreadfixedpoints1").hide();
+                } else if ($("#isFundAccountName").html() == "价差") {
+                	$("#paypalCalcType1").hide();
+                	$("#paypalSegment1").hide();
+                    $("#fundAccountPeriod1").hide();
+                    $("#fundMonthRate1").hide();
+                    $("#dayPenalRate1").hide();
+                    $("#penalGracePeriod1").hide();
+                    $("#fixedpoints1").show();
+                    $("#spreadfixedpoints1").show();
+                    $("#minSaleDay1").hide();
+                    $("#dayRules1").hide();
+                }
+	           	 if(data.paypalCalcType == 1){	  
+	        		 $("#paypalSegment1").hide();
+	        		 $("#fundAccountPeriod1").show();  
+	        		 $("#fundMonthRate1").show();  
+	        		 $("#dayPenalRate1").show();  
+	        		 $("#penalGracePeriod1").show(); 
+	        		 $("#minSaleDay1").show();
+	        		 $("#dayRules1").show();
+	        		 $("#fixedpoints1").hide();  
+	        		 $("#spreadfixedpoints1").hide();
+	             }else if(data.paypalCalcType == 2){ 
+	            	 $("#paypalSegment1").show();
+	        		 $("#fundAccountPeriod1").hide();    
+	        		 $("#fundMonthRate1").hide();  
+	        		 $("#dayPenalRate1").show();  
+	        		 $("#penalGracePeriod1").show(); 
+	        		 $("#minSaleDay1").hide();  
+	        		 $("#dayRules1").show();
+	        		 $("#fixedpoints1").hide();  
+	        		 $("#spreadfixedpoints1").hide();
+	             }
+	        	 
+	          	 if (data.isFundAccount == 1 && data.paypalCalcType == 2 && data.projectItemSegmentList) {
+	          		 if (data.projectItemSegmentList.length > 0) {
+	          			 for (var i=0; i<data.projectItemSegmentList.length; i++) {
+	          				 var segmentData = data.projectItemSegmentList[i];
+	          				 var segmentHtml = '';
+	        	 			 var segmentHtml = '<div class="segment-input-item">' 
+	        	 				 	+ '<label type="number" min="0" class="js-initform segment-day" id="segment-day">'+ segmentData.segmentDay + '</label>'
+	        	 				 	+ '<span class="sign"> - </span>'
+	        	 				 	+ '<label type="number" min="0" class="js-initform segment-fund-month-rate" id="segment-fund-month-rate">' + segmentData.segmentFundMonthRate + '</label>'
+	        	 				 	+ ' (分段天数-服务费率)'
+	        	 				 	+ '</div>';
+	        	 			 $('.segment-input-box').append(segmentHtml);  				 
+	          			 }		 
+	          		 }
+	          	 }
+                if ($("#accountRateTypeValue").html() == "固定汇率") {
+                    $("#accountRate1").show();
+                    $("#bankId1").hide().find("#bankName").val("");
+                } else if ($("#accountRateTypeValue").html() == "结算日汇率") {
+                    $("#bankId1").show();
+                    $("#accountRate1").hide().find("#accountRate").val("");
+                }else{
+                	  $("#bankId1").hide().find("#bankName").val("");
+                      $("#accountMethod1").hide().find("#accountMethodValue").val("");
+                      $("#accountRate1").hide().find("#accountRate").val("");
+                }
+                if ($("#isOperateAccountValue").html() == "无") {
+                    $("#operateFeeRate1").hide().find("#operateFeeRate").val("");
+                }
+                if ($("#isAgencyExportValue").html() == "否") {
+                    $("#agencyExportRate1").hide().find("#agencyExportRate").val("");
+                }
+                if ($("#isagencyimportValue").html() == "否") {
+                    $("#agencyimportrate1").hide().find("#agencyimportrate").val("");
+
+                }
+                if ($("#fixedpointsValue").html() == "否") {
+                    $("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+                }
+                if ($("#signStandardValue").html() == "身份证") {
+                    $("#certificateName1").show();
+                    $("#certificateId1").show();
+                } else if ($("#signStandardValue").html() == "公章") {
+                    $("#officialSeal1").show();
+                } else
+                if ($("#signStandardValue").html() == "身份证+公章") {
+                    $("#certificateName1").show();
+                    $("#certificateId1").show();
+                    $("#officialSeal1").show();
+                }
+                if($("#projectchecktypeValue").html() == "月结"){
+                	$("#projectcheckdate2").hide() 
+                }else if($("#projectchecktypeValue").html() == "周结"){
+                	$("#projectcheckdate1").hide() 
+                }else{   
+            		$("#projectcheckdate1").hide() 
+            		$("#projectcheckdate2").hide() 
+            	}
+                
+                if($("#clientchecktypeValue").html() == "月结"){
+                	$("#clientCheckDay2").hide() 
+                }else if($("#clientchecktypeValue").html() == "周结"){
+                	$("#clientCheckDay1").hide() 
+                }else{   
+                	$("#clientCheckDay1").hide() 
+            		$("#clientCheckDay2").hide() 
+            	}
+                
+            	if($("#supplierchecktypeValue").html() == "月结"){
+                	$("#supplierCheckDay2").hide() 
+                }else if($("#supplierchecktypeValue").html() == "周结"){
+                	$("#supplierCheckDay1").hide() 
+                }else{   
+                	$("#supplierCheckDay1").hide() 
+            		$("#supplierCheckDay2").hide() 
+            	}
+            }
+            var dtls = e.items.projectItemFileAttachList;
+            if (dtls) {
+                GLOBAL.initTable($('#js_dataTable'), fileCols, null, dtls, {pagination: false});
+            }
+        }
+    });
+    
+}
+$("#pass").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$("#sigh").click(function() {
+    var url = $(this).data("url");
+    var sighId = $("#sighId").val();
+    if (sighId) {
+        layer.confirm('确定加签吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: sighId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("加签成功！");
+                    $("#sighId").val("");
+                    GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                        projectItemId: options.param.poId
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#sighId").focus();
+    }
+})
+
+$("#deliver").click(function() {
+    var url = $(this).data("url");
+    var deliverId = $("#deliverId").val();
+    if (deliverId) {
+        layer.confirm('确定转交吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: deliverId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("转交成功！");
+                    $("#deliverId").val("");
+                    if (options.param.entryType == 1) {
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        GLOBAL.go("html/audit/audit.html");
+                    }
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#deliverId").focus();
+    }
+})
+$("#passAndNext").click(function() {
+	    var suggestion = $("#suggestion").val();
+	    var url = $(this).data("url");
+	    GLOBAL.ajax(url, {
+	        auditId: options.param.id,
+	        projectItemId: options.param.poId,
+	        suggestion: suggestion || ""
+	    }, function(e) {
+	        if (e.success) {
+	        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+	                if (e.success) { 
+	                	 if(e.items){
+	                		 var id = e.items.id;
+	                         var state = e.items.state;
+	                         var poId = e.items.poId;
+	                         var poType = e.items.poType;
+	                         options.param.id = id;
+	                         options.param.poId = poId;  
+	                         if (poType && state) { 
+	                             GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+	                         }
+	                	 }else{
+	                		 GLOBAL.go("html/entry.html");
+	                	 }  
+	                } else {
+	                    layer.msg(e.msg);
+	                }
+	            });
+	        } else {
+	            layer.msg(e.msg);
+	        }
+	    });
+	})
+$("#unpass").click(function() {
+    var suggestion = $("#suggestion").val();
+    if (!suggestion) {
+        layer.msg("请输入审核意见");
+        return;
+    }
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核不通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$(".attachment-down").click(function(){
+    var ids = GLOBAL.selectIds($("#js_dataTable"));
+    if(ids){
+        var url = GLOBAL.host + $(this).data("url") + "?ids="+ids;
+        window.open(url); 
+    }
+})
+
+$(".js-back").click(function() {
+    if (options.param.entryType == 1) {
+        GLOBAL.go("html/entry.html");
+    } else {
+        GLOBAL.go("html/audit/audit.html");
+    }
+})
+
+</script>

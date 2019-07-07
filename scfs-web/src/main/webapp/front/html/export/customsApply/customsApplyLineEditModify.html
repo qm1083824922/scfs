@@ -1,0 +1,137 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>出口</li>
+    <li>报关申请</li>  
+    <li>报关明细</li>
+    <li class="active">编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="customsApplyLineEditModifyForm" data-url="customsApplyLine/edit">
+            <div class="box-body">
+                 <input class="form-control js-initform" type="hidden" id="id" name="id">
+                                 
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td width="180" class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>税率：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="taxRate" name="taxRate"></label>                      
+                      </td>
+                    </tr>
+                            
+                    <tr>             
+                      <td class="text-right"><b>报关数量：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="customsNum" name="customsNum">                      
+                      </td>
+                      <td class="text-right"><b>可报关数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="customsNumMax"></label>                    
+                      </td>         
+                                        
+                    </tr>      
+
+                    <tr>    
+                      <td class="text-right"><b>报关单价：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="customsPrice" name="customsPrice">                      
+                      </td>                  
+                      <td class="text-right"><b>报关金额：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="customsAmount" name="customsAmount"></label>                  
+                      </td>                                      
+                    </tr>                     
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/customsApplyLine/update" id="save" class="btn btn-primary btn-sm" >保存</button>
+              <button type="button" data-url="html/export/customsApply/customsApplyLineEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  GLOBAL.getEditData($("#customsApplyLineEditModifyForm"), options.param.cid);
+  	  
+  	  $("#customsApplyLineEditModifyForm").validate({
+        rules: {
+        	customsNum: {
+            	required: true,
+            	number: true,
+            	min: 0
+            },
+            customsPrice: {
+            	required: true,
+            	number: true,
+            	min: 0
+            }
+        },
+        submitHandler: function() {
+	       	var customsNum = $("#customsNum").val() || 0;
+	    	if (customsNum*1 == 0) {
+	    		layer.msg("报关数量不能为零，请重新输入");
+	    		return;
+	    	}
+            var rows = new Array();
+            var formData = $("#customsApplyLineEditModifyForm").serializeObject();
+            rows.push(formData);
+            var params = {
+          	  id: options.param.id,
+          	  customsApplyLineList : rows
+            }
+            GLOBAL.ajax("customsApplyLine/update", JSON.stringify(params), function(e) {
+                  if (e.success) {
+                      layer.msg("保存成功！");
+                      GLOBAL.go("html/export/customsApply/customsApplyLineEdit.html", options.param);
+                  } else {
+                      layer.msg(e.msg);
+                  }
+              }, true);
+        }
+     });
+  }
+  
+  $("#customsNum").on("input",function(){
+      var $customsPrice = $("#customsPrice");
+      var $customsAmount = $("#customsAmount");
+      var customsNum = $(this).val();
+      var customsPrice = $customsPrice.val();
+      $customsAmount.text((customsNum * customsPrice).toFixed(2));
+  })
+
+  $("#customsPrice").on("input",function(){
+      var $customsNum = $("#customsNum");
+      var $customsAmount = $("#customsAmount");
+      var customsPrice = $(this).val();
+      var customsNum = $customsNum.val();
+      $customsAmount.text((customsNum * customsPrice).toFixed(2));
+  })
+
+  GLOBAL.goBack();
+
+</script>

@@ -1,0 +1,233 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>发票</li>
+			<li>境外开票</li>
+			<li>费用信息</li>
+			<li class="active">新增</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box">
+		<div class="box-body">		
+			<form method="post" action="###" class="form-inline"
+				id="searchForm">
+				<div class="form-group-sm">
+					<p>
+						<label class="control-label ml10">费用编号：</label> <input
+							type="text" class="form-control" id="feeNo" name="feeNo">
+						<button type="button" id="btnSearch"
+							class="btn btn-primary btn-sm ml20">查询</button>
+					</p>
+				</div>
+			</form>
+
+			<form class="form-horizontal form-inline" id="poOrderDtlEditAddForm" data-url="invoiceOverseasFee/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="overseasId" name="id">
+					<table id="js_dataTable" data-url="invoiceOverseasFee/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" data-permissionUrl="/invoiceOverseasFee/add" class="btn btn-primary btn-sm" data-url="invoiceOverseasFee/add">保存</button>
+					<button type="button" data-url="html/invoice/overseas/overseasFeeEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ 
+		{
+			field : 'checkItem',
+			checkbox : true,
+		},
+		{
+			title : '项目',
+			field : 'projectName',
+			width : 120,
+			align : 'center'
+		},
+		{
+			title : '费用编号',
+			field : 'feeNo',
+			width : 100,
+			align : 'center'
+		},
+		{
+			title : '费用类型',
+			field : 'feeTypeName',
+			width : 80,
+			align : 'center'
+		},
+		{
+			title : '费用日期',
+			field : 'recDate',
+			width : 100,
+			align : 'center'
+		},
+		{
+			title : '可开票金额',
+			field : 'blanceInvoiceAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return '<span class="blanceInvoiceAmount">'+value+'</span>';
+		    }
+		},
+		{
+			title : '币种',
+			field : 'currencyTypeName',
+			width : 80,
+			align : 'center'
+		},
+		{
+			title : '开票金额',
+			field : 'invoiceAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value, row, index) {
+				return '<input type="text"class="form-control fee-price" value="'+row.blanceInvoiceAmount+'">';
+			}
+		}];
+
+	options.initPage = function() {
+		 $(".js_datePicker").datetimepicker({
+             defaultTime: '00:00:00',
+             format: 'Y-m-d',
+         });
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+			id : options.param.id
+		}, null, {
+			onLoadSuccess : function(data) {
+				balance = data.options.totalAmount;
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>开票金额：<span class='select-price'>0.00</span>");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		});
+		function getSelectData(){
+			var price=0;
+			$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+				var priceValue = $(this).closest("tr").find(".fee-price").val();
+				if(priceValue==""){}else{
+					price = price + parseFloat(priceValue);
+				}
+			})
+			$("#js_dataTable .select-price").text(price.toThounds());
+		}
+		
+		
+		$('#js_dataTable').on("blur",".fee-price",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			var $tr = $(this).closest("tr");
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($tr.find(".acceptInvoiceTaxRate").text());
+			}else{
+				$(this).val("");
+			}
+			getSelectData();
+		});
+	};
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			id : options.param.id
+		});
+		$('#js_dataTable').bootstrapTable('refresh', {
+			query : data
+		});
+	})
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+		
+				var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+				console.log(selectedRows);
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;//金额校验
+						var $tr = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]'); 
+						var $inRateAmount = $tr.find(".fee-price"); 
+						var inRateAmount = $inRateAmount.val();
+						var blance = parseFloat($tr.find(".blanceInvoiceAmount").text());
+						
+						if (inRateAmount == "") {
+							layer.msg("金额不能为空");
+							$inRateAmount.focus();
+							isValid = false;
+						}
+						 if (!pattern.test(inRateAmount)) {
+							layer.msg("请输入正确格式");
+							$inRateAmount.focus();
+							isValid = false;
+						}
+						 if(inRateAmount>blance){
+							 layer.msg("开票余额不足！");
+							$inRateAmount.focus();
+							isValid = false;
+						}  else {
+							console.log("selectedRows: ",selectedRows)
+							dtlArr.push({  
+								"invoiceAmount" : inRateAmount,
+								"feeId":selectedRows[i].id
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+							feeList : dtlArr,
+							overseasId : options.param.id
+					};
+					var setContentType = false;
+					console.log(saveData);
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								options.param.id=options.param.id; 
+								GLOBAL.go("html/invoice/overseas/overseasFeeEdit.html",options.param);
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, true);
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,539 @@
+<style>
+.serviceShow{
+	display: none;
+}
+</style>
+
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>事项管理</li>
+            <li class="active">商务审核</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="form1" data-url="matterManage/info/audit">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <h3>商务审核</h3>
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="200" class="text-right"><b>事项编号：</b></td>
+                            <td class="text-left">
+				                 <label class=" js-initform" id="matterNo" name="matterNo">
+				            </td>
+	                        <td class="text-right"><b>事项名称：</b></td>
+                            <td class="text-left">
+                                 <label class=" js-initform" id="matterNameValue" name="matterNameValue">
+                            </td>
+                        </tr>
+                        <tr>
+                             <td class="text-right" ><b>事项描述：</b></td>
+		                     <td class="text-left">
+		                     	 <label class=" js-initform" id="matterDescribe" name="matterDescribe">
+							 </td>
+							 <td class="text-right"><b>客户类型：</b></td>
+		                     <td class="text-left">
+		                     	<label class=" js-initform" id="matterTypeValue" name="matterTypeValue">
+		                     </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>所处阶段：</b></td>
+		                    <td class="text-left">
+		                     	<label class=" js-initform" id="stageValue" name="stageValue">
+		                    </td>
+		                    <td class="text-right showProject"><b>项目：</b></td>
+                            <td class="text-left showProject">
+                            	<label class=" js-initform" id="projectName" name="projectName">
+                          	</td>
+                              	 
+                            <td class="text-right showAbbreviate"><b>客户简称：</b></td>
+		                    <td class="text-left showAbbreviate">
+		                         <label class=" js-initform" id="customerAbbreviate" name="customerAbbreviate">
+		                    </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right" ><b>客户名称：</b></td>
+		                    <td class="text-left">
+		                     	 <label class=" js-initform" id="customerName" name="customerName">
+							</td>
+							<td class="text-right"><b>办公地址：</b></td>
+		                    <td class="text-left">
+		                     	<label class=" js-initform" id="officeAddress" name="officeAddress">
+		                    </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>香港公司全称：</b></td>
+		                     <td class="text-left">
+		                     		<label class="js-initform" id="hkCompany" name="hkCompany">
+		                     </td>
+		                     <td class="text-right"><b>注册地址：</b></td>
+                                <td class="text-left">
+                                   <label class="js-initform" id="regAddress" name="regAddress">
+                             </td>
+                        </tr>
+                        <tr>
+		                     <td class="text-right"><b>联系人：</b></td>
+		                     <td class="text-left">
+		                     	  <label class="js-initform" id="contacts" name="contacts">
+		                     </td>
+		                     <td class="text-right"><b>联系电话：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="contactsNumber" name="contactsNumber">
+                              	 </td>
+		                </tr>
+                        <tr>
+		                     <td class="text-right"><b>企业主营业务：</b></td>
+		                     <td class="text-left">
+		                     	<label class="js-initform" id="enterpriseBus" name="enterpriseBus">
+		                     </td>
+		                     <td class="text-right"><b>铺货商品：</b></td>
+                                <td class="text-left">
+                                	  <label class="js-initform" id="disGoods" name="disGoods">
+                              	 </td>
+		                  </tr>
+		                  <tr>
+		                     <td class="text-right"><b>业务审核人：</b></td>
+		                     <td class="text-left">
+		                     	<label class="js-initform" id="bizManagerName" name="bizManagerName">
+		                     </td>
+		                     
+		                     <td class="text-right"><b>商务审核人：</b></td>
+                                <td class="text-left">
+                                	<label class="js-initform" id="businessManagerName" name="businessManagerName">
+                              	 </td>
+		                  </tr>
+		                  <tr>
+		                     <td class="text-right"><b>部门主管审核人：</b></td>
+		                     <td class="text-left">
+		                     	 <label class="js-initform" id="departmentIdName" name="departmentIdName">
+		                     </td>
+		                     
+		                     <td class="text-right"><b>法务审核人：</b></td>
+                                <td class="text-left">
+                                	<label class="js-initform" id="justiceName" name="justiceName">
+                              	 </td>
+		                  </tr>
+		                  <tr>
+		                     <td class="text-right"><b>财务主管审核人：</b></td>
+		                     <td class="text-left">
+		                     	<label class="js-initform" id="financeManagerName" name="financeManagerName">
+		                     </td>
+		                     
+		                     <td class="text-right"><b>分控主管审核人：</b></td>
+                                <td class="text-left">
+                                	<label class="js-initform" id="riskManagerName" name="riskManagerName">
+                              	 </td>
+		                  </tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="remark" name="remark">
+							</td>
+						</tr>
+                    </table>
+                </div>
+                <div class="box-body serviceShow">
+                        <h4>服务需求</h4>
+                        <div id="invoiceInfo"></div>
+                </div>
+                <div class="box-body">
+                	 <h4  class="mt15 mb5">附件</h4>
+          			 <table id="js_dataFileTable"></table>
+					 <p class="text-center mt10">
+		                  <button type="button" data-url="matterManageFileList/download" class="btn btn-primary btn-sm attachment-down">批量下载</button>
+		             </p>
+                    <h4>审核记录</h4>
+                    <table id="js_audit_dataTable" data-url="matterManage/auditflow/audit/query"></table>
+                </div>
+                <!-- .box-body -->
+                <div class="box-footer text-center">
+                    <div class="form-inline" style="width:500px; margin:auto">
+                        <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                        <p class="mt20">
+                            <button type="button" data-url="matterManage/biz/audit" data-permissionUrl="/matterManage/biz/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                            <button type="button" data-url="matterManage/unpass/audit" data-permissionUrl="/matterManage/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                            <button type="button" data-url="matterManage/biz/audit" data-permissionUrl="/matterManage/biz/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                            <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                        </p>
+                        <p class="mt20 psigh"  style="display:none">
+                            <label class="control-label pull-rihgt label-sighId" for="sighId">加签给:</label>
+                            <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                            <button type="button" data-url="matterManage/sigh/audit" data-permissionUrl="/matterManage/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                        </p>
+                        <p class="mt20 pdeliver" style="display:none">
+                            <label class="control-label pull-rihgt">转交给:</label>
+                            <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                            <button type="button" data-url="matterManage/deliver/audit" data-permissionUrl="/matterManage/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                        </p>
+                    </div>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+}, {
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+}, {
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+}, {
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+}, {
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+}, {
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+
+/*附件*/
+window.operateEvents = {
+    'click .download': function(e, value, row, index) {
+        var url = GLOBAL.host + "matterManageFile/downLoad?fileId=" + row.id;
+        GLOBAL.preview({type: row.type, url: url});
+    },
+
+};
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="download" href="javascript:void(0)">',
+        '<span class="btn btn-primary btn-sm">下载</span>',
+        '</a>  '
+    ].join('');
+}
+/*数据表格*/
+var fileCols = [
+{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '文件名称',
+    field: 'name',
+    width: 92,
+    align: 'center'
+}, {
+    title: '文件类型',
+    field: 'type',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传时间',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'operta',
+    width: 100,
+    align: 'center',
+    events: operateEvents,
+    formatter: operateFormatter
+}];
+
+options.initPage = function() {
+
+    var $from = $("#form1");
+    var url = $from.data("url");
+    GLOBAL.ajax(url, {
+    	matterId: options.param.poId
+    }, function(e) {
+        if (e.success) {
+            var data = e.items.matterManage; 
+            var matterName;
+            if (data) {
+            	matterName = data.matterName;
+                $(".js-initform", $from).each(function() {
+                    var $this = $(this);
+                    var id = $this.attr("id");
+                    data[id] = data[id] == null ? "" : data[id];
+
+                    if (this.nodeName.toLowerCase() == "label") {
+                        if (data[id] || data[id] == 0) {
+                            $this.text(data[id]);
+                        }
+                    } else {
+                        $this.val(data[id]);
+                    }
+                });
+                if(matterName==1){
+        			$(".showAbbreviate").show();	
+        	    	$(".showProject").hide();
+        	    }else{
+        	    	$(".showProject").show();	
+        	    	$(".showAbbreviate").hide();
+        	    }
+            }
+            if(matterName==1){
+            	$(".serviceShow").show();
+            	var service = e.items.matterService;
+            	if(service){ 
+            		var serviceTypeName = service.serviceTypeName==null?"":service.serviceTypeName;
+            		var serviceExplain = service.serviceExplain==null?"":service.serviceExplain;
+            		var accountPeriodName = service.accountPeriodName==null?"":service.accountPeriodName;
+            		var accountPeriodRemark = service.accountPeriodRemark==null?"":service.accountPeriodRemark;
+            		var matchedAmount = service.matchedAmount==null?"":service.matchedAmount;
+            		var currnecyTypeName = service.currnecyTypeName==null?"":service.currnecyTypeName;
+            		var currnecyTypeRemark = service.currnecyTypeRemark==null?"":service.currnecyTypeRemark;
+            		var depositPaidName = service.depositPaidName==null?"":service.depositPaidName;
+            		var depositAmount = service.depositAmount==null?"":service.depositAmount;
+            		var serviceRateTypeName = service.serviceRateTypeName==null?"":service.serviceRateTypeName;
+            		var serviceRate = service.serviceRate==null?"":service.serviceRate;
+            		var recFeeTypeName = service.recFeeTypeName==null?"":service.recFeeTypeName;
+            		var recFeeRemark = service.recFeeRemark==null?"":service.recFeeRemark;
+            		var payFeeTypeName = service.payFeeTypeName==null?"":service.payFeeTypeName;
+            		var payFeeRemark = service.payFeeRemark==null?"":service.payFeeRemark;
+            		var serviceSettlementTimeName = service.serviceSettlementTimeName==null?"":service.serviceSettlementTimeName;
+            		var serviceSettlementRemark = service.serviceSettlementRemark==null?"":service.serviceSettlementRemark;
+            		var payWayName = service.payWayName==null?"":service.payWayName;
+            		var lendWayName = service.lendWayName==null?"":service.lendWayName;
+            		var lendWayRemark = service.lendWayRemark==null?"":service.lendWayRemark;
+            		var scale = service.scale==null?"":service.scale;
+            		var turnoverTimes = service.turnoverTimes==null?"":service.turnoverTimes;
+            		var returnRate = service.returnRate==null?"":service.returnRate;
+            		var costExpendTypeName = service.costExpendTypeName==null?"":service.costExpendTypeName;
+            		var bizBlance = service.bizBlance==null?"":service.bizBlance;
+            		var blance = service.blance==null?"":service.blance;
+            		var signSubject = service.signSubject==null?"":service.signSubject;
+            		var projectBizManager = service.projectBizManager==null?"":service.projectBizManager;
+            		
+            		var invoiceInfo = '<div class="col-md-6" style="width: 100%;"><table class="table table-bordered table-hover no-margin">'
+            						   +'<tr> <td class="text-center" rowspan="11"><b>结算条款信息</b></td><td class="text-center"><b>服务类型：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="serviceTypeName" name="serviceTypeName">'+serviceTypeName+'</label></td></tr>'	
+            						   +'<tr><td class="text-center"><b>业务模型说明（项目流程）：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="serviceExplain">'+serviceExplain+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>合作账期：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="accountPeriodName">'+accountPeriodName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="accountPeriodRemark">'+accountPeriodRemark+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>现配套资金申请金额：</b></td><td class="text-left"><label class=" js-initform" id="matchedAmount">'+matchedAmount+'</label></td><td class="text-center"><b>结算币种：</b></td><td class="text-left"><label class="js-initform" id="currnecyTypeName">'+currnecyTypeName+'</label>&nbsp;&nbsp;&nbsp<label class="js-initform" id="currnecyTypeRemark">'+currnecyTypeRemark+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>收取待采定金：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="depositPaidName">'+depositPaidName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="depositAmount">'+depositAmount+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>服务费率：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="serviceRateTypeName">'+serviceRateTypeName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="serviceRate">'+serviceRate+'</label>%</td></tr>'
+            						   +'<tr><td class="text-center"><b>应收费用：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="recFeeTypeName">'+recFeeTypeName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="recFeeRemark">'+recFeeRemark+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>应付费用：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="payFeeTypeName">'+payFeeTypeName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="payFeeRemark">'+payFeeRemark+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>服务费结算时间：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="serviceSettlementTimeName">'+serviceSettlementTimeName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="serviceSettlementRemark">'+serviceSettlementRemark+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>付款方式：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="payWayName">'+payWayName+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>放贷方式：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="lendWayName">'+lendWayName+'</label>&nbsp;&nbsp;&nbsp;<label class=" js-initform" id="lendWayRemark">'+lendWayRemark+'</label></td></tr>'
+            						   +'<tr> <td class="text-center" rowspan="6"><b>项目盈利预测</b></td><td class="text-center"><b>付款方式：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="scale">'+scale+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>预计资金周转次数（/年）：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="turnoverTimes">'+turnoverTimes+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>预计资金回报率（/年）：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="returnRate">'+returnRate+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>成本支出项：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="costExpendTypeName">'+costExpendTypeName+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>预计年度业务毛利：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="bizBlance">'+bizBlance+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>预计年度业务净利：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="blance">'+blance+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>我司签约主体：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="signSubject">'+signSubject+'</label></td></tr>'
+            						   +'<tr><td class="text-center"><b>项目导入业务员：</b></td><td class="text-left" colspan="3"><label class=" js-initform" id="projectBizManager">'+projectBizManager+'</label></td></tr>'
+            						   +'</table></div>';
+            		 $("#invoiceInfo").append(invoiceInfo);
+            	}
+            } 
+            
+            var matterFileList = e.items.matterManageFileList;
+            if(matterFileList){
+            	 GLOBAL.initTable($('#js_dataFileTable'), fileCols, null, matterFileList, {pagination: false});
+            }
+            
+            GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+                projectItemId: options.param.poId
+            }, null, {
+                pagination: false
+            });
+            
+            GLOBAL.ajax('audit/id/query', {
+                id: options.param.id
+            }, function(e) {
+                var data = e.items;
+                if (data) {
+                    if (data.auditType == 1 || data.auditType == 2) {
+                        $(".psigh,.pdeliver").show();
+                    } else {
+                        $(".punpass").hide();
+                    }
+                }
+            });
+        }
+    });
+
+}
+
+$("#pass").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+$("#passAndNext").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+        if (e.success) {
+        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+                if (e.success) { 
+                	 if(e.items){
+                		 var id = e.items.id;
+                         var state = e.items.state;
+                         var poId = e.items.poId;
+                         var poType = e.items.poType;
+                         options.param.id = id;
+                         options.param.poId = poId;  
+                         if (poType && state) { 
+                             GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+                         }
+                	 }else{
+                		 GLOBAL.go("html/entry.html");
+                	 }  
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+$("#sigh").click(function(e) {
+    e.stopPropagation();
+    var url = $(this).data("url");
+    var sighId = $("#sighId").val();
+    if(sighId){
+        layer.confirm('确定加签吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: sighId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("加签成功！");
+                    $("#sighId").val("");
+                    GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                        projectItemId: options.param.poId
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    }else{
+        layer.msg("请选择！");
+        $("#sighId").focus();
+    }
+})
+
+$("#deliver").click(function() {
+    var url = $(this).data("url");
+    var deliverId = $("#deliverId").val();
+
+    if(deliverId){
+        layer.confirm('确定转交吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: deliverId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("转交成功！");
+                    $("#deliverId").val("");
+                    if (options.param.entryType == 1) {
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        GLOBAL.go("html/audit/audit.html");
+                    }
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    }else{
+        layer.msg("请选择！");
+        $("#deliverId").focus();
+    }
+    
+})
+
+$("#unpass").click(function() {
+    var suggestion = $("#suggestion").val();
+    if (!suggestion) {
+        layer.msg("请输入审核意见");
+        return;
+    }
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核不通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$(".attachment-down").click(function() {
+    var ids = GLOBAL.selectIds($("#js_dataFileTable"));
+    if (ids) {
+        var url = GLOBAL.host + $(this).data("url") + "?ids=" + ids;
+        window.open(url);
+    }
+})
+
+$(".js-back").click(function() {
+    if (options.param.entryType == 1) {
+        GLOBAL.go("html/entry.html");
+    } else {
+        GLOBAL.go("html/audit/audit.html");
+    }
+})
+
+</script>

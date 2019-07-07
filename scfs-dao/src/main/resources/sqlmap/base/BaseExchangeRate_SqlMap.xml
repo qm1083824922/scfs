@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseExchangeRateDao">
+
+	<resultMap id="BaseExchangeRateMap" type="com.scfs.domain.base.entity.BaseExchangeRate">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="bank" property="bank" jdbcType="VARCHAR" />
+		<id column="currency" property="currency" jdbcType="VARCHAR" />
+		<id column="foreign_currency" property="foreignCurrency" jdbcType="VARCHAR" />
+		<id column="cash_selling_price" property="cashSellingPrice"
+			jdbcType="DECIMAL" />
+		<id column="cash_buying_price" property="cashBuyingPrice" jdbcType="DECIMAL" />
+		<id column="draft_selling_price" property="draftSellingPrice"
+			jdbcType="DECIMAL" />
+		<id column="draft_buying_price" property="draftBuyingPrice"
+			jdbcType="DECIMAL" />
+		<id column="publish_at" property="publishAt" jdbcType="TIMESTAMP" />
+		<id column="creator" property="creator" jdbcType="VARCHAR" />
+		<id column="backup_person" property="backupPerson" jdbcType="VARCHAR" />
+		<id column="deltor" property="deltor" jdbcType="VARCHAR" />
+		<id column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="backup_at" property="backupAt" jdbcType="TIMESTAMP" />
+		<id column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<id column="delete_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<id column="is_error" property="isError" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		bank,
+		currency,
+		foreign_currency,
+		cash_selling_price,
+		cash_buying_price,
+		draft_selling_price,
+		draft_buying_price,
+		publish_at,
+		create_at,
+		creator,
+		backup_at,
+		backup_person,
+		is_error
+	</sql>
+
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseExchangeRate">
+		insert into
+		tb_base_exchange_rate(
+		bank,
+		currency,
+		foreign_currency,
+		cash_selling_price,
+		cash_buying_price,
+		draft_selling_price,
+		draft_buying_price,
+		publish_at,
+		creator,
+		create_at,
+		is_delete,
+		is_error,
+		backup_person,
+		backup_at
+		)
+		values(
+		#{bank,jdbcType=VARCHAR},
+		#{currency,jdbcType=VARCHAR},
+		#{foreignCurrency,jdbcType=VARCHAR},
+		#{cashSellingPrice,jdbcType=DECIMAL},
+		#{cashBuyingPrice,jdbcType=DECIMAL},
+		#{draftSellingPrice,jdbcType=DECIMAL},
+		#{draftBuyingPrice,jdbcType=DECIMAL},
+		#{publishAt,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT},
+		#{isError,jdbcType=TINYINT},
+		#{backupPerson,jdbcType=VARCHAR},
+		#{backupAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.BaseExchangeRate">
+		update tb_base_exchange_rate
+		<set>
+			<if test="cashSellingPrice != null">cash_selling_price=#{cashSellingPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="cashBuyingPrice != null">cash_buying_price=#{cashBuyingPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="draftSellingPrice != null">draft_selling_price=#{draftSellingPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="draftBuyingPrice != null">draft_buying_price=#{draftBuyingPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="isError != null">is_error=#{isError},</if>
+			<if test="createAt != null">create_at=#{createAt},</if>
+			<if test="publishAt != null">publish_at=#{publishAt}</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<update id="backUpExchangeRate" parameterType="com.scfs.domain.base.entity.BaseExchangeRate">
+		update tb_base_exchange_rate
+		SET
+		is_delete=1,backup_at=#{backupAt},backup_person=#{backupPerson}
+		<where>
+			is_delete=0 AND bank=#{bank} AND currency=#{currency} AND
+			foreign_currency=#{foreignCurrency}
+		</where>
+	</update>
+
+	<!--标记所有正在使用的汇率异常 -->
+	<update id="updateAllExcption" parameterType="java.lang.String">
+		update
+		tb_base_exchange_rate
+		SET is_error=2
+		where
+		is_delete=0 AND bank=#{bank}
+	</update>
+
+
+	<select id="getUseExchangeRateList" parameterType="com.scfs.domain.base.dto.req.BaseExchangeRateReqDto"
+		resultMap="BaseExchangeRateMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_base_exchange_rate
+		<where>
+			is_delete=0
+			<if test="bank != null and bank != ''">
+				and bank =#{bank}
+			</if>
+			<if test="currency != null and  currency != ''">
+				and currency=#{currency}
+			</if>
+			<if test="foreignCurrency != null and foreignCurrency!=''">
+				and foreign_currency=#{foreignCurrency}
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+
+	<select id="getHisExchangeRateList" parameterType="com.scfs.domain.base.dto.req.BaseExchangeRateReqDto"
+		resultMap="BaseExchangeRateMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_exchange_rate
+		<where>
+			is_delete=1
+			<if test="bank != null and bank != ''">
+				and bank =#{bank}
+			</if>
+			<if test="currency != null and  currency != ''">
+				and currency=#{currency}
+			</if>
+			<if test="foreignCurrency != null and foreignCurrency!=''">
+				and foreign_currency=#{foreignCurrency}
+			</if>
+			<if test="publishBegin != null">
+				and publish_at >= #{publishBegin}
+			</if>
+			<if test="publishEnd != null">
+                <![CDATA[ and publish_at <= #{publishEnd} ]]>
+			</if>
+
+			<if test="backupFrom != null">
+				and backup_at >= #{backupFrom}
+			</if>
+			<if test="backupTo != null">
+                <![CDATA[ and backup_at <= #{backupTo} ]]>
+			</if>
+		</where>
+		order by create_at desc
+	</select>
+
+	<select id="queryBaseExchangeRateById" resultMap="BaseExchangeRateMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_exchange_rate
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="queryExchangeRateByExchangeRate" resultMap="BaseExchangeRateMap"
+		parameterType="com.scfs.domain.base.entity.BaseExchangeRate">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_exchange_rate
+		where is_delete=0 AND bank=#{bank} AND
+		currency=#{currency} AND
+		foreign_currency=#{foreignCurrency}
+	</select>
+
+	<select id="queryExchangeRateByRateReqDto" resultMap="BaseExchangeRateMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseExchangeRateReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_exchange_rate
+		<where>
+			is_error=1
+			<if test="bank != null and bank != ''">
+				and bank =#{bank}
+			</if>
+			<if test="currency != null and  currency != ''">
+				and currency=#{currency}
+			</if>
+			<if test="foreignCurrency != null and foreignCurrency!=''">
+				and foreign_currency=#{foreignCurrency}
+			</if>
+			<if test="createAt != null and createAt!=''">
+				and DATE (create_at)=#{createAt}
+			</if>
+		</where>
+		ORDER BY id desc limit 1
+	</select>
+
+</mapper>

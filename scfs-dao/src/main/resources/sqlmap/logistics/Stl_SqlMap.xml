@@ -1,0 +1,1404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.logistics.StlDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.logistics.entity.Stl">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_in_store_dtl_tally_id" jdbcType="INTEGER"
+			property="billInStoreDtlTallyId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="bill_in_store_id" jdbcType="INTEGER" property="billInStoreId" />
+		<result column="bill_in_store_dtl_id" jdbcType="INTEGER"
+			property="billInStoreDtlId" />
+		<result column="po_dtl_id" jdbcType="INTEGER" property="poDtlId" />
+		<result column="po_id" jdbcType="INTEGER" property="poId" />
+		<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		<result column="tally_num" jdbcType="DECIMAL" property="tallyNum" />
+		<result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+		<result column="goods_status" jdbcType="TINYINT" property="goodsStatus" />
+		<result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+		<result column="po_price" jdbcType="DECIMAL" property="poPrice" />
+		<result column="in_store_num" jdbcType="DECIMAL" property="inStoreNum" />
+		<result column="store_num" jdbcType="DECIMAL" property="storeNum" />
+		<result column="lock_num" jdbcType="DECIMAL" property="lockNum" />
+		<result column="sale_lock_num" jdbcType="DECIMAL" property="saleLockNum" />
+		<result column="stl_id" jdbcType="INTEGER" property="stlId" />
+		<result column="origin_accept_time" jdbcType="TIMESTAMP"
+			property="originAcceptTime" />
+		<result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
+		<result column="receive_date" jdbcType="DATE" property="receiveDate" />
+		<result column="currency_type" jdbcType="INTEGER" property="currencyType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="bill_in_store_no" jdbcType="VARCHAR" property="billInStoreNo" />
+		<result column="affiliate_no" jdbcType="VARCHAR" property="affiliateNo" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="append_no" jdbcType="VARCHAR" property="appendNo" />
+		<result column="pay_price" jdbcType="DECIMAL" property="payPrice" />
+		<result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+		<result column="pay_rate" jdbcType="DECIMAL" property="payRate" />
+		<result column="pay_real_currency" jdbcType="TINYINT" property="payRealCurrency" />
+		<result column="fly_order_flag" jdbcType="INTEGER" property="flyOrderFlag" />
+
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+		<result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+		<result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_in_store_dtl_tally_id, project_id, supplier_id,
+		warehouse_id,
+		customer_id,
+		bill_in_store_id, bill_in_store_dtl_id,
+		po_dtl_id, po_id, goods_id, tally_num,
+		batch_no, goods_status,
+		cost_price, po_price, in_store_num, store_num, lock_num,
+		sale_lock_num,
+		stl_id, origin_accept_time, accept_time, receive_date,
+		currency_type,
+		exchange_rate, remark,
+		creator_id, creator, create_at,
+		update_at, bill_in_store_no, affiliate_no,
+		order_no, append_no,
+		pay_price, pay_time,pay_rate,pay_real_currency,fly_order_flag
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		ts.id, ts.bill_in_store_dtl_tally_id, ts.project_id,
+		ts.supplier_id,
+		ts.warehouse_id, ts.customer_id,
+		ts.bill_in_store_id,
+		ts.bill_in_store_dtl_id, ts.po_dtl_id, ts.po_id, ts.goods_id,
+		ts.tally_num, ts.batch_no, ts.goods_status,
+		ts.cost_price, ts.po_price,
+		ts.in_store_num, ts.store_num, ts.lock_num,
+		ts.sale_lock_num,
+		ts.stl_id, ts.origin_accept_time, ts.accept_time, ts.receive_date,
+		ts.currency_type, ts.exchange_rate, ts.remark,
+		ts.creator_id,
+		ts.creator, ts.create_at, ts.update_at, ts.bill_in_store_no,
+		ts.affiliate_no, ts.order_no, ts.append_no,
+		ts.pay_price,
+		ts.pay_time,ts.pay_rate,ts.pay_real_currency,ts.fly_order_flag
+	</sql>
+
+	<sql id="condition">
+		<if test="id!=null and id!=''">
+			AND ts.id= #{id}
+		</if>
+		<if test="businessUnitId!=null">
+			AND tbp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="batchNo!=null and batchNo!=''">
+			AND ts.batch_no= #{batchNo}
+		</if>
+		<if test="goodsStatus!=null">
+			AND ts.goods_status = #{goodsStatus}
+		</if>
+		<if test="projectId!=null">
+			AND ts.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND ts.supplier_id = #{supplierId}
+		</if>
+		<if test="warehouseId!=null">
+			AND ts.warehouse_id = #{warehouseId}
+		</if>
+		<if test="goodsId!=null">
+			AND ts.goods_id = #{goodsId}
+		</if>
+		<if test="startAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="endAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="startReceiveDate!=null">
+			AND ts.receive_date &gt;= #{startReceiveDate}
+		</if>
+		<if test="endReceiveDate!=null">
+			AND ts.receive_date &lt;= #{endReceiveDate}
+		</if>
+		<if test="currencyType!=null">
+			AND ts.currency_type = #{currencyType}
+		</if>
+		<if test="billInStoreNo!=null and billInStoreNo!=''">
+			AND ts.bill_in_store_no like
+			CONCAT('%',#{billInStoreNo},'%')
+		</if>
+		<if test="affiliateNo!=null and affiliateNo!=''">
+			AND ts.affiliate_no like CONCAT('%',#{affiliateNo},'%')
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			AND ts.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="preOrderNo!=null and preOrderNo!=''">
+			AND ts.order_no = #{preOrderNo}
+		</if>
+		<if test="appendNo!=null and appendNo!=''">
+			AND ts.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="goodsNumber!=null and goodsNumber!=''">
+			AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+		</if>
+		<if test="goodsName!=null and goodsName!=''">
+			AND tbg.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<if test="goodsType!=null and goodsType!=''">
+			AND tbg.type like CONCAT('%',#{goodsType},'%')
+		</if>
+		<if test="goodsBarCode!=null and goodsBarCode!=''">
+			AND tbg.bar_code like CONCAT('%',#{goodsBarCode},'%')
+		</if>
+		<if test="availableFlag!=null and availableFlag==1">
+			AND (IFNULL(ts.store_num, 0) - IFNULL(ts.lock_num, 0) -
+			IFNULL(ts.sale_lock_num, 0)) > 0
+		</if>
+		<if test="storeFlag==1">
+			AND IFNULL(ts.store_num, 0) > 0
+		</if>
+		<choose>
+			<when test="isCustomerNullFlag==1">
+				AND (ts.customer_id = #{customerId} OR ts.customer_id
+				is null OR
+				ts.customer_id =-1 )
+			</when>
+			<otherwise>
+				<if test="customerId!=null">
+					AND ts.customer_id = #{customerId}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="isExistPay==1">
+			AND (ts.pay_time is not null OR ts.cost_price = 0)
+		</if>
+		<if test="flyOrderFlag!=null">
+			AND ts.fly_order_flag = #{flyOrderFlag}
+		</if>
+		
+	</sql>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_stl
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_stl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_stl
+		where id
+		= #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.logistics.entity.Stl"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_stl (id,
+		bill_in_store_dtl_tally_id, project_id,
+		supplier_id, warehouse_id,
+		customer_id,
+		bill_in_store_id, bill_in_store_dtl_id, po_dtl_id,
+		po_id,
+		goods_id, tally_num,
+		batch_no, goods_status, cost_price,
+		po_price,
+		in_store_num, store_num,
+		lock_num, sale_lock_num, stl_id,
+		origin_accept_time,
+		accept_time, receive_date,
+		currency_type,
+		exchange_rate,
+		remark, creator_id, creator,
+		bill_in_store_no,
+		affiliate_no, order_no,
+		append_no, pay_price,
+		pay_time,pay_rate,pay_real_currency,
+		fly_order_flag)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{billInStoreDtlTallyId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER},
+		#{warehouseId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},
+		#{billInStoreId,jdbcType=INTEGER},
+		#{billInStoreDtlId,jdbcType=INTEGER}, #{poDtlId,jdbcType=INTEGER},
+		#{poId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
+		#{tallyNum,jdbcType=DECIMAL},
+		#{batchNo,jdbcType=VARCHAR},
+		#{goodsStatus,jdbcType=TINYINT}, #{costPrice,jdbcType=DECIMAL},
+		#{poPrice,jdbcType=DECIMAL}, #{inStoreNum,jdbcType=DECIMAL},
+		#{storeNum,jdbcType=DECIMAL},
+		#{lockNum,jdbcType=DECIMAL},
+		#{saleLockNum,jdbcType=DECIMAL}, #{stlId,jdbcType=INTEGER},
+		#{originAcceptTime,jdbcType=TIMESTAMP},
+		#{acceptTime,jdbcType=TIMESTAMP}, #{receiveDate,jdbcType=DATE},
+		#{currencyType,jdbcType=INTEGER}, #{exchangeRate,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{billInStoreNo,jdbcType=VARCHAR},
+		#{affiliateNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+		#{appendNo,jdbcType=VARCHAR}, #{payPrice,jdbcType=DECIMAL},
+		#{payTime,jdbcType=TIMESTAMP},
+		IFNULL(#{payRate,jdbcType=DECIMAL}, 0),
+		IFNULL(#{payRealCurrency,jdbcType=TINYINT},1),
+		IFNULL(#{flyOrderFlag,jdbcType=INTEGER},0)
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.logistics.entity.Stl">
+		update tb_stl
+		<set>
+			<if test="billInStoreDtlTallyId != null">
+				bill_in_store_dtl_tally_id =
+				#{billInStoreDtlTallyId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="billInStoreId != null">
+				bill_in_store_id = #{billInStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="billInStoreDtlId != null">
+				bill_in_store_dtl_id =
+				#{billInStoreDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poDtlId != null">
+				po_dtl_id = #{poDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="tallyNum != null">
+				tally_num = #{tallyNum,jdbcType=DECIMAL},
+			</if>
+			<if test="batchNo != null">
+				batch_no = #{batchNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=TINYINT},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="poPrice != null">
+				po_price = #{poPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inStoreNum != null">
+				in_store_num = #{inStoreNum,jdbcType=DECIMAL},
+			</if>
+			<if test="storeNum != null">
+				store_num = #{storeNum,jdbcType=DECIMAL},
+			</if>
+			<if test="lockNum != null">
+				lock_num = #{lockNum,jdbcType=DECIMAL},
+			</if>
+			<if test="saleLockNum != null">
+				sale_lock_num = #{saleLockNum,jdbcType=DECIMAL},
+			</if>
+			<if test="stlId != null">
+				stl_id = #{stlId,jdbcType=INTEGER},
+			</if>
+			<if test="originAcceptTime != null">
+				origin_accept_time =
+				#{originAcceptTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="acceptTime != null">
+				accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiveDate != null">
+				receive_date = #{receiveDate,jdbcType=DATE},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=INTEGER},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="billInStoreNo != null">
+				bill_in_store_no = #{billInStoreNo,jdbcType=VARCHAR},
+			</if>
+			<if test="affiliateNo != null">
+				affiliate_no = #{affiliateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="appendNo != null">
+				append_no = #{appendNo,jdbcType=VARCHAR},
+			</if>
+			<if test="payPrice != null">
+				pay_price = #{payPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payPrice == -1">
+				pay_price = null,
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payRate != null">
+				pay_rate = #{payRate,jdbcType=DECIMAL},
+			</if>
+			<if test="payRealCurrency != null">
+				pay_real_currency = #{payRealCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="flyOrderFlag != null">
+				fly_order_flag = #{flyOrderFlag,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryStlResultsByCon" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultMap="BaseResultMap">
+		<include refid="queryStlResultsByCon_sql" />
+	</select>
+
+	<sql id="queryStlResultsByCon_sql">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		from tb_stl ts
+		left join tb_base_goods tbg
+		on ts.goods_id = tbg.id
+		inner
+		join tb_base_user_project bup
+		on ts.project_id = bup.project_id
+		inner
+		join tb_base_project tbp on
+		tbp.id = bup.project_id
+		where 1=1
+		<if test="userSubject != null">
+			<foreach collection="userSubject" item="dId"
+				open="AND ts.warehouse_id in(" separator="," close=")">
+				${dId.subjectId}
+			</foreach>
+		</if>
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="storeFlag!=null and storeFlag==1">
+			AND IFNULL(ts.store_num, 0) > 0
+		</if>
+		<include refid="condition" />
+		order by ts.id desc
+	</sql>
+
+	<select id="queryStlCountByCon" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="queryStlResultsByCon_sql" />
+		) tmp
+	</select>
+
+	<select id="querySumStl" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.StlSum">
+		select SUM(tally_num) as totalTallyNum, SUM(cost_price) as
+		totalCostPrice,
+		SUM(po_price) as totalPoPrice,
+		SUM(store_num) as
+		totalStoreNum,
+		SUM(lock_num) as totalLockNum,
+		SUM(sale_lock_num) as
+		totalSaleLockNum,
+		SUM(available_num) as totalAvailableNum,
+		SUM(store_amount) as totalStoreAmount,
+		SUM(lock_amount) as
+		totalLockAmount,
+		SUM(sale_lock_amount) as totalSaleLockAmount,
+		SUM(available_amount) as totalAvailableAmount,
+		currency_type as
+		currencyType
+		from (
+		select DISTINCT ts.id,
+		IFNULL(ts.tally_num, 0) as
+		tally_num,
+		IFNULL(ts.cost_price, 0) as cost_price,
+		IFNULL(ts.po_price,
+		0) as po_price,
+		IFNULL(ts.store_num, 0) as store_num,
+		IFNULL(ts.lock_num, 0) as lock_num,
+		IFNULL(ts.sale_lock_num, 0) as
+		sale_lock_num,
+		IFNULL(ts.store_num - ts.lock_num - ts.sale_lock_num, 0)
+		as available_num,
+		IFNULL(ROUND(ts.store_num*ts.cost_price, 2), 0) as
+		store_amount,
+		IFNULL(ROUND(ts.lock_num*ts.cost_price, 2), 0) as
+		lock_amount,
+		IFNULL(ROUND(ts.sale_lock_num*ts.cost_price, 2), 0) as
+		sale_lock_amount,
+		IFNULL(ROUND((ts.store_num - ts.lock_num -
+		ts.sale_lock_num)*ts.cost_price, 2), 0) as
+		available_amount,
+		ts.currency_type
+		from tb_stl ts
+		left join tb_base_goods tbg
+		on
+		ts.goods_id = tbg.id
+		inner join tb_base_user_project bup
+		on
+		ts.project_id = bup.project_id
+		inner join tb_base_project tbp on
+		tbp.id
+		= bup.project_id
+		where 1=1
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<include refid="condition" />
+		) as tmp GROUP BY tmp.currency_type
+	</select>
+
+	<select id="queryStlSummaryResultsByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.StlSummarySearchReqDto"
+		resultMap="BaseResultMap">
+		<include refid="queryStlSummaryResultsByCon_sql" />
+	</select>
+
+	<sql id="queryStlSummaryResultsByCon_sql">
+		select DISTINCT
+		<choose>
+			<when test="groupByCondition != null">
+				<if test="projectFlag == 1">
+					ts.project_id,
+				</if>
+				<if test="supplierFlag == 1">
+					ts.supplier_id,
+				</if>
+				<if test="warehouseFlag == 1">
+					ts.warehouse_id,
+				</if>
+				<if test="customerFlag == 1">
+					ts.customer_id,
+				</if>
+				<if test="goodsFlag == 1">
+					ts.goods_id,
+				</if>
+				<if test="batchNoFlag == 1">
+					ts.batch_no,
+				</if>
+				<if test="goodsStatusFlag == 1">
+					ts.goods_status,
+				</if>
+				<if test="currencyTypeFlag == 1">
+					ts.currency_type,
+				</if>
+			</when>
+			<otherwise>
+				ts.project_id,
+				ts.supplier_id,
+				ts.warehouse_id,
+				ts.customer_id,
+				ts.goods_id,
+				ts.batch_no,
+				ts.goods_status,
+				ts.currency_type,
+			</otherwise>
+		</choose>
+		IFNULL(sum(ts.in_store_num), 0) in_store_num,
+		IFNULL(sum(ts.store_num), 0) as store_num,
+		IFNULL(sum(ts.lock_num), 0)
+		as lock_num,
+		IFNULL(sum(ts.sale_lock_num), 0) as sale_lock_num,
+		ts.cost_price,
+		ts.po_price,
+		ts.id
+		from tb_stl ts
+		inner join
+		tb_base_user_project bup
+		on ts.project_id = bup.project_id
+		where 1=1
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="storeFlag!=null and storeFlag==1">
+			AND IFNULL(ts.store_num, 0) > 0
+		</if>
+		<choose>
+			<when test="groupByCondition != null">
+				group by 1
+				<if test="projectFlag == 1">
+					,ts.project_id
+				</if>
+				<if test="supplierFlag == 1">
+					,ts.supplier_id
+				</if>
+				<if test="warehouseFlag == 1">
+					,ts.warehouse_id
+				</if>
+				<if test="customerFlag == 1">
+					,ts.customer_id
+				</if>
+				<if test="goodsFlag == 1">
+					,ts.goods_id
+				</if>
+				<if test="batchNoFlag == 1">
+					,ts.batch_no
+				</if>
+				<if test="goodsStatusFlag == 1">
+					,ts.goods_status
+				</if>
+				<if test="currencyTypeFlag == 1">
+					,ts.currency_type
+				</if>
+			</when>
+			<otherwise>
+				group by ts.id
+			</otherwise>
+		</choose>
+		order by ts.id desc
+	</sql>
+
+	<select id="queryStlSummaryCountByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.StlSummarySearchReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="queryStlSummaryResultsByCon_sql" />
+		) tmp
+	</select>
+
+	<select id="querySumStlSummary"
+		parameterType="com.scfs.domain.logistics.dto.req.StlSummarySearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.StlSum">
+		select SUM(store_num) as totalStoreNum,
+		SUM(lock_num) as totalLockNum,
+		SUM(available_num) as totalAvailableNum,
+		SUM(sale_lock_num) as
+		totalSaleLockNum,
+		SUM(store_amount) as totalStoreAmount,
+		SUM(lock_amount) as totalLockAmount,
+		SUM(sale_lock_amount) as
+		totalSaleLockAmount,
+		SUM(available_amount) as totalAvailableAmount,
+		currency_type as currencyType
+		from (
+		select DISTINCT
+		<choose>
+			<when test="groupByCondition != null">
+				<if test="projectFlag == 1">
+					ts.project_id,
+				</if>
+				<if test="supplierFlag == 1">
+					ts.supplier_id,
+				</if>
+				<if test="warehouseFlag == 1">
+					ts.warehouse_id,
+				</if>
+				<if test="customerFlag == 1">
+					ts.customer_id,
+				</if>
+				<if test="goodsFlag == 1">
+					ts.goods_id,
+				</if>
+				<if test="batchNoFlag == 1">
+					ts.batch_no,
+				</if>
+				<if test="goodsStatusFlag == 1">
+					ts.goods_status,
+				</if>
+				<if test="currencyTypeFlag == 1">
+					ts.currency_type,
+				</if>
+			</when>
+			<otherwise>
+				ts.project_id,
+				ts.supplier_id,
+				ts.warehouse_id,
+				ts.customer_id,
+				ts.goods_id,
+				ts.batch_no,
+				ts.goods_status,
+				ts.currency_type,
+			</otherwise>
+		</choose>
+		IFNULL(sum(ts.in_store_num), 0) in_store_num,
+		IFNULL(sum(ts.store_num), 0) as store_num,
+		IFNULL(sum(ts.lock_num), 0)
+		as lock_num,
+		IFNULL(sum(ts.sale_lock_num), 0) as sale_lock_num,
+		IFNULL(sum(ts.store_num - ts.lock_num - ts.sale_lock_num), 0) as
+		available_num,
+		IFNULL(sum(ROUND(ts.store_num*ts.cost_price, 2)), 0) as
+		store_amount,
+		IFNULL(sum(ROUND(ts.lock_num*ts.cost_price, 2)), 0) as
+		lock_amount,
+		IFNULL(sum(ROUND(ts.sale_lock_num*ts.cost_price, 2)), 0)
+		as
+		sale_lock_amount,
+		IFNULL(sum(ROUND((ts.store_num - ts.lock_num -
+		ts.sale_lock_num)*ts.cost_price, 2)), 0) as
+		available_amount,
+		ts.cost_price,
+		ts.po_price,
+		ts.id
+		from tb_stl ts
+		inner join
+		tb_base_user_project bup
+		on ts.project_id = bup.project_id
+		where 1=1
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="storeFlag!=null and storeFlag==1">
+			AND IFNULL(ts.store_num, 0) > 0
+		</if>
+		<choose>
+			<when test="groupByCondition != null">
+				group by 1
+				<if test="projectFlag == 1">
+					,ts.project_id
+				</if>
+				<if test="supplierFlag == 1">
+					,ts.supplier_id
+				</if>
+				<if test="warehouseFlag == 1">
+					,ts.warehouse_id
+				</if>
+				<if test="customerFlag == 1">
+					,ts.customer_id
+				</if>
+				<if test="goodsFlag == 1">
+					,ts.goods_id
+				</if>
+				<if test="batchNoFlag == 1">
+					,ts.batch_no
+				</if>
+				<if test="goodsStatusFlag == 1">
+					,ts.goods_status
+				</if>
+				<if test="currencyTypeFlag == 1">
+					,ts.currency_type
+				</if>
+			</when>
+			<otherwise>
+				group by ts.id
+			</otherwise>
+		</choose>
+		) as tmp GROUP BY tmp.currency_type
+	</select>
+
+	<select id="queryStl4FIFO" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_stl ts
+		where 1=1
+		<include refid="condition" />
+		AND (IFNULL(ts.store_num, 0) - IFNULL(ts.lock_num, 0) -
+		IFNULL(ts.sale_lock_num, 0)) > 0
+		order by id asc, customer_id desc
+	</select>
+
+	<select id="queryStlCount4LastDay" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_stl
+		where IFNULL(store_num, 0) > 0
+	</select>
+
+	<select id="queryStlByBillInStoreTallyDtlId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_stl ts
+		where bill_in_store_dtl_tally_id =
+		#{billInStoreTallyDtlId}
+	</select>
+
+	<select id="querySumResultsByCon" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.StlSum">
+		select IFNULL(sum(ts.store_num), 0) storeNum,
+		IFNULL(sum(ts.lock_num),
+		0) lockNum,
+		IFNULL(sum(ts.sale_lock_num), 0) saleLockNum,
+		IFNULL(sum(IFNULL(ts.store_num, 0) - IFNULL(ts.lock_num, 0) -
+		IFNULL(ts.sale_lock_num, 0)), 0)
+		availableNum
+		from tb_stl ts
+		where 1=1
+		<include refid="condition" />
+	</select>
+
+	<select id="queryResultsByPoLineId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from tb_stl stl
+		where stl.po_dtl_id = #{poLineId}
+	</select>
+
+	<select id="queryResultsByPoId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from tb_stl stl
+		where stl.po_id = #{poId}
+	</select>
+
+	<select id="queryResultsByPayId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_stl ts
+		where ts.po_dtl_id in (select ppr.po_line_id from
+		tb_pay_po_relation ppr
+		where ppr.is_delete = 0 and ppr.pay_id =
+		#{payId})
+	</select>
+
+
+	<update id="updateByBillInStoreId" parameterType="com.scfs.domain.logistics.entity.Stl">
+		update tb_stl
+		<set>
+			<if test="billInStoreDtlTallyId != null">
+				bill_in_store_dtl_tally_id =
+				#{billInStoreDtlTallyId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="billInStoreDtlId != null">
+				bill_in_store_dtl_id =
+				#{billInStoreDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poDtlId != null">
+				po_dtl_id = #{poDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="tallyNum != null">
+				tally_num = #{tallyNum,jdbcType=DECIMAL},
+			</if>
+			<if test="batchNo != null">
+				batch_no = #{batchNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=TINYINT},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="poPrice != null">
+				po_price = #{poPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inStoreNum != null">
+				in_store_num = #{inStoreNum,jdbcType=DECIMAL},
+			</if>
+			<if test="storeNum != null">
+				store_num = #{storeNum,jdbcType=DECIMAL},
+			</if>
+			<if test="lockNum != null">
+				lock_num = #{lockNum,jdbcType=DECIMAL},
+			</if>
+			<if test="saleLockNum != null">
+				sale_lock_num = #{saleLockNum,jdbcType=DECIMAL},
+			</if>
+			<if test="stlId != null">
+				stl_id = #{stlId,jdbcType=INTEGER},
+			</if>
+			<if test="originAcceptTime != null">
+				origin_accept_time =
+				#{originAcceptTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="acceptTime != null">
+				accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiveDate != null">
+				receive_date = #{receiveDate,jdbcType=DATE},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=INTEGER},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="billInStoreNo != null">
+				bill_in_store_no = #{billInStoreNo,jdbcType=VARCHAR},
+			</if>
+			<if test="affiliateNo != null">
+				affiliate_no = #{affiliateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="appendNo != null">
+				append_no = #{appendNo,jdbcType=VARCHAR},
+			</if>
+			<if test="payPrice != null">
+				pay_price = #{payPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payPrice == -1">
+				pay_price = null,
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="flyOrderFlag != null">
+				fly_order_flag = #{flyOrderFlag,jdbcType=INTEGER},
+			</if>
+		</set>
+		where bill_in_store_id = #{billInStoreId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 获取账期临期3天，7天库存 -->
+	<select id="queryResultsByAdvent" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.logistics.entity.Stl">
+		select
+		ts.id,
+		ts.bill_in_store_dtl_tally_id AS
+		billInStoreDtlTallyId,
+		ts.project_id AS projectId,
+		ts.supplier_id AS
+		supplierId,
+		ts.warehouse_id AS
+		warehouseId,
+		ts.customer_id AS customerId,
+		ts.bill_in_store_id AS billInStoreId,
+		ts.bill_in_store_dtl_id
+		billInStoreDtlId,
+		ts.po_dtl_id AS poDtlId, ts.po_id AS poId,
+		ts.goods_id AS goodsId,
+		ts.tally_num AS
+		tallyNum, ts.batch_no AS
+		batchNo, ts.goods_status AS goodsStatus,
+		ts.cost_price AS costPrice,
+		ts.po_price AS poPrice,
+		ts.in_store_num AS
+		inStoreNum, SUM(ts.store_num)
+		AS storeNum, SUM(ts.lock_num) AS
+		lockNum,
+		SUM(ts.sale_lock_num) AS
+		saleLockNum,
+		ts.stl_id AS stlId,
+		ts.origin_accept_time AS
+		originAcceptTime, ts.accept_time AS
+		acceptTime, ts.receive_date AS
+		receiveDate,
+		ts.currency_type AS
+		currencyType, ts.exchange_rate AS
+		exchangeRate, ts.remark AS remark,
+		ts.creator_id AS creatorId,
+		ts.creator, ts.create_at AS createAt,
+		ts.update_at AS updateAt,
+		ts.bill_in_store_no AS billInStoreNo,
+		ts.affiliate_no AS affiliateNo,
+		ts.order_no AS orderNo, ts.append_no
+		AS appendNo,
+		ts.pay_price AS
+		payPrice, ts.pay_time AS payTime,
+		SUM((ts.store_num-ts.lock_num-ts.sale_lock_num)*IFNULL(ts.cost_price,0))
+		AS availableModel
+		FROM tb_stl ts
+		LEFT JOIN tb_base_project pro ON
+		ts.project_id=pro.id
+		LEFT JOIN tb_project_item ite ON
+		pro.id=ite.project_id
+		WHERE ts.pay_time IS NOT NULL
+		AND
+		IFNULL(ts.store_num, 0) > 0
+		AND ite.is_delete=0
+		AND ite.status=6
+		and
+		ite.fund_account_period
+		-IFNULL(DATEDIFF(CURDATE(),ts.pay_time),0)=#{day}
+		GROUP BY
+		ts.project_id,ts.warehouse_id
+	</select>
+
+	<!-- 获取平均库龄 -->
+	<select id="queryAvgOldLibrary" resultType="java.math.BigDecimal"
+		parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto">
+		SELECT
+		AVG(total.avgNumber)
+		FROM
+		(SELECT
+		AVG(IFNULL(DATEDIFF(CURDATE(),
+		ts.accept_time),0)) AS avgNumber
+		FROM
+		tb_stl ts
+		LEFT JOIN tb_base_goods
+		tbg
+		ON ts.goods_id = tbg.id
+		INNER JOIN tb_base_user_project bup
+		ON
+		ts.project_id = bup.project_id
+		INNER JOIN tb_base_project tbp
+		ON tbp.id
+		= bup.project_id
+		WHERE
+		IFNULL(ts.store_num, 0)>0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ts.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY tbg.number
+		)total
+	</select>
+
+	<!-- 在仓库存 -->
+	<select id="queryResultsGroupByGoodsNumber" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.Stl">
+		select
+		ts.id,
+		ts.bill_in_store_dtl_tally_id AS billInStoreDtlTallyId,
+		ts.project_id AS projectId,
+		ts.supplier_id AS supplierId,
+		ts.warehouse_id AS
+		warehouseId,
+		ts.customer_id AS customerId,
+		ts.bill_in_store_id AS billInStoreId,
+		ts.bill_in_store_dtl_id
+		billInStoreDtlId,
+		ts.po_dtl_id AS poDtlId, ts.po_id AS poId,
+		ts.goods_id AS goodsId,
+		ts.tally_num AS
+		tallyNum, ts.batch_no AS
+		batchNo, ts.goods_status AS goodsStatus,
+		ts.cost_price AS costPrice,
+		ts.po_price AS poPrice,
+		ts.in_store_num AS
+		inStoreNum, SUM(ts.store_num)
+		AS storeNum, SUM(ts.lock_num) AS
+		lockNum,
+		SUM(ts.sale_lock_num) AS
+		saleLockNum,
+		ts.stl_id AS stlId,
+		ts.origin_accept_time AS
+		originAcceptTime, ts.accept_time AS
+		acceptTime, ts.receive_date AS
+		receiveDate,
+		ts.currency_type AS
+		currencyType, ts.exchange_rate AS
+		exchangeRate, ts.remark AS remark,
+		ts.creator_id AS creatorId,
+		ts.creator, ts.create_at AS createAt,
+		ts.update_at AS updateAt,
+		ts.bill_in_store_no AS billInStoreNo,
+		ts.affiliate_no AS affiliateNo,
+		ts.order_no AS orderNo, ts.append_no
+		AS appendNo,
+		ts.pay_price AS
+		payPrice, ts.pay_time AS payTime,
+		SUM(IFNULL(ts.store_num,0)*IFNULL(ts.cost_price,0)) AS availableModel,
+		
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = ts.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(ts.accept_time, '%Y-%m-%d')
+		) cnyRate
+		
+		FROM tb_stl ts
+		LEFT JOIN tb_base_goods tbg
+		ON ts.goods_id = tbg.id
+		INNER
+		JOIN
+		tb_base_user_project bup
+		ON ts.project_id = bup.project_id
+		INNER
+		JOIN
+		tb_base_project tbp ON
+		tbp.id = bup.project_id
+		WHERE 1=1
+		AND
+		IFNULL(ts.store_num, 0) &gt; 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="projectId!=null">
+			AND ts.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND ts.supplier_id = #{supplierId}
+		</if>
+		<if test="customerId!=null">
+			AND ts.customer_id = #{customerId}
+		</if>
+		<if test="warehouseId!=null">
+			AND ts.warehouse_id = #{warehouseId}
+		</if>
+		<if test="startAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="endAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ts.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY ts.currency_type,tbg.number
+	</select>
+	<!-- 在仓库存总金额,总数量 -->
+	<select id="querySumNowStlAmount" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.Stl">
+
+	</select>
+
+	<!-- 平均库龄数据 -->
+	<select id="queryResultsGroupByAvgAge" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.Stl">
+		select
+		ts.project_id AS projectId,
+		ts.supplier_id AS supplierId,
+		ts.warehouse_id AS warehouseId,
+		ts.customer_id AS customerId,
+		ts.goods_id AS goodsId,
+		ts.goods_status AS goodsStatus,
+		ts.accept_time
+		AS acceptTime,
+		AVG(IFNULL(DATEDIFF(CURDATE(), ts.accept_time),0)) AS
+		avgAge
+		FROM
+		tb_stl ts
+		LEFT JOIN tb_base_goods tbg
+		ON ts.goods_id = tbg.id
+		INNER
+		JOIN
+		tb_base_user_project bup
+		ON ts.project_id = bup.project_id
+		INNER
+		JOIN
+		tb_base_project tbp ON
+		tbp.id = bup.project_id
+		WHERE 1=1
+		AND
+		IFNULL(ts.store_num, 0) &gt; 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="projectId!=null">
+			AND ts.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND ts.supplier_id = #{supplierId}
+		</if>
+		<if test="customerId!=null">
+			AND ts.customer_id = #{customerId}
+		</if>
+		<if test="warehouseId!=null">
+			AND ts.warehouse_id = #{warehouseId}
+		</if>
+		<if test="startAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="endAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="goodsNumber!=null and goodsNumber!=''">
+			AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ts.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY tbg.number
+	</select>
+
+	<!-- 超期库存及动滞相关 -->
+	<select id="queryResultsGroupByOver" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.Stl">
+		SELECT
+		DISTINCT
+		ts.id,
+		ts.bill_in_store_dtl_tally_id AS
+		billInStoreDtlTallyId,
+		ts.project_id AS projectId,
+		ts.supplier_id AS
+		supplierId,
+		ts.warehouse_id AS
+		warehouseId,
+		ts.customer_id AS customerId,
+		ts.bill_in_store_id AS billInStoreId,
+		ts.bill_in_store_dtl_id
+		billInStoreDtlId,
+		ts.po_dtl_id AS poDtlId, ts.po_id AS poId,
+		ts.goods_id AS goodsId,
+		ts.tally_num AS
+		tallyNum, ts.batch_no AS
+		batchNo, ts.goods_status AS goodsStatus,
+		ts.cost_price AS costPrice,
+		ts.po_price AS poPrice,
+		ts.in_store_num AS
+		inStoreNum, SUM(ts.store_num)
+		AS storeNum, SUM(ts.lock_num) AS
+		lockNum,
+		SUM(ts.sale_lock_num) AS
+		saleLockNum,
+		ts.stl_id AS stlId,
+		ts.origin_accept_time AS
+		originAcceptTime, ts.accept_time AS
+		acceptTime, ts.receive_date AS
+		receiveDate,
+		ts.currency_type AS
+		currencyType, ts.exchange_rate AS
+		exchangeRate, ts.remark AS remark,
+		ts.creator_id AS creatorId,
+		ts.creator, ts.create_at AS createAt,
+		ts.update_at AS updateAt,
+		ts.bill_in_store_no AS billInStoreNo,
+		ts.affiliate_no AS affiliateNo,
+		ts.order_no AS orderNo, ts.append_no
+		AS appendNo,
+		ts.pay_price AS
+		payPrice, ts.pay_time AS payTime,
+		SUM(IFNULL(ts.store_num,0)*IFNULL(ts.cost_price,0)) AS availableModel,
+		IFNULL(ite.library_age,0) AS age,
+		IFNULL(DATEDIFF(CURDATE(),ts.accept_time),0)-IFNULL(ite.library_age,0)
+		AS overAge,
+		IFNULL(ite.fund_account_period,0)-IFNULL(DATEDIFF(CURDATE(),ts.pay_time),0)
+		AS nearAge,
+		ite.fund_account_period AS periodTime,
+
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = ts.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(ts.accept_time, '%Y-%m-%d')
+		) cnyRate
+
+		FROM
+		tb_stl ts
+		LEFT JOIN
+		tb_base_goods tbg
+		ON ts.goods_id =
+		tbg.id
+		INNER
+		JOIN
+		tb_base_user_project
+		bup
+		ON ts.project_id =
+		bup.project_id
+		INNER
+		JOIN
+		tb_base_project tbp
+		ON
+		tbp.id = bup.project_id
+		INNER JOIN
+		tb_project_item ite
+		ON
+		ite.project_id=tbp.id
+		WHERE 1=1
+		AND
+		ite.is_delete=0 AND ite.status=6
+		AND
+		IFNULL(ts.store_num, 0) &gt; 0
+		<if test="day != null and day==0">
+			AND IFNULL(DATEDIFF(CURDATE(), ts.accept_time),0)-
+			IFNULL(ite.library_age,0) &gt; #{day}
+		</if>
+		<if test="day != null and day==7">
+			AND ite.fund_account_period
+			-IFNULL(DATEDIFF(CURDATE(),ts.pay_time),0)
+			&lt;=#{day}
+		</if>
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="projectId!=null">
+			AND ts.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND ts.supplier_id = #{supplierId}
+		</if>
+		<if test="customerId!=null">
+			AND ts.customer_id = #{customerId}
+		</if>
+		<if test="warehouseId!=null">
+			AND ts.warehouse_id = #{warehouseId}
+		</if>
+		<if test="startAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="endAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="startPayTime !=null">
+			AND DATE_FORMAT(ts.pay_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startPayTime},'%Y-%m-%d')
+		</if>
+		<if test="endPayTime !=null">
+			AND DATE_FORMAT(ts.pay_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endPayTime},'%Y-%m-%d')
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ts.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY ts.currency_type,tbg.number
+	</select>
+	<!-- 超期库存及动滞相关总金额 -->
+	<select id="querySumAmount" parameterType="com.scfs.domain.logistics.dto.req.StlSearchReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(st.stlAmount) FROM (
+		SELECT
+		DISTINCT
+		(SUM(IFNULL(ts.store_num,0)*IFNULL(ts.cost_price,0))
+		*
+		(SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = ts.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(ts.accept_time, '%Y-%m-%d')
+		) ) AS
+		stlAmount
+		FROM
+		tb_stl ts
+		LEFT JOIN
+		tb_base_goods tbg
+		ON ts.goods_id =
+		tbg.id
+		INNER
+		JOIN
+		tb_base_user_project
+		bup
+		ON ts.project_id =
+		bup.project_id
+		INNER
+		JOIN
+		tb_base_project tbp
+		ON
+		tbp.id = bup.project_id
+		INNER JOIN
+		tb_project_item ite
+		ON
+		ite.project_id=tbp.id
+		WHERE 1=1
+		AND
+		ite.is_delete=0 AND ite.status=6
+		AND
+		IFNULL(ts.store_num, 0) &gt; 0
+		<if test="day != null and day==0">
+			AND IFNULL(DATEDIFF(CURDATE(), ts.accept_time),0)-
+			IFNULL(ite.library_age,0) &gt; #{day}
+		</if>
+		<if test="day != null and day==7">
+			AND ite.fund_account_period
+			-IFNULL(DATEDIFF(CURDATE(),ts.pay_time),0)
+			&lt;=#{day}
+		</if>
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="projectId!=null">
+			AND ts.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND ts.supplier_id = #{supplierId}
+		</if>
+		<if test="customerId!=null">
+			AND ts.customer_id = #{customerId}
+		</if>
+		<if test="warehouseId!=null">
+			AND ts.warehouse_id = #{warehouseId}
+		</if>
+		<if test="startAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="endAcceptTime!=null">
+			AND DATE_FORMAT(ts.accept_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endAcceptTime},'%Y-%m-%d')
+		</if>
+		<if test="startPayTime !=null">
+			AND DATE_FORMAT(ts.pay_time,'%Y-%m-%d') &gt;=
+			DATE_FORMAT(#{startPayTime},'%Y-%m-%d')
+		</if>
+		<if test="endPayTime !=null">
+			AND DATE_FORMAT(ts.pay_time,'%Y-%m-%d') &lt;=
+			DATE_FORMAT(#{endPayTime},'%Y-%m-%d')
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ts.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY ts.currency_type,tbg.number) st
+	</select>
+</mapper>

@@ -1,0 +1,347 @@
+@import url("public.less");
+@import url("_reset.less");
+
+//去掉ul li 默认样式
+ul,ol,li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+label {
+    max-width:auto;
+    font-weight:300;cursor: pointer;
+}
+.error,.error:focus{border-color:#f00!important;color:#a94442!important;padding:0 5px;display:inline-block;}
+//清除浮动
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.clearfix {
+    display: inline-block
+}
+
+* html .clearfix {
+    height: 1%
+}
+
+//原子类
+.clearfix {
+    display: block
+}
+
+.no-border {
+    border: 0!important;
+}
+
+.transparent-bg{
+    background:transparent url("../images/transparent.png") repeat 0 0;
+}
+
+/* text-align */
+.text-left{
+    text-align:left;
+}
+.text-right{
+    text-align:right;
+}
+.text-center{
+    text-align:center;
+}
+
+.fr{
+    float:right;
+}
+.fl{
+    float:left;
+}
+
+.m10{margin:10px}
+.m15{margin:15px}
+.m30{margin:30px}
+.mt5{margin-top:5px}
+.mt10{margin-top:10px}
+.mt15{margin-top:15px}
+.mt20{margin-top:20px}
+.mt25{margin-top:25px}
+.mt30{margin-top:30px}
+.mt35{margin-top:35px}
+.mt40{margin-top:40px}
+.mt45{margin-top:45px}
+.mt50{margin-top:50px}
+.mt100{margin-top:100px}
+.mb5{margin-bottom:5px}
+.mb10{margin-bottom:10px}
+.mb15{margin-bottom:15px}
+.mb20{margin-bottom:20px}
+.mb30{margin-bottom:30px}
+.mb35{margin-bottom:35px}
+.mb45{margin-bottom:45px}
+.mb50{margin-bottom:50px}
+.mb100{margin-bottom:100px}
+.ml5{margin-left:5px}
+.ml10{margin-left:10px}
+.ml15{margin-left:15px}
+.ml20{margin-left:20px}
+.ml30{margin-left:30px}
+.ml50{margin-left:50px}
+.ml100{margin-left:100px}
+.mr5{margin-right:5px}
+.mr10{margin-right:10px}
+.mr15{margin-right:15px}
+.mr20{margin-right:20px}
+.mr30{margin-right:30px}
+.mr35{margin-right:35px}
+.mr50{margin-right:50px}
+.mr100{margin-right:100px}
+.p5{padding: 5px}
+.p10{padding:10px;}
+.p15{padding:15px;}
+.p20{padding:20px;}
+.p30{padding:30px;}
+.pt5{padding-top:5px}
+.pt10{padding-top:10px}
+.pt15{padding-top:15px}
+.pt20{padding-top:20px}
+.pt30{padding-top:30px}
+.pt35{padding-top:35px}
+.pt40{padding-top:40px}
+.pt45{padding-top:45px}
+.pt50{padding-top:50px}
+.pb0{padding-bottom:0px}
+.pb5{padding-bottom:5px}
+.pb10{padding-bottom:10px}
+.pb15{padding-bottom:15px}
+.pb20{padding-bottom:20px}
+.pb30{padding-bottom:30px}
+.pb40{padding-bottom:40px}
+.pb45{padding-bottom:45px}
+.pb50{padding-bottom:50px}
+.pb100{padding-bottom:100px}
+.pl5{padding-left:5px}
+.pl10{padding-left:10px}
+.pl15{padding-left:15px}
+.pl20{padding-left:20px}
+.pl30{padding-left:30px}
+.pl40{padding-left:40px}
+.pl50{padding-left:50px}
+.pl100{padding-left:100px}
+.pr0{padding-right:0px}
+.pr5{padding-right:5px}
+.pr10{padding-right:10px}
+.pr15{padding-right:15px}
+.pr20{padding-right:20px}
+.pr25{padding-right:25px}
+.pr30{padding-right:30px}
+.pr35{padding-right:35px}
+.pr40{padding-right:40px}
+.pr45{padding-right:45px}
+.pr50{padding-right:50px}
+
+
+//面包屑
+.my-content-header {
+    background: @colorf!important;
+    padding-top: 0;
+    border-bottom: 1px solid @colore;
+    .breadcrumb {
+        float: none;
+        position: static;
+        font-size: 14px;
+    }
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+}
+
+//搜索部分
+.search-box {
+    margin-top: 10px;
+    border: 1px solid #eee;
+    input[type="text"]{margin-right:10px;}
+}
+.table-wrap{width:100%;overflow-x:scroll;overflow-y:hidden;}
+//公共盒子样式
+.box {
+    border-top: 0;
+    border-radius: 0;
+    margin-bottom:1px;
+    //box-shadow:none;
+    .box-header {
+        .box-title-sm {
+            line-height: 30px;
+            span {
+                padding: 0 10px;
+            }
+        }
+        .box-form {
+            margin-bottom: 0;
+            width: 70%;
+            p {
+                margin: 0;
+                padding: 0 5px;
+            }
+        }
+        .checkbox-list {
+            padding: 5px 10px;
+            b {
+                display: block;
+                float: left;
+                padding-right: 10px;
+            }
+            ul {
+                float: left;
+            }
+            li {
+                float: left;
+                margin-right: 20px;
+            }
+            .checkbox {
+                margin: 0;
+            }
+        }
+    }
+    .box-body {
+        width: 100%;
+        // min-height:300px;
+        .form-group {
+            .checkbox,
+            .radio {
+                display: inline-block;
+                float: none;
+                padding-right: 15px;
+                min-width: 100px;
+            }
+        }
+        .box-body-title {
+            background-color: @colore;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            border: 1px solid @colord;
+            border-right: 0;
+            li {
+                border-right: 1px solid @colord;
+                padding: 8px 15px;
+            }
+        }
+    }
+    .box-footer {
+        //position:fixed;bottom:0;width:100%;left:0;
+        .btn {
+            margin: 0px 10px;
+            padding: 6px 20px;
+        }
+    }
+}
+
+//分页
+.pagination-wrap {
+    .pagination-detail,
+    ul,
+    .pagination-total {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 10px;
+    }
+    select {
+        margin: 0 5px;
+        border: 1px solid @colord;
+        padding: 3px 5px;
+        font-family: Arial, "Microsoft Yahei";
+    }
+    span {
+        font-family: Arial, "Microsoft Yahei";
+    }
+}
+
+//数据表格样式重置
+.fixed-table-container {
+    border-radius: 0;
+}
+
+.fixed-table-container {
+    border: none;
+}
+
+.bootstrap-table .table > thead > tr > th {
+    border-width: 1px;
+    border-color: #f4f4f4;
+}
+
+//表单必填星号
+.text-star {
+    color: #f00;
+    font-style: normal;
+    vertical-align: middle;
+    padding:0 5px;
+}
+
+
+//表单提示文字
+.form-group-tips {
+    vertical-align: middle;
+    color: @color9;
+    margin-bottom: 0px;
+}
+
+
+//panel面板自定义
+.panel{
+    border-radius:0px;box-shadow:none;
+}
+.panel-title{
+    font-size:14px;
+}
+.panel-default{
+    border-color:@colore;
+}
+.panel-default>.panel-heading{
+    border-color:@colore;
+}
+
+//上传按钮
+.uploadify-button {
+    padding: 0!important;
+}
+
+
+//tab nav自定义
+.nav-tabs {
+    border-bottom: 1px solid #eee
+}
+
+.nav-tabs>li {
+    float: left;
+    margin-bottom: -1px;
+    cursor:default;
+}
+
+.nav-tabs>li>a {
+    color: #999;
+    margin-right:15px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0
+}
+
+.nav-tabs>li>a:hover {
+    color:#666;
+    border-color: #eee #eee #eee
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {    
+    color:#337ab7;
+    cursor: default; 
+    border: 1px solid #eee;
+    background: #f5f5f5;
+    font-weight: bold;
+    border-bottom-color: transparent
+}

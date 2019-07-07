@@ -1,0 +1,115 @@
+<div class="wrapper">
+  	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+		    <li>当前位置</li>
+		    <li>项目</li>
+		    <li class="active">融资池基本信息浏览</li>
+  		</ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="projectPoolById/query">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+	                 <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectPoolBaseInfo.html">基本信息</a></li>
+	                 <li role="presentation"><a class="tab-item" id="fundDtl" data-url="html/project/projectPoolFundDtl.html">资金明细</a></li>
+	                 <li role="presentation"><a class="tab-item" id="assertDtl" data-url="html/project/projectPoolAssertDtl.html">资产明细</a></li>
+	            </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="230" class="text-right"><b>项目：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectname" name="projectname"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>项目额度：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectAmount" name="projectAmount"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>已使用资金额度：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="usedFundAmount" name="usedFundAmount"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>已使用资产额度：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="usedAssetAmount" name="usedAssetAmount"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>资金余额：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remainFundAmount" name="appremainFundAmountendNo"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>资产余额：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remainAssetAmount" name="remainAssetAmount"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>项目额度(CNY)：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectAmountCny" name="projectAmountCny"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>已使用资金额度(CNY)：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="usedFundAmountCny" name="usedFundAmountCny"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>已使用资产额度(CNY)：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="usedAssetAmountCny" name="usedAssetAmountCny"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>资金余额(CNY)：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remainFundAmountCny" name="remainFundAmountCny"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>资产余额(CNY)：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remainAssetAmountCny" name="remainAssetAmountCny"></label>
+                      </td>
+                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+               <button type="button" id="back" data-url="html/project/projectPool.html" class="btn btn-default btn-sm">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function() {
+	GLOBAL.getEditData($("#form1"), options.param.id);
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}   
+    
+</script>

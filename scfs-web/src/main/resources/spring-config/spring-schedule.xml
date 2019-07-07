@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 启动触发器的配置开始 -->
+	<bean name="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cacheRefreshJobTrigger" />
+				<ref bean="msgContentSendJobTrigger" />
+				<ref bean="hsbcExchangeRateJobTrigger" />
+				<ref bean="chinaBankExchangeRateJobTrigger" />
+				<ref bean="copyStlJobTrigger" />
+				<ref bean="exchangeBillExpireJobTrigger" />
+				<ref bean="projectItemUpdateJobTrigger" />
+				<ref bean="projectPoolAdjustUpdateJobTrigger" />
+				<ref bean="asyncExcelJobTrigger" />
+				<ref bean="performanceReportJobTrigger" />
+				<ref bean="fundReportJobTrigger" />
+				<ref bean="currentMonthFundReportJobTrigger" />
+				<ref bean="profitReportJobTrigger" />
+				<ref bean="profitReportMonthJobTrigger" />
+				<ref bean="autoDistributeAccountJobTrigger" />
+				<ref bean="sendAdventMessageJobTrigger" />
+				<ref bean="autoOffsetReceiveJobTrigger" />
+				<ref bean="capitalTurnoverJobTrigger" />
+				<ref bean="storeOutWechatJobTrigger" />
+				<ref bean="salesDailyWechatJobTrigger" />
+				<!-- 
+				<ref bean="invokeLogJobTrigger" />
+				<ref bean="pmsPayOrderDealJobTrigger" />
+				<ref bean="billInStoreJobTrigger" />
+				<ref bean="billOutStoreJobTrigger" />
+				<ref bean="pmsPayWaitJobTrigger" />
+				<ref bean="interfaceValidTrigger" />
+				-->
+			</list>
+		</property>
+	</bean>
+
+	<!--定时刷新缓存 -->
+	<bean id="cacheRefreshJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="cacheRefreshJobInvokeBean" />
+		<!-- 每隔五分钟刷新缓存一次 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	<bean id="cacheRefreshJobInvokeBean"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cacheRefreshJob" />
+		<property name="targetMethod" value="refreshCache" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="cacheRefreshJob" class="com.scfs.service.schedule.CacheRefreshJob" />
+
+	<!--定时发送系统消息 -->
+	<bean id="msgContentSendJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="msgContentSendJobInvokeBean" />
+		<!-- 每隔3分钟发送一次消息 -->
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="msgContentSendJobInvokeBean"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="msgContentSendJob" />
+		<property name="targetMethod" value="sendMsg" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="msgContentSendJob" class="com.scfs.service.schedule.MsgContentSendJob" />
+
+	<!-- 汇丰银行 -->
+	<bean id="hsbcExchangeRateJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="hsbcExchangeRateJobDetail" />
+		<!-- 每天上午10:01执行 -->
+		<property name="cronExpression" value="0 1 10 * * ?" />
+	</bean>
+	<bean id="hsbcExchangeRateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="hsbcExchangeRateJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="hsbcExchangeRateJob" class="com.scfs.service.schedule.HsbcExchangeRateJob" />
+
+	<!--中国银行 -->
+	<bean id="chinaBankExchangeRateJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="chinaBankExchangeRateJobDetail" />
+		<!-- 每天上午10:01执行 -->
+		<property name="cronExpression" value="0 1 10 * * ?" />
+	</bean>
+	<bean id="chinaBankExchangeRateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="chinaBankExchangeRateJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="chinaBankExchangeRateJob" class="com.scfs.service.schedule.ChinaBankExchangeRateJob" />
+
+	<!-- 每天备份库存 -->
+	<bean id="copyStlJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="copyStlJobDetail" />
+		<!-- 每天上午00:30执行 -->
+		<property name="cronExpression" value="0 30 0 * * ?" />
+	</bean>
+	<bean id="copyStlJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="copyStlJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+	<bean id="copyStlJob" class="com.scfs.service.schedule.CopyStlJob" />
+
+	<!-- 承兑汇票到期自动记账 -->
+	<bean id="exchangeBillExpireJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="exchangeBillExpireJobDetail" />
+		<!-- 每天上午01:00执行 -->
+		<property name="cronExpression" value="0 0 1 * * ?" />
+	</bean>
+	<bean id="exchangeBillExpireJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="exchangeBillExpireJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+	<bean id="exchangeBillExpireJob" class="com.scfs.service.schedule.ExchangeBillExpireJob" />
+
+	<!-- 每天0:01执行更新项目条款 -->
+	<bean id="projectItemUpdateJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="projectItemUpdateJobDetail" />
+		<!-- 每天0:01分执行 -->
+		<property name="cronExpression" value="0 1 0 * * ?" />
+	</bean>
+	<bean id="projectItemUpdateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="projectItemUpdateJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+	<bean id="projectItemUpdateJob" class="com.scfs.service.schedule.ProjectItemUpdateJob" />
+
+	<!-- 每天0:01执行更新临时额度 -->
+	<bean id="projectPoolAdjustUpdateJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="projectPoolAdjustUpdateJobDetail" />
+		<!-- 每天0:01分执行 -->
+		<property name="cronExpression" value="0 1 0 * * ?" />
+	</bean>
+	<bean id="projectPoolAdjustUpdateJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="projectPoolAdjustUpdateJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+	<bean id="projectPoolAdjustUpdateJob" class="com.scfs.service.schedule.ProjectPoolAdjustUpdateJob" />
+
+	<!-- 导出定时处理 -->
+	<bean id="asyncExcelJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="asyncExcelJobDetail" />
+		<!-- 每5分钟执行 -->
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	<bean id="asyncExcelJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="asyncExcelJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="asyncExcelJob" class="com.scfs.service.schedule.AsyncExcelJob" />
+		
+	<!-- 绩效报表定时统计 -->
+	<bean id="performanceReportJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="performanceReportJobDetail" />
+		<!-- 每个月1号上午1点30 -->
+		<property name="cronExpression" value="0 30 1 1 * ?" />
+	</bean>
+	<bean id="performanceReportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="performanceReportJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="performanceReportJob" class="com.scfs.service.schedule.PerformanceReportJob" />
+
+	<!-- 资金报表定时统计 -->
+	<bean id="fundReportJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="fundReportJobDetail" />
+		<!-- 每个月1号上午1点 -->
+		<property name="cronExpression" value="0 0 1 1 * ?" />
+	</bean>
+	<bean id="fundReportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fundReportJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="fundReportJob" class="com.scfs.service.schedule.FundStatisticsJob" />
+
+	<!-- 资金报表当月全量定时统计 -->
+	<bean id="currentMonthFundReportJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="currentMonthFundReportJobDetail" />
+		<!-- 每天上午3点 -->
+		<property name="cronExpression" value="0 0 3 * * ?" />
+	</bean>
+	<bean id="currentMonthFundReportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="currentMonthFundReportJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="currentMonthFundReportJob" class="com.scfs.service.schedule.CurrentMonthFundReportJob" />
+
+	<!-- 利润报表定时统计 -->
+	<bean id="profitReportJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="profitReportJobDetail" />
+		<!-- 每天1:30执行 -->
+		<property name="cronExpression" value="0 30 1 * * ?" />
+	</bean>
+	<bean id="profitReportJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="profitReportJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="profitReportJob" class="com.scfs.service.schedule.ProfitReportJob" />
+
+	<!-- 利润月报表定时统计 -->
+	<bean id="profitReportMonthJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="profitReportJobMonthDetail" />
+		<!-- 每天2:30执行 -->
+		<property name="cronExpression" value="0 30 2 * * ?" />
+	</bean>
+	<bean id="profitReportJobMonthDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="profitReportMonthJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="profitReportMonthJob" class="com.scfs.service.schedule.ProfitReportMonthJob" />
+
+	<!-- 自动生成未请款商品凭证 -->
+	<bean id="autoDistributeAccountJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="autoDistributeAccountJobDetail" />
+		<!-- 每个月1号上午0点10分 -->
+		<property name="cronExpression" value="0 10 0 1 * ?" />
+	</bean>
+	<bean id="autoDistributeAccountJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="autoDistributeAccountJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="autoDistributeAccountJob" class="com.scfs.service.schedule.AutoDistributeAccountJob" />
+
+	<!-- 账期提醒RTX消息 -->
+	<bean id="sendAdventMessageJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="sendAdventMessageJobDetail" />
+		<!-- 每天上午10:00执行 -->
+		<property name="cronExpression" value="0 0 10 * * ?" />
+	</bean>
+	<bean id="sendAdventMessageJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sendAdventMessageJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sendAdventMessageJob" class="com.scfs.service.schedule.SendAdventMessageJob" />
+
+	<!-- 自动冲抵应收 -->
+	<bean id="autoOffsetReceiveJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="autoOffsetReceiveJobDetail" />
+		<!--每天00:30执行 -->
+		<property name="cronExpression" value="0 30 0 * * ?" />
+	</bean>
+	<bean id="autoOffsetReceiveJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="autoOffsetReceiveJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="autoOffsetReceiveJob" class="com.scfs.service.schedule.AutoOffsetReceiveJob" />
+
+	<!--资金周转率信息处理 -->
+	<bean id="capitalTurnoverJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="capitalTurnoverJobDetail" />
+		<!--每月1号05:30执行 -->
+		<property name="cronExpression" value="0 30 5 1 * ?" />
+	</bean>
+	<bean id="capitalTurnoverJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="capitalTurnoverJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="capitalTurnoverJob" class="com.scfs.service.schedule.EntryInfoJob" />
+
+	<!--供应商销售发送微信定时任务 -->
+	<bean id="storeOutWechatJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="storeOutWechatJobDetail" />
+		<!--每天08:30执行 -->
+		<property name="cronExpression" value="0 30 8 * * ?" />
+	</bean>
+	<bean id="storeOutWechatJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="storeOutWechatJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="storeOutWechatJob" class="com.scfs.service.schedule.SendSupplierStoreOutWechatJob" />
+
+	<!--销售日报发送微信消息 -->
+	<bean id="salesDailyWechatJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="salesDailyWechatJobDetail" />
+		<!--每天08:30执行 -->
+		<property name="cronExpression" value="0 30 8 * * ?" />
+	</bean>
+	<bean id="salesDailyWechatJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="salesDailyWechatJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="salesDailyWechatJob" class="com.scfs.service.schedule.SendSalesDailyWechatJob" />
+	
+	<!-- 处理接口日志 -->
+	<bean id="invokeLogJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="invokeLogJobDetail" />
+		<!-- 每一分钟执行 -->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="invokeLogJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invokeLogJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="invokeLogJob" class="com.scfs.service.schedule.InvokeLogJob" />
+
+	<!-- pms请款单处理 -->
+	<bean id="pmsPayOrderDealJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="pmsPayOrderDealJobDetail" />
+		<!-- 每一分钟执行 -->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="pmsPayOrderDealJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pmsPayOrderDealJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="pmsPayOrderDealJob" class="com.scfs.service.schedule.PmsPayOrderDealJob" />
+
+	<!-- pms入库单处理 -->
+	<bean id="billInStoreJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="billInStoreJobDetail" />
+		<!-- 每三分钟执行 -->
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="billInStoreJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="billInStoreJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="billInStoreJob" class="com.scfs.service.schedule.PmsBillInStoreJob" />
+	
+	<!-- pms出库单处理 -->
+	<bean id="billOutStoreJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="billOutStoreJobDetail" />
+		<!-- 每一分钟执行 -->
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="billOutStoreJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="billOutStoreJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="billOutStoreJob" class="com.scfs.service.schedule.PmsBillOutStoreJob" />
+	
+	<!-- pms请款单待付款处理 -->
+	<bean id="pmsPayWaitJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="pmsPayWaitJobDetail" />
+		<!-- 每三分钟执行 -->
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="pmsPayWaitJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pmsPayWait" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="pmsPayWait" class="com.scfs.service.schedule.PmsPayWaitDealJob" />
+	
+	<!-- 同步请款信息 -->
+	<bean id="interfaceValidTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="interfaceValidJobDetail" />
+		<!-- 每10分钟执行 -->
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+	<bean id="interfaceValidJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="interfaceValidJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="interfaceValidJob" class="com.scfs.service.schedule.InterfaceValidJob" />
+
+</beans>

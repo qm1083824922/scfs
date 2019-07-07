@@ -1,0 +1,125 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>库存</li>
+    <li class="active">编辑</li>
+  </ol>
+  <section class="product-wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="stlEditForm" data-url="stl/edit">
+            <div class="box-header">
+                 <input class="form-control js-initform" type="hidden" id="id" name="id">
+                
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td class="text-right" style="width:15%"><b>项目：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="projectName" name="projectName"></label>                      
+                      </td>
+                      
+                      <td class="text-right" style="width:15%"><b>仓库：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right" style="width:15%"><b>供应商：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="supplierName" name="supplierName"></label>                      
+                      </td>
+                      
+                      <td class="text-right" style="width:15%"><b>客户：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="customerName" name="customerName"></label>
+                      </td>
+                    </tr>
+                    <tr>                   
+                      <td class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品条码：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsBarCode" name="goodsBarCode"></label>
+                      </td>                     
+                    </tr>
+                  	<tr>
+					  <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                    </tr>
+                    <tr>                                                 
+                      <td class="text-right"><b>库存数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform toThound" id="storeNum" name="storeNum"></label>                      
+                      </td>
+                                 
+                      <td class="text-right"><b>可用库存数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform toThound" id="availableNum" name="availableNum"></label>                     
+                      </td>
+                    </tr>  
+                    <tr>
+                      <td class="text-right"><b>库存状态：</b></td>
+                      <td class="text-left">
+                      	<select style="width:300px" class="form-control js-initform" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                      </td>
+                      
+                      <td class="text-right"><b>批次：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="batchNo" name="batchNo">                      
+                      </td>
+                    </tr>   
+                  </table>  
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/stl/update" id="save" class="btn btn-primary btn-sm" data-url="stl/update">保存</button>
+              <button type="button" data-url="html/logistics/stl/stlSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+ 
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#stlEditForm"), options.param.id);
+		$("#stlEditForm").validate({
+			rules : {
+				goodsStatus : {
+					required : true
+				}
+			},
+	        submitHandler: function() {
+	            var formData = $("#stlEditForm").serializeObject();
+
+	            GLOBAL.ajax("stl/update", formData, function(e) {
+	                  if (e.success) {
+	                      layer.msg("保存成功！");
+	                      GLOBAL.go("html/logistics/stl/stlSearch.html", options.param);
+	                  } else {
+	                      layer.msg(e.msg);
+	                  }
+	            });
+	        }
+		});
+	}
+
+	GLOBAL.goBack();
+</script>

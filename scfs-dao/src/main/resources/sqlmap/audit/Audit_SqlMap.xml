@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.audit.AuditDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.audit.entity.Audit">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="po_id" property="poId" jdbcType="INTEGER" />
+		<result column="po_type" property="poType" jdbcType="TINYINT" />
+		<result column="po_date" property="poDate" jdbcType="TIMESTAMP" />
+		<result column="audit_type" property="auditType" jdbcType="TINYINT" />
+		<result column="po_no" property="poNo" jdbcType="VARCHAR" />
+		<result column="business_unit_id" property="businessUnitId"
+			jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="currency_id" property="currencyId" jdbcType="TINYINT" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="auditor_pass_id" property="auditorPassId"
+			jdbcType="INTEGER" />
+		<result column="auditor_pass" property="auditorPass" jdbcType="VARCHAR" />
+		<result column="auditor_pass_at" property="auditorPassAt"
+			jdbcType="TIMESTAMP" />
+		<result column="auditor_id" property="auditorId" jdbcType="INTEGER" />
+		<result column="auditor" property="auditor" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="proposer_id" property="proposerId" jdbcType="INTEGER" />
+		<result column="proposer" property="proposer" jdbcType="VARCHAR" />
+		<result column="proposer_at" property="proposerAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="audit_state" property="auditState" jdbcType="TINYINT" />
+		<result column="suggestion" property="suggestion" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="paudit_id" property="pauditId" jdbcType="INTEGER" />
+		<result column="pauditor_id" property="pauditorId" jdbcType="INTEGER" />
+		<result column="pauditor" property="pauditor" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, po_id,
+		po_type,po_date,audit_type,po_no,business_unit_id, project_id,
+		supplier_id, customer_id, auditor_pass_id, auditor_pass,
+		auditor_pass_at, amount, auditor_id, auditor,
+		state, proposer_id,
+		proposer,proposer_at, creator_id, creator, create_at,
+		audit_state,
+		suggestion, is_delete, paudit_id, pauditor_id,
+		pauditor,currency_id
+	</sql>
+	<select id="queryAuditById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryAuditResultsByCon" parameterType="com.scfs.domain.audit.dto.req.AuditReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit where audit_state=0
+		<if test="poNo != null and poNo != ''">
+			and po_no like CONCAT('%',#{poNo},'%')
+		</if>
+		<if test="state != null">
+			and state=#{state, jdbcType = TINYINT}
+		</if>
+		<if test="projectId != null">
+			and project_id=#{projectId, jdbcType = TINYINT}
+		</if>
+		<if test="supplierId != null">
+			and supplier_id=#{supplierId, jdbcType = TINYINT}
+		</if>
+		<if test="customerId != null">
+			and customer_id=#{customerId, jdbcType = TINYINT}
+		</if>
+		<if test="poType != null">
+			and po_type=#{poType, jdbcType = TINYINT}
+		</if>
+		<if test="auditorId != null">
+			and auditor_id=#{auditorId, jdbcType = TINYINT}
+		</if>
+		<if test="proposerId != null">
+			and proposer_id=#{proposerId, jdbcType = TINYINT}
+		</if>
+		<if test="currencyId != null">
+			and currency_id=#{currencyId, jdbcType = TINYINT}
+		</if>
+		<if test="codeList != null">
+			<foreach collection="codeList" item="dId" open="AND project_id in("
+				separator="," close=")">
+				${dId.code}
+			</foreach>
+		</if>
+		order by id desc
+	</select>
+
+	<select id="queryAuditWechatResultsByCon" parameterType="com.scfs.domain.audit.dto.req.AuditReqDto"
+		resultMap="BaseResultMap">
+		select
+		a.id,a.po_id,a.po_type,a.po_date,a.audit_type,a.po_no,a.business_unit_id,a.project_id,a.supplier_id,a.customer_id,a.auditor_pass_id,a.auditor_pass,a.auditor_pass_at,a.amount,a.auditor_id,a.auditor,
+		a.state,a.proposer_id,a.proposer,a.proposer_at,a.creator_id,a.creator,a.create_at,a.audit_state,a.suggestion,a.is_delete,a.paudit_id,a.pauditor_id,a.pauditor,a.currency_id
+		from tb_audit a INNER JOIN tb_base_project b on a.project_id=b.id
+		where a.audit_state=0
+		<if test="projectName != null and projectName != ''">
+			and b.project_name like CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="poNo != null and poNo != ''">
+			and a.po_no like CONCAT('%',#{poNo},'%')
+		</if>
+		<if test="state != null">
+			and a.state=#{state, jdbcType = TINYINT}
+		</if>
+		<if test="projectId != null">
+			and a.project_id=#{projectId, jdbcType = TINYINT}
+		</if>
+		<if test="supplierId != null">
+			and a.supplier_id=#{supplierId, jdbcType = TINYINT}
+		</if>
+		<if test="customerId != null">
+			and a.customer_id=#{customerId, jdbcType = TINYINT}
+		</if>
+		<if test="poType != null">
+			and a.po_type=#{poType, jdbcType = TINYINT}
+		</if>
+		<if test="auditorId != null">
+			and a.auditor_id=#{auditorId, jdbcType = TINYINT}
+		</if>
+		<if test="proposerId != null">
+			and a.proposer_id=#{proposerId, jdbcType = TINYINT}
+		</if>
+		<if test="currencyId != null">
+			and a.currency_id=#{currencyId, jdbcType = TINYINT}
+		</if>
+		order by a.id desc
+	</select>
+
+
+
+	<select id="queryAuditFlows" parameterType="com.scfs.domain.audit.dto.req.AuditReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit where po_id=#{poId, jdbcType = INTEGER} and
+		po_type=#{poType, jdbcType = TINYINT}
+		order by id asc
+	</select>
+	<select id="queryAuditResultsNext" parameterType="com.scfs.domain.audit.dto.req.AuditReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit where id =(select max(id) from tb_audit where
+		auditor_id=#{auditorId, jdbcType = TINYINT} and audit_state=0)
+	</select>
+
+	<select id="queryAuditSighs" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit where paudit_id=#{pauditId, jdbcType = INTEGER} and
+		audit_state=0
+		order by id asc
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.audit.entity.Audit"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_audit (id, po_id,
+		po_type, po_date, audit_type, po_no,
+		business_unit_id, project_id,
+		supplier_id, customer_id,
+		amount, auditor_id, auditor,
+		auditor_pass_id,auditor_pass,auditor_pass_at,
+		state, proposer_id,
+		proposer, proposer_at,
+		creator_id, creator, create_at,
+		audit_state,
+		suggestion, is_delete, paudit_id, pauditor_id, pauditor,currency_id
+		)
+		values (#{id,jdbcType=INTEGER}, #{poId,jdbcType=INTEGER},
+		#{poType,jdbcType=TINYINT}, #{poDate,jdbcType=TIMESTAMP},
+		#{auditType,jdbcType=TINYINT}, #{poNo,jdbcType=VARCHAR},
+		#{businessUnitId,jdbcType=INTEGER},#{projectId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},
+		#{amount,jdbcType=DECIMAL}, #{auditorId,jdbcType=INTEGER},
+		#{auditor,jdbcType=VARCHAR},
+		#{auditorPassId,jdbcType=INTEGER},
+		#{auditorPass,jdbcType=VARCHAR},#{auditorPassAt,jdbcType=TIMESTAMP},
+		#{state,jdbcType=TINYINT}, #{proposerId,jdbcType=INTEGER},
+		#{proposer,jdbcType=VARCHAR}, #{proposerAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{auditState,jdbcType=TINYINT},
+		#{suggestion,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT},
+		#{pauditId,jdbcType=INTEGER},
+		#{pauditorId,jdbcType=INTEGER},
+		#{pauditor,jdbcType=VARCHAR}, #{currencyId,jdbcType=TINYINT}
+		)
+	</insert>
+	<update id="updateAuditById" parameterType="com.scfs.domain.audit.entity.Audit">
+		update tb_audit
+		<set>
+			<if test="auditorId != null">
+				auditor_id = #{auditorId,jdbcType=INTEGER},
+			</if>
+			<if test="auditor != null">
+				auditor = #{auditor,jdbcType=VARCHAR},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="auditorPassId != null">
+				auditor_pass_id = #{auditorPassId,jdbcType=INTEGER},
+			</if>
+			<if test="auditorPass != null">
+				auditor_pass = #{auditorPass,jdbcType=VARCHAR},
+			</if>
+			<if test="auditorPassAt != null">
+				auditor_pass_at = #{auditorPassAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="auditState != null">
+				audit_state = #{auditState,jdbcType=TINYINT},
+			</if>
+			<if test="suggestion != null">
+				suggestion = #{suggestion,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="pauditId != null">
+				paudit_id = #{pauditId,jdbcType=INTEGER},
+			</if>
+			<if test="pauditorId != null">
+				pauditor_id = #{pauditorId,jdbcType=INTEGER},
+			</if>
+			<if test="pauditor != null">
+				pauditor = #{pauditor,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyId != null">
+				currency_id = #{currencyId,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

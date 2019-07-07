@@ -1,0 +1,37 @@
+.label {
+	background-color: #d1dade;
+	color: #5e5e5e;
+	font-size: 10px;
+	font-weight: 600;
+	padding: 3px 8px;
+	text-shadow: none
+}
+
+.loginscreen.middle-box {
+	width: 300px;
+	margin: auto;
+}
+
+.loginColumns {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 100px 20px 20px
+}
+
+.passwordBox {
+	max-width: 460px;
+	margin: 0 auto;
+	padding: 100px 20px 20px
+}
+
+.logo-name {
+	color: #e6e6e6;
+	font-size: 180px;
+	font-weight: 800;
+	letter-spacing: -10px;
+	margin-bottom: 0
+}
+
+.middle-box h1 {
+	font-size: 170px
+}

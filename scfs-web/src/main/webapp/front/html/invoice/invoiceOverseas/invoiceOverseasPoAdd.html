@@ -1,0 +1,254 @@
+
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+        <li>发票</li>
+        <li>Invoice收票</li>
+		<li>采购信息</li>
+		<li class="active">新增</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box">
+		<div class="box-body">
+			<form method="post" action="###" class="form-inline"
+				id="searchForm">
+				<div class="form-group-sm">
+					<p>
+						<label class="control-label ml10">采购编号：</label> 
+						<input type="text" class="form-control" id="orderNo" name="orderNo">
+						
+						<label class="control-label ml10">采购附属编号：</label> 
+						<input type="text" class="form-control" id="orderNo" name="appendNo">
+						
+						<label class="control-label ml10">商品编号：</label> 
+						<input type="text" class="form-control" id="goodsNo" name="goodsNo">
+						
+						</select> <label class="control-label">订单日期：</label>
+						<input type="text" class="form-control js_datePicker" id="startOrderTime" value="" name="startOrderTime">- 
+						<input type="text" class="form-control js_datePicker" id="endOrderTime" value="" name="endOrderTime">
+						
+						<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+						<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+							
+					</p>
+				</div>
+			</form>
+
+			<form class="form-horizontal form-inline"
+				id="poOrderDtlEditAddForm" data-url="invoiceCollectOverPo/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="collectId" name="id">
+					<table id="js_dataTable" data-url="invoiceCollectOverPo/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceCollectOverPo/add" data-url="invoiceCollectOverPo/add">保存</button>
+					 <button type="button"  data-url="html/invoice/invoiceOverseas/invoiceOverseasPoSearch.html"  id="js-back" class="btn btn-default btn-sm">返回</button> 
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>	
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{
+		title : '采购编号',
+		field : 'orderNo',
+		width : 80,
+		align : 'center'
+	},{
+		title : '采购附属编号',
+		field : 'appendNo',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '订单日期',
+		field : 'orderTime',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '商品编号',
+		field : 'goodsNo',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '商品描述',
+		field : 'goodsName',
+		width : 210,
+		align : 'center'
+	},
+	{
+		title : '订单币种',
+		field : 'currencyName',
+		width : 70,
+		align : 'center',
+	},
+	{
+		title : '订单金额',
+		field : 'afterDiscountAmount',
+		width : 70,
+		align : 'center',
+	},
+	{
+		title : '收票币种',
+		field : 'realCurrencyTypeName',
+		width : 70,
+		align : 'center',
+	},{
+		title : '收票金额',
+		field : 'priceCountAmout',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			var priceCountAmout = row.priceCountAmout;
+			return '<span class="priceCountAmout">'+priceCountAmout+'</span>';
+		}
+	},];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {id : options.param.id}, null, {
+			onLoadSuccess : function(data) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>&nbsp;&nbsp; 收票金额：<span class='select-priceCountAmout'>0.00</span>");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+				checkData(row, $ele)
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(rows){
+				getSelectData();
+				checkAllData(rows);
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		});
+		
+		function  checkData(row, $ele){
+	        var data = $("#js_dataTable").bootstrapTable("getAllSelections");
+			 var  checkType=true;
+			if(data.length == 0){
+				layer.msg("请选择采购明细");
+				return false;
+			}
+			  for(var i=0 ; i<data.length ;i++){
+				  var index = $ele.data('index');
+				  if(row.realCurrencyType  != data[i].realCurrencyType){
+					  layer.msg("当前发票币种不一致");
+					  checkType=false;
+				  }
+				  if(checkType == false){
+					  $('#js_dataTable').bootstrapTable("uncheck", index);
+		             return  checkType;
+				  }
+			  }
+		}
+		function checkAllData(rows){
+		     var data = $("#js_dataTable").bootstrapTable("getAllSelections");
+			  var  checkType=true;
+				if(data.length == 0){
+					layer.msg("请选择采购明细");
+					return false;
+				}
+			 var row=data[0];// 取第一条数据
+			 for(var i=0; i<data.length;  i++){
+				  if(row.realCurrencyType  != data[i].realCurrencyType){
+					  layer.msg("当前发票币种不一致");
+					  checkType=false;
+				  }
+			 }
+			if(checkType == false){
+				  $('#js_dataTable').bootstrapTable("uncheckAll", rows);
+			         return  checkType;
+			}
+		}
+		function getSelectData(){
+			var priceCountAmout = 0;
+			$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+				var priceCountAmoutVal = $(this).closest("tr").find(".priceCountAmout").text();
+				 priceCountAmout = priceCountAmout + parseFloat(priceCountAmoutVal);
+			})
+			$("#js_dataTable .select-priceCountAmout").text(parseFloat(priceCountAmout.toFixed(2)).toThounds());
+		}
+	};
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			id : options.param.id
+		});
+		$('#js_dataTable').bootstrapTable('refresh', {
+			query : data
+		});
+	})
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+				 var realCurName="";
+				var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var $tr = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]'); 
+						var $realCurrencyTypeName = $tr.find(".realCurrencyTypeName");
+						var realCurrencyTypeName = $realCurrencyTypeName.val();
+						//获取可用数量与余额
+							dtlArr.push({  
+								"poLineId":selectedRows[i].id,
+								"payRate":selectedRows[i].payRate,
+								"realCurrnecyType": selectedRows[i].realCurrencyType,
+								"invoiceAmoun":selectedRows[i].afterDiscountAmount
+							});
+					}
+				}
+				if (isValid) {
+					var saveData = {
+							overseasPos : dtlArr,
+							collectOverseasId : options.param.id
+					};
+					var setContentType = false;
+					console.log(saveData);
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								options.param.id=options.param.id; 
+								GLOBAL.go("html/invoice/invoiceOverseas/invoiceOverseasPoSearch.html");
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, true);
+				}
+			});
+	$("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    GLOBAL.go(url);
+	})
+	GLOBAL.goBack();
+</script>

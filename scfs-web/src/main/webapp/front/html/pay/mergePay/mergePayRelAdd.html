@@ -1,0 +1,121 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>合并付款</li>
+			<li class="active">明细添加</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<!-- /.box-body -->
+			<table id="js_dataTable" data-url="mergePayOrder/divid">
+
+			</table>
+			<div class="box-footer text-center">
+				<button type="button" class="btn btn-primary btn-sm" id="add">添加</button>
+				<button type="button"
+					data-url="html/pay/mergePay/mergePayRelEdit.html"
+					class="btn btn-default btn-sm js-back">返回</button>
+			</div>
+			<!-- /.box-footer -->
+		</div>
+	</section>
+</div>
+
+<script>
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+		width : '1%'
+	}, {
+		title : '序号',
+		field : 'columnsNumber',
+		width : 10
+	}, {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '附属编号',
+		field : 'attachedNumbe',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '币种',
+		field : 'currnecyTypeName',
+		width : 30,
+		align : 'center'
+	}, {
+		title : '付款金额',
+		field : 'payAmount',
+		width : 40,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '要求付款日期',
+		field : 'requestPayTime',
+		width : 86,
+		align : 'center'
+	}, {
+		title : '预计内部打款日期',
+		field : 'innerPayDate',
+		width : 60,
+		align : 'center'
+	}, {
+		title : '备注',
+		field : 'remark',
+		width : 80,
+		align : 'center'
+	} ];
+	options.initPage = function() {
+		var option = {
+			onLoadSuccess : function(data) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>选中付款金额：<span class='select-sum'>0.00</span> &nbsp;&nbsp;&nbsp;");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			}
+		}
+		GLOBAL.initTable($('#js_dataTable'), tabCols, options.param, null, option);
+	};
+	
+	function getSelectData(){
+		var total = 0;
+		$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+			var id = $(this).closest("tr").data("uniqueid");
+			var row = $("#js_dataTable").bootstrapTable("getRowByUniqueId" , id);
+			total = total + row.payAmount;
+		})
+		$("#js_dataTable .select-sum").text(total.toThounds());
+	}
+	$("#add").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if (ids) {
+			GLOBAL.ajax("mergePayOrderRel/add", {
+				mergePayId : options.param.id,
+				ids : ids
+			}, function(e) {
+				if (e.success) {
+					GLOBAL.go("html/pay/mergePay/mergePayRelEdit.html");
+				} else {
+					layer.msg(e.msg);
+				}
+			}, false);
+		}
+	});
+	GLOBAL.goBack();
+</script>

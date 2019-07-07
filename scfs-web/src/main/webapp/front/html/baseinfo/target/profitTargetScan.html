@@ -1,0 +1,200 @@
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>业务目标值</li>
+            <li class="active">编辑</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="profitTarget/detail">
+            <div class="box-body">  
+            	<div class="row">
+					<div class="col-md-6">
+		                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+		                  <table class="table table-bordered table-hover no-margin">
+		                  	<tr>
+		                         <td class="text-right"><b>业务员：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="userIdName" name="userIdName"></label>
+		                         </td>
+		                         <td class="text-right"><b>月份：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="issue" name="issue"></label>
+		                         </td>
+		                     </tr>
+		                     <tr width="280">
+		                         <td class="text-right"><b>利润目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetProfitAmount" name="targetProfitAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>利润完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="profitAmount" name="profitAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>利润完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="profitAmountRateStr" name="profitAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>业务利润目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetBizManager" name="targetBizManager"></label>
+		                         </td>
+		                         <td class="text-right"><b>业务利润完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="bizManagerAmount" name="bizManagerAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>业务利润完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="bizManagerAmountRateStr" name="bizManagerAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>销售毛利润目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetSaleBlance" name="targetSaleBlance"></label>
+		                         </td>
+		                         <td class="text-right"><b>销售毛利润完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="saleBlanceAmount" name="saleBlanceAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>销售毛利润完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="saleBlanceAmountRateStr" name="saleBlanceAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>经营收入目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetSaleAmount" name="targetSaleAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>经营收入完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="saleAmount" name="saleAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>经营收入完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="saleAmountRateStr" name="saleAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>管理费用目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetManageAmount" name="targetManageAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>管理费用完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="manageAmount" name="manageAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>管理费用完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="manageAmountRateStr" name="manageAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>经营费用目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetWarehouseAmount" name="targetWarehouseAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>经营费用完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="warehouseAmount" name="warehouseAmount"></label>
+		                         </td>
+		                         <td class="text-right"><b>经营费用完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="warehouseAmountRateStr" name="warehouseAmountRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                         <td class="text-right"><b>资金成本目标值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="targetFundVost" name="targetFundVost"></label>
+		                         </td>
+		                         <td class="text-right"><b>资金成本完成值：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="fundCost" name="fundCost"></label>
+		                         </td>
+		                         <td class="text-right"><b>资金成本完成比例：</b></td>
+		                         <td class="text-left">
+		                             <label class="js-initform" id="fundCostRateStr" name="fundCostRateStr"></label>
+		                         </td>
+		                     </tr>
+		                     <tr>
+		                          <td class="text-right"><b>业务审核人：</b></td>
+		                          <td class="text-left">
+		                          	    <label class="js-initform" id="busiIdName" name="busiIdName"></label>
+		                          </td>
+		                          <td class="text-right"><b>部门主管审核人：</b></td>
+		                          <td class="text-left">
+		                          	  <label class="js-initform" id="deptManageIdName" name="deptManageIdName"></label>
+		                          </td>
+		                      </tr>
+		                  </table>
+                  </div>
+				</div>
+                  <div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="profitTarget/auditflow/audit/query"></table>
+                    </div>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button"  data-url="html/baseinfo/target/profitTargetSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function() {
+	/*数据表格*/
+	var tabColsLog = [{
+	    title: '序号',
+	    field: 'columnsNumber',
+	    width: '5%'
+	}, {
+	    title: '流程节点',
+	    field: "stateName",
+	    width: '15%'
+	}, {
+	    title: '处理人',
+	    field: "dealName",
+	    width: '15%'
+	}, {
+	    title: '处理意见',
+	    field: "suggestion",
+	    width: '25%'
+	}, {
+	    title: '开始时间',
+	    field: "createTime",
+	    width: '15%'
+	}, {
+	    title: "处理时间",
+	    field: "dealTime",
+	    width: '15%'
+	}, {
+	    title: "处理状态",
+	    field: "auditStateName",
+	    width: '10%'
+	}];
+
+	GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+        projectItemId: options.param.id
+    }, null, {
+        pagination: false
+    });
+    GLOBAL.getEditData($("#form1"), options.param.id);
+};
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+</script> 
+	 

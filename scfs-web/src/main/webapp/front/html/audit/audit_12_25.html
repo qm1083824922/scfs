@@ -1,0 +1,385 @@
+
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>出口</li>
+		<li>退税</li>
+		<li class="active">财务审核</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+			<div class="box no-margin">
+				<form class="form-horizontal" id="payAuditInfoForm"
+					data-url="refund/info/audit">
+					<div class="box-header">
+						<input class="js-initform" type="hidden" id="id" name="id">
+						<h3 class="mt15 mb5">财务审核</h3>
+						<table class="table table-bordered table-hover no-margin">
+
+							<tr>
+								<td class="text-right"><b>项目：</b></td>
+								<td class="text-left">
+									<label class="js-initform" id="projectName" name="projectName"></label>
+								</td>
+								<td width="180" class="text-right"><b>客户：</b></td>
+								<td class="text-left">
+									<label class="js-initform" id="cusName" name="cusName"></label>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>退税编号：</b></td>
+								<td class="text-left">
+									<label class="js-initform" id="refundApplyNo" name="refundApplyNo"></label>
+								</td>
+								<td class="text-right"><b>退税附属编号：</b></td>
+								<td class="text-left">
+									<label class="js-initform" id="refundAttachNo" name="refundAttachNo"></label>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>退税数量：</b></td>
+								<td class="text-left">
+									<label class="js-initform" id="refundApplyNum" name="refundApplyNum"></label>
+								</td>
+								<td class="text-right"><b>退税时间：</b></td>
+								<td class="text-left">
+									<label type="text" class="js-initform" id="refundApplyDate" name="refundApplyDate"></label>
+								</td>
+							</tr>
+							
+							<tr>
+								<td class="text-right"><b>退税含税金额：</b></td>
+								<td class="text-left">
+									<label class="js-initform toThound" id="refundApplyAmount" name="refundApplyAmount"></label>
+								</td>
+								<td class="text-right"><b>可退税额：</b></td>
+								<td class="text-left">
+									<label type="text" class="js-initform" id="refundApplyTax" name="refundApplyTax"></label>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<h3 class="mt15 mb5">退税明细信息</h3>
+						<table id="js_dataTable"></table>
+					</div>
+					<div class="box-body">
+                        <h4 class="mt15 mb5">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="refund/auditflow/audit/query"></table>
+                    </div>
+					<!-- .box-body -->
+					<div class="box-footer text-center">
+						<div class="form-inline" style="width:500px; margin:auto">
+                            <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                            <p class="mt20">
+                                <button type="button" data-url="refund/finance/audit" data-permissionUrl="/refund/finance/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                                <button type="button" data-url="refund/unpass/audit" data-permissionUrl="/refund/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                                <button type="button" data-url="refund/finance/audit" data-permissionUrl="/refund/finance/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                                <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                            </p>
+                            <p class="mt20 psigh"  style="display:none">
+                                <label class="control-label pull-rihgt">加签给:</label>
+                                <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                                <button type="button" data-url="refund/sigh/audit" data-permissionUrl="/refund/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                            </p>
+                            <p class="mt20 pdeliver" style="display:none">
+                                <label class="control-label pull-rihgt">转交给:</label>
+                                <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                                <button type="button" data-url="refund/deliver/audit" data-permissionUrl="/refund/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                            </p>
+                        </div>
+					</div>
+					<!-- /.box-footer -->
+				</form>
+			</div>
+	</section>
+</div>
+
+<script>
+/*数据表格*/
+var tabCols = [
+		{
+			title : '退税数量',
+			field : 'applyNum',
+			width : 80,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '退税含税金额',
+			field : 'applyAmount',
+			width : 210,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '未税金额',
+			field : 'exRateAmount',
+			width : 100,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '税率',
+			field : 'taxTate',
+			width : 70,
+			align : 'center'
+		},
+		{
+			title : '退税额',
+			field : 'applyTax',
+			width : 80,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '报关编号',
+			field : 'applyNo',
+			width : 70,
+			align : 'center'
+		},
+		{
+			title : '报关附属编号',
+			field : 'affiliateNo',
+			width : 70,
+			align : 'center'
+		}];
+	
+	
+		/*审核数据表格*/
+		var tabColsLog = [{
+		    title: '序号',
+		    field: 'columnsNumber',
+		    width: '5%'
+		}, {
+		    title: '流程节点',
+		    field: "stateName",
+		    width: '15%'
+		}, {
+		    title: '处理人',
+		    field: "dealName",
+		    width: '15%'
+		}, {
+		    title: '处理意见',
+		    field: "suggestion",
+		    width: '25%'
+		}, {
+		    title: '开始时间',
+		    field: "createTime",
+		    width: '15%'
+		}, {
+		    title: "处理时间",
+		    field: "dealTime",
+		    width: '15%'
+		}, {
+		    title: "处理状态",
+		    field: "auditStateName",
+		    width: '10%'
+		}];
+	options.initPage = function() {
+		var $from = $("#payAuditInfoForm");
+		var url = $from.data("url");
+ 	    GLOBAL.ajax(url, {refundId: options.param.poId}, function(e) {
+        	if (e.success) {
+        		var data = e.items.refundApply;
+              	if (data) {
+              		$(".js-initform", $from).each(function() {
+                        var $this = $(this);
+                        var id = $this.attr("id");
+                        data[id] = data[id] == null ? "" : data[id];
+                        
+                        if(this.nodeName.toLowerCase() == "label") {
+                            if(data[id]) {
+                                $this.text(data[id]);
+                            }
+                        } else {
+                            $this.val(data[id]);
+                        }
+              		});
+              	}
+
+              	var dtls = e.items.refundList;
+                if (dtls) {
+                    GLOBAL.initTable($('#js_dataTable'), tabCols, null, dtls,{pagination:false});
+                }
+                
+                GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+                    projectItemId: options.param.poId
+                }, null, {
+                    pagination: false
+                });
+                GLOBAL.ajax('audit/id/query', {
+                    id: options.param.id
+                }, function(e) {
+                	var data = e.items;
+                    if (data) {
+                    	if(data.auditType==1||data.auditType==2){
+                    		$(".psigh,.pdeliver").show();
+                    	}else{
+                    		$(".punpass").hide();
+                    	}
+                    }
+                });
+            }
+        });
+	}
+
+	$("#pass").click(function() {
+	    var suggestion = $("#suggestion").val();
+	    var url = $(this).data("url");
+	    GLOBAL.ajax(url, {
+	        auditId: options.param.id,
+	        projectItemId: options.param.poId,
+	        suggestion: suggestion || ""
+	    }, function(e) {
+	        if (e.success) {
+	            layer.msg("审核通过成功！");
+	            if (options.param.entryType == 1) {
+	                GLOBAL.go("html/entry.html");
+	            } else {
+	                GLOBAL.go("html/audit/audit.html");
+	            }
+	        } else {
+	            layer.msg(e.msg);
+	        }
+	    });
+	})
+ $("#passAndNext").click(function() {
+	    var suggestion = $("#suggestion").val();
+	    var url = $(this).data("url");
+	    GLOBAL.ajax(url, {
+	        auditId: options.param.id,
+	        projectItemId: options.param.poId,
+	        suggestion: suggestion || ""
+	    }, function(e) {
+	        if (e.success) {
+	        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+	                if (e.success) { 
+	                	 if(e.items){
+	                		 var id = e.items.id;
+	                         var state = e.items.state;
+	                         var poId = e.items.poId;
+	                         var poType = e.items.poType;
+	                         options.param.id = id;
+	                         options.param.poId = poId;  
+	                         if (poType && state) { 
+	                             GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+	                         }
+	                	 }else{
+	                		 GLOBAL.go("html/entry.html");
+	                	 }  
+	                } else {
+	                    layer.msg(e.msg);
+	                }
+	            });
+	        } else {
+	            layer.msg(e.msg);
+	        }
+	    });
+	})
+	$("#sigh").click(function() {
+	    var url = $(this).data("url");
+	    var sighId = $("#sighId").val();
+	    if(sighId){
+	        layer.confirm('确定加签吗？', {
+	            btn: ['确定','取消'] //按钮
+	        }, function(){
+	            GLOBAL.ajax(url, {
+			        auditId: options.param.id,
+			        pauditorId: sighId
+			    }, function(e) {
+			        if (e.success) {
+			            layer.msg("加签成功！");
+			            $("#sighId").val("");
+			            GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+			                projectItemId: options.param.poId
+			            });
+			        } else {
+			            layer.msg(e.msg);
+			        }
+			    });
+	        });
+	    }else{
+	        layer.msg("请选择！");
+	        $("#sighId").focus();
+	    }
+	    
+	})
+
+	$("#deliver").click(function() {
+	    var url = $(this).data("url");
+	    var deliverId = $("#deliverId").val();
+
+	    if(deliverId){
+	        layer.confirm('确定转交吗？', {
+	            btn: ['确定','取消'] //按钮
+	        }, function(){
+	            GLOBAL.ajax(url, {
+			        auditId: options.param.id,
+			        pauditorId: deliverId
+			    }, function(e) {
+			        if (e.success) {
+			            layer.msg("转交成功！");
+			            $("#deliverId").val("");
+			            if (options.param.entryType == 1) {
+			                GLOBAL.go("html/entry.html");
+			            } else {
+			                GLOBAL.go("html/audit/audit.html");
+			            }
+			        } else {
+			            layer.msg(e.msg);
+			        }
+			    });
+	        });
+	    }else{
+	        layer.msg("请选择！");
+	        $("#deliverId").focus();
+	    }
+	})
+
+	$("#unpass").click(function() {
+	    var suggestion = $("#suggestion").val();
+	    if (!suggestion) {
+	        layer.msg("请输入审核意见");
+	        return;
+	    }
+	    var url = $(this).data("url");
+	    GLOBAL.ajax(url, {
+	        auditId: options.param.id,
+	        projectItemId: options.param.poId,
+	        suggestion: suggestion
+	    }, function(e) {
+	        if (e.success) {
+	            layer.msg("审核不通过成功！");
+	            if (options.param.entryType == 1) {
+	                GLOBAL.go("html/entry.html");
+	            } else {
+	                GLOBAL.go("html/audit/audit.html");
+	            }
+	        } else {
+	            layer.msg(e.msg);
+	        }
+	    });
+	})
+
+	$(".js-back").click(function() {
+	    if (options.param.entryType == 1) {
+	        GLOBAL.go("html/entry.html");
+	    } else {
+	        GLOBAL.go("html/audit/audit.html");
+	    }
+	})
+
+</script>
+

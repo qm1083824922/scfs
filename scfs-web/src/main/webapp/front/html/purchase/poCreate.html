@@ -1,0 +1,246 @@
+
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>采购</li>
+          <li class="active">新建采购订单</li>
+      </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="poForm">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-bordered table-hover no-margin">
+                      <tr>
+                          <td width="180" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>供应商：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control js-select" data-url="PROJECT_SUPPLIER" id="supplierId" pid="projectId" name="supplierId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>客户：</b></td>
+                          <td class="text-left">
+                            <select class="form-control js-select" data-url="PROJECT_CUSTOMER" id="customerId" pid="projectId" name="customerId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currencyId" name="currencyId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>附属编号：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="text" class="form-control" id="appendNo" name="appendNo">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>订单日期：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                              <input type="text" class="form-control js_datePicker" id="orderTime" name="orderTime">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>预计到货时间：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" name="perdictTime" value="">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>收货仓库：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control" data-url="PROJECT_WAREHOUSE" id="warehouseId" pid="projectId" name="warehouseId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>仓库地址：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control" data-url="SUBJECT_ADDRESS" id="wareAddrId" pid="warehouseId" name="wareAddrId"></select>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>要求付款：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                              <select class="form-control js-select" data-url="PO_REQUEST_PAY" id="isRequestPay" name="isRequestPay"></select>
+                          </td>
+                        </tr>
+                        <tr class="hideByRequestPay">
+                          <td class="text-right"><b>付款方式：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                              <select class="form-control js-select" data-url="PAY_ORDER_WAY" id="payWay" name="payWay"></select>
+                          </td>
+                        </tr>
+
+                        <tr class="hideByRequestPay"><td class="text-right"><b>收款账号：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <select class="form-control" data-url="SUBJECT_ACCOUNT" id="accountId" pid="supplierId" name="accountId"></select>
+                          </td>
+                        </tr>
+
+                        <tr class="hideByRequestPay"><td class="text-right"><b>要求付款时间：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="text" class="form-control js_datePicker" id="requestPayTime" name="requestPayTime">
+                          </td>
+                        </tr>
+                      <tr class="hideByRequestPay"><td class="text-right"><b>预收订金：</b></td>
+                        <td class="text-left">
+                          <input type="text" class="form-control" id="perRecAmount" name="perRecAmount">
+                        </td>
+                      </tr>
+
+                      <tr id="openType-tr" style="display: none">
+                        <td class="text-right"><b>开立类型：<em class="text-star">*</em></b></td>
+                        <td class="text-left">
+                          <input type="text" class="form-control" id="openType" name="openType" />
+                      </tr>
+
+                      <tr>
+                          <td class="text-right"><b>预收订金水单号：</b></td>
+                          <td class="text-left">
+                            <input type="text" class="form-control" id="cBankWater" name="cBankWater">
+                        </tr>                  
+                        <tr>
+                          <td class="text-right"><b>备注：</b></td>
+                          <td class="text-left">
+                            <textarea class="form-control" id="remark" cols="50" rows="5" name="remark"></textarea>  
+                          </td>
+                        </tr>
+                      </table>
+                </div>
+              </div>
+             
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-url="html/purchase/poBaseInfoEdit.html" data-permissionUrl="/po/add" class="btn btn-primary btn-sm btn-disable">保存</button>
+              <button type="button" data-url="html/purchase/poSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+   options.initPage = function(){
+        var isShow = $("#isRequestPay").val() == "1" ? "show" : "hide";
+        $(".hideByRequestPay")[isShow]();
+ 	   $("#orderTime,#js_form_datetimeStart").datetimepicker({format:"Y-m-d", timepicker:false});
+
+        $("#projectId").validate({
+            rules:{
+              name:"required",
+              email:{
+                 required:true,
+                 email:true
+              }
+            }
+        });
+
+         $("#poForm").validate({
+             rules: {
+                 projectId: {
+                   required: true
+                 },
+                 supplierId: {
+                   required: true
+                 },
+                 currencyId: {
+                   required: true
+                 },
+                 appendNo: {
+                   required: true
+                 },
+                 orderTime: {
+                   required: true
+                 },
+                 perdictTime: {
+                   required: true
+                 },
+                 warehouseId: {
+                   required: true
+                 },
+                 wareAddrId: {
+                   required: true
+                 },
+                 isRequestPay: {
+                   required: true
+                 },
+                 payWay: {
+                   required: true
+                 },
+                 accountId: {
+                   required: true
+                 },
+               openType: {
+                 required: true,
+                 number:true
+               },
+                 requestPayTime: {
+                   required: true
+                 }
+             },
+             submitHandler: function() {
+                var data = $("#poForm").serializeObject();
+                GLOBAL.ajax("po/add", data, function(e){
+                  if(e.success){
+                      layer.msg("保存成功！", {
+                         icon: 1,
+                         time: 1500
+                     },function(){
+                         var url = $("#save").data("url");
+                         options.param.id = e.items;
+                         options.param.cid = e.items;
+                         options.param.projectId = $("#projectId").val();
+                         GLOBAL.go(url);
+                     })
+                  }
+                   
+               }, false, $("#save"));
+             }
+         });
+    }
+
+    $("#isRequestPay").change(function(){
+        var value = $(this).val();
+        if(value == "1"){
+            $(".hideByRequestPay").show();
+        }else{
+          $(".hideByRequestPay").hide().find("[name]").val("");
+        }
+    })
+
+    //付款方式为承兑汇票,需要显示开立类型
+    $("#payWay").change(function(){
+      var value = $(this).val();
+      if(value == "2"){
+        $("#openType-tr").css("display","");
+      }else{
+        $("#openType-tr").css("display","none");
+        $("#openType").val("");
+     }
+     //清空 requestPayTime  accountId openType
+     $("#requestPayTime").val("");
+     $("#accountId").val("");
+     $("#perRecAmount").val("");
+     $("#openType").val("");
+   })
+
+
+
+
+    GLOBAL.goBack();
+
+</script>

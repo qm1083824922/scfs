@@ -1,0 +1,75 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+	<li>费用科目</li>
+	<li class="active">浏览费用科目</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="fee/spec/detail">
+            <div class="box-body">
+                <input class="js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                 		<tr>
+							<td class="text-right"><b>费用科目编号：</b></td>
+							<td class="text-left">
+								<label type="text" class="js-initform"  id="feeSpecNo" name="feeSpecNo"></label>
+							</td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>费用科目类型：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="feeTypeName" name="feeTypeName"></label>
+							</td>
+						</tr>
+						<tr >
+							<td class="text-right"><b>费用科目名称：</b></td>
+							<td class="text-left">
+								<label type="text" class="js-initform" id="feeSpecName" name="feeSpecName"></label>
+							</td>
+						</tr>
+						<tr >
+							<td class="text-right"><b>管理一级名称：</b></td>
+							<td class="text-left">
+								<label type="text" class="js-initform" id="feeOneNameValue" name="feeOneNameValue"></label>
+							</td>
+						</tr>
+						<tr >
+							<td class="text-right"><b>管理二级名称：</b></td>
+							<td class="text-left">
+								<label type="text" class="js-initform" id="feeTwoNameValue" name="feeTwoNameValue"></label>
+							</td>
+						</tr>
+						<tr >
+							<td class="text-right"><b>财务科目编码：</b></td>
+							<td class="text-left">
+								<label type="text" class="js-initform" id="financeCode" name="financeCode"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left">
+								<label class="js-initform"	id="remark"  name="remark"></label>
+							</td>
+						</tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+             <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/fee/specFee/specFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+};
+GLOBAL.goBack();
+  
+</script>

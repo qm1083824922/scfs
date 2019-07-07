@@ -1,0 +1,165 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票</li>
+            <li class="active">费用信息新增</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box"> 
+        	<div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                            <label class="control-label">费用编号：</label> 
+							<input type="text" class="form-control" id="feeNo" name="feeNo"> 
+						</div>
+						<div class="search-item">
+                     		<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                     		<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"> 
+                <table id="js_dataTable" data-url="invoiceFeeNotSelect/query">
+                </table>
+            </div>
+            <div class="box-footer text-center"> 
+               <button type="button" id="save" class="btn btn-primary btn-sm" data-url="invoiceBatchFee/add" data-permissionUrl="/invoiceBatchFee/add">保存</button>
+               <button type="button" id="back" data-url="html/invoice/makeinvoice/feeInfoSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+   			</div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+
+/*数据表格*/
+var tabCols = [
+	 {
+         field: 'checkItem',
+         checkbox: true,
+     },{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '费用编号',
+	     field: 'feeNo',
+	     width: 92,
+	     align: 'center'
+	 }, {
+	     title: '费用类型',
+	     field: 'feeTypeName',
+	     width: 85,
+	     align: 'center'
+	 }, {
+	     title: '费用日期',
+	     field: 'feeDate',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '可开票金额',
+	     field: 'provideMaxAmount',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '开票金额',
+	     field: 'provideInvoiceAmount',
+	     width: 100,
+	     align: 'center',
+	     events : operateEvents,
+		 formatter : function(value, row, index) {
+				return '<input type="text"class="form-control advance-price" value="'+value+'">';
+		  }
+	 },
+];
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols,  {id: options.param.id});
+ };
+ 
+$("#btnSearch").click(function() {  
+	var data = {id: options.param.id,
+			feeNo:$('#feeNo').val()}
+    GLOBAL.tableRefresh($('#js_dataTable'), data); 
+})
+
+$("#back").click(function(){
+    var url = $(this).data("url");
+    options.param.id=options.param.cid;
+    GLOBAL.go(url, options.param);
+})  
+$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+		
+				var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');  
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;//金额校验
+						var $tr = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]'); 
+						var $provideInvoiceAmount = $tr.find(".advance-price"); 
+						var provideInvoiceAmount = $provideInvoiceAmount.val();
+						 
+						if (provideInvoiceAmount === "") {
+							layer.msg("金额不能为空");
+							$provideInvoiceAmount.focus();
+							isValid = false;
+						}
+						 if (!pattern.test(provideInvoiceAmount)) {
+							layer.msg("请输入正确格式");
+							$provideInvoiceAmount.focus();
+							isValid = false;
+						}  else {
+							console.log("selectedRows: ",selectedRows)
+							dtlArr.push({  
+								"provideInvoiceAmount" : provideInvoiceAmount,
+								"feeNo":selectedRows[i].feeNo,
+								"feeId":selectedRows[i].feeId,
+								"feeType" : selectedRows[i].feeType,
+								"feeDate": selectedRows[i].feeDate,
+								"invoiceApplyId" : selectedRows[i].invoiceApplyId
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+						invoiceFeeManagerReqDto : dtlArr,
+						id : options.param.id
+					};
+					var setContentType = false;
+					console.log(saveData);
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								   options.param.id=options.param.cid; 
+								GLOBAL.go("html/invoice/makeinvoice/feeInfoSearch.html",options.param);
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, true);
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

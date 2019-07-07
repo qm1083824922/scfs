@@ -1,0 +1,180 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>费用管理</li>
+			<li>分摊</li>
+			<li class="active">添加</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="fee/manage/detail">
+				<ul class="nav nav-tabs">
+				</ul>
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="id" name="id">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="feeManageNo" name="feeManageNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>部门：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="departmentName" name="departmentName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>管理费用金额：</b></td>
+							<td class="text-left"><label class="js-initform" id="amount"
+								name="amount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已分摊金额：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="shareAmount" name="shareAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可分摊金额：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="blanceAmount" name="blanceAmount"></label></td>
+						</tr>
+					</table>
+
+					<table class="table share-add-table">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>项目</th>
+								<th>人员</th>
+								<th>客户</th>
+								<th>日期</th>
+								<th>分摊金额</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- <tr>
+                          			<td>
+                          				1
+                          			</td>
+                          			<td>
+                          				<select class="form-control js-initform" data-url="DEPARTMENT_USER_PROJECT" id="projectId1" name="projectId1" pid="departmentId"></select>
+                          			</td>
+                          			<td>
+                          				<select class="form-control js-initform" data-url="DEPARTMENT_USER" id="userId1" name="userId1" pid="departmentId"></select>
+                          			</td>
+                          			<td>
+                          				<select class="form-control js-initform" data-url="PROJECT_CS" id="custId1" name="custId1" pid="projectId"></select>
+                          			</td>
+                          			<td>
+                          				<input class="form-control" id="amount" name="amount">
+                          			</td>
+                          		</tr>  -->
+
+						</tbody>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm"
+						data-url="fee/share/add" data-permissionUrl="/fee/share/add">保存</button>
+					<button type="button" id="back"
+						data-url="html/fee/manageFee/feeManageShare.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+	}
+	
+	 for(var k = 1; k <= 5; k++){
+	      var tr = '<tr><td>'+k+'</td><td><select class="form-control js-initform share-project" data-url="DEPARTMENT_USER_PROJECT" id="shareProjectId" name="shareProjectId" pid="departmentId"></select>' +
+	              '<td><select class="form-control js-initform share-user" data-url="DEPARTMENT_USER" id="shareUserId" name="shareUserId" pid="departmentId"></td><td>' +
+	              '<select class="form-control js-initform share-cust" data-url="PROJECT_CS" id="shareCustId" name="shareCustId" pid="shareProjectId"></td>'+
+	              '<td><input class="form-control js_datePicker share-date" id="shareDate" name="shareDate"></td><td><input class="form-control share-amount" id="amount" name="amount"></td>';
+	      $(".share-add-table tbody").append(tr);
+	  } 
+	
+	$("#save").click(function() {
+	      var saveUrl = $(this).data("url");
+	      var $trs = $(".share-add-table tbody tr");
+	      var dtlArr = [];
+	      var isValid = true;
+	      var blanceAmount = parseFloat($("#blanceAmount").text());
+	      var sumAmount=0.00;
+	      $trs.each(function(){
+	    	var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+	        var $shareProject = $(this).find(".share-project");
+	        var $shareUser = $(this).find(".share-user");
+	        var $shareCust = $(this).find(".share-cust"); 
+	        var $shareDate = $(this).find(".share-date"); 
+	        var $shareAmount = $(this).find(".share-amount");
+	        if($shareProject.val() || $shareUser.val() || $shareCust.val()){
+	        	if($shareAmount.val() == ""){
+	                $shareAmount.focus();
+	                layer.msg("请输入金额 ");
+	                isValid = false;
+	            }else if (!pattern.test($shareAmount.val())) {
+					layer.msg("请输入正确格式");
+					shareAmount.focus();
+					isValid = false;
+				}
+                sumAmount=sumAmount+parseFloat($shareAmount.val());
+                dtlArr.push({
+	                 "shareProjectId": $shareProject.val(),
+	                 "shareUserId": $shareUser.val(),
+	                 "shareCustId": $shareCust.val(),
+	                 "shareDate": $shareDate.val(),
+	                 "amount":$shareAmount.val()
+                });
+	        }
+	      })
+	      if(!isValid){
+	    	  return;
+	      }
+	      if(dtlArr.length == 0){
+	          layer.msg("至少输入一条数据", {icon: 5, time: 1500, shade:[0.3, '#000']});
+	          return;
+	      }
+	      if(blanceAmount<sumAmount){
+	    	  layer.msg("可分摊金额不足!", {icon: 5, time: 1500, shade:[0.3, '#000']});
+	          return;
+	      }
+	      if(isValid){
+	         var saveData = {
+	        	feeShares: dtlArr,
+	        	manageId: options.param.id
+	        };
+	        var setContentType = true;
+	        GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e){
+	              if (e.success) {
+	                  layer.msg("保存成功！", {
+	                    icon: 1,
+	                    time:1500,
+	                  }, function(){
+	                    GLOBAL.go("html/fee/manageFee/feeManageShare.html");
+	                  });
+	              } else {
+	                  layer.msg(e.msg, {
+	                    icon: 5,
+	                    time:1500,
+	                  });
+	              }
+	        }, setContentType, $("#save"));
+	      }
+	     
+	  });
+	
+	GLOBAL.goBack();
+</script>

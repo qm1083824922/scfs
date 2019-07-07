@@ -1,0 +1,98 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">权限</li>
+        </ol>
+   </section>
+  <section class="product-wrap">
+      <div class="box no-margin"> 
+        <form class="form-horizontal form-inline" id="form1" data-url="permission/detail">
+          <div class="box-body">
+              <ul class="nav nav-tabs">
+              	<li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/authority/authorityScan.html">基本信息</a></li> 
+              	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/authority/authorityGroupScan.html">权限组信息</a></li>
+              </ul> 
+               <table class="table table-bordered table-hover no-margin">
+                	<tr>
+                    <td width="180" class="text-right"><b>权限名：</b></td> 
+                     <td class="text-left"> 
+                      	 <label class="js-initform" id="name" name="name"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>URL：</b></td> 
+                     <td class="text-left">
+                      	<label class="js-initform" id="url" name="url"></label> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>排序：</b></td> 
+                    <td class="text-left">
+                    	    <label class="js-initform" id="ord" name="ord"></label>  
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>权限类型：</b></td> 
+                    <td class="text-left">
+                       <label class="js-initform" id="typeName" name="typeName"></label>   
+                     </td>
+                  </tr>
+                  <tr id="menu">
+                    <td class="text-right"><b>菜单级别：</b></td> 
+                    <td class="text-left">
+                        <label class="js-initform" id="menuLevelName" name="menuLevelName"></label>  
+                    </td>
+                  </tr> 
+                  <tr id="firstMenu">
+                    <td class="text-right"><b>所属一级菜单：</b></td> 
+                    <td class="text-left">
+                       <label class="js-initform" id="parentName" name="parentName"></label>  
+                    </td>
+                  </tr>
+                </table>
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer text-center"> 
+            <button type="button" id="back" data-url="html/baseinfo/authority/authoritySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+          </div>
+          <!-- /.box-footer -->
+
+        </form>
+      </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function() {
+	GLOBAL.getEditData($("#form1"), options.param.id);
+	
+	if($("#menuLevelName").html() == "二级菜单") {
+	  	$("#firstMenu").show();
+	    
+	}else 
+	if($("#menuLevelName").html() == "一级菜单"){
+	  $("#firstMenu").hide();  
+	}
+	if($("#typeName").html() =="Url权限") {
+		$("#menu").hide();  
+		$("#firstMenu").hide();
+	}else
+	if($("#typeName").html() == "菜单权限") {
+		$("#menu").show(); 
+	}
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+	
+	
+}
+</script>

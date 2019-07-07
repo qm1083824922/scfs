@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectPoolFundDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.project.entity.ProjectPoolFund">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_source" jdbcType="TINYINT" property="billSource" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="business_date" jdbcType="DATE" property="businessDate" />
+		<result column="bill_amount" jdbcType="DECIMAL" property="billAmount" />
+		<result column="bill_currency_type" jdbcType="TINYINT"
+			property="billCurrencyType" />
+		<result column="bill_project_exchange_rate" jdbcType="DECIMAL"
+			property="billProjectExchangeRate" />
+		<result column="bill_cny_exchange_rate" jdbcType="DECIMAL"
+			property="billCnyExchangeRate" />
+		<result column="project_amount" jdbcType="DECIMAL" property="projectAmount" />
+		<result column="project_currency_type" jdbcType="TINYINT"
+			property="projectCurrencyType" />
+		<result column="cny_amount" jdbcType="DECIMAL" property="cnyAmount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="fund_redant" jdbcType="DECIMAL" property="fundRedant" />
+		<result column="fund_class" jdbcType="TINYINT" property="fundClass" />
+		<result column="fee_id" jdbcType="TINYINT" property="feeId" />
+		<result column="out_store_id" jdbcType="TINYINT" property="outStoreId" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="assist_bill_no" jdbcType="VARCHAR" property="assistBillNo" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, type, bill_no, bill_source, project_id, customer_id,
+		supplier_id,
+		business_date,
+		bill_amount, bill_currency_type,
+		bill_project_exchange_rate,
+		bill_cny_exchange_rate,
+		project_amount,
+		project_currency_type, cny_amount, remark, creator_id, creator,
+		create_at,
+		update_at,
+		fund_redant,fund_class,fee_id,out_store_id,bill_type,assist_bill_no
+	</sql>
+
+	<select id="selectByCon"
+		parameterType="com.scfs.domain.project.dto.req.ProjectPoolDtlSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_pool_fund_dtl
+		where
+		1=1
+		<if test=" projectId != null">
+			AND project_id = #{projectId}
+		</if>
+		<if test=" fundClass != null">
+			AND fund_class = #{fundClass}
+		</if>
+		<if test=" billNo != null">
+			AND bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test=" feeId != null">
+			AND fee_id = #{feeId}
+		</if>
+		<if test=" outStoreId != null">
+			AND out_store_id = #{outStoreId}
+		</if>
+		order by business_date desc
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_project_pool_fund_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectPoolFund"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_pool_fund_dtl
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="billNo != null">
+				bill_no,
+			</if>
+			<if test="billSource != null">
+				bill_source,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="supplierId != null">
+				supplier_id,
+			</if>
+			<if test="businessDate != null">
+				business_date,
+			</if>
+			<if test="billAmount != null">
+				bill_amount,
+			</if>
+			<if test="billCurrencyType != null">
+				bill_currency_type,
+			</if>
+			<if test="billProjectExchangeRate != null">
+				bill_project_exchange_rate,
+			</if>
+			<if test="billCnyExchangeRate != null">
+				bill_cny_exchange_rate,
+			</if>
+			<if test="projectAmount != null">
+				project_amount,
+			</if>
+			<if test="projectCurrencyType != null">
+				project_currency_type,
+			</if>
+			<if test="cnyAmount != null">
+				cny_amount,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="fundRedant != null">
+				fund_redant,
+			</if>
+			<if test="fundClass != null">
+				fund_class,
+			</if>
+			<if test="feeId != null">
+				fee_id,
+			</if>
+			<if test="outStoreId != null">
+				out_store_id,
+			</if>
+			<if test="billType != null">
+				bill_type,
+			</if>
+			<if test="assistBillNo != null">
+				assist_bill_no
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billSource != null">
+				#{billSource,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				#{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="businessDate != null">
+				#{businessDate,jdbcType=DATE},
+			</if>
+			<if test="billAmount != null">
+				#{billAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billCurrencyType != null">
+				#{billCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="billProjectExchangeRate != null">
+				#{billProjectExchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="billCnyExchangeRate != null">
+				#{billCnyExchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="projectAmount != null">
+				#{projectAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="projectCurrencyType != null">
+				#{projectCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="cnyAmount != null">
+				#{cnyAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fundRedant != null">
+				#{fundRedant,jdbcType=DECIMAL},
+			</if>
+			<if test="fundClass != null">
+				#{fundClass,jdbcType=TINYINT},
+			</if>
+			<if test="feeId != null">
+				#{feeId,jdbcType=TINYINT},
+			</if>
+			<if test="outStoreId != null">
+				#{outStoreId,jdbcType=TINYINT},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+			<if test="assistBillNo != null">
+				#{assistBillNo,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectPoolFund">
+		update tb_project_pool_fund_dtl
+		<set>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billSource != null">
+				bill_source = #{billSource,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="businessDate != null">
+				business_date = #{businessDate,jdbcType=DATE},
+			</if>
+			<if test="billAmount != null">
+				bill_amount = #{billAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billCurrencyType != null">
+				bill_currency_type =
+				#{billCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="billProjectExchangeRate != null">
+				bill_project_exchange_rate =
+				#{billProjectExchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="billCnyExchangeRate != null">
+				bill_cny_exchange_rate =
+				#{billCnyExchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="projectAmount != null">
+				project_amount = #{projectAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="projectCurrencyType != null">
+				project_currency_type =
+				#{projectCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="cnyAmount != null">
+				cny_amount = #{cnyAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fundRedant != null">
+				fund_redant = #{fundRedant,jdbcType=DECIMAL},
+			</if>
+			<if test="fundClass != null">
+				fund_class = #{fundClass,jdbcType=TINYINT},
+			</if>
+			<if test="feeId != null">
+				fee_id = #{feeId,jdbcType=INTEGER},
+			</if>
+			<if test="outStoreId != null">
+				out_store_id = #{outStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="assistBillNo != null">
+				assist_bill_no = #{assistBillNo,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteExculdeOfSunyou">
+		delete from tb_project_pool_fund_dtl
+		where project_id
+		not in (2)
+	</delete>
+</mapper>

@@ -1,0 +1,251 @@
+<link rel="stylesheet" href="js/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+    <div class="wrapper">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>销售</li>
+            <li>销售单</li>              
+            <li>销售明细</li>
+            <li class="active">新增</li>
+        </ol>
+        <section class="product-wrap">
+            <div class="box no-margin">
+                <form class="form-horizontal form-inline" id="billDeliveryDtlAddForm" >
+                    <div class="box-body">
+                        <input class="form-control" type="hidden" id="id" name="id">
+                        <table class="table goods-add-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>商品编号</th>
+                                    <th>商品条码</th>                                                                                       
+                                    <th>商品名称</th>
+                                    <th>商品型号</th>
+                                    <th>批次</th>
+                                    <th>库存状态</th>
+                                    <th>销售数量</th>
+                                    <th>销售单价</th>
+                                    <th>销售金额</th>
+                                    <th>可用库存数量</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer text-center">
+                        <button type="button" data-permissionUrl="/billDeliveryDtl/add" id="save" class="btn btn-primary btn-sm" data-url="billDeliveryDtl/add">保存</button>
+                        <button type="button" data-url="html/sale/billDelivery/billDeliveryDtlEdit.html" class="back-item btn btn-default btn-sm js-back">返回</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </section>
+    </div>
+    <script>
+      options.initPage = function(){}
+
+      for(var k = 1; k <= 5; k++){
+          var tr = '<tr><td>' + k + '</td>' 
+          	+ '<td><input type="text" class="form-control goods-no" placeholder="输入商品信息关健词" style="width:100%"><input type="hidden" class="goods-id"></td>' 
+          	+ '<td><span class="goods-barCode"></span></td>'
+          	+ '<td><span class="goods-name"></span></td>' 
+          	+ '<td><span class="goods-type"></span></td>' 
+          	+ '<td><input type="text" class="form-control batch-no"></td>'
+          	+ '<td><select class="form-control js-select goods-status" data-url="BILL_IN_STORE_GOODS_STATUS" style="width:100%"></select></td>'
+          	+ '<td><input type="number" class="form-control required-send-num"></td>' 
+          	+ '<td><input type="number" class="form-control required-send-price"></td>' 
+          	+ '<td><span class="required-send-amount">0.00</span></td>' 
+          	+ '<td><span class="store-num">0</span></td></tr>';
+          $(".goods-add-table tbody").append(tr);
+      }
+      
+      $(".goods-no").each(function() {
+          var $this = $(this);
+          var projectId = options.param.projectId;
+		  
+          $this.autocomplete({
+              source: function (request, response) {
+            	  if (projectId) {
+                      $.getJSON(GLOBAL.host + "common/project/goods/query?projectId="+projectId+"&term=" + request.term, function (data) {
+                          if(data.items){
+                              response($.map(data.items, function (item, key) {
+                                if(item){
+                                  return {
+                                      label: item.number + "," + item.name + "," + item.type + "," + item.barCode,
+                                      value: item.number,
+                                      data: item
+                                  };
+                                }
+                            }));
+                          }
+                      });
+            	  }
+              },
+              minLength: 2,
+
+              select: function( event, ui ) {
+                  var data = ui.item.data;
+                  if(data){
+                	  var goodsName = data.name;
+                      var goodsType = data.type;
+                      var goodBarCode = data.barCode;
+                      var $goodName = $this.closest("tr").find(".goods-name");
+                      var $goodType = $this.closest("tr").find(".goods-type");
+                      var $goodBarCode = $this.closest("tr").find(".goods-barCode");
+                      var $storeNum = $this.closest("tr").find(".store-num");
+                      var $batchNo = $this.closest("tr").find("input.batch-no");
+                      var $goodsStatus = $this.closest("tr").find("select.goods-status option:selected");
+                      var batchNo = $batchNo.val();
+                      var goodsStatus = $goodsStatus.val();
+
+                      $goodName.text(goodsName);
+                      $goodType.text(goodsType);
+                      $goodBarCode.text(goodBarCode);
+                      $this.next("[type='hidden']").val(data.id);
+                      var goodsId = data.id;
+                      if (goodsId) {
+                    	  queryAvailableStl(goodsId, batchNo, goodsStatus, $storeNum);
+                      }
+                  }
+              }
+          });
+      })
+      
+      function queryAvailableStl(goodsId, batchNo, goodsStatus, $storeNum) {
+          if (!goodsId) {
+              layer.msg("请录入的商品");
+			  return;
+          }
+    	  var params = {
+    		  billDeliveryId : options.param.id,
+     	      goodsId : goodsId,
+     	      querySource : 5
+     	  };
+      	  if (goodsStatus) {
+      		  params.goodsStatus = goodsStatus;
+      	  }
+      	  if (batchNo) {
+      		  params.batchNo = batchNo;
+      	  }
+      	  GLOBAL.ajax("stl/available/goodsId/query", params, function(e){
+                if (e.success) {
+              	  var items = e.items;
+              	  if (items) {
+              		  $storeNum.text(null == items.availableNum ? 0 : items.availableNum);
+              	  } else {
+              		  $storeNum.text(0);
+              	  }
+                }
+            });
+      }
+      
+      $("input.batch-no").on("input",function(){
+          var batchNo = $(this).val();
+          var goodsStatus = $(this).closest("tr").find("select.goods-status option:selected").val();
+          var goodsId = $(this).closest("tr").find("input.goods-id").val();
+          var $storeNum = $(this).closest("tr").find(".store-num");            
+    	  queryAvailableStl(goodsId, batchNo, goodsStatus, $storeNum);
+      })
+      
+      $("select.goods-status").change(function(){
+          var goodsStatus = $(this).val();
+          var batchNo = $(this).closest("tr").find("input.batch-no").val();
+          var goodsId = $(this).closest("tr").find("input.goods-id").val();
+          var $storeNum = $(this).closest("tr").find(".store-num"); 
+    	  queryAvailableStl(goodsId, batchNo, goodsStatus, $storeNum);   	 
+      })
+
+      $("input.required-send-num").on("input",function(){
+          var $requiredSendPrice = $(this).closest("tr").find("input.required-send-price");
+          var $requiredSendAmount = $(this).closest("tr").find(".required-send-amount");
+          var requiredSendNum = $(this).val();
+          var requiredSendPrice = $requiredSendPrice.val();
+          $requiredSendAmount.text((requiredSendNum * requiredSendPrice).toFixed(2));
+      })
+
+      $("input.required-send-price").on("input",function(){
+          var $requiredSendNum = $(this).closest("tr").find("input.required-send-num");
+          var $requiredSendAmount = $(this).closest("tr").find(".required-send-amount");
+          var requiredSendPrice = $(this).val();
+          var requiredSendNum = $requiredSendNum.val();
+          $requiredSendAmount.text((requiredSendNum * requiredSendPrice).toFixed(2));
+      })
+      
+      $("#save").click(function() {
+          var saveUrl = $(this).data("url");
+          var $trs = $(".goods-add-table tbody tr");
+          var dtlArr = [];
+          var isValid = true;
+          $trs.each(function(){
+            var goodsId = $(this).find("input.goods-id").val();
+            var $goodsNo = $(this).find(".goods-no");
+            var $requiredSendNum = $(this).find(".required-send-num");
+            var $requiredSendPrice = $(this).find(".required-send-price");
+            var $batchNo = $(this).find(".batch-no");
+            var $goodsStatus = $(this).find(".goods-status option:selected");
+            if($goodsNo.val() !== ""){
+                if($requiredSendNum.val() == ""){
+                    $requiredSendNum.focus();
+                    layer.msg("销售数量必填且正确，请重新输入");
+                    isValid = false;
+                    return false;               
+                }else if($requiredSendNum.val()*1 <= 0){
+                    $requiredSendNum.focus();
+                    layer.msg("销售数量不能为负数和零，请重新输入");
+                    isValid = false;
+                    return false;               
+                }else if($requiredSendPrice.val() == ""){
+                    $requiredSendPrice.focus();
+                    layer.msg("销售单价必填且正确，请重新输入 ");
+                    isValid = false;
+                    return false; 
+                }else if($requiredSendPrice.val()*1 < 0){
+                    $requiredSendPrice.focus();
+                    layer.msg("销售单价不能为负数，请重新输入 ");
+                    isValid = false;
+                    return false; 
+                }else if($goodsStatus.val() == ""){
+                    $requiredSendPrice.focus();
+                    layer.msg("请选择库存状态 ");
+                    isValid = false;
+                    return false; 
+                }else{
+                  dtlArr.push({
+                    "goodsId": goodsId,
+                    "goodsNo": $goodsNo.val(),
+                    "requiredSendNum": $requiredSendNum.val(),
+                    "requiredSendPrice": $requiredSendPrice.val(),
+                    "batchNo": $batchNo.val(),
+                    "goodsStatus": $goodsStatus.val()
+                  });
+                }
+            }
+          })
+          if(isValid){
+          	 if (dtlArr && dtlArr.length <= 0) {
+        		 layer.msg("请至少录入一条商品信息");
+        		 return;
+        	 }
+             var saveData = {
+            	billDeliveryDtlList: dtlArr,
+                id: options.param.id
+            };             
+            GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e){
+                  if (e.success) {
+                      layer.msg("保存成功！", {
+                        icon: 1,
+                        time:1500,
+                      }, function(){
+                        GLOBAL.go("html/sale/billDelivery/billDeliveryDtlEdit.html");
+                      });
+                  } else {
+                      layer.msg(e.msg);
+                  }
+            }, true, $("#save"));
+          }
+      });
+
+      GLOBAL.goBack();
+
+    </script>

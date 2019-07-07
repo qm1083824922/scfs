@@ -1,0 +1,232 @@
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>审核流</li>
+            <li class="active">编辑</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="auditFlow/edit">
+            <div class="box-body">  
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  		<tr>
+	                        <td width="180" class="text-right"><b>审核流编号：</b></td>
+		                    <td class="text-left">
+		                      <label type="text" class="js-initform" id="auditFlowNo" name="auditFlowNo"></label>
+		                    </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>审核流名称：<em class="text-star">*</em></b></td>
+	                        <td class="text-left">
+	                            <input type="text" class="form-control js-initform" id="auditFlowName" name="auditFlowName">
+	                        </td>
+	                    </tr>
+	                    <tr>
+		                    <td class="text-right"><b>审核流类型：<em class="text-star">*</em></b></td>
+		                    <td class="text-left">
+		                        <select class="form-control js-initform" data-url="AUDIT_POTYPE" id="auditFlowType" name="auditFlowType"></select>
+		                    </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>法务审核：</b></td>
+	                        <td class="text-left">
+	                            <select class="form-control sequence-num" id="lawAudit" name="lawAudit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>商务审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="bizAudit" name="bizAudit"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>事业部审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="careerAudit" name="careerAudit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>采购审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="purchaseAudit" name="purchaseAudit"></select>	                        	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>供应链小组审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="supplyChainGroupAudit" name="supplyChainGroupAudit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>供应链服务部审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="supplyChainServiceAudit" name="supplyChainServiceAudit"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>商品风控审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="goodsRiskAudit" name="goodsRiskAudit"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>业务审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="busiAudit" name="busiAudit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>财务专员审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="financeAudit" name="financeAudit"></select>	                        	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>财务主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="finance2Audit" name="finance2Audit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控专员审核：</b></td>
+	                        <td class="text-left">
+	                            <select class="form-control sequence-num" id="riskSpecialAudit" name="riskSpecialAudit"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="riskAudit" name="riskAudit"></select>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>部门主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="deptManageAudit" name="deptManageAudit"></select>	                                               
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>总经理审核：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control sequence-num" id="bossAudit" name="bossAudit"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控是否首单：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control js-initform" data-url="AUDIT_FIRST" id="isFirstRisk" name="isFirstRisk"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>法务是否首单：</b></td>
+	                        <td class="text-left">
+	                        	<select class="form-control js-initform" data-url="AUDIT_FIRST" id="isFirstLaw" name="isFirstLaw"></select>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>备注：</b></td>
+	                        <td class="text-left">
+	                        	<p class="text-star">审核节点之间若存在依赖关系，请自下而上设置各个节点！</p>
+	                        </td>
+	                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/auditFlow/update" data-url="/auditFlow/update" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/baseinfo/auditFlow/auditFlowSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function(){
+	var selectedOptions = "<option></option>";
+	for(var i = 1; i < 14; i++){
+    	selectedOptions += '<option value="'+ i + '">' + i + '</option>';
+    }  
+    $(".sequence-num").empty().append(selectedOptions);
+    
+    var editData = GLOBAL.getEditData($("#form1"), options.param.id);
+    if (editData) {
+    	$("#lawAudit").val(editData.lawAudit);
+    	$("#bizAudit").val(null == editData.bizAudit ? "" : editData.bizAudit);
+    	$("#careerAudit").val(null == editData.careerAudit ? "" : editData.careerAudit);
+    	$("#purchaseAudit").val(null == editData.purchaseAudit ? "" : editData.purchaseAudit);
+    	$("#supplyChainGroupAudit").val(null == editData.supplyChainGroupAudit ? "" : editData.supplyChainGroupAudit);
+    	$("#supplyChainServiceAudit").val(null == editData.supplyChainServiceAudit ? "" : editData.supplyChainServiceAudit);
+    	$("#busiAudit").val(null == editData.busiAudit ? "" : editData.busiAudit);
+    	$("#financeAudit").val(null == editData.financeAudit ? "" : editData.financeAudit);
+    	$("#finance2Audit").val(null == editData.finance2Audit ? "" : editData.finance2Audit);
+    	$("#riskSpecialAudit").val(null == editData.riskSpecialAudit ? "" : editData.riskSpecialAudit);
+    	$("#riskAudit").val(null == editData.riskAudit ? "" : editData.riskAudit);
+    	$("#deptManageAudit").val(null == editData.deptManageAudit ? "" : editData.deptManageAudit);
+    	$("#bossAudit").val(null == editData.bossAudit ? "" : editData.bossAudit);
+    }
+    
+    $("#form1").validate({
+        rules: {
+           	auditFlowName: {
+                required: true
+            },
+            auditFlowType: {
+                required: true
+            },
+            isFirstRisk: {
+                required: true
+            },
+            isFirstLaw: {
+                required: true
+            }
+        },
+        submitHandler: function() {
+        	var numArray = new Array();
+        	$(".sequence-num").each(function() {
+                var val = $(this).val(); //获取单个value
+                if (val) {
+                	numArray.push(val*1);
+                }
+            });
+        	numArray.sort(numAscSort);
+        	for (var i = 0; i < numArray.length - 1; i++) {
+        		if ((numArray[i] + 1) != numArray[i + 1]) {
+        			layer.msg("请从1开始选择连续的数值！");
+        			return;
+        		}
+        	}
+          	var data = $("#form1").serialize();
+          	GLOBAL.ajax("auditFlow/update",data, function(e){
+        	  	if (e.success) {
+            	  	layer.msg("保存成功！", {
+                      	icon: 1,
+                      	time: 1500
+                  	},function(){
+                	  	GLOBAL.go("html/baseinfo/auditFlow/auditFlowSearch.html");
+                  	});
+              	} else {
+                  	layer.msg(e.msg);
+              	}
+          	});
+        }
+    });
+    
+};
+
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+function numAscSort(a,b){
+	return a - b;
+}
+
+</script> 
+	 

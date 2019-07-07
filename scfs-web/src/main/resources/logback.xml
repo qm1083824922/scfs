@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+<configuration debug="false" scan="false">
+	<contextName>${project.name}</contextName>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%-5level [%contextName] %d{yyyy-MM-dd HH:mm:ss.SSS}
+				[%thread] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log.base}/${log.name}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/${log.name}-log-%d{yyyy-MM-dd}.zip</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%-5level [%contextName] %d{yyyy-MM-dd HH:mm:ss.SSS}
+				[%thread] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE-ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+		<File>${log.base}/${log.name}-err.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/${log.name}-err-%d{yyyy-MM-dd}.zip</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%-5level [%contextName] %d{yyyy-MM-dd HH:mm:ss.SSS}
+				[%thread] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>512</queueSize>
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<appender name="ASYNC-ERROR" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>128</queueSize>
+		<appender-ref ref="FILE-ERROR" />
+	</appender>
+
+	<root level="${log.level}">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="ASYNC" />
+		<appender-ref ref="ASYNC-ERROR" />
+	</root>
+
+	<logger name="org.springframework" additivity="true"
+		level="${log.spring.level}" />
+	<logger name="org.mybatis.spring" additivity="true"
+		level="${log.mybatis.level}" />
+	<logger name="java.sql" additivity="true" level="${log.sql.level}" />
+	<logger name="com.mchange.v2" additivity="true" level="ERROR" />
+
+</configuration>

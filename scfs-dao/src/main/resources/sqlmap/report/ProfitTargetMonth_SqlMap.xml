@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ProfitTargetDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.ProfitTarget">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="target_profit_amount" jdbcType="DECIMAL"
+			property="targetProfitAmount" />
+		<result column="target_biz_manager" jdbcType="DECIMAL"
+			property="targetBizManager" />
+		<result column="target_sale_blance" jdbcType="DECIMAL"
+			property="targetSaleBlance" />
+		<result column="target_sale_amount" jdbcType="DECIMAL"
+			property="targetSaleAmount" />
+		<result column="target_manage_amount" jdbcType="DECIMAL"
+			property="targetManageAmount" />
+		<result column="target_warehouse_amount" jdbcType="DECIMAL"
+			property="targetWarehouseAmount" />
+		<result column="target_fund_cost" jdbcType="DECIMAL" property="targetFundVost" />
+		<result column="busi_id" jdbcType="INTEGER" property="busiId" />
+		<result column="dept_manage_id" jdbcType="INTEGER" property="deptManageId" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		issue,
+		user_id,
+		target_profit_amount,
+		target_biz_manager,
+		target_sale_blance,
+		target_sale_amount,
+		target_manage_amount,
+		target_warehouse_amount,
+		target_fund_cost,
+		busi_id,
+		dept_manage_id,
+		state,
+		creator_id,
+		creator,
+		create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_profit_target
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_profit_target
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.ProfitTarget"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_profit_target (
+		issue,
+		user_id,
+		target_profit_amount,
+		target_biz_manager,
+		target_sale_blance,
+		target_sale_amount,
+		target_manage_amount,
+		target_warehouse_amount,
+		target_fund_cost,
+		busi_id,
+		dept_manage_id,
+		state,
+		creator_id,
+		creator
+		)
+		values
+		(
+		#{issue,jdbcType=VARCHAR},
+		#{userId,jdbcType=INTEGER},
+		#{targetProfitAmount,jdbcType=DECIMAL},
+		#{targetBizManager,jdbcType=DECIMAL},
+		#{targetSaleBlance,jdbcType=DECIMAL},
+		#{targetSaleAmount,jdbcType=DECIMAL},
+		#{targetManageAmount,jdbcType=DECIMAL},
+		#{targetWarehouseAmount,jdbcType=DECIMAL},
+		#{targetFundVost,jdbcType=DECIMAL},
+		#{busiId,jdbcType=INTEGER},
+		#{deptManageId,jdbcType=INTEGER},
+		#{state,jdbcType=TINYINT},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.ProfitTarget">
+		update tb_profit_target
+		<set>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="targetProfitAmount != null">
+				target_profit_amount =
+				#{targetProfitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="targetBizManager != null">
+				target_biz_manager =
+				#{targetBizManager,jdbcType=DECIMAL},
+			</if>
+			<if test="targetSaleBlance != null">
+				target_sale_blance =
+				#{targetSaleBlance,jdbcType=DECIMAL},
+			</if>
+			<if test="targetSaleAmount != null">
+				target_sale_amount =
+				#{targetSaleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="targetManageAmount != null">
+				target_manage_amount =
+				#{targetManageAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="targetWarehouseAmount != null">
+				target_warehouse_amount =
+				#{targetWarehouseAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="targetFundVost != null">
+				target_fund_cost = #{targetFundVost,jdbcType=DECIMAL},
+			</if>
+			<if test="busiId != null">
+				busi_id = #{busiId,jdbcType=INTEGER},
+			</if>
+			<if test="deptManageId != null">
+				dept_manage_id = #{deptManageId,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.ProfitTargetReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		pt.id,
+		pt.issue,
+		pt.user_id,
+		pt.target_profit_amount,
+		pt.target_biz_manager,
+		pt.target_sale_blance,
+		pt.target_sale_amount,
+		pt.target_manage_amount,
+		pt.target_warehouse_amount,
+		pt.target_fund_cost,
+		pt.state,
+		pt.creator_id,
+		pt.creator,
+		pt.create_at,
+		pt.update_at
+		FROM
+		tb_profit_target pt
+		LEFT JOIN tb_base_user tub ON
+		pt.user_id=tub.id
+		where 1=1 AND tub.is_delete = 0 AND tub.status=0
+		<if test="userId != null">
+			AND pt.user_id = #{userId}
+		</if>
+		<if test="departmentId != null">
+			AND tub.department_id =#{departmentId}
+		</if>
+		<if test="userName !=null and userName !=''">
+			AND tub.chinese_name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND pt.issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND pt.issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="state != null">
+			AND pt.state = #{state}
+		</if>
+		<if test="userIds !=null">
+			<foreach collection="userIds" item="dId" open="AND pt.user_id IN("
+				separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		order by pt.id desc
+	</select>
+
+	<!-- 获取首页统计报表 -->
+	<select id="querySumByCont" parameterType="com.scfs.domain.report.req.ProfitTargetReqDto"
+		resultType="com.scfs.domain.report.entity.ProfitTarget">
+		SELECT
+		SUM(pt.target_profit_amount) AS targetProfitAmount,
+		SUM(pt.target_biz_manager) AS targetBizManager,
+		SUM(pt.target_sale_blance) AS targetSaleBlance,
+		SUM(pt.target_sale_amount) AS targetSaleAmount,
+		SUM(pt.target_manage_amount) AS targetManageAmount,
+		SUM(pt.target_warehouse_amount) AS targetWarehouseAmount,
+		SUM(pt.target_fund_cost) AS targetFundVost
+		FROM
+		tb_profit_target pt
+		where 1=1
+		AND pt.state=3
+		<if test="userId !=null">
+			AND pt.user_id = #{userId}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND pt.issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND pt.issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="state != null">
+			AND pt.state = #{state}
+		</if>
+		<if test="userIds !=null">
+			<foreach collection="userIds" item="dId" open="AND pt.user_id IN("
+				separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+	</select>
+
+</mapper>

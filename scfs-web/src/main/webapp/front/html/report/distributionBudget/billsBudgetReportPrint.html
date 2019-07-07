@@ -1,0 +1,335 @@
+<html>
+
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- FontAwesome 4.3.0 -->
+<link href="../../../fonts/font-awesome-4.4.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css" />
+<!-- Ionicons 2.0.1 -->
+<link href="../../../fonts/ionicons-2.0.1/css/ionicons.min.css"
+	rel="stylesheet" type="text/css" />
+<!--bootstrap-->
+<link href="../../../css/bootstrap_min.css" rel="stylesheet"
+	type="text/css" />
+<!--AdminLTE theme-->
+<link href="../../../css/AdminLTE_min.css" rel="stylesheet"
+	type="text/css" />
+<!-- <link href="css/AdminLT_skins/_all-skins.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="../../../css/jquery.tag-editor.css" rel="stylesheet"
+	type="text/css" />
+<!--web css-->
+<link rel="stylesheet"
+	href="../../../js/plugins/jquery.datetimepicker/jquery.datetimepicker.css">
+<link rel="stylesheet" href="../../../css/sys_setting_min.css">
+<link rel="stylesheet" href="../../../css/mainframe_min.css">
+<link rel="stylesheet"
+	href="../../../js/plugins/bootstrap-table/bootstrap-table.min.css">
+<style type="text/css">
+@page {
+	size: auto; /* auto is the initial value */
+	margin: 0mm; /* this affects the margin in the printer settings */
+}
+
+body, table {
+	font-size: 14px;
+}
+
+table {
+	margin: left;
+}
+
+table.head {
+	font-size: 13px;
+	margin-top: -5px;
+}
+
+table.head td {
+	height: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.whole {
+	margin: 0px auto;
+	padding-top: 50px;
+	width: 90%;
+}
+
+td {
+	vertical-align: middle;
+}
+
+hr {
+	margin: 5px 0 2px 0;
+}
+
+#qrcode img {
+	vertical-align: middle;
+	margin: auto;
+}
+</style>
+</head>
+
+<body>
+	<div class="whole">
+		<div class="print-top">
+			<button class="btn btn-primary mb20 printBtn">打印</button>
+			<button class="btn btn-default mb20 closeBtn">关闭</button>
+			<button class="btn btn-warning mb20 btnExport"
+				data-url="distributionBudgetBillsReport/excel/distributionBudget.xls">导出excel</button>
+		</div>
+		<form class="form-horizontal form-inline" id="form1"
+			data-url="distributionBudgetBillsReport/print">
+			<table width="800px">
+				<tr>
+					<td>
+						<table width="100%">
+							<!-- <tr>
+                        		<td align="center">
+                        			<h3><label class="js-initform" id="businessUnitNameValue" name="businessUnitNameValue"/></h3>
+                        			<hr>
+                        			<span><label class="js-initform" id="businessUnitAddress" name="businessUnitAddress"/></span>
+                        		</td>
+                        		<td rowspan="2">
+                        			<div id="qrcode"></div>
+                        		</td>
+                        	</tr> -->
+							<tr>
+								<td align="center" height="80px" style="font-size: 22px;">预算对账单
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<table width="100%">
+							<!-- <tr>
+                                <td width="25%" height="30px" align="left">
+                                    &nbsp;&nbsp;项目&nbsp;:&nbsp;<label class="js-initform" id="projectName" name="projectName"/>
+                                </td>
+                                <td width="30%" height="30px" align="center">
+                                    &nbsp;&nbsp;经营单位&nbsp;:&nbsp;<label class="js-initform" id="businessUnitName" name="businessUnitName"/>
+                                </td>
+                            </tr> -->
+							<tr>
+								<td width="25%" height="30px" align="left">
+									&nbsp;&nbsp;供应商&nbsp;:&nbsp; <label class="js-initform"
+									id="supplierChineseName" name="supplierChineseName" />
+								</td>
+								<td width="25%" height="30px" align="center">
+									&nbsp;&nbsp;币种&nbsp;:&nbsp; <label class="js-initform"
+									id="currencyName" name="currencyName" />
+								</td>
+							</tr>
+							<tr>
+								<td width="30%" height="30px" align="left" colspan="2">
+									&nbsp;&nbsp;结算周期&nbsp;:&nbsp;<label class="js-initform"
+									id="oldPayCreateTime" name="oldPayCreateTime"></label>—<label
+									class="js-initform" id="payCreateTime" name="payCreateTime"></label>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" style="border: 0;">
+						<table width="100%" style="border: 1; padding-top: 5px;"
+							class="poSearch_table" align="left">
+							<thead>
+								<tr>
+									<td
+										style="width: 10%; border: 1px solid #000; padding: 5px; text-align: center;">
+										代销订单编号</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										代销订单附属编号</td>
+									<td
+										style="width: 8%; border: 1px solid #000; padding: 5px; text-align: center;">
+										商品编号</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										单价</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										销售数量</td>
+									<td
+										style="width: 10%; border: 1px solid #000; padding: 5px; text-align: center;">
+										销售金额</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										预付日期</td>
+									<td
+										style="width: 10%; border: 1px solid #000; padding: 5px; text-align: center;">
+										预付比例</td>
+									<td
+										style="width: 10%; border: 1px solid #000; padding: 5px; text-align: center;">
+										预付金额</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										结算日期</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										占用天数</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										服务费</td>
+									<td
+										style="width: 17%; border: 1px solid #000; padding: 5px; text-align: center;">
+										尾款</td>
+								</tr>
+
+							</thead>
+							<tbody>
+
+							</tbody>
+							<tfoot>
+								<tr>
+									<td
+										style="border: 0; padding: 3px; text-align: center; border: 1px solid #000;"
+										colspan="4"><b>小计</b></td>
+									<td
+										style="border: 0; padding: 3px; text-align: right; border: 1px solid #000; padding: 0 5px;"><b><label
+											class="js-initform" id="requiredSendNumSum"
+											style="font-weight: bold;" /></b></td>
+									<td
+										style="border: 0; padding: 3px; text-align: center; border: 1px solid #000; padding: 0 5px;"><b><label
+											class="js-initform" id="requiredSendAmountSum"
+											style="font-weight: bold;" /></b></td>
+									<td
+										style="border: 0; padding: 3px; text-align: center; border: 1px solid #000;"
+										colspan="2"></td>
+									<td
+										style="border: 0; padding: 3px; text-align: right; border: 1px solid #000; padding: 0 5px;"><b><label
+											class="js-initform" id="budgetAmountSum"
+											style="font-weight: bold;" /></b></td>
+									<td
+										style="border: 0; padding: 3px; text-align: center; border: 1px solid #000;"
+										colspan="2"></td>
+									<td
+										style="border: 0; padding: 3px; text-align: right; border: 1px solid #000; padding: 0 5px;"><b><label
+											class="js-initform" id="discountAmountSum"
+											style="font-weight: bold;" /></b></td>
+									<td
+										style="border: 0; padding: 3px; text-align: right; border: 1px solid #000; padding: 0 5px;"><b><label
+											class="js-initform" id="retainageAmountSum"
+											style="font-weight: bold;" /></b></td>
+								</tr>
+							</tfoot>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script src="../../../js/lib/jquery-1.9.1.min.js"
+		type="text/javascript"></script>
+	<script src="../../../js/lib/qrcode.min.js" type="text/javascript"></script>
+	<script src='../../../js/plugins/bootstrap-table/bootstrap-table.js'
+		type='text/javascript'></script>
+	<script
+		src='../../../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js'
+		type='text/javascript'></script>
+	<script src='../../../js/plugins/layer/layer.js' type='text/javascript'></script>
+	<script src="../../../js/common.js"></script>
+</body>
+<script>
+var orderNos = GLOBAL.getParam("orderNos");
+var time = GLOBAL.getParam("time");
+var beforTime = GLOBAL.getParam("beforTime");
+var payCreateDate = GLOBAL.getParam("payCreateDate");
+
+GLOBAL.ajax("distributionBudgetBillsReport/print", {orderNos: orderNos,startPayCreateDate: beforTime,endPayCreateDate: time,payCreateDate: payCreateDate}, function(result) {
+	if (result.items) {
+		var model = result.items;
+		var tbody = "";
+		
+		var requiredSendNumSum =0;
+		var requiredSendAmountSum =0;
+		var budgetAmountSum =0;
+		var discountAmountSum =0;
+		var retainageAmountSum =0;
+		for (var i = 0; i < result.items.resDtoList.length; i++) {
+			var data = result.items.resDtoList[i];
+			
+			requiredSendNumSum = requiredSendNumSum + parseFloat((data.requiredSendNum).toFixed(2));
+			requiredSendAmountSum = requiredSendAmountSum + parseFloat((data.requiredSendAmount).toFixed(2));
+			budgetAmountSum = budgetAmountSum + parseFloat((data.budgetAmount).toFixed(2));
+			discountAmountSum = discountAmountSum + parseFloat((data.discountAmount).toFixed(2));
+			retainageAmountSum = retainageAmountSum + parseFloat((data.retainageAmount).toFixed(2));
+			
+			var tr="";
+			 tr = "<tr>" 
+					+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " +data.orderNo + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + data.appendNo + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + data.number + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + (data.goodsPrice).toThounds()+ "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + (data.requiredSendNum).toThounds()+ "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + (data.requiredSendAmount).toThounds()+ "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;'> " + data.payTime + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + data.pledge + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + (data.budgetAmount).toThounds() + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + data.payCreateTime + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + data.occupyDay + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + (data.discountAmount).toThounds() + "</td>"
+    				+ "<td style='border: 1px solid #000; padding: 5px; text-align: center;''> " + (data.retainageAmount).toThounds() + "</td>"
+    				+ "</tr>";
+			tbody += tr;
+        }
+		$("#oldPayCreateTime").html(model.oldPayCreateTime);
+		$("#payCreateTime").html(model.payCreateTime);
+		$("#projectName").html(model.projectName);
+		$("#businessUnitName").html(model.businessUnitName);
+		$("#supplierChineseName").html(model.supplierChineseName);
+		$("#currencyName").html(model.currencyName);
+		
+		$("#requiredSendNumSum").html(requiredSendNumSum.toThounds());
+		$("#requiredSendAmountSum").html(requiredSendAmountSum.toThounds());
+		$("#budgetAmountSum").html(budgetAmountSum.toThounds());
+		$("#discountAmountSum").html(discountAmountSum.toThounds());
+		$("#retainageAmountSum").html(retainageAmountSum.toThounds());
+        $(".poSearch_table").find("tbody").append(tbody);             
+	}
+});
+
+
+$(".printBtn").click(function(){
+	$(this).parent(".print-top").hide();
+	closeAfterPrint();
+})
+$(".closeBtn").click(function(){
+	window.close();
+})
+
+$(".btnExport").click(function(){
+	var url = $(this).data("url");
+	url = url + "?orderNos=" + orderNos+"&startPayCreateDate="+beforTime+"&endPayCreateDate="+time+"&payCreateDate="+payCreateDate;
+	location.href = GLOBAL.host + url;
+})
+
+function closeAfterPrint() {
+		if (document.execCommand("print")) {
+			$(".print-top").show();
+			var data = {
+				ids  : ids ,
+				billType : 100
+			}
+			GLOBAL.ajax("common/updatePrintNum", data, function() {
+			});
+		} else
+			setTimeout("CloseAfterPrint();", 1000);
+	}
+window.onafterprint = function(){
+   alert("Printing completed...");
+}
+
+
+</script>
+
+</html>

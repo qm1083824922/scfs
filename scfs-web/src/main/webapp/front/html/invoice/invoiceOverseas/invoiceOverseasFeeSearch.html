@@ -1,0 +1,138 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+	          <li>当前位置</li>
+	          <li>发票</li>
+	          <li>Invoice收票</li>
+	          <li class="active">费用信息编辑</li>
+	      </ol>
+     </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+					   <li role="presentation" ><a class="tab-item" data-url="html/invoice/invoiceOverseas/invoiceOverseasEdit.html">基础信息</a></li>
+					   	<li role="presentation"  class="active"><a class="tab-item" data-url="html/invoice/invoiceOverseas/invoiceOverseasFeeSearch.html">费用信息</a></li>
+<!-- 						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectApproveScan.html">认证信息</a></li>						 -->
+	           			 <li role="presentation" ><a class="tab-item" data-url="html/invoice/invoiceOverseas/attachment.html">附件</a></li> 
+					</ul>
+					<table id="js_dataTable" data-url="invoiceCollectOverFee/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/invoiceCollectOverFee/delete" id="multDel">批量删除</button>
+					<button type="button" class="btn btn-primary btn-sm"
+						data-url="html/invoice/invoiceOverseas/invoiceOverseasFeeAdd.html" data-permissionUrl="/invoiceCollectOverFee/add" id="add">添加</button>
+   				 <button type="button"  data-url="html/invoice/invoiceOverseas/invoiceOverseasSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	window.operateEvents = {
+	};
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			},
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '费用类型',
+				field : 'feeTypeName',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '费用日期',
+				field : 'payDate',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '收票币种',
+				field : 'currencyTypeName',
+				width : 210,
+				align : 'center'
+			},{
+				title : '收票金额',
+				field : 'invoiceAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},{
+				title : '创建时间',
+				field : 'createAt',
+				width : 210,
+				align : 'center'
+			},{
+				title : '创建人',
+				field : 'creator',
+				width : 210,
+				align : 'center'
+			},
+			];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			},
+    		}
+		options.param.collectOverseasId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {collectOverseasId: options.param.id}, false, option);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("invoiceCollectOverFee/delete", {
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+	$("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    GLOBAL.go(url);
+	})
+	GLOBAL.goBack();
+</script>

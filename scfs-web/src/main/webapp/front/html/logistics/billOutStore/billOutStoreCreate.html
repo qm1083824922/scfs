@@ -1,0 +1,327 @@
+
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>物流</li>
+          <li>出库单</li>
+          <li class="active">新建出库单</li>
+      </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="billOutStoreCreateForm">
+            <div class="box-body">
+            	<div class="row">
+					<div class="col-md-6">
+              <table class="table table-bordered table-hover no-margin">
+            	  <tr>
+                    <td width="180" class="text-right"><b>出库编号：</b></td>
+                    <td class="text-left">
+                      <label type="text" class="form-control" id="billNo" name="billNo"></label>
+                    </td>
+                  </tr>
+            	  <tr>
+                    <td class="text-right"><b>出库附属编号：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>出库类型：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input type="text" readonly=true class="form-control" id="billTypeName" name="billTypeName" value="调拨">
+                      <input type="hidden" id="billType" name="billType" value="2">                     
+                    </td>
+                  </tr>
+               	  <tr>
+                    <td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>发货仓库：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="PROJECT_WAREHOUSE" id="warehouseId" pid="projectId" name="warehouseId"><label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>接收仓库：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="PROJECT_WAREHOUSE" id="receiveWarehouseId" pid="projectId" name="receiveWarehouseId"><select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>运输方式：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="BILL_OUT_STORE_TRANSFER_MODE" id="transferMode" name="transferMode"></select>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>送货地址：<em class="text-star cls_customerAddressId">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="SUBJECT_ADDRESS" id="customerAddressId" pid="receiveWarehouseId" name="customerAddressId"></select>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>要求发货日期：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input type="text" class="form-control js_datePicker" id="requiredSendDate" name="requiredSendDate">
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>签收标准：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="SIGN_STANDARD" id="signStandard" name="signStandard"></select>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateName" style="display:none">
+                    <td class="text-right"><b>签收人：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="certificateName" name="certificateName"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateId" style="display:none">
+                    <td class="text-right"><b>身份证： </b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="certificateId" name="certificateId"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_officialSeal" style="display:none">
+                    <td class="text-right"><b>公章：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="officialSeal" name="officialSeal"></input>
+                    </td>
+                  </tr>                
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td>
+                    <td class="text-left">
+                      <textarea class="form-control" id="remark" cols="50" rows="5" name="remark"></textarea>  
+                    </td>
+                  </tr>
+               </table>
+               	</div>
+               </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/billOutStore/add" id="save" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" data-url="html/logistics/billOutStore/billOutStoreSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+    options.initPage = function(){
+     	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+     	
+     	$("#projectId").change(function(){
+            var thisValue = $(this).val();
+            if (thisValue) {
+                GLOBAL.ajax("projectItem/selected", {projectId: thisValue}, function(e){
+              	  if (e.success) { 
+              		  var signStandard = e.items.signStandard;
+              		  var certificateName = e.items.certificateName;
+              		  var certificateId = e.items.certificateId;
+              		  var officialSeal = e.items.officialSeal;
+              		  if (signStandard == null) {
+              			  signStandard = "";
+              		  }
+              		  $("#signStandard").val(signStandard);
+              		  if (signStandard === "" || signStandard == 3) {
+      					  $("#certificateName").val("");
+                      	  $("#certificateId").val("");
+                      	  $("#officialSeal").val("");  
+                      	  
+                      	  $(".tr_certificateName").hide();
+               			  $("#certificateName").rules("remove");
+               				
+                          $(".tr_certificateId").hide();
+               			  $("#certificateId").rules("remove");
+               			  
+                          $(".tr_officialSeal").hide();
+               			  $("#officialSeal").rules("remove");
+              		  } else if (signStandard == 0) {
+                	      $("#certificateName").val(certificateName);
+                      	  $("#certificateId").val(certificateId);
+                      	  $("#officialSeal").val("");
+                      	  
+                      	  $(".tr_certificateName").show();
+                	 	  $("#certificateName").rules("add", {required: true});
+                	 		
+                          $(".tr_certificateId").show();
+                	 	  $("#certificateId").rules("add", {required: true});
+                	 		
+                          $(".tr_officialSeal").hide();
+               			  $("#officialSeal").rules("remove");
+              		  } else if (signStandard == 1) {
+      					  $("#certificateName").val("");
+                      	  $("#certificateId").val("");
+                      	  $("#officialSeal").val(officialSeal);
+                      	  
+                      	  $(".tr_certificateName").hide();
+               			  $("#certificateName").rules("remove");
+               				
+                          $(".tr_certificateId").hide();
+               			  $("#certificateId").rules("remove");
+               				
+                          $(".tr_officialSeal").show();
+               			  $("#officialSeal").rules("add", {required: true}); 
+      				  } else if (signStandard == 2) {
+      					  $("#certificateName").val(certificateName);
+                      	  $("#certificateId").val(certificateId);
+                      	  $("#officialSeal").val(officialSeal);    
+                      	  
+                          $(".tr_certificateName").show();
+              	 		  $("#certificateName").rules("add", {required: true});
+              	 		
+                      	  $(".tr_certificateId").show();
+              	 		  $("#certificateId").rules("add", {required: true});
+              	 		
+                      	  $(".tr_officialSeal").show();
+             		      $("#officialSeal").rules("add", {required: true}); 
+      				  }
+                    } 
+      	    	});
+            } else {
+			    $("#signStandard").val("");
+			    $("#certificateName").val("");
+             	$("#certificateId").val("");
+             	$("#officialSeal").val("");  
+             	  
+             	$(".tr_certificateName").hide();
+      			$("#certificateName").rules("remove");
+      				
+                $(".tr_certificateId").hide();
+      			$("#certificateId").rules("remove");
+      			  
+                $(".tr_officialSeal").hide();
+      			$("#officialSeal").rules("remove"); 
+            }
+        });
+     	
+        $("#transferMode").change(function(){
+            var thisValue = $(this).val();
+            if (thisValue == 1) {	//1-自提
+            	$(".cls_customerAddressId").hide();
+            	$("#customerAddressId").val("");
+   				$("#customerAddressId").rules("remove");  
+            } else {
+            	$(".cls_customerAddressId").show();            	
+    	 		$("#customerAddressId").rules("add", {required: true});
+            }
+        });
+        $("#signStandard").change(function(){
+            var thisValue = $(this).val();
+            if (thisValue === "" || thisValue == 3) {
+          	  	$(".tr_certificateName").hide();
+            	$("#certificateName").val("");
+   			  	$("#certificateName").rules("remove");
+   				
+            	$(".tr_certificateId").hide();
+            	$("#certificateId").val("");
+   			    $("#certificateId").rules("remove");
+   			  
+            	$(".tr_officialSeal").hide();
+            	$("#officialSeal").val("");
+   			    $("#officialSeal").rules("remove");
+            } else if (thisValue == 0) {	//0-身份证  
+            	$(".tr_certificateName").show();
+    	 		$("#certificateName").rules("add", {required: true});
+    	 		
+            	$(".tr_certificateId").show();
+    	 		$("#certificateId").rules("add", {required: true});
+    	 		
+            	$(".tr_officialSeal").hide();
+            	$("#officialSeal").val("");
+   				$("#officialSeal").rules("remove");
+            } else if (thisValue == 1) {	//1-公章 
+            	$(".tr_certificateName").hide();
+            	$("#certificateName").val("");
+   				$("#certificateName").rules("remove");
+   				
+            	$(".tr_certificateId").hide();
+            	$("#certificateId").val("");
+   				$("#certificateId").rules("remove");
+   				
+            	$(".tr_officialSeal").show();
+   				$("#officialSeal").rules("add", {required: true}); 
+            } else if (thisValue == 2) {	//2-身份证和公章
+            	$(".tr_certificateName").show();
+    	 		$("#certificateName").rules("add", {required: true});
+    	 		
+            	$(".tr_certificateId").show();
+    	 		$("#certificateId").rules("add", {required: true});
+    	 		
+            	$(".tr_officialSeal").show();
+   				$("#officialSeal").rules("add", {required: true}); 
+            }
+        });
+        $("#billOutStoreCreateForm").validate({
+            rules: {
+            	affiliateNo: {
+            		required: true
+            	},
+            	projectId: {
+                  	required: true
+                },
+                supplierId: {
+                    required: true
+                },
+                warehouseId: {
+                	required: true
+                },
+                receiveWarehouseId: {
+                	required: true
+                },
+                customerAddressId: {
+                	required: true
+                },
+                requiredSendDate: {
+                	required: true
+                },
+                transferMode: {
+                	required: true
+                },
+                signStandard: {
+                	required: true
+                }, 
+                certificateId: {
+                	required: true
+                },
+                officialSeal: {
+                	required: true
+                }
+            },
+            submitHandler: function() {
+                var warehouseId = $("#billOutStoreCreateForm").find("#warehouseId option:selected").val();
+                var receiveWarehouseId = $("#billOutStoreCreateForm").find("#receiveWarehouseId option:selected").val();
+          	    if (warehouseId == receiveWarehouseId) {
+  	        	  layer.msg("发货仓库与接收仓库不能相同，请重新选择");
+  	        	  return;
+          	    }  
+          	  	
+                var $this = $(this);
+                var data = $("#billOutStoreCreateForm").serialize();
+                GLOBAL.ajax("billOutStore/add", data, function(e){
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                    	time: 1500
+                    },function(){
+                        options.param.id = e.items.id;
+                  		options.param.projectId = e.items.projectId;
+                        GLOBAL.go("html/logistics/billOutStore/billOutStoreEdit.html", options.param);
+                    })
+                }, false, $("#save"));
+                
+            }
+        });
+    }
+
+	GLOBAL.goBack();
+</script>

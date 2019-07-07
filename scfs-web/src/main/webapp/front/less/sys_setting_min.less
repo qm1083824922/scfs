@@ -1,0 +1,74 @@
+@import url("base/common.less");
+
+.skin-blue .main-header .navbar {
+    background-color: @blue;
+    min-width:1136px;
+}
+
+.main-wrap{
+    /* overflow-y:auto; */
+}
+.tab-item{
+    cursor: pointer;
+}
+input{
+    &.invalid{
+        border:1px solid red;
+    }
+}
+
+.upload-box{
+    width:100px;
+    height:40px;
+    border:1px solid #ccc;
+    padding:10px;
+    font-size:16px;
+    line-height:14px;
+    cursor: pointer;
+    &:hover{
+        border-color:#5FB878;
+        .upload-txt{
+            color:#5FB878;
+        }
+    }
+    .icon-plus{
+        font-size: 20px;
+        display: inline-block;
+        margin-left: 8px;
+        color: #5FB878;
+        border: 1px solid #5FB878;
+        border-radius: 50%;
+        padding: 0px;
+        width: 18px;
+        height: 18px;
+        line-height: 12px;
+    }
+    .upload-txt{
+        font-size:16px;
+        color:#666;
+        margin-left:8px;
+    }
+    input[type='file']{
+        display:none;
+    }
+}
+
+@keyframes animate-stripes {
+    0% {
+        background-position: 0 0
+    }
+
+    100% {
+        background-position: 60px 0
+    }
+}
+
+.processing{
+	transition: background-color .5s 0s ease;
+    background-size: 30px 30px;
+    background-image: -moz-linear-gradient(315deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-image: linear-gradient(135deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    -moz-animation: animate-stripes 1.8s linear infinite;
+    animation: animate-stripes 1.8s linear infinite;
+    pointer-events:none;
+}

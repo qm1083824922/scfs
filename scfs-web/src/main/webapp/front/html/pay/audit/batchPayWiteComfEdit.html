@@ -1,0 +1,312 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li class="active">付款批量确认</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+				<form class="form-horizontal form-inline" id="form1">
+				<div class="box-body">
+					<table class="table table-bordered table-hover no-margin" id="js_dataTable1">
+						<tr>
+							<td width="180" class="text-right"><b>付款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payerName" name="payerName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payeeName" name="payeeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账号开户人：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="subjectName" name="subjectName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账户：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform"
+								id="accountNo" name="accountNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行代码：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankCode" name="bankCode"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行地址：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankAddress" name="bankAddress"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款人电话：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="phoneNumber" name="phoneNumber"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款总金额：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform"
+								id="sumPayAmount" name="sumPayAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>币种：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform"
+								id="defaultCurrency" name="defaultCurrency"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款账户：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select class="form-control js-select"
+								data-url="SUBJECT_ACCOUNT" id="paymentAccount" pid="payer"
+								name="paymentAccount"></select></td>
+						</tr>
+						<tr id="payRateTr" style="display:none">
+							<td class="text-right"><b>汇率：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control"  id="payRate" name="payRate"  />
+							</td>
+						</tr>
+						<tr id="realPayAmountTr" style="display:none">
+							<td class="text-right"><b>实际付款金额：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control"  id="realPayAmount" name="realPayAmount" />
+								<label style="font-size:20px" id="realCurrencyTypeName" name="realCurrencyTypeName"></label>
+							</td>
+						</tr>
+						<tr style="display:none">
+							<td class="text-right"><b>实际付款币种：<em class="text-star">*</em></b></td>
+							<td class="text-left"><input style="font-size:20px" id="realCurrencyType" name="realCurrencyType" /></td>
+						</tr>
+						<tr>
+	                      <td class="text-right"><b>确认日期：<em class="text-star">*</em></b></td>
+	                      <td class="text-left">
+	                        <input type="text" class="form-control  js_datePicker" id="confirmorAt" name="confirmorAt">
+	                      </td>
+	                    </tr>
+	                    <tr>
+							<td class="text-right"><b>银行手续费：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control" id="bankCharge" name="bankCharge" value="0">
+							</td>
+						</tr>
+					</table>
+					<table class="table table-bordered table-hover no-margin" id="js_dataTable2">
+						
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="submit" class="btn btn-default btn-sm"  data-permissionUrl="/payOrder/batch/over"
+						id="save">确认</button>
+					<button type="button" id="back"
+						data-url="html/pay/audit/payWiteComf.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [{
+		title : '序号',
+		field : 'columnsNumber',
+		width : 10
+	}, {
+		title : '付款编号',
+		field : 'payNo',
+		width : 85,
+		align : 'center'
+	}, {
+		title : '付款附属编号',
+		field : 'attachedNumbe',
+		width : 85,
+		align : 'center'
+	}, {
+		title : '付款类型',
+		field : 'payTypeName',
+		width : 70,
+		align : 'center'
+	},  {
+		title : '付款金额',
+		field : 'payAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '要求付款日期',
+		field : 'requestPayTime',
+		width : 90,
+		align : 'center'
+	},{
+		title : '备注',
+		field : 'remark',
+		width : 90,
+		align : 'center'
+	} ];
+
+	options.initPage = function() {
+		var param = {
+			ids : options.param.ids
+		}
+		var callback = function(e) {
+			var data = e.items;
+			if (data != null && data.sumPayAmount != null && data.payOrderResDto.length > 0) {
+				var payOrderResDto = data.payOrderResDto ;
+				var sumPayAmount = data.sumPayAmount;
+				$("#js_dataTable1").find(".js-initform").each(function(){
+					var _self = $(this);
+					var key = _self.attr("id");
+					_self.html(payOrderResDto[0][key]);
+				});
+				$("#js_dataTable1").find("#sumPayAmount").html(sumPayAmount).attr("sumPayAmount" , sumPayAmount);
+				console.log(payOrderResDto[0]["payer"]);
+				GLOBAL.ajax("common/selected/query?key=SUBJECT_ACCOUNT&pId=" + payOrderResDto[0]["payer"], null, function(data) {
+                    if (data) {
+                        var option = "<option value=''>请选择</option>";
+                        var items = data.items;
+                        if (items) {
+                            for (var k = 0; k < items.length; k++) {
+                            	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                            }
+                            $("#paymentAccount").append(option);
+                        }
+                    }
+                })
+				
+				GLOBAL.initTable($('#js_dataTable2'), tabCols, null, payOrderResDto, {pagination: false});
+			}
+		}
+		GLOBAL.ajax("payOrder/batchConfirm/query", JSON.stringify(param),
+		function(e) {
+			if (e.success) {
+				callback(e);
+			} else {
+				layer.msg(e.msg);
+			}
+		}, true);
+	};
+
+	$("#paymentAccount").change(
+			function() {
+				var paymentAccount = $(this).val();
+				if (paymentAccount.length == 0) {
+					$("#realPayAmountTr").hide();
+					$("#payRateTr").hide();
+				} else {
+					var data = {
+						ids : options.param.ids,
+						paymentAccount : paymentAccount
+					}
+					var callback = function(e) {
+						var items = e.items;
+						if (e.items != null) {
+							$("#realPayAmountTr").show().find("#realPayAmount")
+									.val(items.realPayAmount);
+							$("#realPayAmountTr").find("#realCurrencyTypeName")
+									.html(items.realCurrencyTypeName);
+							$("#realCurrencyType").val(items.realCurrencyType);
+							$("#payRateTr").show().find("#payRate").val(
+									items.payRate);
+						}
+					}
+					GLOBAL.ajax("payOrder/defaultRealPayAmount/query", JSON.stringify(data),
+							function(e) {
+								if (e.success) {
+									callback(e);
+								} else {
+									layer.msg(e.msg);
+								}
+							}, true);
+				}
+
+			});
+
+	$("#payRate").change(function() {
+		var payRate = $(this).val();
+		var sumPayAmount = $("#sumPayAmount").attr("sumPayAmount");
+		var pattern = /^[0-9]*(\.[0-9]{1,8})?$/;
+		if (!pattern.test(payRate)) {
+			layer.msg("请输入正确格式");
+			$(this).focus();
+		}
+		$("#realPayAmount").val((parseFloat(sumPayAmount).multiply(parseFloat(payRate))).toFixed(2));
+	});
+	
+	$("#realPayAmount").change(function() {
+		var realPayAmount = $(this).val();
+		var payAmount = $("#sumPayAmount").attr("sumPayAmount");
+		var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+		if (!pattern.test(realPayAmount)) {
+			layer.msg("请输入正确格式");
+			$(this).focus();
+	  	}
+		$("#payRate").val((parseFloat(realPayAmount).divide(parseFloat(payAmount))).toFixed(8));
+	});
+
+	$("#form1").validate({
+		rules : {
+			paymentAccount : {
+				required : true
+			},
+			confirmorAt : {
+				required : true
+			},
+			payRate : {
+				required : true
+			},
+			realCurrencyType : {
+				required : true
+			},
+			realPayAmount : {
+				required : true
+			}
+		},
+		submitHandler : function() {
+			var data = {};
+			$("#js_dataTable1").find("input , select").each(function(){
+				var name = $(this).attr("id");
+				data[name] = $(this).val();
+			});
+			$.extend(data , {ids : options.param.ids})
+			console.log(data);
+			var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+			var bankCharge = $("#bankCharge");
+			var realPayAmount = $("#realPayAmount");
+		      
+	  	    var pattern1 = /^[0-9]*(\.[0-9]{1,8})?$/;
+	  	    var payRate = $("#payRate");
+	  	    if (!pattern1.test(payRate.val())) {
+			  	layer.msg("请输入正确格式");
+				payRate.focus();
+	  	    } else if (!pattern.test(realPayAmount.val())) {
+	  		  	layer.msg("请输入正确格式");
+	  	  	 	realPayAmount.focus();
+	  	    } else if (!pattern.test(bankCharge.val())) {
+				layer.msg("请输入正确格式");
+				bankCharge.focus();
+			} else {
+				GLOBAL.ajax("payOrder/batch/over", JSON.stringify(data), function(e) {
+					if (e.success) {
+						layer.msg("确认成功！", {
+							icon : 1,
+							time : 1500
+						}, function() {
+							GLOBAL.go("html/pay/audit/payWiteComf.html");
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				}, true, $("#save"));
+			}
+		}
+	});
+
+	GLOBAL.goBack();
+</script>

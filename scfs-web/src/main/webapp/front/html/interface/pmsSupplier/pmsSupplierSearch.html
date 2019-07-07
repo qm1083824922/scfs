@@ -1,0 +1,193 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>接口</li>
+            <li class="active">PMS供应商绑定</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                            <label class="control-label ml10">项目：</label> 
+								<select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label> 
+								<select class="form-control js-select" data-url="SUPPLIER" id="supplierId"  name="supplierId"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商编号：</label> 
+								<input type="text" class="form-control "  id="supplierNo"  name="supplierNo">  
+                        </div> 
+                        <div class="search-item">
+                            <label class="control-label ml10">PMS供应商编号：</label> 
+								<input type="text" class="form-control "  id="pmsSupplierNo"  name="pmsSupplierNo">  
+                        </div> 
+                        
+                         <div class="search-item">
+                            <label class="control-label ml10">状态：</label> 
+								<select class="form-control js-select" data-url="PMSS_STATUS" id="status"  name="status"> </select>
+                        </div> 
+                        
+                        <div class="search-item">
+								<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="button" id="btnNew" data-url="html/interface/pmsSupplier/newBuildPMSSupplier.html" data-permissionUrl="/pmssSupplierBind/add" class="btn btn-warning btn-sm ml10">新建</button>     
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>  
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="pmssSupplierBind/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+	'click .edit': function(e, value, row, index){
+    	options.param.id = row.id;
+		options.param.cid = row.id; 
+		if(row.status=="2"){
+			GLOBAL.go("html/interface/pmsSupplier/pmsSupplierProjectEdit.html", options.param);	
+		}else{
+			GLOBAL.go("html/interface/pmsSupplier/pmsSupplierEdit.html", options.param);	
+		}
+    },
+    'click .scan': function(e, value, row, index){
+		options.param.id = row.id;
+		options.param.cid = row.id; 
+		options.param.billType =row.billType; 
+		GLOBAL.go("html/interface/pmsSupplier/pmsSupplierScan.html", options.param); 
+		
+    },
+    'click .submit': function (e, value, row, index) {
+    	var id = row.id;
+	    if(id){
+	    	layer.confirm('确定要提交吗？', {
+		        btn: ['确定', '取消'] //按钮
+		    }, function() {
+		         GLOBAL.ajax("pmssSupplierBind/submit", {id: id}, function(e) {
+	                if (e.success) {
+	                    layer.msg("提交成功！");
+	                    $("#btnSearch").click();
+	                } else {
+	                    layer.msg(e.msg);
+	                }
+	            });
+		    }, function() {});
+	    }
+    },
+    'click .delete': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要删除吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("pmssSupplierBind/delete", {id: id}, function(e){
+	    		if (e.success) {
+                    layer.msg("删除成功！");
+                    $("#btnSearch").click();
+                } else {
+                    layer.msg(e.msg);
+                } 
+	    	})
+	    }, function() {});
+    },
+    'click .unbind': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要解绑吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("pmssSupplierBind/unbind", {id: id}, function(e){
+	    		if (e.success) {
+                    layer.msg("解绑成功！");
+                    $("#btnSearch").click();
+                } else {
+                    layer.msg(e.msg);
+                } 
+	    	})
+	    }, function() {});
+    },
+    'click .bind': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要绑定吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("pmssSupplierBind/bind", {id: id}, function(e){
+	    		if (e.success) {
+                    layer.msg("绑定成功！");
+                    $("#btnSearch").click();
+                } else {
+                    layer.msg(e.msg);
+                } 
+	    	})
+	    }, function() {});
+    }
+};
+ 
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '供应商',
+	     field: 'supplierName',
+	     align: 'center'
+	 }, {
+	     title: '供应商编号',
+	     field: 'supplierNo',
+	     align: 'center'
+	 }, {
+	     title: 'PMS供应商编号',
+	     field: 'pmsSupplierNo',
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'statusName',
+	     align: 'center'
+	 } , {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents 
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+</script>

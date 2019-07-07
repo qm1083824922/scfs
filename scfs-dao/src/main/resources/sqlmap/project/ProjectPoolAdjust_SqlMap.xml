@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectPoolAdjustDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.project.entity.ProjectPoolAdjust">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="adjust_no" jdbcType="VARCHAR" property="adjustNo" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_amount" jdbcType="DECIMAL" property="projectAmount" />
+		<result column="remain_fund_amount" jdbcType="DECIMAL"
+			property="remainFundAmount" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="adjust_amount" jdbcType="DECIMAL" property="adjustAmount" />
+		<result column="create_id" jdbcType="INTEGER" property="createId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="start_valid_date" jdbcType="DATE" property="startValidDate" />
+		<result column="end_valid_date" jdbcType="DATE" property="endValidDate" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="used_fund_amount" jdbcType="DECIMAL" property="usedFundAmount" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, adjust_no, project_id, currency_type, state,
+		adjust_amount,
+		create_id, creator, create_at, update_at,
+		start_valid_date,
+		end_valid_date, remark
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		adjust.id, adjust.adjust_no, adjust.project_id,
+		adjust.currency_type,
+		adjust.state, adjust.adjust_amount,
+		adjust.create_id, adjust.creator, adjust.create_at, adjust.update_at,
+		adjust.start_valid_date, adjust.end_valid_date,
+		adjust.remark,
+		pool.used_fund_amount, pool.project_amount, pool.remain_fund_amount
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_project_pool_adjust adjust
+		left join tb_project_pool pool
+		on
+		adjust.project_id = pool.project_id
+		where adjust.id =
+		#{id,jdbcType=INTEGER} for update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_project_pool_adjust
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectPoolAdjust"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_pool_adjust
+		(adjust_no, project_id, currency_type,
+		state,
+		adjust_amount, create_id,
+		creator, create_at, start_valid_date,
+		end_valid_date, remark
+		)
+		values
+		(#{adjustNo,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=TINYINT}, #{state,jdbcType=TINYINT},
+		#{adjustAmount,jdbcType=DECIMAL}, #{createId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}, #{createAt,jdbcType=DATE},
+		#{startValidDate,jdbcType=DATE},
+		#{endValidDate,jdbcType=DATE},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.project.dto.req.ProjectPoolAdjustSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_project_pool_adjust adjust
+		left join tb_project_pool pool
+		on
+		adjust.project_id = pool.project_id
+		<where>
+			<if test="projectId != null">
+				and adjust.project_id = #{projectId}
+			</if>
+			<if test="state != null">
+				and adjust.state = #{state}
+			</if>
+			<if test="creator != null">
+				and adjust.creator like CONCAT('%', #{creator}, '%')
+			</if>
+			<if test="startApplyDate != null">
+  	 		<![CDATA[
+  	 			and adjust.create_at >= #{startApplyDate}
+  	 		]]>
+			</if>
+			<if test="endApplyDate != null">
+  	 		<![CDATA[
+  	 			and adjust.create_at <= #{endApplyDate}
+  	 		]]>
+			</if>
+		</where>
+		order by id desc
+	</select>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectPoolAdjust">
+		update tb_project_pool_adjust
+		<set>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="adjustAmount != null">
+				adjust_amount = #{adjustAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="startValidDate != null">
+				start_valid_date = #{startValidDate,jdbcType=DATE},
+			</if>
+			<if test="endValidDate != null">
+				end_valid_date = #{endValidDate,jdbcType=DATE},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

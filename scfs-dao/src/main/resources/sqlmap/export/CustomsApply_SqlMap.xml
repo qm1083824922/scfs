@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.export.CustomsApplyDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.export.entity.CustomsApply">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="apply_no" jdbcType="VARCHAR" property="applyNo" />
+		<result column="affiliate_no" jdbcType="VARCHAR" property="affiliateNo" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="proxy_company_id" jdbcType="INTEGER" property="proxyCompanyId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="customer_address_id" jdbcType="INTEGER"
+			property="customerAddressId" />
+		<result column="customs_date" jdbcType="TIMESTAMP" property="customsDate" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+		<result column="customs_num" jdbcType="DECIMAL" property="customsNum" />
+		<result column="customs_amount" jdbcType="DECIMAL" property="customsAmount" />
+		<result column="customs_tax_amount" jdbcType="DECIMAL"
+			property="customsTaxAmount" />
+		<result column="is_return_tax" jdbcType="TINYINT" property="isReturnTax" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deleter_id" jdbcType="INTEGER" property="deleterId" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="print_num" jdbcType="INTEGER" property="printNum" />
+	</resultMap>
+	<resultMap id="sumModel" type="com.scfs.domain.export.entity.CustomsApply">
+		<result column="customs_num" jdbcType="DECIMAL" property="customsNum" />
+		<result column="customs_amount" jdbcType="DECIMAL" property="customsAmount" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, apply_no, affiliate_no, project_id, proxy_company_id,
+		customer_id,
+		customer_address_id,
+		customs_date, status, tax_rate,
+		customs_num, customs_amount, customs_tax_amount,
+		is_return_tax, remark,
+		creator_id,
+		creator, create_at, update_at, deleter_id, deleter,
+		is_delete,
+		delete_at,print_num
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		tca.id, tca.apply_no, tca.affiliate_no, tca.project_id,
+		tca.proxy_company_id,
+		tca.customer_id, tca.customer_address_id,
+		tca.customs_date, tca.status, tca.tax_rate, tca.customs_num,
+		tca.customs_amount,
+		tca.customs_tax_amount, tca.is_return_tax,
+		tca.remark, tca.creator_id,
+		tca.creator, tca.create_at, tca.update_at,
+		tca.deleter_id,
+		tca.deleter, tca.is_delete, tca.delete_at
+	</sql>
+
+	<sql id="condition">
+		<if test="projectId!=null">
+			AND tca.project_id = #{projectId}
+		</if>
+		<if test="proxyCompanyId!=null">
+			AND tca.proxy_company_id = #{proxyCompanyId}
+		</if>
+		<if test="customerId!=null">
+			AND tca.customer_id = #{customerId}
+		</if>
+		<if test="startCustomsDate!=null and startCustomsDate!=''">
+			AND tca.customs_date &gt;= #{startCustomsDate}
+		</if>
+		<if test="endCustomsDate!=null and endCustomsDate!=''">
+			AND tca.customs_date &lt;= #{endCustomsDate}
+		</if>
+		<if test="status!=null">
+			AND tca.status = #{status}
+		</if>
+		<if test="applyNo!=null and applyNo!=''">
+			AND tca.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="affiliateNo!=null and affiliateNo!=''">
+			AND tca.affiliate_no like CONCAT('%',#{affiliateNo},'%')
+		</if>
+	</sql>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_customs_apply
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_customs_apply
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.export.entity.CustomsApply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_customs_apply (id,
+		apply_no, affiliate_no,
+		project_id, proxy_company_id, customer_id,
+		customer_address_id, customs_date, status,
+		tax_rate, remark,
+		creator_id,
+		creator
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{applyNo,jdbcType=VARCHAR},
+		#{affiliateNo,jdbcType=VARCHAR},
+		#{projectId,jdbcType=INTEGER}, #{proxyCompanyId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{customerAddressId,jdbcType=INTEGER},
+		#{customsDate,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
+		#{taxRate,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.export.entity.CustomsApply">
+		update tb_customs_apply
+		<set>
+			<if test="applyNo != null">
+				apply_no = #{applyNo,jdbcType=VARCHAR},
+			</if>
+			<if test="affiliateNo != null">
+				affiliate_no = #{affiliateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="proxyCompanyId != null">
+				proxy_company_id = #{proxyCompanyId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="customerAddressId != null">
+				customer_address_id =
+				#{customerAddressId,jdbcType=INTEGER},
+			</if>
+			<if test="customsDate != null">
+				customs_date = #{customsDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="customsNum != null">
+				customs_num = #{customsNum,jdbcType=DECIMAL},
+			</if>
+			<if test="customsAmount != null">
+				customs_amount = #{customsAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="customsTaxAmount != null">
+				customs_tax_amount =
+				#{customsTaxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isReturnTax != null">
+				is_return_tax = #{isReturnTax,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleterId != null">
+				deleter_id = #{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.export.dto.req.CustomsApplySearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_customs_apply tca
+		inner join tb_base_user_project bup
+		on
+		tca.project_id = bup.project_id
+		where tca.is_delete = 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="isReturnTax !=null">
+			AND tca.is_return_tax = #{isReturnTax}
+		</if>
+		<include refid="condition" />
+		order by tca.id desc
+	</select>
+
+	<select id="sumAmountAndNumber"
+		parameterType="com.scfs.domain.export.dto.req.CustomsApplySearchReqDto"
+		resultMap="sumModel">
+		select SUM(tca.customs_num) customs_num, SUM(tca.customs_amount)
+		customs_amount
+		from tb_customs_apply tca
+		inner join tb_base_user_project
+		bup
+		on tca.project_id = bup.project_id
+		where tca.is_delete = 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="isReturnTax !=null">
+			AND tca.is_return_tax = #{isReturnTax}
+		</if>
+		<include refid="condition" />
+	</select>
+
+	<update id="updateCustomsApplyInfo" parameterType="com.scfs.domain.export.entity.CustomsApply">
+		update
+		tb_customs_apply
+		set tax_rate = #{taxRate,jdbcType=DECIMAL},
+		customs_num = #{customsNum,jdbcType=DECIMAL},
+		customs_amount =
+		#{customsAmount,jdbcType=DECIMAL},
+		customs_tax_amount =
+		#{customsTaxAmount,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePrintNum" parameterType="com.scfs.domain.export.entity.CustomsApply">
+		update tb_customs_apply
+		<set>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

@@ -1,0 +1,142 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">地址信息编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectBaseInfoEdit.html">基础信息</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/subject/subjectAddressEdit.html">地址信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAccountEdit.html">帐号信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectInvoiceEdit.html">开票信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectUserInfoEdit.html">用户信息</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="baseSubject/address/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-primary btn-sm" data-url="html/subject/subjectAddressEditAdd.html" data-permissionUrl="/baseSubject/address/add" id="add">添加</button> 
+              <button type="button" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+              <button type="button" class="btn btn-danger btn-sm" data-url="baseSubject/address/batch/invalid" data-permissionUrl="/baseSubject/address/batch/invalid" id="multDel">批量作废</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [
+	{
+	    field: 'checkItem',
+	    checkbox: true,
+	}, {  
+	    title: '序号',
+	    field: 'columnsNumber',  
+	    width: 10
+	}, {
+         title: '地址类型',
+         field: 'addressTypeName',
+         width: 60,
+         align: 'center'
+     }, {
+         title: '国家',
+         field: 'nationName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '省',
+         field: 'provinceName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '市',
+         field: 'cityName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '县',
+         field: 'countyName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '地址',
+         field: 'addressDetail',
+         width: 150,
+         align: 'center'
+     }, {
+         title: '联系人',
+         field: 'contactPerson',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '手机',
+         field: 'mobilePhone',
+         width: 80,
+         align: 'center'
+     }, {
+         title: '电话',
+         field: 'telephone',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '传真',
+         field: 'fax',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '备注',
+         field: 'note',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '状态',
+         field: 'stateLabel',
+         width: 50,
+         align: 'center'
+     }];
+    
+    options.initPage = function(){
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+      };
+
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    $("#multDel").click(function(){
+    	var id = GLOBAL.selectIds($('#js_dataTable'));
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					$('#js_dataTable').bootstrapTable('refresh', {query: {id: options.param.id}});
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+
+    $("#add").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+    
+    GLOBAL.goBack();
+
+</script>

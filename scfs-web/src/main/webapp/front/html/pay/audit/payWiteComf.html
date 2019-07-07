@@ -1,0 +1,293 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">付款确认</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">收款单位：</label>
+                            <select class="form-control js-select" data-url="BCS" id="payee" name="payee"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款编号：</label>
+                            <input style="width:300px;" type="text" class="form-control" id="payNo" name="payNo" placeholder="多个付款编号之间用,隔开">
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款类型：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_TYPE" id="payType" name="payType"></select>
+                            
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">要求付款日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startRequestTime" value="" name="startRequestTime"> -
+                            <input type="text" class="form-control js_datePicker" id="endRequestTime" value="" name="endRequestTime">
+                        	
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="button" id="batchConfirm" class="btn btn-primary btn-sm ml20" data-permissionUrl="/payOrder/batch/over">批量确认</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                        <div class="search-item">
+                              <button type="button" id="btnExport" data-permissionUrl="/payOrder/write/payEnsure.xls"
+                           		 data-url="payOrder/write/payEnsure.xls" class="btn btn-warning btn-sm ml10">导出</button>                                 	
+                        </div>
+                         <div class="search-item">                        	
+                       		  <button type="button" id="btnImport" data-url="html/pay/audit/payEnsureImport.html" class="btn btn-warning btn-sm ml10">付款确认导入</button>    
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="box-body">
+					<input class="form-control" type="hidden" id="id" name="id">
+					<table id="js_dataTable" data-url="payOrder/write/query">
+
+					</table>
+				</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+	      'click .modify': function(e, value, row, index){
+	          options.param.id = row.id;
+	          GLOBAL.go("html/pay/audit/payWiteComfEdit.html");
+	      },
+		   'click .reject' :function(e, value, row, index){
+		 	 var id = row.id;
+			  if(id){
+			    	layer.confirm('确定要驳回吗？', {
+				        btn: ['确定', '取消'] //按钮
+				    }, function() {
+				         GLOBAL.ajax("payOrder/reject", {id: id}, function(e) {
+			                if (e.success) {
+			                    layer.msg("驳回成功！");
+			                    $("#btnSearch").click();
+			                } else {
+			                    layer.msg(e.msg);
+			                }
+			            });
+			    	}, function() {});
+		    }
+	   },     
+  };
+
+function operateFormatter(value, row, index) {
+	    return [
+	            
+	            '<a class="modify" href="javascript:void(0)">',
+	            '<span class="btn btn-primary btn-xs" data-permissionUrl="/payOrder/detail">确认</span>',
+	            '</a>  ',
+	            '<span class="btn btn-primary btn-xs  btn-danger   reject"  data-url="/payOrder/reject">驳回</span>',
+	        ].join('');
+	}
+/*数据表格*/
+var tabCols = [
+	 {
+		field : 'checkItem',
+		checkbox : true,
+		width : '1%'
+	 },	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '付款编号',
+	     field: 'payNo',
+	     width: 85,
+	     align: 'center'
+     }, {
+	     title: '合并付款编号',
+	     field: 'mergePayNo',
+	     width: 85,
+	     align: 'center'
+     },{
+	     title: '附属编号',
+	     field: 'attachedNumbe',
+	     width: 92,
+	     align: 'center'
+     }, {
+	     title: '经营单位',
+	     field: 'busiUnit',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '付款类型',
+	     field: 'payTypeName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currnecyTypeName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '付款方式',
+	     field: 'payWayName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '付款金额',
+	     field: 'payAmount',
+	     width: 70,
+	     align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '收款单位',
+	     field: 'payeeName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '要求付款日期',
+	     field: 'requestPayTime',
+	     width: 90,
+	     align: 'center'
+	 }, {
+	     title: '确认日期',
+	     field: 'confirmorAt',
+	     width: 90,
+	     align: 'center'
+	 }, {
+	     title: '确认人',
+	     field: 'confirmor',
+	     width: 70,
+	     align: 'center'
+	 },{
+	     title: '创建人',
+	     field: 'creator',
+	     width: 80,
+	     align: 'center'
+	  }, {
+		 title: '创建时间',
+		 field: 'createAt',
+		 width: 80,
+		 align: 'center'
+	  }, {
+         title: '操作',
+         field: 'opertaList2',
+         width: 60,
+         align: 'center',
+         events: operateEvents,
+         formatter: operateFormatter
+	 }];
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject(); 
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+		GLOBAL.tableRefresh($('#js_dataTable'), data);
+	})
+	$("#btnExport").click(function() {
+		var url = $(this).data("url");
+		url = url + "?" + $("#searchForm").serialize();
+		location.href = GLOBAL.host + url;
+	})
+	$("#btnImport").click(function() {
+	   var url = $(this).data("url");
+	   GLOBAL.go(url, options.param);
+	})
+	$("#batchConfirm").click(function() {
+		var ids = [];
+		$("#js_dataTable tr").each(function() {
+			var cb = $(this).find("input[name='btSelectItem']");
+			if (cb.prop("checked")) {
+				var id = $(this).data("uniqueid");
+				ids.push(id);
+			}
+		});
+		if (ids.length == 0) {
+			layer.msg("请先选择付款单");
+			return false;
+		}
+		var stanItem = $('#js_dataTable').bootstrapTable('getRowByUniqueId', ids[0]);
+		var flag = true;
+		for (var i=1; i<ids.length ; i++) {
+			var item = $('#js_dataTable').bootstrapTable('getRowByUniqueId', ids[i]);
+			if (stanItem.busiUnitId != item.busiUnitId || stanItem.projectId != item.projectId || stanItem.currnecyType != item.currnecyType 
+						|| stanItem.payee != item.payee || stanItem.payer != item.payer || stanItem.payWay != item.payWay || stanItem.payAccountId != item.payAccountId
+						|| stanItem.payType != item.payType) {
+				flag = false;
+				layer.msg("经营单位、项目、币种、收款单位、收款账号、付款单位、付款方式、付款类型不一致无法批量确认");
+				return flag;
+			}
+		}
+		if (flag) {
+			options.param.ids = ids;
+		    GLOBAL.go("html/pay/audit/batchPayWiteComfEdit.html");
+		}
+	});
+	options.initPage = function(){
+		var sumPayAmount = 0;
+		var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			},
+			onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            },
+            onCheck: function(row , element){
+				sumPayAmount = sumPayAmount.add(row.payAmount);
+				$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+				$('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+            },
+            onUncheck: function(row) {
+			    sumPayAmount = sumPayAmount.subtract(row.payAmount);
+			    $('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+			    var selections = $('#js_dataTable').bootstrapTable('getSelections');
+			    if (selections.length > 0) {
+				    $('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+			    }
+            },
+            onCheckAll: function(rows) {
+            	sumPayAmount = 0;
+		    	for (var index=0 ; index < rows.length; index++) {
+		    		sumPayAmount = sumPayAmount.add(rows[index].payAmount);
+		    	}
+		    	$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+				$('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+		    },
+		    onUncheckAll: function(rows) {
+		    	sumPayAmount = 0;
+		    	$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+		    }
+		}
+		
+	   GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+	   //还原查询条件及过滤后的数据
+	   GLOBAL.restoreQuery($('#js_dataTable'));
+	   $("#startRequestTime,#endRequestTime").datetimepicker({format:"Y-m-d", timepicker:false});
+	};
+
+
+	 
+</script>

@@ -1,0 +1,253 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款确认</li>
+			<li class="active">待确认</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="payOrder/detail">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>付款编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payNo" name="payNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款类型：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payTypeName" name="payTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="projectName" name="projectName"></label></td>
+						</tr>
+							<td class="text-right"><b>付款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payerName" name="payerName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款方式：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payWayName" name="payWayName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payeeName" name="payeeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账号开户人：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="subjectName" name="subjectName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账户：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform"
+								id="accountNo" name="accountNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行代码：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankCode" name="bankCode"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行地址：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankAddress" name="bankAddress"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款人电话：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="phoneNumber" name="phoneNumber"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>要求付款日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="requestPayTime" name="requestPayTime"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款金额：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform toThound"
+								id="payAmount" name="payAmount"></label> <label style="font-size:20px" class="js-initform"
+								id="currnecyTypeName" name="currnecyTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款账户：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select class="form-control js-initform"
+								data-url="SUBJECT_ACCOUNT" id="paymentAccount" pid="payer"
+								name="paymentAccount"></select></td>
+						</tr>
+						<tr id="payRateTr" style="display:none">
+							<td class="text-right"><b>汇率：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control"  id="payRate" name="payRate"  />
+							</td>
+						</tr>
+						<tr id="realPayAmountTr" style="display:none">
+							<td class="text-right"><b>实际付款金额：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control"  id="realPayAmount" name="realPayAmount" />
+								<label style="font-size:20px" id="realCurrencyTypeName" name="realCurrencyTypeName"></label>
+							</td>
+						</tr>
+						<tr style="display:none">
+							<td class="text-right"><b>实际付款币种：<em class="text-star">*</em></b></td>
+							<td class="text-left"><input style="font-size:20px" id="realCurrencyType" name="realCurrencyType" /></td>
+						</tr>
+						<tr>
+	                      <td class="text-right"><b>确认日期：<em class="text-star">*</em></b></td>
+	                      <td class="text-left">
+	                        <input type="text" class="form-control js-initform js_datePicker" id="confirmorAt" name="confirmorAt">
+	                      </td>
+	                    </tr>
+	                    <tr>
+							<td class="text-right"><b>银行手续费：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control" id="bankCharge" name="bankCharge" value="0">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="remark" name="remark"></label></td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" class="btn btn-default btn-sm" data-permissionUrl="/payOrder/over"
+						id="save">确认</button>
+					<button type="button" id="back"
+						data-url="html/pay/audit/payWiteComf.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+options.initPage = function() {
+	var editData = GLOBAL.getEditData($("#form1"), options.param.id);
+	$("#payAmount").attr("amount" , editData.payAmount);
+};
+
+$("#paymentAccount").change(function() {
+	var paymentAccount = $(this).val();
+	if (paymentAccount.length == 0) {
+		$("#realPayAmountTr").hide();
+		$("#payRateTr").hide();
+	}else {
+		var ids = [];
+		ids.push(options.param.id);
+		var data = {
+			ids : ids ,
+			paymentAccount : parseInt(paymentAccount)
+		}
+		var callback = function(e) {
+			var items = e.items;
+			if (e.items != null) {
+				$("#realPayAmountTr").show().find("#realPayAmount").val(items.realPayAmount);
+				$("#realPayAmountTr").find("#realCurrencyTypeName").html(items.realCurrencyTypeName);
+				$("#realCurrencyType").val(items.realCurrencyType); 
+				$("#payRateTr").show().find("#payRate").val(items.payRate);
+			}
+		}
+		GLOBAL.ajax("payOrder/defaultRealPayAmount/query",JSON.stringify(data), function(e){
+	  	  if (e.success) {
+  			  callback(e);
+          } else {
+              layer.msg(e.msg);
+          }
+	    },true);
+	}
+});
+
+$("#payRate").change(function() {
+	var payRate = $(this).val();
+	if (payRate.length > 0) {
+		var payAmount = $("#payAmount").attr("amount");
+		var pattern = /^[0-9]*(\.[0-9]{1,8})?$/;
+		if (!pattern.test(payRate)) {
+			layer.msg("请输入正确格式");
+			$(this).focus();
+	  	}
+		$("#realPayAmount").val((parseFloat(payAmount).multiply(parseFloat(payRate))).toFixed(2));
+	}
+});
+
+$("#realPayAmount").change(function() {
+	var realPayAmount = $(this).val();
+	if (realPayAmount.length > 0) {
+		var payAmount = $("#payAmount").attr("amount");
+		var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+		if (!pattern.test(realPayAmount)) {
+			layer.msg("请输入正确格式");
+			$(this).focus();
+	  	}
+		$("#payRate").val((parseFloat(realPayAmount).divide(parseFloat(payAmount))).toFixed(8));
+	}
+});
+
+$("#form1").validate({
+    rules: {
+    	paymentAccount: {
+            required:true
+        },confirmorAt: {
+          	required: true
+        },payRate: {
+        	required: true
+        },realCurrencyType: {
+        	required: true
+        },realPayAmount: {
+        	required: true
+        }
+    },
+    submitHandler: function() {
+      var data = $("#form1").serialize();
+      console.log(data);
+      var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+      var bankCharge = $("#bankCharge");
+      var realPayAmount = $("#realPayAmount");
+      
+      var pattern1 = /^[0-9]*(\.[0-9]{1,8})?$/;
+      var payRate = $("#payRate");
+      if (!pattern1.test(payRate.val())) {
+	  	  layer.msg("请输入正确格式");
+	  	payRate.focus();
+      }else if (!pattern.test(realPayAmount.val())) {
+    	  layer.msg("请输入正确格式");
+    	  realPayAmount.focus();
+      }else if (!pattern.test(bankCharge.val())) {
+		  layer.msg("请输入正确格式");
+		  bankCharge.focus();
+	  }else{
+	      GLOBAL.ajax("payOrder/over",data, function(e){
+	    	  if (e.success) {
+	        	  layer.msg("确认成功！", {
+	                  icon: 1,
+	                  time: 1500
+	              },function(){
+	            	  GLOBAL.go("html/pay/audit/payWiteComf.html");
+	              });
+	          } else {
+	              layer.msg(e.msg);
+	          }
+	      },false,$("#save"));
+	  }
+    }
+});
+
+	GLOBAL.goBack();
+</script>

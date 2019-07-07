@@ -1,0 +1,707 @@
+<style>
+.one, .two {
+	display: none;
+}
+</style>
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>资金</li>
+		<li>合并付款单</li>
+		<li class="active">部门主管审核</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="payAuditInfoForm"
+				data-url="mergePayOrder/info/audit">
+				<div class="box-header">
+					<input class="js-initform" type="hidden" id="id" name="id">
+					<h3>部门主管审核</h3>
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>合并付款编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="mergePayNo" name="mergePayNo"></label></td>
+							<td width="180" class="text-right"><b>项目：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="projectName" name="projectName"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>付款类型：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payTypeName" name="payTypeName"></label></td>
+							<td class="text-right"><b>付款方式：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payWayName" name="payWayName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payeeName" name="payeeName"></label></td>
+							<td class="text-right"><b>要求付款日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="requestPayTime" name="requestPayTime"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款金额：</b></td>
+							<td class="text-left"><label class="js-initform toThound"
+								id="payAmount" name="payAmount"></label></td>
+								<td class="text-right"><b>币种：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="currencyTypeName" name="currencyTypeName"></label></td>
+						</tr>
+						<tr>
+                            <td class="text-right"><b>预收金额：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform toThound" id="advanceAmount" name="advanceAmount"></label>
+                            </td>
+                            <td class="text-right"><b>预收比例：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="advanceAmountRateName" name="advanceAmountRateName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>占用比例：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="payAdvanceAmountRateName" name="payAdvanceAmountRateName"></label>
+                            </td>
+                            <td class="text-right"><b>付款后项目余额：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform toThound" id="payProjectBalanceAmount" name="payProjectBalanceAmount"></label>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td class="text-right"><b>折扣率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="discountRateStr" name="discountRateStr"></label>
+                            </td>
+                            <td class="text-right"><b>备注：</b></td>
+							<td class="text-left"><label class="js-initform" id="remark"
+								name="remark"></label></td>
+                        </tr>
+					</table>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div>
+						<h3 class="mt15 mb5">合并付款明细</h3>
+						<table class="mt5" id="js_dataTable"></table>
+						<h3 class="one mt15 mb5 collapse-title">付款订单明细</h3>
+						<h3 class="two mt15 mb5 collapse-title">付款费用明细</h3>
+						<table class="mt5 collapse-content hidden" id="js_dtl_dataTable"></table>
+					</div>
+					<div>
+						<h3 class="mt15 mb5 collapse-title">付款预收明细</h3>
+						<table id="js_advance_dataTable" class="collapse-content hidden"></table>
+					</div>
+				</div>
+				<div class="box-body">
+					<h4 class="mt15 mb5">附件</h4>
+					<table id="js_dataFileTable"></table>
+					<h4 class="mt15 mb5">审核记录</h4>
+					<table id="js_audit_dataTable"
+						data-url="mergePayOrder/auditflow/audit/query"></table>
+				</div>
+				<!-- .box-body -->
+				<div class="box-footer text-center">
+					<div class="form-inline" style="width: 500px; margin: auto">
+						<textarea style="margin-bottom: 10px; width: 500px"
+							class="form-control js-initform" id="suggestion" rows="3"
+							name="suggestion" placeholder="审核意见"></textarea>
+						<p class="mt20">
+							<button type="button" data-url="mergePayOrder/dept/audit"
+								data-permissionUrl="/mergePayOrder/dept/audit"
+								class="btn btn-primary btn-sm" id="pass">审核通过</button>
+							<button type="button" data-url="mergePayOrder/unpass/audit"
+								data-permissionUrl="/mergePayOrder/unpass/audit"
+								class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+							<button type="button" data-url="mergePayOrder/dept/audit"
+								data-permissionUrl="/mergePayOrder/dept/audit"
+								class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+							<button type="button" class="btn btn-default btn-sm js-back">返回</button>
+						</p>
+						<p class="mt20 psigh" style="display: none">
+							<label class="control-label pull-rihgt">加签给:</label> <select
+								class="form-control js-select" data-url="USER" id="sighId"
+								name="sighId"></select>
+							<button type="button" data-url="mergePayOrder/sigh/audit"
+								data-permissionUrl="/mergePayOrder/sigh/audit"
+								class="btn btn-primary btn-sm" id="sigh">加签</button>
+						</p>
+						<p class="mt20 pdeliver" style="display: none">
+							<label class="control-label pull-rihgt">转交给:</label> <select
+								class="form-control js-select" data-url="USER" id="deliverId"
+								name="deliverId"></select>
+							<button type="button" data-url="mergePayOrder/deliver/audit"
+								data-permissionUrl="/mergePayOrder/deliver/audit"
+								class="btn btn-primary btn-sm" id="deliver">转交</button>
+						</p>
+					</div>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		title : '序号',
+		field : 'columnsNumber',
+		width : 10
+	}, {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '附属编号',
+		field : 'attachedNumbe',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '币种',
+		field : 'currencyTypeName',
+		width : 30,
+		align : 'center'
+	}, {
+		title : '支付类型',
+		field : 'payWayTypeName',
+		width : 50,
+		align : 'center'
+	}, {
+		title : '付款金额',
+		field : 'payAmount',
+		width : 40,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '要求付款日期',
+		field : 'requestPayTime',
+		width : 86,
+		align : 'center'
+	}, {
+		title : '预计内部打款日期',
+		field : 'innerPayDate',
+		width : 60,
+		align : 'center'
+	}, {
+		title : '创建人',
+		field : 'creator',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '创建时间',
+		field : 'createAt',
+		width : 80,
+		align : 'center'
+	} ];
+	/*数据表格*/
+	var tabColsLog = [ {
+		title : '序号',
+		field : 'columnsNumber',
+		width : '5%'
+	}, {
+		title : '流程节点',
+		field : "stateName",
+		width : '15%'
+	}, {
+		title : '处理人',
+		field : "dealName",
+		width : '15%'
+	}, {
+		title : '处理意见',
+		field : "suggestion",
+		width : '25%'
+	}, {
+		title : '开始时间',
+		field : "createTime",
+		width : '15%'
+	}, {
+		title : "处理时间",
+		field : "dealTime",
+		width : '15%'
+	}, {
+		title : "处理状态",
+		field : "auditStateName",
+		width : '10%'
+	} ];
+	/*附件*/
+	window.operateEvents = {
+		'click .download' : function(e, value, row, index) {
+			var url = GLOBAL.host + "payOrderFile/downLoad?fileId=" + row.id;
+			GLOBAL.preview({
+				type : row.type,
+				url : url
+			});
+		},
+
+	};
+
+	function operateFormatter(value, row, index) {
+		return [ '<a class="download" href="javascript:void(0)">',
+				'<span class="btn btn-primary btn-sm">下载</span>', '</a>  ' ]
+				.join('');
+	}
+	/*数据表格*/
+	var fileCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	}, {
+		title : '序号',
+		field : 'columnsNumber',
+		width : 10
+	}, {
+		title : '文件名称',
+		field : 'name',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '文件类型',
+		field : 'type',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '上传人',
+		field : 'creator',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '上传时间',
+		field : 'createAt',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '操作',
+		field : 'operta',
+		width : 100,
+		align : 'center',
+		events : operateEvents,
+		formatter : operateFormatter
+	} ];
+	/*预收信息*/
+	var advanceCols = [ {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	},{
+		title : '项目',
+		field : 'projectName',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '客户',
+		field : 'custName',
+		width : 210,
+		align : 'center'
+	}, {
+		title : '经营单位',
+		field : 'busiUnit',
+		width : 100,
+		align : 'center'
+	}, {
+		title : '币种',
+		field : 'currencyTypeName',
+		width : 70,
+		align : 'center'
+	}, {
+		title : '金额',
+		field : 'payAmount',
+		width : 80,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	} ];
+	/*数据表格*/
+	var tabColsPo = [ {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	},{
+		title : '订单编号',
+		field : 'orderNo',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '订单附属编号',
+		field : 'appendNo',
+		width : 210,
+		align : 'center'
+	}, {
+	    title: '商品编号',
+	    field: 'goodsNo',
+	    width: 70,
+	    align: 'center'
+	}, {
+	    title: '商品名称',
+	    field: 'goodsName',
+	    width: 70,
+	    align: 'center'
+	}, {
+		title : '订单日期',
+		field : 'orderTime',
+		width : 100,
+		align : 'center'
+	}, {
+		title : '采购数量',
+		field : 'goodsNum',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '采购单价',
+		field : 'goodsPrice',
+		width : 70,
+		align : 'center'
+	}, {
+		title : '销售价',
+		field : 'requiredSendPrice',
+		width : 80,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '折扣率',
+		field : 'discountRateStr',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '币种',
+		field : 'currencyName',
+		width : 70,
+		align : 'center'
+	}, {
+		title : '采购金额',
+		field : 'goodsAmount',
+		width : 80,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '已收货金额',
+		field : 'arrivalAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '本次付款金额',
+		field : 'payAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	} ];
+
+	/*费用数据表格*/
+	var tabColsFee = [ {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	},{
+		title : '费用编号',
+		field : 'feeNo',
+		width : 80,
+		align : 'center'
+	}, {
+		title : '费用类型',
+		field : 'feeTypeName',
+		width : 210,
+		align : 'center'
+	}, {
+		title : '费用日期',
+		field : 'payDate',
+		width : 100,
+		align : 'center'
+	}, {
+		title : '费用金额',
+		field : 'expPayAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '已收票金额',
+		field : 'acceptInvoiceAmount',
+		width : 80,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '本次付款金额',
+		field : 'payAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	} ];
+
+	options.initPage = function() {
+		var $from = $("#payAuditInfoForm");
+		var url = $from.data("url");
+		GLOBAL.ajax(url, {
+			mergePayId : options.param.poId
+		}, function(e) {
+			if (e.success) {
+				var data = e.items.mergePayOrderResDto;
+				if (data) {
+					$(".js-initform", $from).each(function() {
+						var $this = $(this);
+						var id = $this.attr("id");
+						data[id] = data[id] == null ? "" : data[id];
+
+						if (this.nodeName.toLowerCase() == "label") {
+							if(data[id]) { 
+                            	if($this.attr('class') == "js-initform toThound"){  
+                            		$this.text(data[id].toThounds());
+                            	} else{
+                                    $this.text(data[id]);
+                            	}
+                            }
+						} else {
+							$this.val(data[id]);
+						}
+					});
+				}
+
+				var mergePayOrderRelResDtos = e.items.mergePayOrderRelResDtos;
+				if (mergePayOrderRelResDtos) {
+					GLOBAL.initTable($('#js_dataTable'), tabCols, null,
+							mergePayOrderRelResDtos, {
+								pagination : false
+							});
+				}
+
+				var payOrderFileList = e.items.payOrderFileList;
+				if (payOrderFileList) {
+					GLOBAL.initTable($('#js_dataFileTable'), fileCols, null,
+							payOrderFileList, {
+								pagination : false
+							});
+				}
+
+				var payAdvanceRelation = e.items.payAdvanceRelation;
+				if (payOrderFileList) {
+					GLOBAL.initTable($('#js_advance_dataTable'), advanceCols,
+							null, payAdvanceRelation, {
+								pagination : false
+							});
+				}
+
+				if (data.payType == 1) {
+					var dtls = e.items.payPoRelationResDto;
+					GLOBAL.initTable($('#js_dtl_dataTable'), tabColsPo, null,
+							dtls, {
+								pagination : false
+							});
+					$(".one").show();
+				}
+				if (data.payType == 2) {
+					var fees = e.items.payFeeRelationResDto;
+					GLOBAL.initTable($('#js_dtl_dataTable'), tabColsFee, null,
+							fees, {
+								pagination : false
+							});
+					$(".two").show();
+				}
+
+				/* var auditFlowsResDtos = e.items.auditFlowsResDtos;
+				if(auditFlowsResDtos){
+					 GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, null, auditFlowsResDtos,{pagination:false});
+				} */
+
+				GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+					projectItemId : options.param.poId
+				}, null, {
+					pagination : false
+				});
+
+				GLOBAL.ajax('audit/id/query', {
+					id : options.param.id
+				}, function(e) {
+					var data = e.items;
+					if (data) {
+						if (data.auditType == 1 || data.auditType == 2) {
+							$(".psigh,.pdeliver").show();
+						} else {
+							$(".punpass").hide();
+						}
+					}
+				});
+			}
+		});
+	}
+
+	$("#pass").click(function() {
+		var suggestion = $("#suggestion").val();
+		var url = $(this).data("url");
+		GLOBAL.ajax(url, {
+			auditId : options.param.id,
+			projectItemId : options.param.poId,
+			suggestion : suggestion || ""
+		}, function(e) {
+			if (e.success) {
+				layer.msg("审核通过成功！");
+				if (options.param.entryType == 1) {
+					GLOBAL.go("html/entry.html");
+				} else {
+					GLOBAL.go("html/audit/audit.html");
+				}
+			} else {
+				layer.msg(e.msg);
+			}
+		});
+	})
+	$("#passAndNext").click(
+			function() {
+				var suggestion = $("#suggestion").val();
+				var url = $(this).data("url");
+				GLOBAL.ajax(url, {
+					auditId : options.param.id,
+					projectItemId : options.param.poId,
+					suggestion : suggestion || ""
+				}, function(e) {
+					if (e.success) {
+						GLOBAL.ajax("/audit/next/query", "", function(e) {
+							if (e.success) {
+								if (e.items) {
+									var id = e.items.id;
+									var state = e.items.state;
+									var poId = e.items.poId;
+									var poType = e.items.poType;
+									options.param.id = id;
+									options.param.poId = poId;
+									if (poType && state) {
+										GLOBAL.go("html/audit/audit_" + poType
+												+ "_" + state + ".html");
+									}
+								} else {
+									GLOBAL.go("html/entry.html");
+								}
+							} else {
+								layer.msg(e.msg);
+							}
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				});
+			})
+	$("#sigh").click(function() {
+		var url = $(this).data("url");
+		var sighId = $("#sighId").val();
+		if (sighId) {
+			layer.confirm('确定加签吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax(url, {
+					auditId : options.param.id,
+					pauditorId : sighId
+				}, function(e) {
+					if (e.success) {
+						layer.msg("加签成功！");
+						$("#sighId").val("");
+						GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+							projectItemId : options.param.poId
+						});
+					} else {
+						layer.msg(e.msg);
+					}
+				});
+			});
+		} else {
+			layer.msg("请选择！");
+			$("#sighId").focus();
+		}
+	})
+
+	$("#deliver").click(function() {
+		var url = $(this).data("url");
+		var deliverId = $("#deliverId").val();
+		if (deliverId) {
+			layer.confirm('确定转交吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax(url, {
+					auditId : options.param.id,
+					pauditorId : deliverId
+				}, function(e) {
+					if (e.success) {
+						layer.msg("转交成功！");
+						$("#deliverId").val("");
+						if (options.param.entryType == 1) {
+							GLOBAL.go("html/entry.html");
+						} else {
+							GLOBAL.go("html/audit/audit.html");
+						}
+					} else {
+						layer.msg(e.msg);
+					}
+				});
+			});
+		} else {
+			layer.msg("请选择！");
+			$("#deliverId").focus();
+		}
+	})
+
+	$("#unpass").click(function() {
+		var suggestion = $("#suggestion").val();
+		if (!suggestion) {
+			layer.msg("请输入审核意见");
+			return;
+		}
+		var url = $(this).data("url");
+		GLOBAL.ajax(url, {
+			auditId : options.param.id,
+			projectItemId : options.param.poId,
+			suggestion : suggestion
+		}, function(e) {
+			if (e.success) {
+				layer.msg("审核不通过成功！");
+				if (options.param.entryType == 1) {
+					GLOBAL.go("html/entry.html");
+				} else {
+					GLOBAL.go("html/audit/audit.html");
+				}
+			} else {
+				layer.msg(e.msg);
+			}
+		});
+	})
+	$(".attachment-down").click(function() {
+		var ids = GLOBAL.selectIds($("#js_dataFileTable"));
+		if (ids) {
+			var url = GLOBAL.host + $(this).data("url") + "?ids=" + ids;
+			window.open(url);
+		}
+	})
+	$(".js-back").click(function() {
+		if (options.param.entryType == 1) {
+			GLOBAL.go("html/entry.html");
+		} else {
+			GLOBAL.go("html/audit/audit.html");
+		}
+	})
+	
+</script>
+

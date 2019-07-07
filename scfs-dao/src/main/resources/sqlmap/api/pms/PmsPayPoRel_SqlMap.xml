@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsPayPoRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsPayPoRel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pms_pay_dtl_id" jdbcType="INTEGER" property="pmsPayDtlId" />
+		<result column="po_id" jdbcType="INTEGER" property="poId" />
+		<result column="po_line_id" jdbcType="INTEGER" property="poLineId" />
+		<result column="py_po_line_id" jdbcType="INTEGER" property="pyPoLineId" />
+		<result column="pay_quantity" jdbcType="DECIMAL" property="payQuantity" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pms_pay_dtl_id, po_id, pay_quantity, create_at,
+		is_delete,
+		update_at,po_line_id,py_po_line_id
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_pms_pay_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsPayPoRel">
+		insert into tb_pms_pay_po_rel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="pmsPayDtlId != null">
+				pms_pay_dtl_id,
+			</if>
+			<if test="poId != null">
+				po_id,
+			</if>
+			<if test="payQuantity != null">
+				pay_quantity,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="poLineId != null">
+				po_line_id,
+			</if>
+			<if test="pyPoLineId != null">
+				py_po_line_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="pmsPayDtlId != null">
+				#{pmsPayDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				#{poId,jdbcType=INTEGER},
+			</if>
+			<if test="payQuantity != null">
+				#{payQuantity,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="poLineId != null">
+				#{poLineId,jdbcType=INTEGER},
+			</if>
+			<if test="pyPoLineId != null">
+				#{pyPoLineId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.api.pms.entity.PmsPayPoRel">
+		update tb_pms_pay_po_rel
+		<set>
+			<if test="pmsPayDtlId != null">
+				pms_pay_dtl_id = #{pmsPayDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="payQuantity != null">
+				pay_quantity = #{payQuantity,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.api.pms.entity.PmsPayPoRel">
+		update
+		tb_pms_pay_po_rel
+		set pms_pay_dtl_id = #{pmsPayDtlId,jdbcType=INTEGER},
+		po_id = #{poId,jdbcType=INTEGER},
+		pay_quantity =
+		#{payQuantity,jdbcType=DECIMAL},
+		create_at =
+		#{createAt,jdbcType=TIMESTAMP},
+		is_delete =
+		#{isDelete,jdbcType=TINYINT},
+		update_at =
+		#{updateAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryOrderNoByLineId" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT
+		po.order_no
+		FROM
+		tb_pms_pay_po_rel prel
+		INNER JOIN
+		tb_purchase_order_title po
+		ON prel.po_id = po.id
+		WHERE
+		prel.py_po_line_id =#{lineId}
+	</select>
+
+	<select id="queryPmsPayPoRelListByPmsPaySn" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		pppr.id,
+		pppr.pms_pay_dtl_id,
+		pppr.po_id,
+		pppr.pay_quantity,
+		pppr.is_delete,
+		pppr.po_line_id,
+		pppr.py_po_line_id
+		from tb_pms_pay_po_rel pppr
+		INNER JOIN tb_pms_pay_dtl d
+		on
+		pppr.pms_pay_dtl_id = d.id
+		INNER JOIN tb_pms_pay p
+		on d.pms_pay_id =
+		p.id
+		WHERE p.flag = 0
+		AND p.deal_flag = 3
+		AND p.pay_sn =
+		#{pmsPaySn,jdbcType=VARCHAR}
+		AND pppr.is_delete = 0
+	</select>
+	<select id="queryPmsPayPoLineIdByLineId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select pay.pay_way_type as payWayType from
+		tb_pms_pay_po_rel pms
+		INNER JOIN tb_pay_po_relation poRel ON
+		poRel.po_line_id=pms.po_line_id
+		INNER JOIN tb_pay_order pay ON
+		poRel.pay_id=pay.id
+		WHERE pay.is_delete = 0
+		AND pay.state=6 AND
+		poRel.is_delete = 0 AND pms.is_delete=0
+		and
+		pms.py_po_line_id=#{pyPoLineId}
+	</select>
+</mapper>

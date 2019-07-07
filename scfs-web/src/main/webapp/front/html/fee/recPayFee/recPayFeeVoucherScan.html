@@ -1,0 +1,192 @@
+<style>
+	.custom-table tr td {
+		padding:8px;
+		width:33%;
+	}
+</style>
+<div class="wrapper">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+		  <li>费用</li>
+		  <li>应收应付费用</li>
+          <li class="active">浏览</li>
+      </ol>
+	 <section class="product-wrap">
+		<form method="post" action="###" class="form-inline" id="voucherForm">
+			<div class="box no-margin">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation" ><a class="tab-item" data-url="html/fee/recPayFee/recPayFeeScan.html">应收应付费用浏览</a></li>
+	                    <li role="presentation" class="active"><a class="tab-item" data-url="html/fee/recPayFee/recPayFeeVoucherScan.html">应收应付费用凭证浏览</a></li>
+	                </ul>
+					<div class="row">
+		            	<div class="col-md-2"></div>
+		                <div class="col-md-8">
+		                	<div class="form-group-sm">
+		                		<table width="100%" class="custom-table">
+		                			<tbody>
+		                				<tr>
+		                					<td>
+		                						<label class="control-label">凭证编号：</label> 
+												<span  id="voucherNo" name="voucherNo"></span>
+		                					</td>
+		                					<td>
+												<label class="control-label">帐套：</label> 
+												<span  id="accountBookName" name="accountBookName"></span>
+		                					</td>
+		                					<td>
+		                						<label class="control-label">经营单位：</label> 
+												<span id="busiUnitName" name="busiUnitName"></span>
+		                					</td>
+		                				</tr>
+		                				<tr>
+		                					<td>
+		                						<label class="control-label">日期：</label>
+												<span  id="voucherDate" name="voucherDate"></span>
+		                					</td>
+		                					<td>
+		                						<label class="control-label">凭证字：</label> 
+												<span  id="voucherWordName" name="voucherWordName"></span>
+		                					</td>
+		                					<td>
+		                						<label class="control-label">附单据数：</label> 
+												<span  id="attachmentNumber" name="attachmentNumber"></span>
+		                					</td>
+		                				</tr>
+		                				<tr>
+		                					<td colspan="3">
+		                						<label class="control-label">凭证摘要：</label> 
+												<span  id="voucherSummary" name="voucherSummary"></span>
+		                					</td>
+		                				</tr>
+		                			</tbody>
+		                		</table>
+							</div>
+		                </div>
+		            	<div class="col-md-2"></div>
+		            </div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-2"></div>
+	                <div class="col-md-8">
+	                    <table class="table table-bordered table-hover no-margin" id="js-lineTable">
+	                    	<thead>
+	                    		<th></th>
+	                    		<th>摘要</th>
+	                    		<th>科目</th>
+	                    		<th>辅助项</th>
+	                    		<th>借方金额</th>
+	                    		<th>贷方金额</th>
+	                    		<th>币种</th>
+	                    		<th>本币借方金额</th>
+		                    	<th>本币贷方金额</th>
+		                    	<th>本币币种</th>
+	                    	</thead>
+	                    	<tbody id="js-lineTbody">
+	                    	</tbody>
+	                     </table>
+	                </div>
+	                <div class="col-md-2"></div>
+	            </div>
+	            <!-- <div class="mt15 mb20">
+			        <h4 class="mb10">审核记录</h4>
+			        <table id="js_audit_dataTable" data-permissionUrl="/voucher/auditflow/audit/query" data-url="voucher/auditflow/audit/query"></table>
+			    </div> -->
+			</div>
+			<div class="box-footer text-center">
+	              <button type="button" id="back" data-url="html/fee/recPayFee/recPayFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+		</form>
+	</section>
+</div>
+<script>
+/*数据表格*/
+options.initPage = function() {
+	GLOBAL.ajax("fee/voucher/detail" , {billType:1,billNo:options.param.feeNo} , function(e) {
+		if (e.success) {
+			var voucherDetail = e.items;
+			if (voucherDetail) {
+				//1渲染凭证
+				var voucherForm = $("#voucherForm");
+				var voucher = voucherDetail.voucher;
+				if(voucher != null){
+					for ( var i in voucher) {
+						var value = voucher[i];
+						voucherForm.find("#" + i).text(value);
+					}
+				}
+				//1渲染分录
+				var voucherLines = voucherDetail.voucherLines;
+				if (voucherLines != null && voucherLines.length > 0) {
+					var html = [];
+					var totalStandardDebitAmount = 0;
+					var totalStandardCreditAmount = 0;
+					for(var i = 0 ; i < voucherLines.length; i++) {
+						var item = voucherLines[i];
+						var assistDec = "";
+						if (item.needProject == 1 && item.projectName) {
+							assistDec += "项目: " + item.projectName + "</br>";
+						}
+						if (item.needSupplier == 1 && item.supplierName) {
+							assistDec += "供应商: " + item.supplierName + "</br>";
+						}
+						if (item.needCust == 1 && item.custName) {
+							assistDec += "客户: " + item.custName + "</br>";
+						}
+						if (item.needAccount == 1 && item.accountNo) {
+							assistDec += "账号: " + item.accountNo + "</br>";
+						}
+						if (item.needUser == 1 && item.userName) {
+							assistDec += "用户: " + item.userName + "</br>";
+						}
+						if (item.needTaxRate == 1 && item.taxRate != null) {
+							assistDec += "税率: " + item.taxRate + "</br>";
+						}
+						html.push("<tr>");
+						html.push("<td width='3%'>" + (i+1) + "</td>");
+						html.push("<td width='15%'><span name='voucherLineSummary'>" + item.voucherLineSummary + "</span></td>");
+						html.push("<td width='15%'><span name='accountLineName'>" + item.accountLineName + "</span></td>");
+						html.push("<td width='25%'> " + assistDec + "</td>");
+						html.push("<td width='8%'><span name='debitAmount'>" + (item.debitAmount==null?"":(item.debitAmount).toThounds()) + "</span></td>");
+						html.push("<td width='8%'><span name='creditAmount'>" + (item.creditAmount==null?"":(item.creditAmount).toThounds()) + "</span></td>");
+						html.push("<td width='5%'><span name='currencyTypeName'>" + item.currencyTypeName + "</span></td>");
+						html.push("<td width='8%'><span name='standardDebitAmount'>" + (item.standardDebitAmount==null?"":(item.standardDebitAmount).toThounds()) + "</span></td>");
+						html.push("<td width='8%'><span name='standardCreditAmount'>" + (item.standardCreditAmount==null?"":(item.standardCreditAmount).toThounds()) + "</span></td>");
+						html.push("<td width='5%'><span name='standardCoinName'>" + item.standardCoinName + "</span></td>");
+						html.push("</tr>");
+						
+						totalStandardDebitAmount = totalStandardDebitAmount + item.standardDebitAmount*1;
+						totalStandardCreditAmount = totalStandardCreditAmount + item.standardCreditAmount*1;
+					}
+					var html1 = [];
+					html1.push("<tfoot><tr>");
+					html1.push("<td></td>");
+					html1.push("<td></td>");
+					html1.push("<td></td>");
+					html1.push("<td class='text-right'><strong>合计</strong></td>");
+					html1.push("<td>" + (voucher.debitAmount).toThounds() + "</td>");
+					html1.push("<td>" + (voucher.creditAmount).toThounds() + "</td>");
+					html1.push("<td></td>");
+					html1.push("<td>" + (totalStandardDebitAmount).toThounds() + "</td>");
+					html1.push("<td>" + (totalStandardCreditAmount).toThounds() + "</td>");
+					html1.push("<td></td>");
+					html1.push("</tr></tfoot>");
+					console.log($('#js-lineTable').find("#js-lineTbody"));
+					$('#js-lineTable').find("tbody").html(html.join(''));
+					$('#js-lineTable').append(html1.join(''));
+					
+				}
+				//3渲染辅助项
+			}
+			
+		} else {
+			layer.msg(e.msg);
+		}
+	});
+}
+
+GLOBAL.goBack();
+</script>

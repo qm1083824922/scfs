@@ -1,0 +1,65 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>财务</li>
+            <li class="active">凭证</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">凭证编号：</label>
+                            <input class="form-control" id="voucherNo" name="voucherNo" />
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">凭证字：</label>
+                            <select class="form-control js-select" data-url="VOUCHER_WORD" id="voucherWord" name="voucherWord"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">帐套：</label>
+                            <select class="form-control js-select" data-url="ACCOUNT_BOOK" id="accountBookId" name="accountBookId"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="VOUCHER_STATE" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="BILL_TYPE" id="billType" name="billType"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">凭证日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startVoucherDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endVoucherDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">摘要：</label>
+                            <input class="form-control" id="voucherSummary" name="voucherSummary" />
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-permissionUrl="/voucher/detail/add" data-url="html/fi/voucher/voucherCreate.html" class="btn btn-warning btn-sm ml10">新建</button>
+							<button type="button" id="btnExcelExport" class="btn btn-warning btn-sm ml10" data-permissionUrl="/voucher/voucherLineList.xls">导出凭证明细</button>                     
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="voucher/query">
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<script type='text/javascript' src="../js/fi/voucher/voucherSearch.js"></script>

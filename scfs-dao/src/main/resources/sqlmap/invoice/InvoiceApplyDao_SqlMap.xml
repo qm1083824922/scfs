@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.invoice.InvoiceApplyDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceApplyManager">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="apply_no" jdbcType="VARCHAR" property="applyNo" />
+		<result column="apply_type" jdbcType="TINYINT" property="applyType" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="invoice_type" jdbcType="TINYINT" property="invoiceType" />
+		<result column="is_elec_invoice" jdbcType="TINYINT" property="isElecInvoice" />
+		<result column="base_invoice_id" jdbcType="INTEGER" property="baseInvoiceId" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="fee_type" jdbcType="TINYINT" property="feeType" />
+		<result column="invoice_tax_rate" jdbcType="DECIMAL" property="invoiceTaxRate" />
+		<result column="tax_cate_no" jdbcType="VARCHAR" property="taxCateNo" />
+		<result column="is_goods_merge" jdbcType="TINYINT" property="isGoodsMerge" />
+		<result column="is_display_discount" jdbcType="TINYINT"
+			property="isDisplayDiscount" />
+		<result column="discount" jdbcType="DECIMAL" property="discount" />
+		<result column="invoice_remark" jdbcType="VARCHAR" property="invoiceRemark" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deleter_id" jdbcType="INTEGER" property="deleterId" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="apply_amount" jdbcType="DECIMAL" property="applyAmount" />
+		<result column="print_num" jdbcType="INTEGER" property="printNum" />
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, apply_no, apply_type, project_id, customer_id,
+		business_unit_id,
+		invoice_type,
+		is_elec_invoice, base_invoice_id,
+		status, bill_type, fee_type, invoice_tax_rate,
+		tax_cate_no,
+		is_goods_merge, is_display_discount, discount,
+		invoice_remark,
+		currency_type,
+		exchange_rate, remark, creator_id, creator, create_at,
+		update_at, deleter_id,
+		deleter,
+		is_delete,
+		delete_at,apply_amount,print_num
+	</sql>
+	<sql id="invoiceApply">
+		tia.id, tia.apply_no, tia.apply_type, tia.project_id,
+		tia.customer_id,
+		tia.business_unit_id, tia.invoice_type,
+		tia.is_elec_invoice, tia.base_invoice_id, tia.status, tia.bill_type,
+		tia.fee_type,
+		tia.invoice_tax_rate,
+		tia.tax_cate_no, tia.is_goods_merge,
+		tia.is_display_discount, tia.discount,
+		tia.invoice_remark,
+		tia.currency_type,
+		tia.exchange_rate, tia.remark, tia.creator_id,
+		tia.creator, tia.create_at,
+		tia.update_at, tia.deleter_id, tia.deleter,
+		tia.is_delete, tia.delete_at,apply_amount
+	</sql>
+	<select id="selectByCon" parameterType="com.scfs.domain.invoice.entity.InvoiceApplyManager"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_apply
+		<where>
+			<if test="id != null">
+				AND id =#{id}
+			</if>
+			<if test="projectId != null">
+				AND project_id =#{projectId}
+			</if>
+		</where>
+		order by create_at desc
+	</select>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		(select group_concat( invoice_no ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id) as invoiceNo,
+		(select group_concat(
+		invoice_code ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id)
+		as invoiceCode
+		from tb_invoice_apply tia where tia.id =
+		#{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryEntityByApplyNo" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		(select group_concat( invoice_no ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id) as invoiceNo,
+		(select group_concat(
+		invoice_code ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id)
+		as invoiceCode
+		from tb_invoice_apply tia where tia.apply_no =
+		#{applyNo,jdbcType=VARCHAR}
+	</select>
+	<select id="queryInvoiceResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceApplyManagerReqDto"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="invoiceApply" />
+		,(select group_concat( invoice_no ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id) as invoiceNo,
+		(select group_concat(
+		invoice_code ) from tb_invoice ti where
+		ti.invoice_apply_id = tia.id)
+		as invoiceCode
+		from tb_invoice_apply tia left join tb_invoice tii on
+		tia.id =
+		tii.invoice_apply_id inner join tb_base_user_project userPro
+		on
+		tia.project_id = userPro.project_id
+		<where>
+			tia.is_delete = 0 AND
+			userPro.state = 1
+			<if test="userId != null">
+				AND userPro.user_id =#{userId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				AND tia.project_id =#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null">
+				AND tia.customer_id =#{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+				AND tii.invoice_no like CONCAT('%',#{invoiceNo},'%')
+			</if>
+			<if test="invoiceCode != null and invoiceCode != ''">
+				AND tii.invoice_code like CONCAT('%',#{invoiceCode},'%')
+			</if>
+			<if test="invoiceType != null">
+				AND tia.invoice_type =#{invoiceType,jdbcType=TINYINT}
+			</if>
+			<if test="businessUnitId != null">
+				AND tia.business_unit_id
+				=#{businessUnitId,jdbcType=INTEGER}
+			</if>
+			<if test="billType != null">
+				AND tia.bill_type =#{billType,jdbcType=TINYINT}
+			</if>
+			<if test="status != null">
+				AND tia.status =#{status,jdbcType=TINYINT}
+			</if>
+			<if test="applyNo != null and applyNo != ''">
+				AND tia.apply_no like CONCAT('%',#{applyNo},'%')
+			</if>
+		</where>
+		order by tia.create_at desc
+	</select>
+	<select id="querySumByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceApplyManagerReqDto"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="invoiceApply" />
+		from tb_invoice_apply tia left join tb_invoice tii on tia.id =
+		tii.invoice_apply_id
+		inner join tb_base_user_project userPro on
+		tia.project_id = userPro.project_id
+		<where>
+			tia.is_delete = 0 AND
+			userPro.state = 1
+			<if test="userId != null">
+				AND userPro.user_id =#{userId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				AND tia.project_id =#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="billType != null">
+				AND tia.bill_type =#{billType,jdbcType=TINYINT}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_invoice_apply
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceApplyManager"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_invoice_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="applyNo != null">
+				apply_no,
+			</if>
+			<if test="applyType != null">
+				apply_type,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id,
+			</if>
+			<if test="invoiceType != null">
+				invoice_type,
+			</if>
+			<if test="isElecInvoice != null">
+				is_elec_invoice,
+			</if>
+			<if test="baseInvoiceId != null">
+				base_invoice_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="billType != null">
+				bill_type,
+			</if>
+			<if test="feeType != null">
+				fee_type,
+			</if>
+			<if test="invoiceTaxRate != null">
+				invoice_tax_rate,
+			</if>
+			<if test="taxCateNo != null">
+				tax_cate_no,
+			</if>
+			<if test="isGoodsMerge != null">
+				is_goods_merge,
+			</if>
+			<if test="isDisplayDiscount != null">
+				is_display_discount,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="invoiceRemark != null">
+				invoice_remark,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="deleterId != null">
+				deleter_id,
+			</if>
+			<if test="deleter != null">
+				deleter,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="deleteAt != null">
+				delete_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="applyNo != null">
+				#{applyNo,jdbcType=VARCHAR},
+			</if>
+			<if test="applyType != null">
+				#{applyType,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				#{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceType != null">
+				#{invoiceType,jdbcType=TINYINT},
+			</if>
+			<if test="isElecInvoice != null">
+				#{isElecInvoice,jdbcType=TINYINT},
+			</if>
+			<if test="baseInvoiceId != null">
+				#{baseInvoiceId,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+			<if test="feeType != null">
+				#{feeType,jdbcType=TINYINT},
+			</if>
+			<if test="invoiceTaxRate != null">
+				#{invoiceTaxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxCateNo != null">
+				#{taxCateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="isGoodsMerge != null">
+				#{isGoodsMerge,jdbcType=TINYINT},
+			</if>
+			<if test="isDisplayDiscount != null">
+				#{isDisplayDiscount,jdbcType=TINYINT},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="invoiceRemark != null">
+				#{invoiceRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				#{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleterId != null">
+				#{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="deleter != null">
+				#{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="deleteAt != null">
+				#{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceApplyManager">
+		update tb_invoice_apply
+		<set>
+			<if test="applyNo != null">
+				apply_no = #{applyNo,jdbcType=VARCHAR},
+			</if>
+			<if test="applyType != null">
+				apply_type = #{applyType,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceType != null">
+				invoice_type = #{invoiceType,jdbcType=TINYINT},
+			</if>
+			is_elec_invoice = #{isElecInvoice,jdbcType=TINYINT},
+			base_invoice_id =
+			#{baseInvoiceId,jdbcType=INTEGER},
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="invoiceTaxRate != null">
+				invoice_tax_rate = #{invoiceTaxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="isGoodsMerge != null">
+				is_goods_merge = #{isGoodsMerge,jdbcType=TINYINT},
+			</if>
+			<if test="isDisplayDiscount != null">
+				is_display_discount =
+				#{isDisplayDiscount,jdbcType=TINYINT},
+			</if>
+
+			<if test="feeType != null">
+				fee_type = #{feeType,jdbcType=TINYINT},
+			</if>
+			<if test="taxCateNo != null">
+				tax_cate_no = #{taxCateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="invoiceRemark != null">
+				invoice_remark = #{invoiceRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleterId != null">
+				deleter_id = #{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateStatus" parameterType="com.scfs.domain.invoice.entity.InvoiceApplyManager">
+		update tb_invoice_apply
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePrintNum" parameterType="com.scfs.domain.invoice.entity.InvoiceApplyManager">
+		update tb_invoice_apply
+		<set>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="isOverasyncMaxLine"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceApplyManagerReqDto"
+		resultType="Integer">
+		select count(*) from tb_invoice_apply tia
+		left join tb_invoice tii on
+		tia.id = tii.invoice_apply_id
+		inner join tb_base_user_project userPro
+		on
+		tia.project_id = userPro.project_id
+		<where>
+			tia.is_delete = 0 AND
+			userPro.state = 1
+			<if test="userId != null">
+				AND userPro.user_id =#{userId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				AND tia.project_id =#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null">
+				AND tia.customer_id =#{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+				AND tii.invoice_no like CONCAT('%',#{invoiceNo},'%')
+			</if>
+			<if test="invoiceCode != null and invoiceCode != ''">
+				AND tii.invoice_code like CONCAT('%',#{invoiceCode},'%')
+			</if>
+			<if test="invoiceType != null">
+				AND tia.invoice_type =#{invoiceType,jdbcType=TINYINT}
+			</if>
+			<if test="businessUnitId != null">
+				AND tia.business_unit_id
+				=#{businessUnitId,jdbcType=INTEGER}
+			</if>
+			<if test="billType != null">
+				AND tia.bill_type =#{billType,jdbcType=TINYINT}
+			</if>
+			<if test="status != null">
+				AND tia.status =#{status,jdbcType=TINYINT}
+			</if>
+			<if test="applyNo != null and applyNo != ''">
+				AND tia.apply_no like CONCAT('%',#{applyNo},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

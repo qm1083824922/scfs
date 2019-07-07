@@ -1,0 +1,223 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">客户维护管理</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">    
+                            <label class="control-label ml10">客户编码：</label>
+                            <input type="text" class="form-control" id="customerNo" name="customerNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">客户名称：</label>
+                            <input type="text" class="form-control" id="chineseName" name="chineseName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">来源渠道：</label>
+                            <select class="form-control js-select" data-url="SOURCE_CHANNEL" id="sourceChannel"  name="sourceChannel"> </select> 
+						</div>
+						<div class="search-item">    
+                            <label class="control-label ml10">维护人：</label>
+                            <select class="form-control js-select" data-url="USER" id="guardian"  name="guardian"> </select> 
+						</div>
+						<div class="search-item">    
+                            <label class="control-label ml10">跟进人：</label>
+                            <select class="form-control js-select" data-url="USER" id="fllow"  name="fllow"> </select> 
+						</div>
+						<div class="search-item">
+                        	<label class="control-label">创建日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startCreateTime" value="" name="startCreateTime"> -
+                            <input type="text" class="form-control js_datePicker" id="endCreateTime" value="" name="endCreateTime">
+                        </div>
+                        <div class="search-item">
+                        	 <label class="control-label ml10">所处阶段：</label>
+                        	 <select class="form-control js-select" data-url="MATTER_STAGE" id="stage" name="stage"></select>
+                        </div>
+                        <div class="search-item">
+                        	 <label class="control-label ml10">客户类型：</label>
+                        	 <select class="form-control js-select" data-url="CUSTOMER_TYPE" id="customerType" name="customerType"></select>
+                        </div>
+                        <div class="search-item">	
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/baseinfo/customer/customerMaintainCreate.html" data-permissionUrl="/customerMaintain/add" class="btn btn-warning btn-sm ml10">新建</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="customerMaintain/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<div class="audit-pop-wraper" style="display:none;">
+	
+</div>
+
+<script>
+
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要删除吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("sendManage/delete", {id: id}, function(){
+	    		layer.msg("删除成功", {
+	                icon: 1
+	            })
+	            $("#btnSearch").click();
+	    	})
+	    }, function() {});
+    },
+    'click .edit': function(e, value, row, index){
+    	options.param.id = row.id;
+		GLOBAL.go("html/baseinfo/customer/customerMaintainEdit.html", options.param);
+    },
+    'click .scan': function(e, value, row, index){
+		options.param.id = row.id;
+		GLOBAL.go("html/baseinfo/customer/customerMaintainScan.html", options.param);
+    },
+    'click .divide': function(e, value, row, index){
+		if (row) {
+			options.param.id = row.id;
+            var url = "html/baseinfo/customer/customerMaintainDevide.html";
+            $(".audit-pop-wraper").load(url, function (e) {
+               options.initPage && options.initPage();
+               $(".audit-pop-wraper .box-footer").hide();
+               //$(".audit-pop-wraper .box-footer .btn[data-permissionurl]").show();
+				
+                var loadingIdx = layer.load(3, {
+                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                });
+
+                setTimeout(function () {
+                    //关闭加载图标
+                    layer.close(loadingIdx);
+                    var index = layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: [$(window).width() * 0.3, $(window).height() - 600], //宽高
+                        content: $(".audit-pop-wraper"),
+                        btn: ["保存", "取消"],
+                        yes: function(){
+                        	var fllow = $(".audit-pop-wraper #fllow").val();
+                        	var id = $(".audit-pop-wraper #id").val();
+                        	var data ={};
+                        	data["fllow"]=fllow;
+                        	data["id"]=id;
+                        	GLOBAL.ajax("/customerMaintain/update", data, function(e) {
+            					if (e.success) {
+            						layer.msg("保存成功！");
+            						layer.close(index);
+            						GLOBAL.go("html/baseinfo/customer/customerMaintainSearch.html"); 
+            					} else {
+            						layer.msg(e.msg);
+            					}
+            				}, false, $("#save"));
+                        }
+                    });
+                   layer.style(index, {
+                        top: "187px", 
+                        left: "378px"
+                    });
+                }, 1200);
+            })
+        }
+    },
+    'click .follow': function(e, value, row, index){
+		options.param.id = row.id;
+		GLOBAL.go("html/baseinfo/customer/customerFollow.html", options.param);
+    }
+};
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '客户编码',
+	     field: 'customerNo',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '客户简称',
+	     field: 'abbreviation',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '中文全称',
+	     field: 'chineseName',
+	     width: 80,
+	     align: 'center'
+	  }, {
+		 title: '创建时间',
+		 field: 'createAt',
+		 width: 60,
+		 align: 'center'
+	  }, {
+		 title: '创建人',
+		 field: 'creator',
+		 width: 60,
+		 align: 'center'
+	  }, {
+		 title: '跟进人',
+		 field: 'fllowName',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '所处阶段',
+		 field: 'stageName',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '客户类型',
+		 field: 'customerTypeName',
+		 width: 80,
+		 align: 'center'
+	  }, {
+	     title: '操作',
+	     field: 'opertaList',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents
+	 }
+];
+
+options.initPage = function() {
+	$("button[type='reset']").click(function(){
+		$("input[type='hidden']").val("");
+	})
+	GLOBAL.initOptionsParam('id,cid,hip');
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null , null);
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})    
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+</script>

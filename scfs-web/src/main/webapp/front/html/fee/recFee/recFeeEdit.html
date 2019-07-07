@@ -1,0 +1,125 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>费用</li>
+		<li>应收费用</li>
+		<li class="active">编辑</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1"
+				data-url="fee/receive/edit">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation" class="active"><a class="tab-item"data-url="html/fee/recFee/recFeeEdit.html">基础信息</a></li>
+						<li role="presentation" class="li-po"><a class="tab-item" data-url="html/fee/recFee/recFeePayEdit.html">应付费用信息</a></li>
+                	</ul>
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+						<div class="row">
+					<div class="col-md-6">
+						<table class="table table-bordered table-hover no-margin">
+							<tr>
+								<td width="180" class="text-right"><b>费用编号：</b></td>
+								<td class="text-left"><label
+									class="form-control js-initform" id="feeNo" name="feeNo"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+								<td class="text-left"><label
+									class="form-control js-initform"
+									id="projectName" name="projectName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>应收客户：<em class="text-star">*</em></b></td>
+								<td class="text-left"><select
+									class="form-control js-initform" data-url="PROJECT_BCS"
+									pid="projectId" id="custPayer" name="custPayer"></select></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>应收费用科目：<em class="text-star">*</em></b></td>
+								<td class="text-left"><select
+									class="form-control js-initform" data-url="REC_FEE_SPEC"
+									id="recFeeSpec" name="recFeeSpec"></select></td>
+							</tr> 
+							<tr>
+								<td class="text-right"><b>应收方式：<em class="text-star">*</em></b></td>
+								<td class="text-left"><select
+									class="form-control js-initform" data-url="REC_TYPE"
+									id="recType" name="recType"></select></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>应收日期：<em class="text-star">*</em></b></td>
+								<td class="text-left"><input
+									class="form-control js-initform js_datePicker" id="recDate"
+									name="recDate"></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>到期日：</b></td>
+								<td class="text-left"><input
+									class="form-control js-initform js_datePicker" id="expireDate"
+									name="expireDate"></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+								<td class="text-left"><select
+									class="form-control js-initform"
+									data-url="DEFAULT_CURRENCY_TYPE" id="currencyType"
+									name="currencyType"><select></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>应收金额：<em class="text-star">*</em></b></td>
+								<td class="text-left"><input
+									class="form-control js-initform" id="recAmount"
+									name="recAmount"></td>
+							</tr>
+							<tr style="display: none;">
+								<td class="text-right"><b>已收金额：</b></td>
+								<td class="text-left"><input
+									class="form-control js-initform" id="receivedAmount"
+									name="receivedAmount"></td>
+							</tr>
+							<tr style="display: none;">
+								<td class="text-right"><b>已开票金额：</b></td>
+								<td class="text-left"><input
+									class="form-control js-initform" id="provideInvoiceAmount"
+									name="provideInvoiceAmount"></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>开票方式：<em class="text-star">*</em></b></td>
+								<td class="text-left"><select
+									class="form-control js-initform"
+									data-url="PROVIDE_INVOICE_TYPE" id="provideInvoiceType"
+									name="provideInvoiceType"></select></td>
+							</tr>
+							<tr id="provideInvoiceTaxRateTr">
+								<td class="text-right"><b>开票税率：</b></td>
+								<td class="text-left"><select
+									class="form-control js-initform"
+									data-url="PROVIDE_INVOICE_TAX_RATE" id="provideInvoiceTaxRate"
+									name="provideInvoiceTaxRate"></span></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>备注：</b></td>
+								<td class="text-left"><textarea
+										class="form-control js-initform" id="recNote" name="recNote"></textarea></td>
+							</tr>
+						</table>
+					</div>
+					</div>
+				</div>
+				<div class="box-footer text-center">
+					<button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/fee/receive/update">保存</button>
+					<button type="button" id="back"
+						data-url="html/fee/recFee/recFeeSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script src="../../../js/fee/recFee/recFeeEdit.js">
+	
+</script>

@@ -1,0 +1,134 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>权限组浏览</li>
+            <li class="active">用户信息</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+            <div class="box"> 
+                <!-- /.box-header -->
+                <div class="box-body">
+	                  <ul class="nav nav-tabs">
+		                  <li role="presentation"><a class="tab-item" data-url="html/project/projectBaseInfoEdit.html">基础信息</a></li>
+		                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectVEdit.html">供应商信息</a></li>
+		                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectCEdit.html">客户信息</a></li>
+		                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectWEdit.html">仓库信息</a></li>
+		                  <li role="presentation"><a class="tab-item" data-url="html/project/projectGoodsEdit.html">商品信息</a></li>                
+		                  <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectUserEdit.html">用户信息</a></li>
+		              </ul> 
+                    <table id="js_dataTable" data-url="project/user/query">
+                    </table>
+                </div>
+                <!-- .box-body -->
+                 <div class="box-footer text-center">   
+                  <button type="button" class="btn btn-danger btn-sm" data-url="/project/user/delete" data-permissionUrl="/project/user/delete" id="multDel">批量作废</button> 
+	              <button type="button" class="btn btn-primary btn-sm" data-url="html/project/projectUserEditDivide.html" data-permissionUrl="/project/user/divid" id="devide">分配</button> 
+	              <button type="button" id="back" data-url="html/project/projectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+           	  </div>
+            </div>
+    </section>
+</div>
+
+<script>
+/*数据表格*/
+var tabCols = [
+	 {
+	field : 'checkItem',
+	checkbox : true,
+	width : '5'
+	 },{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '工号',
+	     field: 'employeeNumber',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '用户名',
+	     field: 'userName',
+	     width: 75,
+	     align: 'center'
+	 }, {
+	     title: '中文名',
+	     field: 'chineseName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '英文名',
+	     field: 'englishName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '手机',
+	     field: 'mobilePhone',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '邮箱',
+	     field: 'email',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '用户类别',
+	     field: 'userPropertyValue',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'status',
+	     width: 100,
+	     align: 'center'
+	 } 
+];
+ options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+  };
+
+$("#back").click(function(){
+    var url = $(this).data("url");
+    options.param.id=options.param.cid;
+    GLOBAL.go(url, options.param);
+}) 
+$("#devide").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+  })
+ $(".tab-item").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+$("#multDel").click(function() {
+    	var id = GLOBAL.selectIds($('#js_dataTable'));
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id,
+    				userId:options.param.cid}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					$('#js_dataTable').bootstrapTable('refresh', {query: {projectId: options.param.id}});
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+</script>

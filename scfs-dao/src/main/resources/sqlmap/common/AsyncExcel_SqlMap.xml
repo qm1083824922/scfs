@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.common.AsyncExcelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.AsyncExcel">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
+		<result column="method_name" property="methodName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="template_path" property="templatePath"
+			jdbcType="VARCHAR" />
+		<result column="excel_path" property="excelPath" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="yn" property="yn" jdbcType="TINYINT" />
+		<result column="po_type" property="poType" jdbcType="TINYINT" />
+		<result column="result" property="result" jdbcType="TINYINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.scfs.domain.common.entity.AsyncExcel"
+		extends="BaseResultMap">
+		<result column="args" property="args" jdbcType="LONGVARBINARY" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, class_name, method_name,
+		name,po_type,template_path,excel_path,
+		create_at, creator_id, creator,
+		update_at, yn,
+		result
+	</sql>
+	<sql id="Blob_Column_List">
+		args
+	</sql>
+	<select id="queryAsyncExcelById" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tb_async_excel
+		where id = #{id}
+	</select>
+	<select id="queryAsyncExcelByCon" resultMap="ResultMapWithBLOBs"
+		parameterType="com.scfs.domain.common.dto.req.AsyncExcelReqDto">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tb_async_excel
+		where 1=1
+		<if test="userId != null ">
+			AND creator_id = #{userId}
+		</if>
+		<if test="name != null and name != '' ">
+			AND name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="poType != null and poType != ''  ">
+			AND po_type = #{poType}
+		</if>
+		order by create_at desc
+	</select>
+
+	<select id="queryAsyncExcelLimit10" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from tb_async_excel
+		where yn=0
+		order by id
+		limit 10
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.AsyncExcel">
+		insert into tb_async_excel
+		(id, class_name, method_name,
+		name,po_type,template_path,excel_path,
+		create_at, creator_id,
+		creator, update_at, yn,
+		result, args)
+		values
+		(#{id,jdbcType=BIGINT}, #{className,jdbcType=VARCHAR},
+		#{methodName,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{poType,jdbcType=TINYINT}, #{templatePath,jdbcType=VARCHAR},
+		#{excelPath,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=BIGINT},
+		#{creator,jdbcType=VARCHAR},
+		#{updateAt,jdbcType=TIMESTAMP}, #{yn,jdbcType=TINYINT},
+		#{result,jdbcType=TINYINT}, #{args,jdbcType=LONGVARBINARY})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.AsyncExcel">
+		update tb_async_excel
+		<set>
+			yn = 1,result= #{result}
+			<if test=" excelPath != null">
+				,excel_path=#{excelPath}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,39 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>项目</li>
+			<li class="active">资金明细</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-body">
+				<ul class="nav nav-tabs">
+					<li role="presentation"><a class="tab-item"
+						data-url="html/project/projectPoolBaseInfo.html">基本信息</a></li>
+					<li role="presentation" class="active"><a class="tab-item"
+						id="fundDtl" data-url="html/project/projectPoolFundDtl.html">资金明细</a></li>
+					<li role="presentation"><a class="tab-item" id="assertDtl"
+						data-url="html/project/projectPoolAssertDtl.html">资产明细</a></li>
+				</ul>
+				<input class="form-control js-initform" type="hidden" id="id"
+					name="id">
+				<table id="js_dataTable" data-url="projectPoolFundDtl/query">
+				</table>
+			</div>
+			<!-- .box-body -->
+			<div class="box-footer text-center">
+				<button type="button" id="back"
+					data-url="html/project/projectPool.html"
+					class="btn btn-default btn-sm">返回</button>
+				<button type="button" id="btnExport"
+					data-permissionUrl="/project/pool/excel/fund.xls"
+					data-url="project/pool/excel/fund.xls"
+					class="btn btn-warning btn-sm ml10">导出</button>
+			</div>
+		</div>
+	</section>
+</div>
+
+<script src="../../js/project/projectPoolFund.js"></script>

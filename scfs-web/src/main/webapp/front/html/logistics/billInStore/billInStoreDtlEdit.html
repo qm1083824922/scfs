@@ -1,0 +1,251 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>入库单</li>
+    <li>收货明细</li>
+    <li class="active">编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreEdit.html">基础信息</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreDtlEdit.html">收货明细</a></li>
+                    <li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreTallyDtlEdit.html">理货明细</a></li>
+                    <li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/attachment.html">附件</a></li>               	
+                </ul>
+                <table id="js_dataTable" data-url="billInStoreDtl/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/billInStoreDtl/add" data-url="html/logistics/billInStore/billInStoreDtlEditAdd.html" id="add">新增</button> 
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/billInStore/submit" data-url="billInStore/submit" id="submit">提交</button> 
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/billInStore/reject" data-url="billInStore/reject" id="reject">驳回</button>
+              <button type="button" data-url="html/logistics/billInStore/billInStoreSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+              <button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/billInStoreDtl/batch/delete" data-url="billInStoreDtl/batch/delete" id="multDel">批量删除</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+	window.operateEvents = {
+   	    'click .modify': function (e, value, row, index) {
+   	    	options.param.cid = row.id;
+   	  		GLOBAL.go("html/logistics/billInStore/billInStoreDtlEditModify.html", options.param);
+   	    }
+   	};
+
+   	function operateFormatter(value, row, index) {
+   	    return [
+   	            '<a class="modify" href="javascript:void(0)">',
+   	            '<span class="btn btn-primary btn-sm" data-permissionUrl="/billInStoreDtl/update">修改</span>',
+   	            '</a>  '
+   	        ].join('');
+   	}
+
+    /*数据表格*/
+    var tabCols = [	
+      {
+        field: 'checkItem',
+        checkbox: true,
+   	  }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+      }, {
+         title: '订单编号',
+         field: 'orderNo',
+         align: 'center'
+     }, {
+         title: '订单附属编号',
+         field: 'appendNo',
+         align: 'center'
+     }, {
+         title: '退货编号',
+         field: 'billDeliveryNo',
+         align: 'center'
+     }, {
+         title: '退货附属编号',
+         field: 'billDeliveryAffiliateNo',
+         align: 'center'
+     }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     },  {
+         title: '规格',
+         field: 'specification',
+         width: 100,
+         align: 'center'
+     },{
+         title: '收货数量',
+         field: 'receiveNum',
+         align: 'center'
+     }, {
+         title: '理货数量',
+         field: 'tallyNum',
+         align: 'center'
+     }, {
+         title: '收货单价',
+         field: 'receivePriceStr',
+         align: 'center'
+     }, {
+         title: '收货金额',
+         field: 'receiveAmountStr',
+         align: 'center'
+     }, {
+	     title: '操作',
+         field: 'operate',
+         width: 80,
+         align: 'center',
+         events: operateEvents,
+         formatter: operateFormatter
+	 }
+   ];
+
+    options.initPage = function(){
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {billInStoreId: options.param.id}, false, {
+            onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            },
+            onLoadSuccess: function(data){
+    			if (data.options.totalStr) {
+   					$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+   				}
+   		 	}
+        });
+        GLOBAL.ajax("billInStore/detail", {id: options.param.id}, function(data){
+       	 	if (data && data.items && data.items.billType) {
+       		 	var billType = data.items.billType;
+       		 	if (billType == 2 || billType == 3) {	//2-调拨入库、3-销售入库
+           	    	$("#multDel").hide();
+           	    	$("#add").hide();
+            		$('#js_dataTable').bootstrapTable("hideColumn", "checkItem");
+            		$('#js_dataTable').bootstrapTable("hideColumn", "operate");
+            		
+                    /**
+                    if (wmsStatus == 0) {
+                    	$("#submit").hide();
+                    	$("#invoke").show();
+                    } else {
+                    	$("#submit").show();
+                    	$("#invoke").hide();
+                    }
+                    **/                 
+             	}
+       		 	if (billType == 1 || billType == 2) {
+       		 		$('#js_dataTable').bootstrapTable("showColumn", "orderNo");
+       		 		$('#js_dataTable').bootstrapTable("showColumn", "appendNo");
+       		 		$('#js_dataTable').bootstrapTable("hideColumn", "billDeliveryNo");
+   		 			$('#js_dataTable').bootstrapTable("hideColumn", "billDeliveryAffiliateNo");
+   	       	    	$("#reject").hide();
+       		 	} else if (billType == 3) {
+       		 		$('#js_dataTable').bootstrapTable("hideColumn", "orderNo");
+   		 			$('#js_dataTable').bootstrapTable("hideColumn", "appendNo");
+   		 			$('#js_dataTable').bootstrapTable("showColumn", "billDeliveryNo");
+		 			$('#js_dataTable').bootstrapTable("showColumn", "billDeliveryAffiliateNo");
+           	    	$("#reject").show();
+       		 	}
+       	 	}
+        });
+    }
+  	
+  	$("#add").click(function(){
+        var url = $(this).data("url");
+  		GLOBAL.go(url, options.param);
+  	})
+  	
+  	$("#multDel").click(function(){
+	   	var ids = GLOBAL.selectIds($('#js_dataTable'));
+  	    var url = $(this).data("url");
+  	    if (ids) {
+  	  	    layer.confirm('确定要批量删除吗？', {
+  	  	        btn: ['确定', '取消'] //按钮
+  	  	    }, function() {
+  	  	  	    GLOBAL.ajax(url, {billInStoreId: options.param.id, ids: ids}, function(e) {
+  	  	        	if (e.success) {
+  	  	            	layer.msg("删除成功！");
+  	  	                $('#js_dataTable').bootstrapTable('refresh');
+  	  	            } else {
+  	  	                layer.msg(e.msg);
+  	  	            }
+  	  	        });
+  	  	    }, function() {});    
+  	    }
+  	})
+  	
+  	$("#submit").click(function(){
+    	var url = $(this).data("url");
+    	layer.confirm('确定提交吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	    	GLOBAL.ajax(url, {id: options.param.id}, function(e) {
+  	        	if (e.success) {
+  	              	layer.msg("提交成功！");
+  	              	GLOBAL.go("html/logistics/billInStore/billInStoreSearch.html", options.param);
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {});
+  	})
+  	
+  	$("#reject").click(function(){
+    	var url = $(this).data("url");
+    	layer.confirm('确定驳回吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	 	    GLOBAL.ajax(url, {id: options.param.id}, function(e) {
+  	        	if (e.success) {
+  	              	layer.msg("驳回成功！");
+  	              	GLOBAL.go("html/logistics/billInStore/billInStoreSearch.html", options.param);
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {});
+  	})
+  	
+  	/**
+  	$("#invoke").click(function(){
+    	var url = $(this).data("url");
+    	layer.confirm('确定要调用wms接口吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	 	    GLOBAL.ajax(url, {id: options.param.id}, function(e) {
+  	        	if (e.success) {
+  	              	layer.msg("调用wms接口成功！");
+  	              	GLOBAL.go("html/logistics/billInStore/billInStoreSearch.html", options.param);
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {}); 
+  	})
+  	**/
+  	
+  	GLOBAL.goBack();
+
+</script>

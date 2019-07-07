@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.SaleReportDao">
+	<sql id="bill_out_store_sql">
+		INNER join tb_base_user_project tbup
+		on tbos.project_id =
+		tbup.project_id
+		INNER join tb_base_project tbp
+		on tbos.project_id =
+		tbp.id
+		LEFT JOIN tb_base_subject tbs
+		ON tbos.customer_id = tbs.id
+		WHERE
+		tbos.bill_type = 1
+		AND tbos.status = 5
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="startBusinessDate!=null and startBusinessDate!=''">
+			AND tbos.send_date &gt;= #{startBusinessDate}
+		</if>
+		<if test="endBusinessDate!=null and endBusinessDate!=''">
+			AND tbos.send_date &lt;= #{endBusinessDate}
+		</if>
+		<if test="bizManagerId!=null">
+			AND tbp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		<if test="departmentId!=null">
+			<foreach collection="departmentId" item="dId"
+				open="AND tbp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbos.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</sql>
+
+	<sql id="complex_sql">
+		<if test="statisticsDimensionType == 1">
+			AND tbos.project_id = tmp.project_id
+		</if>
+		<if test="statisticsDimensionType == 2">
+			AND tbos.customer_id = tmp.customer_id
+		</if>
+		<if test="statisticsDimensionType == 3">
+			AND tbos.project_id = tmp.project_id
+			AND tbos.customer_id =
+			tmp.customer_id
+		</if>
+		AND tbos.currency_type = tmp.currency_type
+	</sql>
+
+	<sql id="fee_sql">
+		(SELECT
+		<if test="statisticsDimensionType == 1">
+			tf.project_id project_id,
+			tbp.biz_special_id
+			biz_manager_id,
+			tbp.department_id department_id,
+			tbp.biz_type biz_type,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tf.cust_payer customer_id,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tf.project_id project_id,
+			tf.cust_payer customer_id,
+			tbp.biz_special_id biz_manager_id,
+			tbp.department_id department_id,
+			tbp.biz_type biz_type,
+		</if>
+		0 as sale_amount,
+		0 as cost_amount,
+		0 as profit_amount,
+		tf.currency_type
+		as currency_type,
+		IFNULL(SUM(IFNULL(tf.rec_amount, 0)), 0) as
+		rec_amount,
+		0 as pay_amount
+		FROM tb_fee tf
+		INNER join
+		tb_base_user_project tbup
+		on tf.project_id = tbup.project_id
+		INNER join
+		tb_base_project tbp
+		on tf.project_id = tbp.id
+		where tf.state = 3
+		and
+		tf.is_delete = 0
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="statisticsDimensionType == 1">
+			<if test="projectId!=null">
+				AND tf.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 2">
+			<if test="customerId!=null">
+				AND tf.cust_payer = #{customerId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 3">
+			<if test="projectId!=null">
+				AND tf.project_id = #{projectId}
+			</if>
+			<if test="customerId!=null">
+				AND tf.cust_payer = #{customerId}
+			</if>
+		</if>
+		<if test="startBusinessDate!=null and startBusinessDate!=''">
+			AND (tf.book_date &gt;= #{startBusinessDate})
+		</if>
+		<if test="endBusinessDate!=null and endBusinessDate!=''">
+			AND (tf.book_date &lt;= #{endBusinessDate})
+		</if>
+		<if test="bizManagerId!=null">
+			AND tbp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		<if test="departmentId!=null">
+			<foreach collection="departmentId" item="dId"
+				open="AND tbp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tf.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		group by tf.currency_type
+		<if test="statisticsDimensionType == 1">
+			,tf.project_id
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tf.cust_payer
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tf.project_id
+			,tf.cust_payer
+		</if>
+		)
+
+		union all
+
+		(SELECT
+		<if test="statisticsDimensionType == 1">
+			tf.project_id project_id,
+			tbp.biz_special_id
+			biz_manager_id,
+			tbp.department_id department_id,
+			tbp.biz_type biz_type,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tf.cust_receiver customer_id,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tf.project_id project_id,
+			tf.cust_receiver customer_id,
+			tbp.biz_special_id biz_manager_id,
+			tbp.department_id department_id,
+			tbp.biz_type biz_type,
+		</if>
+		0 as sale_amount,
+		0 as cost_amount,
+		0 as profit_amount,
+		tf.currency_type
+		as currency_type,
+		0 as rec_amount,
+		IFNULL(SUM(IFNULL(tf.pay_amount, 0)),
+		0) as pay_amount
+		FROM tb_fee tf
+		INNER join tb_base_user_project tbup
+		on
+		tf.project_id = tbup.project_id
+		INNER join tb_base_project tbp
+		on
+		tf.project_id = tbp.id
+		where tf.state = 3
+		and tf.is_delete = 0
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="statisticsDimensionType == 1">
+			<if test="projectId!=null">
+				AND tf.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 2">
+			<if test="customerId!=null">
+				AND tf.cust_receiver = #{customerId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 3">
+			<if test="projectId!=null">
+				AND tf.project_id = #{projectId}
+			</if>
+			<if test="customerId!=null">
+				AND tf.cust_receiver = #{customerId}
+			</if>
+		</if>
+		<if test="startBusinessDate!=null and startBusinessDate!=''">
+			AND (tf.book_date &gt;= #{startBusinessDate})
+		</if>
+		<if test="endBusinessDate!=null and endBusinessDate!=''">
+			AND (tf.book_date &lt;= #{endBusinessDate})
+		</if>
+		<if test="bizManagerId!=null">
+			AND tbp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		<if test="departmentId!=null">
+			<foreach collection="departmentId" item="dId"
+				open="AND tbp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tf.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		group by tf.currency_type
+		<if test="statisticsDimensionType == 1">
+			,tf.project_id
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tf.cust_receiver
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tf.project_id
+			,tf.cust_receiver
+		</if>
+		)
+	</sql>
+
+	<sql id="sale_report_sql">
+		SELECT
+		<if test="statisticsDimensionType == 1">
+			tmp.project_id project_id,
+			tmp.biz_manager_id
+			biz_manager_id,
+			tmp.department_id department_id,
+			tmp.biz_type biz_type,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tmp.customer_id customer_id,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tmp.project_id project_id,
+			tmp.customer_id customer_id,
+			tmp.biz_manager_id biz_manager_id,
+			tmp.department_id
+			department_id,
+			tmp.biz_type biz_type,
+		</if>
+		SUM(tmp.sale_amount) sale_amount,
+		SUM(tmp.cost_amount) cost_amount,
+		SUM(tmp.profit_amount) profit_amount,
+		tmp.currency_type currency_type,
+		(SELECT SUM(IFNULL(tbos.send_amount, 0))
+		FROM tb_bill_out_store tbos
+		<include refid="bill_out_store_sql" />
+		<include refid="complex_sql" />
+		AND (tbs.subject_type &amp; 1) = 1) inner_sale_amount,
+		(SELECT
+		SUM(IFNULL(tbos.send_amount, 0))
+		FROM tb_bill_out_store tbos
+		<include refid="bill_out_store_sql" />
+		<include refid="complex_sql" />
+		AND (tbs.subject_type &amp; 1) != 1) outer_sale_amount,
+		SUM(tmp.rec_amount) rec_amount,
+		SUM(tmp.pay_amount) pay_amount
+		FROM (
+		SELECT
+		<if test="statisticsDimensionType == 1">
+			tbos.project_id project_id,
+			tbp.biz_special_id
+			biz_manager_id,
+			tbp.department_id department_id,
+			tbp.biz_type biz_type,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tbos.customer_id customer_id,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tbos.project_id project_id,
+			tbos.customer_id customer_id,
+			tbp.biz_special_id biz_manager_id,
+			tbp.department_id
+			department_id,
+			tbp.biz_type biz_type,
+		</if>
+		SUM(IFNULL(tbos.send_amount, 0)) sale_amount,
+		SUM(IFNULL(tbos.cost_amount, 0)) cost_amount,
+		SUM(IFNULL(tbos.send_amount, 0) - IFNULL(tbos.cost_amount, 0))
+		profit_amount,
+		tbos.currency_type currency_type,
+		0 as rec_amount,
+		0 as
+		pay_amount
+		FROM tb_bill_out_store tbos
+		<include refid="bill_out_store_sql" />
+		<if test="statisticsDimensionType == 1">
+			<if test="projectId!=null">
+				AND tbos.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 2">
+			<if test="customerId!=null">
+				AND tbos.customer_id = #{customerId}
+			</if>
+		</if>
+		<if test="statisticsDimensionType == 3">
+			<if test="projectId!=null">
+				AND tbos.project_id = #{projectId}
+			</if>
+			<if test="customerId!=null">
+				AND tbos.customer_id = #{customerId}
+			</if>
+		</if>
+		group by tbos.currency_type
+		<if test="statisticsDimensionType == 1">
+			,tbos.project_id
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tbos.customer_id
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tbos.project_id
+			,tbos.customer_id
+		</if>
+
+		union all
+
+		<include refid="fee_sql" />
+		) AS tmp
+		group by tmp.currency_type
+		<if test="statisticsDimensionType == 1">
+			,tmp.project_id
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tmp.customer_id
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tmp.project_id
+			,tmp.customer_id
+		</if>
+	</sql>
+
+	<select id="querySaleReportResultsByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.report.entity.SaleReport">
+		select
+		<if test="statisticsDimensionType == 1">
+			sale_report.project_id projectId,
+			sale_report.biz_manager_id bizManagerId,
+			sale_report.department_id
+			departmentId,
+			sale_report.biz_Type bizType,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			sale_report.customer_id customerId,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			sale_report.project_id projectId,
+			sale_report.customer_id
+			customerId,
+			sale_report.biz_manager_id bizManagerId,
+			sale_report.department_id departmentId,
+			sale_report.biz_Type bizType,
+		</if>
+		sale_report.sale_amount saleAmount,
+		sale_report.cost_amount costAmount,
+		sale_report.profit_amount profitAmount,
+		sale_report.currency_type
+		currencyType,
+		sale_report.inner_sale_amount innerSaleAmount,
+		sale_report.outer_sale_amount outerSaleAmount,
+		(sale_report.rec_amount
+		- sale_report.pay_amount) feeProfitAmount,
+		(sale_report.profit_amount +
+		sale_report.rec_amount - sale_report.pay_amount) sumProfitAmount
+		from (
+		<include refid="sale_report_sql" />
+		) sale_report
+		where !(sale_report.sale_amount = 0
+		and
+		sale_report.cost_amount = 0
+		and sale_report.profit_amount = 0
+		and
+		sale_report.inner_sale_amount = 0
+		and sale_report.outer_sale_amount = 0
+		and (sale_report.rec_amount - sale_report.pay_amount) = 0)
+		<if test="statisticsDimensionType == 1">
+			order by sale_report.project_id,
+			sale_report.department_id,
+			sale_report.biz_manager_id,
+			sale_report.currency_type
+		</if>
+		<if test="statisticsDimensionType == 2">
+			order by sale_report.customer_id,
+			sale_report.currency_type
+		</if>
+		<if test="statisticsDimensionType == 3">
+			order by sale_report.project_id, sale_report.customer_id,
+			sale_report.department_id, sale_report.biz_manager_id,
+			sale_report.currency_type
+		</if>
+	</select>
+
+	<select id="querySaleReportCountByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="sale_report_sql" />
+		) sale_report
+	</select>
+
+	<select id="querySumSaleReportResultsByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.report.entity.SaleReportSum">
+		SELECT SUM(sale_report.sale_amount) totalSaleAmount,
+		SUM(sale_report.cost_amount) totalCostAmount,
+		SUM(sale_report.profit_amount) totalProfitAmount,
+		SUM(sale_report.inner_sale_amount) totalInnerSaleAmount,
+		SUM(sale_report.outer_sale_amount) totalOuterSaleAmount,
+		SUM(sale_report.rec_amount - sale_report.pay_amount)
+		totalFeeProfitAmount,
+		SUM(sale_report.profit_amount +
+		sale_report.rec_amount - sale_report.pay_amount)
+		totalSumProfitAmount,
+		sale_report.currency_type currencyType
+		FROM (
+		<include refid="sale_report_sql" />
+		) sale_report group by sale_report.currency_type
+	</select>
+
+	<select id="querySaleDtlResultsByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.report.entity.SaleDtlResult">
+		SELECT
+		tbos.project_id projectId,
+		tbos.customer_id customerId,
+		tbos.id
+		billId,
+		1 as billType,
+		'销售出库单' as billTypeName,
+		tbos.bill_no billNo,
+		tbos.send_date accountDate,
+		IFNULL(tbos.send_amount, 0) saleAmount,
+		IFNULL(tbos.cost_amount, 0) costAmount,
+		IFNULL(tbos.received_amount, 0)
+		returnedAmount,
+		tbos.currency_type currencyType
+		FROM tb_bill_out_store
+		tbos
+		<include refid="bill_out_store_sql" />
+		<if test="projectId!=null">
+			AND tbos.project_id = #{projectId}
+		</if>
+		<if test="customerId!=null">
+			AND tbos.customer_id = #{customerId}
+		</if>
+		<if test="currencyType!=null">
+			AND tbos.currency_type = #{currencyType}
+		</if>
+		<if test="amountTypeFlag==1">
+			AND (tbs.subject_type &amp; 1) != 1
+		</if>
+		<if test="amountTypeFlag==2">
+			AND (tbs.subject_type &amp; 1) = 1
+		</if>
+	</select>
+
+	<select id="querySumSaleDtlResultsByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.report.entity.SaleDtlSum">
+		SELECT SUM(IFNULL(tbos.send_amount, 0)) totalSaleAmount,
+		SUM(IFNULL(tbos.cost_amount, 0)) totalCostAmount,
+		SUM(IFNULL(tbos.received_amount, 0)) totalReturnedAmount,
+		tbos.currency_type currencyType
+		FROM tb_bill_out_store tbos
+		<include refid="bill_out_store_sql" />
+		<if test="projectId!=null">
+			AND tbos.project_id = #{projectId}
+		</if>
+		<if test="customerId!=null">
+			AND tbos.customer_id = #{customerId}
+		</if>
+		<if test="currencyType!=null">
+			AND tbos.currency_type = #{currencyType}
+		</if>
+		<if test="amountTypeFlag==1">
+			AND (tbs.subject_type &amp; 1) != 1
+		</if>
+		<if test="amountTypeFlag==2">
+			AND (tbs.subject_type &amp; 1) = 1
+		</if>
+	</select>
+
+	<sql id="fee_dtl_sql">
+		where fee.is_delete = 0
+		and fee.state = 3
+		and (fee.rec_amount -
+		fee.pay_amount) != 0
+		<if test="startBusinessDate != null">
+			and fee.book_date &gt;= #{startBusinessDate}
+		</if>
+		<if test="endBusinessDate != null">
+			and fee.book_date &lt;= #{endBusinessDate}
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="projectId !=null">
+			and fee.project_id = #{projectId}
+		</if>
+		<if test="customerId!=null">
+			and (fee.cust_payer = #{customerId} or fee.cust_receiver =
+			#{customerId})
+		</if>
+		<if test="currencyType !=null">
+			and fee.currency_type = #{currencyType}
+		</if>
+		<if test="bizManagerId!=null">
+			AND tbp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="departmentId!=null">
+			<foreach collection="departmentId" item="dId"
+				open="AND tbp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND fee.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</sql>
+
+	<select id="queryFeeDtlByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.fee.entity.Fee">
+		select fee.id Id,
+		fee.fee_no feeNo,
+		fee.currency_type currencyType,
+		fee.fee_type feeType,
+		fee.project_id projectId,
+		fee.cust_payer
+		custPayer,
+		fee.rec_fee_spec recFeeSpec,
+		fee.rec_assist_fee_spec
+		recAssistFeeSpec,
+		fee.rec_type recType,
+		fee.rec_date recDate,
+		fee.rec_amount recAmount,
+		fee.provide_invoice_amount
+		provideInvoiceAmount,
+		fee.provide_invoice_type provideInvoiceType,
+		fee.provide_invoice_tax_rate provideInvoiceTaxRate,
+		fee.rec_note
+		recNote,
+		fee.cust_receiver custReceiver,
+		fee.pay_fee_spec payFeeSpec,
+		fee.pay_assist_fee_spec payAssistFeeSpec,
+		fee.pay_type payType,
+		fee.pay_date payDate,
+		fee.pay_amount payAmount,
+		fee.accept_invoice_amount acceptInvoiceAmount,
+		fee.accept_invoice_type
+		acceptInvoiceType,
+		fee.accept_invoice_tax_rate acceptInvoiceTaxRate,
+		fee.pay_note payNote,
+		fee.state state,
+		fee.paid_amount paidAmount,
+		fee.received_amount receivedAmount,
+		fee.audit_at auditAt,
+		fee.book_date
+		bookDate
+		from tb_fee fee
+		inner join tb_base_user_project bup
+		on
+		fee.project_id = bup.project_id
+		inner join tb_base_project tbp
+		on
+		fee.project_id = tbp.id
+		<include refid="fee_dtl_sql" />
+		order by id desc
+	</select>
+
+	<select id="queryFeeDtlSumByCon" parameterType="com.scfs.domain.report.req.SaleReportReqDto"
+		resultType="com.scfs.domain.fee.dto.resp.FeeSumModel">
+		select sum(rec_amount) as recAmountSum,
+		sum(received_amount) as
+		receivedAmountSum,
+		sum(provide_invoice_amount) as
+		provideInvoiceAmountSum,
+		sum(pay_amount) as payAmountSum,
+		sum(paid_amount) as paidAmountSum,
+		sum(accept_invoice_amount) as
+		acceptInvoiceAmountSum,
+		currency_type as currencyType
+		from tb_fee fee
+		inner join tb_base_user_project bup
+		on
+		fee.project_id = bup.project_id
+		inner join tb_base_project tbp
+		on
+		fee.project_id = tbp.id
+		<include refid="fee_dtl_sql" />
+		group by currency_type
+	</select>
+
+</mapper>

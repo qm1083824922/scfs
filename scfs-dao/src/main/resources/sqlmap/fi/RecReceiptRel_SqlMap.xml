@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.RecReceiptRelDao">
+	<resultMap type="com.scfs.domain.fi.entity.RecReceiptRel" id="recReceiptRelResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="rec_id" property="recId" jdbcType="BIGINT" />
+		<result column="receipt_id" property="receiptId" jdbcType="BIGINT" />
+		<result column="write_off_amount" property="writeOffAmount"
+			jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="create_at" property="createAt" jdbcType="DATE" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="fund_used" property="fundUsed" jdbcType="DECIMAL" />
+
+		<result column="cust_id" property="custId" jdbcType="BIGINT" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="amount_receivable" property="amountReceivable"
+			jdbcType="DECIMAL" />
+		<result column="amount_received" property="amountReceived"
+			jdbcType="DECIMAL" />
+		<result column="expire_date" property="expireDate" jdbcType="DATE" />
+
+		<result column="receipt_no" property="receiptNo" jdbcType="VARCHAR" />
+		<result column="receipt_note" property="receiptNote" jdbcType="VARCHAR" />
+		<result column="receipt_date" property="receiptDate" jdbcType="TIMESTAMP" />
+		<result column="bank_receipt_no" property="bankReceiptNo"
+			jdbcType="VARCHAR" />
+		<result column="bank_receipt_note" property="bankReceiptNote"
+			jdbcType="VARCHAR" />
+		<result column="rec_account_no" property="recAccountNo"
+			jdbcType="TINYINT" />
+		<result column="receipt_currency_type" property="receiptCurrencyType"
+			jdbcType="TINYINT" />
+		<result column="receipt_amount" property="receiptAmount"
+			jdbcType="DECIMAL" />
+		<result column="receipt_type" property="receiptType" jdbcType="TINYINT" />
+		<result column="summary" property="summary" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="recReceiptRel_column_list">
+		r.id,
+		r.rec_id,
+		r.receipt_id,
+		r.write_off_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.currency_type,
+		r.fund_used,
+
+		re.cust_id,
+		re.busi_unit,
+		re.project_id,
+		re.amount_receivable,
+		re.amount_received,
+		re.expire_date,
+		re.check_date,
+
+		br.receipt_no,
+		br.receipt_note,
+		br.bank_receipt_note,
+		br.rec_account_no,
+		br.receipt_type,
+		br.receipt_date,
+		br.bank_receipt_no,
+		br.receipt_amount,
+		br.summary
+	</sql>
+
+	<sql id="recrel_column_list">
+		r.id,
+		r.rec_id,
+		r.receipt_id,
+		r.write_off_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.currency_type,
+		r.fund_used
+	</sql>
+
+	<!-- 查询所有 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.fi.dto.req.RecReceiptRelSearchReqDto"
+		resultMap="recReceiptRelResultMap">
+		select
+		<include refid="recReceiptRel_column_list" />
+		FROM tb_fi_rec_receipt_rel r
+		LEFT JOIN tb_fi_rec re
+		ON r.rec_id=re.id
+		LEFT JOIN tb_fi_bank_receipt br
+		ON r.receipt_id = br.id
+		where
+		r.is_delete = 0
+		<if test="receiptId != null">
+			and r.receipt_id = #{receiptId}
+		</if>
+		<if test="recId != null">
+			and r.rec_id = #{recId}
+		</if>
+
+		order by r.id desc
+	</select>
+
+	<!-- 查询详情 -->
+	<select id="queryDetailById" parameterType="int"
+		resultMap="recReceiptRelResultMap">
+		select
+		<include refid="recReceiptRel_column_list" />
+		FROM tb_fi_rec_receipt_rel r
+		LEFT JOIN tb_fi_rec re
+		ON r.rec_id=re.id
+		LEFT JOIN tb_fi_bank_receipt br
+		ON r.receipt_id = br.id
+		WHERE
+		r.is_delete = 0 and r.id = #{id}
+	</select>
+
+	<!-- 查询详情 -->
+	<select id="queryEntityById" parameterType="int"
+		resultMap="recReceiptRelResultMap">
+		select
+		<include refid="recrel_column_list" />
+		FROM tb_fi_rec_receipt_rel r
+		WHERE r.is_delete = 0 and r.id = #{id} for
+		update
+	</select>
+
+	<select id="querySumByReceiptId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(write_off_amount)
+		writeOffAmount
+		from
+		tb_fi_rec_receipt_rel
+		where is_delete = 0 and receipt_id =
+		#{receiptId}
+	</select>
+
+	<select id="queryReceiptRecSumByReceiptId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.fi.entity.ReceiptRecSum">
+		select
+		sum(write_off_amount) writeOffAmount , rec_id as
+		recId
+		from
+		tb_fi_rec_receipt_rel
+		where is_delete = 0 and receipt_id =
+		#{receiptId}
+		group by rec_id
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.RecReceiptRel">
+		INSERT INTO
+		tb_fi_rec_receipt_rel (
+		rec_id,
+		receipt_id,
+		write_off_amount,
+		creator,
+		creator_id,
+		create_at,
+		currency_type,
+		fund_used
+		)
+		VALUES
+		(
+		#{recId},
+		#{receiptId},
+		#{writeOffAmount},
+		#{creator},
+		#{creatorId},
+		#{createAt},
+		#{currencyType},
+		#{fundUsed}
+		)
+	</insert>
+
+	<!-- 修改金额 -->
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.RecReceiptRel">
+		UPDATE
+		tb_fi_rec_receipt_rel
+		<set>
+			<if test="writeOffAmount != null">
+				write_off_amount = #{writeOffAmount},
+			</if>
+			<if test="fundUsed != null">
+				fund_used = #{fundUsed},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 解除关系 -->
+	<update id="deleteById" parameterType="int">
+		UPDATE
+		tb_fi_rec_receipt_rel
+		SET
+		is_delete =1
+		WHERE id =
+		#{id}
+	</update>
+
+	<select id="getRecReceiptRelByReceiptId" parameterType="java.lang.Integer"
+		resultMap="recReceiptRelResultMap">
+		select
+		<include refid="recrel_column_list" />
+		FROM tb_fi_rec_receipt_rel r
+		where r.is_delete = 0
+		and r.receipt_id =
+		#{receiptId}
+	</select>
+
+	<select id="getFifoRecReceiptRelByRecId" resultMap="recReceiptRelResultMap">
+		select distinct
+		<include refid="recrel_column_list" />
+		FROM tb_fi_rec_receipt_rel r
+		INNER JOIN tb_fi_bank_receipt tfbr
+		ON
+		r.receipt_id = tfbr.id
+		where
+		r.is_delete = 0
+		and r.rec_id = #{recId}
+		AND
+		tfbr.is_delete = 0
+		AND tfbr.state = 3
+		AND
+		(tfbr.receipt_type = 1
+		OR
+		tfbr.receipt_type = 3
+		OR tfbr.receipt_type = 6
+		)
+		<if test="isVirtualReceipt != null">
+			AND tfbr.receipt_type = 6
+		</if>
+		order by r.id asc
+	</select>
+
+	<select id="getRefreshFundUsedList" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.common.dto.resp.RefreshFundUsedResDto">
+		SELECT DISTINCT tf.id AS id, tf.fee_no AS billNo, tfbr.receipt_type AS
+		receiptType, '1' AS billSource
+		FROM tb_fee tf
+		INNER JOIN tb_fi_rec_line
+		tfrl
+		ON tf.id = tfrl.fee_id
+		INNER
+		JOIN tb_fi_rec_receipt_rel tfrrr
+		ON
+		tfrl.rec_id = tfrrr.rec_id
+		INNER
+		JOIN tb_fi_bank_receipt tfbr
+		ON tfbr.id
+		= tfrrr.receipt_id
+		WHERE
+		tf.pay_fee_type = 1
+		AND tf.state = 3
+		AND
+		tf.is_delete = 0
+		AND
+		tfrl.bill_type = 1
+		AND tfrrr.is_delete = 0
+		AND
+		tfbr.is_delete = 0
+		AND tfbr.state = 3
+		AND
+		(tfbr.receipt_type = 1
+		OR
+		tfbr.receipt_type = 3
+		OR tfbr.receipt_type = 6
+		)
+		<if test="isVirtualReceipt != null">
+			AND tfbr.receipt_type = 6
+		</if>
+		AND (tfrrr.fund_used is null or tfrrr.fund_used = 0)
+
+		UNION ALL
+
+		SELECT
+		DISTINCT tbos.id AS id, tbos.bill_no AS billNo, tfbr.receipt_type AS
+		receiptType, '2' AS bill_source
+		FROM tb_bill_out_store tbos
+		INNER JOIN
+		tb_fi_rec_line tfrl
+		ON tbos.id =
+		tfrl.out_store_id
+		INNER JOIN
+		tb_fi_rec_receipt_rel tfrrr
+		ON tfrl.rec_id
+		= tfrrr.rec_id
+		INNER JOIN
+		tb_fi_bank_receipt tfbr
+		ON tfbr.id =
+		tfrrr.receipt_id
+		WHERE
+		tbos.is_delete = 0
+		AND tbos.STATUS = 5
+		AND
+		tfrl.bill_type = 3
+		AND
+		tfrrr.is_delete = 0
+		AND tfbr.is_delete = 0
+		AND tfbr.state = 3
+		AND
+		(tfbr.receipt_type = 1
+		OR tfbr.receipt_type = 3
+		OR tfbr.receipt_type = 6
+		)
+		<if test="isVirtualReceipt != null">
+			AND tfbr.receipt_type = 6
+		</if>
+		AND (tfrrr.fund_used is null or tfrrr.fund_used = 0)
+
+	</select>
+
+	<select id="queryFundUsedByReceiptId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(IFNULL(fund_used, 0))
+		fundUsed
+		from
+		tb_fi_rec_receipt_rel
+		where is_delete = 0
+		and receipt_id = #{receiptId}
+	</select>
+
+	<select id="queryFundUsedByReceiptNo" parameterType="java.lang.String"
+		resultType="java.math.BigDecimal">
+		select sum(IFNULL(tfrrr.fund_used,
+		0)) fundUsed
+		from
+		tb_fi_rec_receipt_rel tfrrr
+		inner join tb_fi_bank_receipt tfbr
+		on
+		tfbr.id = tfrrr.receipt_id
+		where tfrrr.is_delete = 0
+		and tfbr.receipt_no
+		= #{receiptNo}
+	</select>
+
+	<select id="queryPayAmountByBankReceiptId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select
+		sum(IFNULL(tbos.pay_amount, 0)) payAmount
+		from
+		tb_bill_out_store tbos
+		INNER JOIN tb_fi_rec_line tfrl
+		ON
+		tfrl.out_store_id = tbos.id
+		INNER join tb_fi_rec_receipt_rel tfrrr
+		on
+		tfrrr.rec_id = tfrl.rec_id
+		where tbos.is_delete = 0
+		and tfrrr.is_delete
+		= 0
+		and tfrrr.receipt_id = #{receiptId}
+	</select>
+
+	<select id="queryBillOutStoreBillNosByBankReceiptNo"
+		parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT DISTINCT
+		tbos.bill_no AS billNoList
+		FROM
+		tb_bill_out_store tbos
+		INNER JOIN
+		tb_fi_rec_line tfrl
+		ON tfrl.out_store_id = tbos.id
+		INNER JOIN
+		tb_fi_rec_receipt_rel tfrrr
+		ON tfrrr.rec_id = tfrl.rec_id
+		INNER JOIN
+		tb_fi_bank_receipt tfbr
+		ON tfbr.id = tfrrr.receipt_id
+		WHERE
+		tbos.is_delete = 0
+		AND tfrrr.is_delete = 0
+		AND tfrrr.receipt_no =
+		#{bankReceiptNo}
+	</select>
+
+	<select id="queryCountByBankReceiptId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(1)
+		from
+		tb_fi_rec_receipt_rel
+		where is_delete = 0
+		and receipt_id = #{receiptId}
+	</select>
+
+</mapper>

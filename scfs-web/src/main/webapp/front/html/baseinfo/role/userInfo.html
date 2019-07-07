@@ -1,0 +1,142 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+     <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">角色</li>
+  </ol>
+   </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+        	<div class="box-header">
+        			<ul class="nav nav-tabs">
+	                	<li role="presentation"><a class="tab-item" data-url="html/baseinfo/role/roleEdit.html">基本信息</a></li> 
+	                  	<li role="presentation"><a class="tab-item" id="project"  data-url="html/baseinfo/role/authorityGroupEdit.html">权限组信息</a></li>
+	                  	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/role/authorityInfo.html">权限信息</a></li>
+	                  	<li role="presentation"  class="active"><a class="tab-item" data-url="html/baseinfo/role/userInfo.html">用户信息</a></li>   
+            		</ul>
+                    <form method="post" action="###" class="form-inline" id="searchForm">
+                        <div class="form-group-sm">
+                            <div class="search-item">
+                                <label class="control-label">用户名：</label> 
+								<input type="text" class="form-control" id="userName" name="userName">
+                            </div>
+                            <div class="search-item">
+                                <label class="control-label ml10">中文名：</label>
+								<input type="text" class="form-control" id="chineseName" name="chineseName">
+                            </div>
+                            <div class="search-item">
+                                <label class="control-label ml10">英文名：</label>
+                         		<input type="text" class="form-control" id="englishName" name="englishName">
+                            </div>
+                            <div class="search-item">
+                         		 <label class="control-label">工号：</label>
+                                <input type="text" class="form-control" id="employeeNumber" name="employeeNumber">
+                            </div>
+                            <div class="search-item">
+                                <label class="control-label ml10">手 机：</label>
+                                <input type="text" class="form-control" id="mobilePhone" name="mobilePhone">
+                            </div>
+                            <div class="search-item">
+                                <label class="control-label ml10">状态：</label> 
+									<select class="form-control js-select" data-url="USERSTS" id="status"  name="status"> </select>
+                            </div>
+                            <div class="search-item">
+								<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            </div> 
+                        </div>
+                    </form>
+             </div>
+                <!-- /.box-header -->
+            <div class="box-body">
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table id="js_dataTable" data-url="userRole/query">
+                  
+               	  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/baseinfo/role/rolesearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+        </div>
+  </section>
+</div>
+ 
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '工号',
+	     field: 'employeeNumber',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '用户名',
+	     field: 'userName',
+	     width: 75,
+	     align: 'center'
+	 }, {
+	     title: '中文名',
+	     field: 'chineseName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '英文名',
+	     field: 'englishName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '手机',
+	     field: 'mobilePhone',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '邮箱',
+	     field: 'email',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '用户类别',
+	     field: 'userPropertyValue',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'status',
+	     width: 100,
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {roleId: options.param.id});
+  };
+  
+  $("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			roleId : options.param.id
+		});
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	}) 
+
+GLOBAL.goBack();
+</script>

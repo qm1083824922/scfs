@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceOverseasFeeDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceOverseasFee">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="overseas_id" property="overseasId" jdbcType="INTEGER" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+
+	<resultMap type="com.scfs.domain.invoice.entity.InvoiceOverseasFee"
+		id="ModoleResultMap" extends="BaseResultMap">
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="fee_no" property="feeNo" jdbcType="VARCHAR" />
+		<result column="fee_type" property="feeType" jdbcType="TINYINT" />
+		<result column="rec_date" property="recDate" jdbcType="DATE" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="blance" property="blanceInvoiceAmount"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		overseas_id,
+		fee_id,
+		invoice_amount,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasFeeReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		o.id,
+		o.overseas_id,
+		o.fee_id,
+		o.invoice_amount,
+		o.creator_id,
+		o.creator,
+		o.create_at,
+		o.is_delete,
+		f.project_id,
+		f.fee_no,
+		f.fee_type,
+		f.rec_date,
+		f.currency_type,
+		IFNULL(f.rec_amount,0)-IFNULL(f.accept_invoice_amount,0)
+		blance
+		FROM
+		tb_invoice_overseas_fee o
+		LEFT JOIN tb_fee f ON o.fee_id =
+		f.id
+		WHERE
+		o.is_delete=0
+		<if test="overseasId != null">
+			and o.overseas_id = #{overseasId}
+		</if>
+		order by o.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="ModoleResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		o.id,
+		o.overseas_id,
+		o.fee_id,
+		o.invoice_amount,
+		o.creator_id,
+		o.creator,
+		o.create_at,
+		o.is_delete,
+		f.project_id,
+		f.fee_no,
+		f.fee_type,
+		f.rec_date,
+		f.currency_type,
+		IFNULL(f.rec_amount,0)-IFNULL(f.accept_invoice_amount,0) blance
+		FROM
+		tb_invoice_overseas_fee o
+		LEFT JOIN tb_fee f ON o.fee_id =
+		f.id
+		where
+		o.id
+		=#{id,jdbcType=INTEGER}
+	</select>
+
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceOverseasFee"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_invoice_overseas_fee
+		(
+		overseas_id,
+		fee_id,
+		invoice_amount,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		values
+		(
+		#{overseasId,jdbcType=INTEGER},
+		#{feeId,jdbcType=INTEGER},
+		#{invoiceAmount,jdbcType=DECIMAL},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceOverseasFee">
+		update tb_invoice_overseas_fee
+		<set>
+			id = #{id}
+			<if test="invoiceAmount != null">
+				,invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

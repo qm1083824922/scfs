@@ -1,0 +1,290 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">铺货预算对账单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                        </div>
+                        <div class="search-item">
+                              <label class="control-label ml10">供应商：</label>
+                              <select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId" ></select>
+                        </div>
+                        <div class="search-item">
+                              <label class="control-label ml10">经营单位：</label>
+                              <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId" ></select>
+                        </div>
+                    	<div class="search-item">    
+                            <label class="control-label">代销订单编号：</label>
+							<input type="text" class="form-control" id="orderNo" name="orderNo">
+						</div>
+                        <div class="search-item">
+                            <label class="control-label">代销订单附属编号：</label> 
+                            <input type="text" class="form-control" id="appendNo" name="appendNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">订单日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startOrderDate" value="" name="startOrderDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endOrderDate" value="" name="endOrderDate">
+						</div>
+						<div class="search-item">    
+                            <label class="control-label ml10">对账日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startPayCreateDate" value="" name="startPayCreateDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endPayCreateDate" value="" name="endPayCreateDate">
+						</div>
+						<div class="search-item">    
+                            <label class="control-label ml10">结算日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="payCreateDate" value="" name="payCreateDate">
+                        <div class="search-item">	
+                            <label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/distributionBudgetBillsReport/print" id="multPrint">合并打印</button> 
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="distributionBudgetBillsReport/query">
+                
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+var date=new Date();
+var time = date.Format("yyyy-MM-dd");
+var beforTime=new Date((+date)-7*24*3600*1000).Format("yyyy-MM-dd");
+
+document.getElementById("startPayCreateDate").value = beforTime;
+document.getElementById("endPayCreateDate").value = time;
+document.getElementById("payCreateDate").value = time;
+
+window.operateEvents = {
+    'click .print': function(e, value, row, index){
+		var orderNos = row.orderNo;
+		var beforTime = $("#startPayCreateDate").val();
+		var endTime = $("#endPayCreateDate").val();
+		window.open("html/report/distributionBudget/billsBudgetReportPrint.html?orderNos="+orderNos+"&time="+endTime+"&beforTime="+beforTime+"&payCreateDate="+row.payCreateTime);
+    }
+    
+};
+/*数据表格*/
+var tabCols = [
+	 {
+           field: 'checkItem',
+           checkbox: true,
+      },{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '项目',
+	     field: 'projectName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '经营单位',
+	     field: 'businessUnitName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '供应商',
+	     field: 'supplierName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '代销订单编号',
+	     field: 'orderNo',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '代销订单附属编号',
+	     field: 'appendNo',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '商品编号',
+	     field: 'number',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '单价',
+	     field: 'goodsPrice',
+	     width: 100,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 } 
+	 }, {
+	     title: '币种',
+	     field: 'currencyName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '销售数量',
+	     field: 'requiredSendNum',
+	     width: 80,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 } 
+	 }, {
+	     title: '销售金额',
+	     field: 'requiredSendAmount',
+	     width: 80,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 }  
+	 }, {
+	     title: '预付比例',
+	     field: 'pledge',
+	     width: 80,
+	     align: 'center'  
+	 }, {
+	     title: '预付日期',
+	     field: 'payTime',
+	     width: 100,
+	     align: 'center' 
+	 }, {
+	     title: '预付金额',
+	     field: 'budgetAmount',
+	     width: 80,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 }  
+	 }, {
+	     title: '结算日期',
+	     field: 'payCreateTime',
+	     width: 100,
+	     align: 'center' 
+	 },{
+	     title: '占用天数',
+	     field: 'occupyDay',
+	     width: 80,
+	     align: 'center' 
+	 },{
+	     title: '服务费',
+	     field: 'discountAmount',
+	     width: 80,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 }  
+	 },{
+	     title: '尾款',
+	     field: 'retainageAmount',
+	     width: 80,
+	     align: 'center',
+		 formatter : function(value , row , index) {
+	 			return value==null ? "": value.toThounds();
+	 	 } 
+	  }, {
+	     title: '操作',
+	     field: 'opertaList',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents
+	 }
+];
+
+options.initPage = function() {
+	GLOBAL.initOptionsParam('id,cid,hip');
+	var option = {
+		onLoadSuccess : function(data) {
+			if(data.options.totalStr != null){
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+			}
+		}
+	}
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null , option);
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})  
+
+$("#multPrint").click(function() {
+		var orderNos = [];
+		var isValid = true;
+		var payCreateTime=null;
+		var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+		if (selectedRows.length == 0) {
+			layer.msg("请选择");
+			isValid = false;
+		} else {
+			for (var i = 0; i < selectedRows.length; i++) {
+				if(i+1 < selectedRows.length){
+					/* if(selectedRows[i].projectId != selectedRows[i+1].projectId){
+						layer.msg("不同项目不能合并！");
+						isValid = false;
+					}
+					if(selectedRows[i].businessUnitId != selectedRows[i+1].businessUnitId){
+						layer.msg("不同经营单位不能合并！");
+						isValid = false;
+					} */
+					if(selectedRows[i].supplierId != selectedRows[i+1].supplierId){
+						layer.msg("不同供应商不能合并！");
+						isValid = false;
+					}
+					if(selectedRows[i].currencyId != selectedRows[i+1].currencyId){
+						layer.msg("不同币种不能合并！");
+						isValid = false;
+					}
+					/* if(selectedRows[i].payCreateTime != selectedRows[i+1].payCreateTime){
+						layer.msg("不同结算日期不能合并！");
+						isValid = false;
+					} */
+				}
+				if(isValid){
+					orderNos.push(selectedRows[i].orderNo);
+					payCreateTime=selectedRows[i].payCreateTime;
+				}
+			}
+		}
+		if(isValid){
+			$("#btnSearch").click();
+			var beforTime = $("#startPayCreateDate").val();
+			var endTime = $("#endPayCreateDate").val();
+			window.open("html/report/distributionBudget/billsBudgetReportPrint.html?orderNos="+orderNos+"&time="+endTime+"&beforTime="+beforTime+"&payCreateDate="+payCreateTime);
+		}
+	})
+	
+</script>

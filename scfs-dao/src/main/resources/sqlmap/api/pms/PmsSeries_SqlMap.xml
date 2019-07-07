@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsSeriesDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsSeries">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="invoke_time" jdbcType="TIMESTAMP" property="invokeTime" />
+		<result column="series_no" jdbcType="VARCHAR" property="seriesNo" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, type, invoke_time, series_no, message, create_at,
+		update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_series
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_pms_series
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsSeries"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pms_series (id,
+		type, invoke_time, series_no,
+		message, create_at, update_at)
+		values
+		(#{id,jdbcType=INTEGER}, #{type,jdbcType=TINYINT},
+		#{invokeTime,jdbcType=TIMESTAMP}, #{seriesNo,jdbcType=VARCHAR},
+		#{message,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.entity.PmsSeries">
+		update tb_pms_series
+		<set>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test="invokeTime != null">
+				invoke_time = #{invokeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="seriesNo != null">
+				series_no = #{seriesNo,jdbcType=VARCHAR},
+			</if>
+			<if test="message != null">
+				message = #{message,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultByCon"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto"
+		resultType="com.scfs.domain.api.pms.model.PmsSeriesModel">
+		select pm.id ,pm.type ,pm.invokeTime ,
+		pm.seriesNo
+		,pm.message,pm.createAt ,
+		pm.updateAt , pm.purchaseSn,pm.dealflag
+		from
+		(SELECT se.id id,se.type type,se.invoke_time invokeTime,
+		se.series_no
+		seriesNo,se.message message,se.create_at createAt,
+		se.update_at
+		updateAt, st.purchase_sn purchaseSn,
+		st.deal_flag dealflag
+		FROM
+		tb_pms_series se
+		INNER JOIN
+		tb_pms_store_in st
+		ON se.id =
+		st.pms_series_id
+		where st.flag=0 and
+		st.deal_flag=2
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id
+		UNION ALL
+		SELECT
+		se.id id,se.type type,se.invoke_time
+		invokeTime,
+		se.series_no seriesNo,se.message message,se.create_at
+		createAt,
+		se.update_at updateAt, ou.purchase_sn purchaseSn,
+		ou.deal_flag dealflag
+		FROM
+		tb_pms_series se
+		INNER JOIN tb_pms_store_out
+		ou
+		ON se.id =
+		ou.pms_series_id
+		where ou.flag=0 and ou.deal_flag=2
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id
+		UNION ALL
+		SELECT
+		se.id id,se.type type,se.invoke_time
+		invokeTime,
+		se.series_no seriesNo,se.message message,se.create_at
+		createAt,
+		se.update_at updateAt, pa.pay_sn purchaseSn,
+		pa.deal_flag
+		dealflag
+		FROM
+		tb_pms_series
+		se
+		INNER JOIN tb_pms_pay pa
+		ON se.id =
+		pa.pms_series_id
+		where pa.flag=0
+		and pa.deal_flag=2
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id) pm order by pm.createAt desc
+	</select>
+	<select id="querySuccessResultByCon"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto"
+		resultType="com.scfs.domain.api.pms.model.PmsSeriesModel">
+		select pm.id ,pm.type ,pm.invokeTime ,
+		pm.seriesNo
+		,pm.message,pm.createAt ,
+		pm.updateAt , pm.purchaseSn,pm.dealflag
+		from
+		(SELECT se.id id,se.type type,se.invoke_time invokeTime,
+		se.series_no
+		seriesNo,se.message message,se.create_at createAt,
+		se.update_at
+		updateAt, st.purchase_sn purchaseSn,
+		st.deal_flag dealflag
+		FROM
+		tb_pms_series se
+		INNER JOIN
+		tb_pms_store_in st
+		ON se.id =
+		st.pms_series_id
+		where st.flag=0 and
+		st.deal_flag=3
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id
+		UNION ALL
+		SELECT
+		se.id id,se.type type,se.invoke_time
+		invokeTime,
+		se.series_no seriesNo,se.message message,se.create_at
+		createAt,
+		se.update_at updateAt, ou.purchase_sn purchaseSn,
+		ou.deal_flag dealflag
+		FROM
+		tb_pms_series se
+		INNER JOIN tb_pms_store_out
+		ou
+		ON se.id =
+		ou.pms_series_id
+		where ou.flag=0 and ou.deal_flag =3
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id
+		UNION ALL
+		SELECT
+		se.id id,se.type type,se.invoke_time
+		invokeTime,
+		se.series_no seriesNo,se.message message,se.create_at
+		createAt,
+		se.update_at updateAt, pa.pay_sn purchaseSn,
+		pa.deal_flag
+		dealflag
+		FROM
+		tb_pms_series
+		se
+		INNER JOIN tb_pms_pay pa
+		ON se.id =
+		pa.pms_series_id
+		where pa.flag=0
+		and pa.deal_flag=3
+		<if test="type != null ">
+			AND se.type =#{type}
+		</if>
+		<if test="startTime != null ">
+			<![CDATA[
+					AND se.invoke_time >=#{startTime}
+				]]>
+		</if>
+		<if test="endTime != null ">
+			<![CDATA[
+					AND se.invoke_time <=#{endTime}
+				]]>
+		</if>
+		GROUP BY se.id) pm order by pm.createAt desc
+	</select>
+</mapper>

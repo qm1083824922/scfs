@@ -1,0 +1,223 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li class="active">收票认证</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+	    <div class="box">
+	        <div class="box-header">
+	            <form method="post" action="###" class="form-inline" id="searchForm">
+	                <div class="form-group-sm">
+	                    <div class="search-item">
+	                        <label class="control-label">经营单位：</label> 
+	                        <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnit"  name="businessUnit"> </select>
+	                    </div>
+	                    <div class="search-item">    
+	                        <label class="control-label">项目：</label>
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+						</div>
+	                    <div class="search-item">	
+	                        <label class="control-label ml10">供应商：</label>
+	                        <select class="form-control js-select" data-url="BCS" id="supplierId"  name="supplierId"> </select>
+	                    </div>
+	                    <div class="search-item">    
+	                        <label class="control-label ml10">申请编号：</label>
+	                        <input type="text" class="form-control" id="applyNo" name="applyNo">
+	                    </div>
+	                    <div class="search-item">
+	                        <label class="control-label ml10">发票编号：</label>
+	                        <input type="text" class="form-control" id="invoiceNo" name="invoiceNo">
+	                    </div>
+	                    <div class="search-item">
+	                    	<label class="control-label">票据类型：</label>
+	                        <select class="form-control js-select" data-url="INVOICE_TYPE" id="invoiceType"  name="invoiceType"> </select>
+	                    </div>
+	                    <div class="search-item">   
+	                        <label class="control-label ml10">单据类型：</label>
+	                        <select class="form-control js-select" data-url="DOCUMENT_TYPE" id="billType"  name="billType"> </select> 
+	                        <label class="control-label ml10">是否合计：</label>
+	                        <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+	                        <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+	                        <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button><!-- data-permissionUrl="/template/collect/collect_approve_template.xls" -->
+	                        <button type="button" id="btnImport" data-url="html/invoice/collect/approve/collectApproveImport.html"  class="btn btn-warning btn-sm ml10">收票认证导入</button>   
+	                        <button type="button" id="btnExport" data-url="/collect/excel/collectApprove.xls" data-permissionUrl="/collect/excel/collectApprove.xls" class="btn btn-warning btn-sm ml10">导出excel</button> 
+	                    </div>
+	                </div>
+	            </form>
+	        </div>
+	        <!-- /.box-header -->
+	        <div class="box-body">
+	            <table id="js_dataTable" data-url="invoiceCollect/approve/query">
+	            </table>
+	        </div>
+	        <!-- .box-body -->
+	    </div>
+    </section>
+</div>
+
+<script >
+window.operateEvents = {
+      'click .modify': function(e, value, row, index){
+          options.param.id = row.id;
+          GLOBAL.go("html/invoice/collect/approve/collectApproveEdit.html");
+      }
+  };
+function operateFormatter(value, row, index) {
+	    return [
+	            '<a class="modify" href="javascript:void(0)">',
+	            '<span class="btn btn-primary btn-sm" data-permissionUrl="/invoiceCollect/edit">认证</span>',
+	            '</a>  '
+	        ].join('');
+	}
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '申请编号',
+	     field: 'applyNo',
+	     width: 92,
+	     align: 'center'
+	 }, {
+	     title: '经营单位',
+	     field: 'businessUnitName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '供应商',
+	     field: 'supplierName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '票据类型',
+	     field: 'invoiceTypeName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '单据类别',
+	     field: 'billTypeName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '发票号',
+	     field: 'invoiceNo',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '发票日期',
+	     field: 'invoiceDate',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '发票金额',
+	     field: 'invoiceAmount',
+	     width: 80,
+	     align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '已认证金额',
+	     field: 'approveAmount',
+	     width: 80,
+	     align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '未认证金额',
+	     field: 'unApproveAmount',
+	     width: 80,
+	     align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 },{
+	     title: '票据备注',
+	     field: 'invoiceRemark',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '创建人',
+	     field: 'creator',
+	     width: 80,
+	     align: 'center'
+	  }, {
+		 title: '创建时间',
+		 field: 'createAt',
+		 width: 80,
+		 align: 'center'
+	  },{
+		     title: '状态',
+		     field: 'stateName',
+		     width: 100,
+		     align: 'center'
+	   }, {
+         title: '操作',
+         field: 'opertaList2',
+         width: 60,
+         align: 'center',
+         events: operateEvents,
+         formatter: operateFormatter
+	 }
+];
+
+options.initPage = function() {
+	GLOBAL.initOptionsParam('id,cid,hip');
+	var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			},
+			onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            }
+		}
+	
+   GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+   //还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable')); 
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})   
+
+function getCondition() {
+	return "?businessUnit=" + $("#businessUnit").val() 
+	+ "&projectId=" + $("#projectId").val()
+	+ "&supplierId=" + $("#supplierId").val()
+	+ "&applyNo=" + $("#applyNo").val()
+	+ "&invoiceNo=" + $("#invoiceNo").val()
+	+ "&invoiceType=" + $("#invoiceType").val()
+	+ "&billType=" + $("#billType").val();
+}
+
+$("#btnExport").click(function() {
+	var url = "collect/excel/collectApprove.xls";
+	url = url + getCondition();
+	location.href = GLOBAL.host + url;
+})
+$("#btnImport").click(function() {
+	   var url = $(this).data("url");
+	   GLOBAL.go(url, options.param);
+})
+</script>

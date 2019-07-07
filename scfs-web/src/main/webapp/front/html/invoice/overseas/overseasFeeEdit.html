@@ -1,0 +1,162 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+	          <li>当前位置</li>
+	          <li>发票</li>
+	          <li>境外开票</li>
+	          <li class="active">编辑</li>
+	      </ol>
+     </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/overseas/overseasInfoEdit.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/overseas/overseasFeeEdit.html">费用信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/overseas/attachment.html">附件</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="invoiceOverseasFee/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/invoiceOverseasFee/deleteAll" id="multDel">批量删除</button>
+					<button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceOverseasFee/add" data-url="html/invoice/overseas/overseasFeeEditAdd.html" id="add">添加</button>
+					<button type="button" data-url="html/invoice/overseas/overseasInfoSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	window.operateEvents = {
+		'click .modify' : function(e, value, row, index) {
+			options.param.overseasFee = row.id;
+			GLOBAL.go("html/invoice/overseas/overseasFeeEditModify.html");
+		}
+	};
+	function operateFormatter(value, row, index) {
+   	    return [
+   	            '<a class="modify" href="javascript:void(0)">',
+   	            '<span class="btn btn-primary btn-sm" data-permissionUrl="/invoiceOverseasFee/edit">编辑</span>',
+   	            '</a>  '
+   	        ].join('');
+   	}
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			},
+			{
+				title : '项目',
+				field : 'projectName',
+				width : 120,
+				align : 'center'
+			},
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '费用类型',
+				field : 'feeTypeName',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '费用日期',
+				field : 'recDate',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '可开票金额',
+				field : 'blanceInvoiceAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '币种',
+				field : 'currencyTypeName',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '开票金额',
+				field : 'invoiceAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '操作',
+				field : 'opertaList2',
+				width : 60,
+				align: 'center',
+	            events: operateEvents,
+	            formatter: operateFormatter
+			} ];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			},
+    			onPostBody: function(){
+                    if($(".modify").length){
+                        GLOBAL.permissionBtn($(".modify .btn"));
+                    }
+                }
+    		}
+		options.param.collectId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {overseasId: options.param.id}, false, option);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("invoiceOverseasFee/deleteAll", {
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+
+	GLOBAL.goBack();
+</script>

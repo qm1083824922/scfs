@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.CustomerFollowDao">
+	<resultMap id="CustomerFollowMap" type="com.scfs.domain.base.entity.CustomerFollow">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="customer_id" property="customerId" jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="stage" property="stage" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		customer_id,
+		stage,
+		content,
+		creator,
+		creator_id,
+		create_at,
+		update_at,
+		is_delete
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.CustomerFollow"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_customer_follow(
+		customer_id,
+		stage,
+		content,
+		creator,
+		creator_id,
+		create_at,
+		is_delete
+		)
+		values(
+		#{customerId,jdbcType=BIGINT},
+		#{stage,jdbcType=TINYINT},
+		#{content,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=TINYINT},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+	<!-- 修改数据 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_customer_follow
+		WHERE id = #{id}
+	</delete>
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.CustomerFollow">
+		update tb_customer_follow
+		<set>
+			<if test="customerId != null">
+				customer_id=#{customerId},
+			</if>
+			<if test="stage != null">
+				stage=#{stage},
+			</if>
+			<if test="content != null and content !=''">
+				content=#{content},
+			</if>
+			<if test="isDelete != null">
+				is_delete=#{isDelete},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 获取详情 -->
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="CustomerFollowMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_customer_follow
+		where id=#{id} for update
+	</select>
+	<!-- 获取最新记录 -->
+	<select id="queryEntityByMaxUpdate" parameterType="java.lang.Integer"
+		resultMap="CustomerFollowMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_customer_follow
+		WHERE update_at=(SELECT MAX(update_at) FROM
+		tb_customer_follow WHERE is_delete=0 and customer_id=#{customerId})
+	</select>
+	<!-- 获取not in最新一条记录 -->
+	<select id="queryEntityByNotin" parameterType="com.scfs.domain.base.entity.CustomerFollow"
+		resultMap="CustomerFollowMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM
+		tb_customer_follow
+		WHERE id NOT IN(#{id}) AND is_delete=0 AND
+		customer_id=#{customerId} ORDER BY update_at DESC LIMIT 1
+	</select>
+
+	<!-- 获取数据 -->
+	<select id="queryResultsByCon" resultMap="CustomerFollowMap"
+		parameterType="com.scfs.domain.base.entity.CustomerFollow">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_customer_follow
+		<where>
+			is_delete = 0
+			<if test="customerId != null">
+				and customer_id=#{customerId}
+			</if>
+		</where>
+		order by id desc
+	</select>
+</mapper>

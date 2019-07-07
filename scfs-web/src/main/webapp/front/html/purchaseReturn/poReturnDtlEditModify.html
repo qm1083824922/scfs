@@ -1,0 +1,129 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+	    <ol class="breadcrumb">
+	        <li>当前位置</li>
+	        <li>采购</li>
+	        <li>采购退货单</li>
+	        <li>退货单明细编辑</li>
+	        <li class="active">修改</li>
+	    </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="/poReturn/line/edit">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <input class="form-control js-initform" type="hidden" id="poId" name="poId">
+                    <input class="form-control js-initform" type="hidden" id="tallyNum" name="tallyNum">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>商品编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="goodsNumber"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品名称：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="goodsName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品型号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="goodsType"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品条码：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="goodsBarCode"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>批次：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="batchNo"></label> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>库存状态：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="goodsStatusName"></label> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>可退货数量：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform toThound" id="tallyNum"></label> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退货数量：</b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="returnNum" name="returnNum">
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td class="text-right"><b>退货单价：</b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="returnPrice" name="returnPrice">
+                            </td>
+                        </tr>
+                    </table>
+                </div> 
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-url="poReturn/line/update" data-permissionUrl="/poReturn/line/update" class="btn btn-primary btn-sm">
+                       		 保存
+                    </button>
+                    <button type="button" data-url="html/purchaseReturn/poReturnDtlEdit.html" class="btn btn-default btn-sm js-back">返回
+                    </button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    options.initPage = function () {
+        GLOBAL.getEditData($("#form1"), options.param.lineId);
+        $("#form1").validate({
+            rules: {
+            	returnNum: {
+                    required: true,
+                    number: true,
+                    max:0
+                },
+                returnPrice: {
+                    number: true,
+                    required: true,
+                    min:0
+                }
+            },
+            submitHandler: function(){ 
+            	var tallyNum  = $("#tallyNum").html().trim()*1;   
+            	var saveUrl = $("#save").data("url"); 
+                var gNum = $("#returnNum").val()*1;  
+                GLOBAL.ajax("poReturn/line/update", $("#form1").serializeObject(),
+                  function(e) {
+                      if (e.success) {
+                          layer.msg("保存成功！", {time:1500}, function(){
+//                            options.param.id = options.param.cid;
+                              GLOBAL.go("html/purchaseReturn/poReturnDtlEdit.html");
+                          });
+                      } else {
+                          layer.msg(e.msg);
+                      }
+              },false);
+            }
+        });
+    }; 
+    
+    GLOBAL.goBack(function () { 
+        options.param.lineId=null;
+    });
+
+</script>
+

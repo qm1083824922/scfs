@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>待我审核的单据__瑞翰供应链</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet" />
+<link href="../../css/public.css" rel="stylesheet" />
+<link href="../../css/mobile.css" rel="stylesheet" />
+<link href="../../css/msg.css" rel="stylesheet" />
+<style>
+[data-dpr="1"] .audit-cash {
+	font-size: 24px;
+}
+
+[data-dpr="2"] .audit-cash {
+	font-size: 36px;
+}
+
+[data-dpr="3"] .audit-cash {
+	font-size: 48px;
+}
+
+[data-dpr="4"] .audit-cash {
+	font-size: 64px;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<div class="search-box">
+			<div class="keyword-box">
+				<i class="icon btn-search"></i> <input type="text"
+					class="inputKeyWrods">
+			</div>
+			<div class="btn-audit-box">
+				<button class="btn-batch-audit">批量审核</button>
+			</div>
+		</div>
+		<div class="audit-list-info">
+			<span>共<span class="total">3</span>条，当前选中<span
+				class="select-count">0</span>条
+			</span> <a href="javascript:" class="select-all"></a>
+		</div>
+		<div class="audit-list">
+			<ul>
+				<li><span class="checkbox-label"> <input type="checkbox"
+						class="checkbox-audit-item" value="0">
+				</span>
+					<div class="detail-box" data-id="0">
+						<p class="detail-item">
+							<label class="detail-label">付款单：</label> <span
+								class="detail-value">PY17041022221</span> <span
+								class="detail-date">2017-04-15</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">项目：</label> <span
+								class="detail-value">3011B.05-左右</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">申请：</label> <span
+								class="detail-value">李伟龙 2天</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label money"> <img
+								src="../../images/money.bmp" alt="">
+							</label> <span class="detail-value money-val">￥60000.00</span>
+						</p>
+					</div></li>
+				<li><span class="checkbox-label"> <input type="checkbox"
+						class="checkbox-audit-item" value="0">
+				</span>
+					<div class="detail-box" data-id="1">
+						<p class="detail-item">
+							<label class="detail-label">付款单：</label> <span
+								class="detail-value">PY17041022221</span> <span
+								class="detail-date">2017-04-15</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">项目：</label> <span
+								class="detail-value">3011B.05-左右</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">申请：</label> <span
+								class="detail-value">李伟龙 2天</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label money"> <img
+								src="../../images/money.bmp" alt="">
+							</label> <span class="detail-value money-val">￥60000.00</span>
+						</p>
+					</div></li>
+				<li><span class="checkbox-label"> <input type="checkbox"
+						class="checkbox-audit-item" value="0">
+				</span>
+					<div class="detail-box" data-id="2">
+						<p class="detail-item">
+							<label class="detail-label">付款单：</label> <span
+								class="detail-value">PY17041022221</span> <span
+								class="detail-date">2017-04-15</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">项目：</label> <span
+								class="detail-value">3011B.05-左右</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">申请：</label> <span
+								class="detail-value">李伟龙 2天</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label money"> <img
+								src="../../images/money.bmp" alt="">
+							</label> <span class="detail-value money-val">￥60000.00</span>
+						</p>
+					</div></li>
+				<li><span class="checkbox-label"> <input type="checkbox"
+						class="checkbox-audit-item" value="0">
+				</span>
+					<div class="detail-box" data-id="3">
+						<p class="detail-item">
+							<label class="detail-label">付款单：</label> <span
+								class="detail-value">PY17041022221</span> <span
+								class="detail-date">2017-04-15</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">项目：</label> <span
+								class="detail-value">3011B.05-左右</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label">申请：</label> <span
+								class="detail-value">李伟龙 2天</span>
+						</p>
+						<p class="detail-item">
+							<label class="detail-label money"> <img
+								src="../../images/money.bmp" alt="">
+							</label> <span class="detail-value money-val">￥60000.00</span>
+						</p>
+					</div></li>
+			</ul>
+		</div>
+		<img src="../../images/loading.gif" class="loading">
+	</div>
+
+	<script src="../../../js/lib/jquery-1.11.0.min.js"
+		type="text/javascript"></script>
+	<!--common js-->
+	<script src="../../js/common.js"></script>
+	<script>
+
+    $(function() {
+        var $table = $("#js_dataTable");
+        var url = $table.data("url");
+        var pageNumber = 0;
+        var rowIdx = 0;
+        var perPage = 15;
+
+        var winH = $(window).height();
+        var $box = $(".wrapper");
+        var $body = $("body");
+        var isLock = true;
+
+        //初始加载第一页数据
+        //getData(pageNumber)
+
+        window.onscroll = function(){
+            var scrollTop = $body.scrollTop();
+            if(scrollTop + winH >= $box.height() - 20 && isLock){
+                isLock = false;
+                getData(pageNumber);
+            }
+        }
+
+        function getData(){
+            $(".loading").show();
+            GLOBAL.ajax(url, {per_page: perPage, page: pageNumber}, function(e) {
+                $(".loading").hide();
+                if (e.success) {
+                    var auditList = e.items;
+                    if (auditList) {
+                        if(auditList.length){
+                            var tabStr = "";
+                            for (var i = 0; i < auditList.length; i++) {
+                                var trBg = i % 2 == 0 ? "" : "#ddd";
+                                var poType = auditList[i].poType;
+                                var state = auditList[i].state;
+                                var id = auditList[i].id;
+                                var poId = auditList[i].poId;
+                                var auditUrl = "audit_" + poType + "_" + state + ".html?id="+id+"&poId="+poId;
+                                rowIdx++;
+                                tabStr += '<tbody><tr style="background-color:'+trBg+'"><td rowspan="7" class="column-index">'+(rowIdx)+'</td></tr><tr style="background-color:'+trBg+'"><td><b>类型：</b></td><td>' + auditList[i].poTypeName + '</td><td colspan="2" style="text-align:right;padding-right:.2rem;"><a href="'+auditUrl+'">审核&gt;&gt;</a></td></tr><tr style="background-color:'+trBg+'"></tr><tr style="background-color:'+trBg+'"><td><b>项目:</b></td><td colspan="2">' + auditList[i].projectName + '</td><tr><tr style="background-color:'+trBg+'"><td><b>金额:</b></td><td colspan="2" class="audit-cash">' + auditList[i].amount + '</td><tr style="background-color:'+trBg+'"><td><b>申请：</b></td><td colspan="2">' + auditList[i].proposer + ' &nbsp;' + auditList[i].proposerDayTime + '</td></tr><tr class="empty-tr"><td colspan="5"></td></tr></tbody>';
+                            }
+                            $('#js_dataTable').append(tabStr);
+                            pageNumber += perPage;
+                            isLock = true;
+                        }else{
+                            isLock = false;
+                        }
+                        
+                    }
+                   
+                }
+            });
+        }
+
+        $(".select-all").click(function(){
+            if($(this).hasClass("checked")){
+                $(".checkbox-label").removeClass("checked");
+                $(".checkbox-audit-item").prop("checked", false);
+                $(this).removeClass("checked");
+            }else{
+                $(".checkbox-label").addClass("checked");
+                $(".checkbox-audit-item").prop("checked", true);
+                 $(this).addClass("checked");
+            }
+            var total = $(".checkbox-audit-item:checked").length;
+            $(".select-count").text(total);
+        })
+        $(".checkbox-label").click(function(){
+            var opt = $(this).hasClass("checked") ? "removeClass" : "addClass";
+            $(this)[opt]("checked");
+            $(this).find("input[type='checkbox']").prop("checked", $(this).hasClass("checked"));
+            var total = $(".checkbox-audit-item:checked").length;
+            $(".select-count").text(total);
+            if(total === $(".checkbox-audit-item").length){
+                $(".select-all").addClass("checked")
+            }else{
+                $(".select-all").removeClass("checked")
+            }
+        })
+
+        $(".btn-search").click(function(){
+            var keyWords = $(".inputKeyWrods").val();
+            if(keyWords == ""){
+                $(".inputKeyWrods").focus();
+            }else{
+                GLOBAL.ajax("", {keyWords: keyWords}, function(e){
+                    var items = e.items;
+                    alert(items);
+                })
+            }
+        });
+
+        $(".detail-box").click(function(){
+            var id = $(this).data('id');
+            //location.href = "audit_"+ id + "_.html";
+        })
+
+        $(".btn-batch-audit").click(function(){
+            var $checked = $(".checkbox-audit-item:checked");
+            if($checked.length){
+                var ids = "", temp = [];
+                $checked.each(function(){
+                    temp.push($(this).val());
+                });
+                ids = temp.join(",");
+                GLOBAL.ajax("", {ids: ids}, function(e){
+
+                })
+            }else{
+                MOBILE.msg("请先选择单据");
+            }
+        })
+
+    })
+
+    </script>
+</body>
+
+</html>

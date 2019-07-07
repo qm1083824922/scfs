@@ -1,0 +1,23 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>应收管理</li>
+			<li class="active">编辑</li>
+		</ol>
+	</section>
+	<div class="box-body">
+		<table id="js_dataTable" data-url="recLine/query">
+		</table>
+	</div>
+	<div class="box-footer text-center" id="btn_div">
+		<!--<button id="add" class="btn btn-primary btn-sm ">添加</button>-->
+		<button type="button" id="delete" class="btn btn-primary btn-sm"
+			data-permissionUrl="/recLine/batch/delete">删除</button>
+		<button type="button" id="update" class="btn btn-primary btn-sm"
+			data-permissionUrl="/recLine/batch/update">修改</button>
+		<button data-url="html/fi/receiveManage/receiveSearch.html"
+			class="btn btn-default btn-sm js-back">返回</button>
+	</div>
+</div>
+<script src="../js/fi/receiveManage/receiveEdit.js"></script>

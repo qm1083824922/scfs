@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseUserDao">
+
+	<resultMap id="BaseUserMap" type="com.scfs.domain.base.entity.BaseUser">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="employee_number" property="employeeNumber" jdbcType="VARCHAR" />
+		<id column="user_name" property="userName" jdbcType="VARCHAR" />
+		<id column="password" property="password" jdbcType="VARCHAR" />
+		<id column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
+		<id column="english_name" property="englishName" jdbcType="VARCHAR" />
+		<id column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<id column="email" property="email" jdbcType="VARCHAR" />
+		<id column="status" property="status" jdbcType="TINYINT" />
+		<id column="creator" property="creator" jdbcType="VARCHAR" />
+		<id column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<id column="create_at" property="createAt" jdbcType="DATE" />
+		<id column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<id column="delete_at" property="createAt" jdbcType="DATE" />
+		<id column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<id column="type" property="type" jdbcType="TINYINT" />
+		<id column="creatorId" property="creatorId" jdbcType="BIGINT" />
+		<id column="rtx_code" property="rtxCode" jdbcType="VARCHAR" />
+		<id column="user_property" property="userProperty" jdbcType="TINYINT" />
+		<id column="department_id" property="departmentId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, employee_number, user_name, password, chinese_name,
+		english_name,
+		mobile_phone, email, status, is_delete, type,creatorId,
+		rtx_code,user_property,create_at,creator,department_id
+	</sql>
+	<sql id="userByPermissionGroup">
+		tbu.id, tbu.employee_number, tbu.user_name, tbu.password,
+		tbu.chinese_name,
+		tbu.english_name, tbu.mobile_phone, tbu.email,
+		tbu.status,
+		tbu.is_delete, tbu.type,tbu.creatorId,
+		tbu.rtx_code,tbu.user_property,tbu.create_at,tbu.creator,tbu.department_id
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseUser"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_base_user(
+		employee_number,
+		user_name,
+		password,
+		chinese_name,
+		english_name,
+		mobile_phone,
+		email,
+		status,
+		creator,
+		creatorId,
+		type,
+		rtx_code,
+		user_property,
+		department_id
+		)
+		values(
+		#{employeeNumber,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{chineseName,jdbcType=VARCHAR},
+		#{englishName,jdbcType=VARCHAR},
+		#{mobilePhone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=BIGINT},
+		#{type,jdbcType=TINYINT},
+		#{rtxCode,jdbcType=VARCHAR} ,
+		#{userProperty,jdbcType=TINYINT},
+		#{departmentId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		<set>
+			<if test="employeeNumber != null and employeeNumber != ''">employee_number=#{employeeNumber,jdbcType=VARCHAR},</if>
+			<if test="userName != null and userName != '' ">user_name=#{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">password=#{password,jdbcType=VARCHAR},</if>
+			<if test="chineseName != null">chinese_name=#{chineseName,jdbcType=VARCHAR},</if>
+			<if test="englishName != null">english_name=#{englishName,jdbcType=VARCHAR},</if>
+			<if test="mobilePhone != null">mobile_phone=#{mobilePhone,jdbcType=VARCHAR},</if>
+			<if test="email != null">email=#{email,jdbcType=VARCHAR},</if>
+			<if test="status != null">status=#{status,jdbcType=TINYINT},</if>
+			<if test="creator != null">creator=#{creator,jdbcType=VARCHAR},</if>
+			<if test="creatorId != null">creatorId=#{creatorId,jdbcType=BIGINT},</if>
+			<if test="type != null">type=#{type,jdbcType=TINYINT},</if>
+			<if test="rtxCode != null">rtx_code=#{rtxCode,jdbcType=VARCHAR},</if>
+			<if test="userProperty != null">user_property= #{userProperty,jdbcType=TINYINT},</if>
+			<if test="departmentId != null">department_id= #{departmentId,jdbcType=BIGINT},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<update id="updateInnerUser" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		set status = #{status}
+		where
+		user_name=#{userName,jdbcType=VARCHAR}
+	</update>
+
+	<select id="queryUserByPermissionGroup" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.entity.BaseUser">
+		select
+		<include refid="userByPermissionGroup" />
+		from tb_base_user tbu inner join tb_base_user_roles tbur on tbu.id =
+		tbur.user_id
+		inner join tb_base_role_permission_group tbrpg on
+		tbur.role_id =
+		tbrpg.role_id
+		where
+		tbu.is_delete = 0 and
+		tbur.is_delete =
+		0 and
+		tbrpg.is_delete = 0 and
+		tbrpg.permission_group_id =
+		#{permissionGroupId}
+		order by tbu.create_at desc
+	</select>
+
+	<select id="queryBaseUserList" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.entity.BaseUser">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_user
+		<where>
+			is_delete = 0
+			<if test="employeeNumber != null and employeeNumber !=''">
+				AND employee_number like
+				CONCAT('%',#{employeeNumber},'%')
+			</if>
+			<if test="userName != null and userName !=''">
+				AND user_name like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				AND chinese_name like CONCAT('%',#{chineseName},'%')
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND english_name like CONCAT('%',#{englishName},'%')
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				AND mobile_phone like CONCAT('%',#{mobilePhone},'%')
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="userProperty != null">
+				AND user_property = #{userProperty}
+			</if>
+			<if test="type != null">
+				AND type = #{type}
+			</if>
+		</where>
+		order by create_at desc
+	</select>
+
+	<select id="queryBaseUserByUser" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.entity.BaseUser">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_user
+		<where>
+			is_delete = 0
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="employeeNumber != null and employeeNumber != ''">
+				and employee_number = #{employeeNumber}
+			</if>
+			<if test="userName != null and userName != ''">
+				and user_name = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				and password = #{password}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryBaseUserById" resultMap="BaseUserMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_user
+		where id = #{id} for update
+	</select>
+
+
+	<update id="submit" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		<set>
+			status = 0,
+			<if test="creator != null">creator = #{creator,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+			and status = 3
+		</where>
+	</update>
+
+	<update id="lock" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		<set>
+			status = 1,
+			<if test="creator != null">creator = #{creator,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+			and status = 0
+		</where>
+	</update>
+
+	<update id="unlock" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		<set>
+			status = 0,
+			<if test="creator != null">creator = #{creator,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+			and (status = 1 or status = 2)
+		</where>
+	</update>
+
+	<update id="delete" parameterType="com.scfs.domain.base.entity.BaseUser">
+		update tb_base_user
+		<set>
+			is_delete = 1,
+			delete_at = now(),
+			<if test="deleter != null">deleter = #{deleter,jdbcType=VARCHAR},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+			and is_delete = 0
+		</where>
+	</update>
+
+	<select id="queryAllUser" resultMap="BaseUserMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_user
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_user
+
+	</select>
+	<select id="queryBaseUserListByPorjectId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select
+		<include refid="userByPermissionGroup" />
+		from tb_base_user tbu inner join tb_base_user_project tbup on tbu.id =
+		tbup.user_id
+		<where>
+			tbu.is_delete = 0 AND tbup.is_delete = 0
+			<if test="id != null">
+				AND tbup.project_id = #{id}
+			</if>
+		</where>
+	</select>
+	<select id="queryUndivideUserByPorjectId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select DISTINCT
+		<include refid="userByPermissionGroup" />
+		from tb_base_user tbu LEFT join tb_base_user_project tbup on tbu.id =
+		tbup.user_id
+		<where>
+			tbu.is_delete = 0 AND tbu.status=0
+			AND
+			tbu.id not in(select tbu.id from
+			tb_base_user tbu LEFT join tb_base_user_project tbup on tbu.id =
+			tbup.user_id where tbup.project_id = #{id} AND tbu.status=0 AND
+			tbup.is_delete = 0)
+			<if test="employeeNumber != null and employeeNumber !=''">
+				AND employee_number like
+				CONCAT('%',#{employeeNumber},'%')
+			</if>
+			<if test="userName != null and userName !=''">
+				AND user_name like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				AND chinese_name like CONCAT('%',#{chineseName},'%')
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND english_name like CONCAT('%',#{englishName},'%')
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				AND mobile_phone like CONCAT('%',#{mobilePhone},'%')
+			</if>
+			<if test="projectId != null and projectId != ''">
+				AND tbup.project_id = #{projectId}
+			</if>
+		</where>
+		order by tbu.create_at desc
+	</select>
+	<select id="queryUserListByRoleName" resultMap="BaseUserMap"
+		parameterType="java.lang.String">
+		select
+		bu.id, bu.employee_number, bu.user_name,
+		bu.password, bu.chinese_name,
+		bu.english_name,
+		bu.mobile_phone,
+		bu.email, bu.status, bu.is_delete, bu.type,bu.creatorId,bu.rtx_code
+		from tb_base_user bu INNER JOIN
+		tb_base_user_roles ur ON
+		bu.id=ur.user_id
+		INNER JOIN tb_base_role r on ur.role_id=r.id
+		where
+		ur.is_delete=0 AND r.is_delete=0 AND r.state=2 AND ur.state=1 AND
+		r.name=#{roleName}
+	</select>
+
+
+
+	<select id="queryBaseUserListByRoleId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseUserReqDto">
+		SELECT
+		u.id,
+		u.employee_number,
+		u.user_name,
+		u.password,
+		u.chinese_name,
+		u.english_name,
+		u.mobile_phone,
+		u.email,
+		u.status,
+		u.is_delete,
+		u.type,
+		u.creatorId,
+		u.rtx_code,
+		u.user_property,
+		u.create_at,
+		u.creator,
+		u.department_id
+		FROM
+		tb_base_user u
+		LEFT JOIN tb_base_user_roles r
+		ON u.id
+		= r.user_id
+		WHERE r.role_id = #{roleId}
+		AND u.is_delete = 0 AND
+		r.state=1
+		<if test="employeeNumber != null and employeeNumber !=''">
+			AND u.employee_number like
+			CONCAT('%',#{employeeNumber},'%')
+		</if>
+		<if test="userName != null and userName !=''">
+			AND u.user_name like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="chineseName != null and chineseName != ''">
+			AND u.chinese_name like CONCAT('%',#{chineseName},'%')
+		</if>
+		<if test="englishName != null and englishName != ''">
+			AND u.english_name like CONCAT('%',#{englishName},'%')
+		</if>
+		<if test="mobilePhone != null and mobilePhone != ''">
+			AND u.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+		</if>
+		<if test="status != null">
+			AND u.status = #{status}
+		</if>
+		<if test="type != null">
+			AND u.type = #{type}
+		</if>
+		GROUP BY u.id
+		ORDER BY u.id DESC
+	</select>
+
+	<select id="queryBaseUserListBySubjectId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseUserReqDto">
+		select
+		<include refid="userByPermissionGroup" />
+		,tbus.operater as operater
+		from tb_base_user tbu inner join
+		tb_base_user_subject tbus on tbu.id = tbus.user_id
+		<where>
+			tbu.is_delete = 0 AND tbus.is_delete = 0
+			<if test="employeeNumber != null and employeeNumber !=''">
+				AND tbu.employee_number like
+				CONCAT('%',#{employeeNumber},'%')
+			</if>
+			<if test="userName != null and userName !=''">
+				AND tbu.user_name like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				AND tbu.chinese_name like CONCAT('%',#{chineseName},'%')
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND tbu.english_name like CONCAT('%',#{englishName},'%')
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				AND tbu.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+			</if>
+			<if test="status != null">
+				AND tbu.status = #{status}
+			</if>
+			<if test="subjectId != null">
+				AND tbus.subject_id = #{subjectId}
+			</if>
+		</where>
+		order by tbu.create_at desc
+	</select>
+	<select id="queryUndivideUserBySubjectId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseUserReqDto">
+		select DISTINCT
+		<include refid="userByPermissionGroup" />
+		from tb_base_user tbu LEFT join tb_base_user_subject tbus on tbu.id =
+		tbus.user_id
+		<where>
+			tbu.is_delete = 0
+			AND tbu.status=0
+			AND tbu.id not in(select tbu.id from
+			tb_base_user tbu
+			LEFT join tb_base_user_subject tbus on tbu.id =
+			tbus.user_id where
+			tbus.subject_id = #{subjectId} AND tbu.is_delete =
+			0 AND tbu.status=0
+			AND tbus.is_delete = 0)
+			<if test="employeeNumber != null and employeeNumber !=''">
+				AND tbu.employee_number like
+				CONCAT('%',#{employeeNumber},'%')
+			</if>
+			<if test="userName != null and userName !=''">
+				AND tbu.user_name like CONCAT('%',#{userName},'%')
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				AND tbu.chinese_name like CONCAT('%',#{chineseName},'%')
+			</if>
+			<if test="englishName != null and englishName != ''">
+				AND tbu.english_name like CONCAT('%',#{englishName},'%')
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				AND tbu.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+			</if>
+		</where>
+		order by tbu.create_at desc
+	</select>
+	<!-- 通过部门ID和角色名称查询数据 -->
+	<select id="queryUserListByRoleNameAndDepId" resultMap="BaseUserMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseUserReqDto">
+		select
+		bu.id, bu.employee_number, bu.user_name,
+		bu.password, bu.chinese_name,
+		bu.english_name,
+		bu.mobile_phone,
+		bu.email, bu.status, bu.is_delete, bu.type,bu.creatorId,bu.rtx_code
+		from tb_base_user bu INNER JOIN
+		tb_base_user_roles ur ON
+		bu.id=ur.user_id
+		INNER JOIN tb_base_role r on ur.role_id=r.id
+		where
+		ur.is_delete=0 AND r.is_delete=0 AND r.state=2 AND ur.state=1 AND
+		r.name=#{roleName}
+		AND bu.department_id = #{departmentId}
+
+	</select>
+
+</mapper>

@@ -1,0 +1,199 @@
+<div class="wrapper">
+	 <section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>请款</li>
+			<li class="active">编辑</li>
+		</ol>
+  </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation"><a class="tab-item"data-url="html/pay/request/fundBaseInfoEdit.html">基础信息</a></li>
+						<li role="presentation" class="li-po"><a class="tab-item" data-url="html/pay/request/fundOrderEdit.html">订单信息</a></li>
+						<li role="presentation" class="li-fee"><a class="tab-item" data-url="html/pay/request/fundFeeEdit.html">费用信息</a></li>
+						<li role="presentation" class="li-refund"><a class="tab-item" data-url="html/pay/request/fundRefundEdit.html">退款信息</a></li>
+						<li role="presentation" class="li-advance"><a class="tab-item" data-url="html/pay/request/fundAdvanceEdit.html">预收单信息</a></li>
+						<li role="presentation" class="li-deduction-fee active"><a class="tab-item" data-url="html/pay/request/fundDeductionFeeEdit.html">抵扣费用信息</a></li>
+	                    <li role="presentation" class="li-attachment"><a class="tab-item" data-url="html/pay/request/attachment.html">附件</a></li>
+	                    <li role="presentation" class="li-voucher"><a class="tab-item" data-url="html/pay/request/fundVoucherScan.html">付款凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="payDeductionFeeRela/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/payDeductionFeeRela/deleteAll" id="multDel">批量删除</button>
+					<button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/payDeductionFeeRela/add"  data-url="html/pay/request/fundDeductionFeeEditAdd.html" id="add">添加</button>
+					<button type="button" data-permissionUrl="/payOrder/submit" class="btn btn-default btn-sm" id="poSubmit">提交</button>
+					<button type="button" data-url="html/pay/request/fundSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script src="../../js/pay/payCommon.js"></script> 
+<script>
+	window.operateEvents = {
+		'click .modify' : function(e, value, row, index) {
+			options.param.id = row.id;
+			GLOBAL.go("html/pay/request/fundDeductionFeeEditModify.html");
+		}
+	};
+	function operateFormatter(value, row, index) {
+   	    return [
+   	            '<a class="modify" href="javascript:void(0)">',
+   	            '<span class="btn btn-primary btn-sm" data-permissionUrl="/payDeductionFeeRela/edit">编辑</span>',
+   	            '</a>  '
+   	        ].join('');
+   	}
+	/*数据表格*/
+	var tabCols = [
+		{
+			field : 'checkItem',
+			checkbox : true,
+		},
+		{
+			title : '费用编号',
+			field : 'feeNo',
+			width : 80,
+			align : 'center'
+		},
+		{
+			title : '费用类型',
+			field : 'feeTypeName',
+			width : 210,
+			align : 'center'
+		},
+		{
+			title : '费用日期',
+			field : 'payDate',
+			width : 100,
+			align : 'center'
+		},
+		{
+			title : '费用金额',
+			field : 'expPayAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '已收票金额',
+			field : 'acceptInvoiceAmount',
+			width : 80,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '已付款金额',
+			field : 'oldPayAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '本次付款金额',
+			field : 'payAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '操作',
+			field : 'opertaList2',
+			width : 60,
+			align: 'center',
+           events: operateEvents,
+           formatter: operateFormatter
+		} ];
+
+	options.initPage = function() {
+		var payType = options.param.payType;
+		var stateInt = options.param.stateInt;
+		showTab(payType, stateInt);
+		
+		var option = {
+   			onLoadSuccess : function(data) {
+   				if(data.options.totalStr != null){
+   					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+   				}
+   			},
+   			onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            }
+   		};
+		options.param.payId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {payId: options.param.id}, false, option);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("payDeductionFeeRela/deleteAll", {
+					payId  : options.param.id,
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+
+	$("#poSubmit").click(function(){
+    	layer.confirm('确定要提交吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	         GLOBAL.ajax("payOrder/submit", {id: options.param.id}, function(e) {
+                if (e.success) {
+                	layer.msg("提交成功！", {
+                     	icon : 1,
+         				time : 1500,
+                     }, function() {
+         				GLOBAL.go("html/pay/request/fundSearch.html");
+         			})
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+	    }, function() {});
+    })
+
+	GLOBAL.goBack();
+</script>

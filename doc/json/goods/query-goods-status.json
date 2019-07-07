@@ -1,0 +1,31 @@
+//请求参数 key: GOODS_STATUS
+{
+  "msg": null,
+  "redirectURL": null,
+  "successMsg": null,
+  "items": [{
+    "code": "1",
+    "value": "待提交"
+  }, {
+    "code": "3",
+    "value": "已锁定"
+  }, {
+    "code": "2",
+    "value": "已完成"
+  }],
+  "total": 0,
+  "current_page": 0,
+  "per_page": 0,
+  "last_page": 0,
+  "totalAmount": null,
+  "totalNum": null,
+  "feeTotalAmount": null,
+  "exRateTotalAmount": null,
+  "rateTotalAmount": null,
+  "currency": "CNY",
+  "totalStr": null,
+  "footer": null,
+  "permission": true,
+  "login": false,
+  "success": true
+}

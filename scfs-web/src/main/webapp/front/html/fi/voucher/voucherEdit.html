@@ -1,0 +1,153 @@
+<style>
+	.custom-table tr td {
+		padding:8px;
+		width:24%;
+	}
+	.form-inline .form-control.vo-field{
+		width:90%;
+	}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>凭证</li>
+			<li class="active">修改凭证</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<form method="post" class="form-inline" id="voucherForm">
+			<div class="box">
+				<div class="box-header">
+					<div class="row">
+						<div class="col-md-2"></div>
+		                <div class="col-md-8">
+			            	<div class="form-group-sm" id="voucherDiv">
+			            		<label class="control-label" style="display:none">凭证id：</label> 
+								<input type="text" class="form-control" style="display:none" name="id" id="id">
+			            		<table width="100%" class="custom-table">
+		                			<body>
+		                				<tr>
+		                					<td>
+		                						<label class="control-label">帐套：</label> 
+												<select class="form-control js-select" disabled="disabled" 
+													data-url="ACCOUNT_BOOK" id="accountBookId" name="accountBookId"></select>
+		                					</td>
+		                					<td>
+												<label class="control-label ml10">日期：</label>
+												<input type="text" class="form-control js_datePicker" id="voucherDate" name="voucherDate">
+		                					</td>
+		                					<td>
+		                						<label class="control-label ml10">凭证字：</label> 
+												<select class="form-control js-select" data-url="VOUCHER_WORD" id="voucherWord" name="voucherWord"></select>
+		                					</td>
+		                					<td>
+		                						<label class="control-label ml10">附单据数：</label> 
+												<input type="text" class="form-control" id="attachmentNumber" name="attachmentNumber">
+		                					</td>
+		                				</tr>
+		                				<tr>
+		                					<td colspan="4">
+		                						<label class="control-label">凭证摘要：</label> 
+												<input style="width:400px;"type="text" class="form-control" name="voucherSummary" id="voucherSummary">
+		                					</td>
+		                				</tr>
+		                			</body>
+		                		</table>
+							</div>
+						</div>
+						<div class="col-md-2">
+						</div>
+		            </div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-1"></div>
+	                <div class="col-md-10">
+	                    <table class="table table-bordered table-hover no-margin vo-create-table" id="js-lineTable">
+	                    	<thead>
+	                    		<th width="30px"></th>
+	                    		<th></th>
+	                    		<th width="300px"> 摘要 </th>
+	                    		<th width="300px">科目</th>
+	                    		<th width="120px">借方金额</th>
+	                    		<th width="120px">贷方金额</th>
+	                    		<th width="150px">币种</th>
+	                    		<th width="100px">本币借方金额</th>
+	                    		<th width="100px">本币贷方金额</th>
+	                    		<th width="100px">本币币种</th>
+	                    		<th width="50px"></th>
+	                    	</thead>
+	                    	<tbody id="js-lineTbody">
+	                    	</tbody>
+	                     </table>
+	                </div>
+	                <div class="col-md-1"></div>
+	            </div>
+			</div>
+			<div class="row mt40">
+	            	<div class="col-md-3"></div>
+	                <div class="col-md-6">
+	                	<table class="table vo-detail-tab" id="assistTable">
+								<tr>
+									<td class="text-right">
+										<label class="control-label" name="projectLabel">项目：</label> 
+									</td>
+									<td class="text-left"> 
+										<select class="form-control"  id="projectId" name="projectId"></select>
+									</td>
+									<td class="text-right">
+										<label class="control-label ml10" name="custLabel">客户：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="CUSTOMER" id="custId" name="custId"></select>
+									</td>
+									<td class="text-right">
+										<label class="control-label ml10" name="accountLabel">账户：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control"  id="accountId" name="accountId"></select> 
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right">
+										<label class="control-label ml10" name="supplierLabel">供应商：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId"></select>
+									</td>
+									<td class="text-right">
+										<label class="control-label ml10" name="userLabel">人员：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="USER" id="userId" name="userId"></select>
+									</td>
+									<td class="text-right">
+										<label class="control-label ml10" name="taxRateLabel">税率：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="VOUCHER_LINE_TAX_RATE" id="taxRate" name="taxRate"></select>
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right">
+										<label class="control-label ml10" name="innerBusiUnitLabel">内部经营单位：</label> 
+									</td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="BUSI_UNIT" id="innerBusiUnitId" name="innerBusiUnitId"></select>
+									</td>
+								</tr>
+							</table>
+	                </div>
+	            	<div class="col-md-3"></div>
+	            </div>
+			<div class="box-footer text-center">
+				  <button type="submit" id="save" data-permissionUrl="/voucher/detail/update" data-url="html/voucher/voucherSearch.html" class="btn btn-primary btn-sm mr20">保存</button>
+	              <button type="button" data-url="html/fi/voucher/voucherSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+		</form>
+	</section>
+</div>
+<script type='text/javascript' src="../js/fi/voucher/voucherEdit.js"></script>

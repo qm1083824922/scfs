@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.VoucherDao">
+	<resultMap type="com.scfs.domain.fi.entity.Voucher" id="voucherResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="account_book_id" property="accountBookId"
+			jdbcType="INTEGER" />
+		<result column="busi_unit" property="busiUnit" jdbcType="INTEGER" />
+		<result column="voucher_word" property="voucherWord" jdbcType="INTEGER" />
+		<result column="voucher_summary" property="voucherSummary"
+			jdbcType="VARCHAR" />
+		<result column="voucher_no" property="voucherNo" jdbcType="VARCHAR" />
+		<result column="debit_amount" property="debitAmount" jdbcType="DECIMAL" />
+		<result column="debit_currency_type" property="debitCurrencyType"
+			jdbcType="INTEGER" />
+		<result column="credit_amount" property="creditAmount"
+			jdbcType="DECIMAL" />
+		<result column="credit_currency_type" property="creditCurrencyType"
+			jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="out_store_id" property="outStoreId" jdbcType="INTEGER" />
+		<result column="in_store_id" property="inStoreId" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="accept_invoice_id" property="acceptInvoiceId"
+			jdbcType="INTEGER" />
+		<result column="provide_invoice_id" property="provideInvoiceId"
+			jdbcType="INTEGER" />
+		<result column="receipt_id" property="receiptId" jdbcType="INTEGER" />
+		<result column="bill_type" property="billType" jdbcType="INTEGER" />
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="bill_date" property="billDate" jdbcType="DATE" />
+		<result column="attachment_number" property="attachmentNumber"
+			jdbcType="INTEGER" />
+		<result column="voucher_date" property="voucherDate" jdbcType="DATE" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+		<result column="voucher_line_number" property="voucherLineNumber"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="voucher_column_list">
+		id ,
+		account_book_id,busi_unit,voucher_word,voucher_summary,voucher_no,debit_amount,debit_currency_type,
+		credit_amount, credit_currency_type, state, bill_type , bill_date ,
+		bill_no, fee_id , out_store_id, in_store_id, pay_id, accept_invoice_id
+		,
+		provide_invoice_id , receipt_id , attachment_number,voucher_date
+		,creator_id,creator,create_at,update_at,is_delete,voucher_line_number
+	</sql>
+	<sql id="alias_voucher_column_list">
+		voucher.id ,
+		voucher.account_book_id,voucher.busi_unit,voucher.voucher_word,voucher.voucher_summary,voucher.voucher_no,voucher.debit_amount,voucher.debit_currency_type,
+		voucher.credit_amount, voucher.credit_currency_type, voucher.state,
+		voucher.bill_type , voucher.bill_date , voucher.bill_no,
+		voucher.fee_id , voucher.out_store_id, voucher.in_store_id,
+		voucher.pay_id, voucher.accept_invoice_id , voucher.provide_invoice_id
+		, voucher.receipt_id , voucher.attachment_number,voucher.voucher_date
+		,voucher.creator_id,
+		voucher.creator,voucher.create_at,voucher.update_at,voucher.is_delete,voucher.voucher_line_number
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.Voucher"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fi_voucher(
+		account_book_id,
+		busi_unit,
+		voucher_word,
+		voucher_summary,
+		voucher_no,
+		debit_amount,
+		debit_currency_type,
+		credit_amount,
+		credit_currency_type,
+		state,
+		voucher_date,
+		creator_id,
+		creator,
+		bill_type,
+		bill_no,
+		bill_date,
+		fee_id,
+		out_store_id,
+		in_store_id,
+		pay_id,
+		accept_invoice_id,
+		provide_invoice_id,
+		receipt_id,
+		attachment_number,
+		voucher_line_number
+		)
+		values(
+		#{accountBookId},
+		#{busiUnit},
+		#{voucherWord},
+		#{voucherSummary},
+		#{voucherNo},
+		#{debitAmount},
+		#{debitCurrencyType},
+		#{creditAmount},
+		#{creditCurrencyType},
+		#{state},
+		#{voucherDate},
+		#{creatorId},
+		#{creator},
+		#{billType},
+		#{billNo},
+		#{billDate},
+		#{feeId},
+		#{outStoreId},
+		#{inStoreId},
+		#{payId},
+		#{acceptInvoiceId},
+		#{provideInvoiceId},
+		#{receiptId},
+		IFNULL(#{attachmentNumber},0),
+		IFNULL(#{voucherLineNumber},0)
+		)
+	</insert>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fi.dto.req.VoucherSearchReqDto"
+		resultMap="voucherResultMap">
+		select
+		<include refid="alias_voucher_column_list" />
+		from tb_fi_voucher voucher
+		where voucher.is_delete = 0
+		<if test="accountBookId != null">
+			and voucher.account_book_id = #{accountBookId}
+		</if>
+		<if test="voucherWord != null and voucherWord != ''">
+			and voucher.voucher_word = #{voucherWord}
+		</if>
+		<if test="busiUnit != null">
+			and voucher.busi_unit = #{busiUnit}
+		</if>
+		<if test="voucherNo != null and voucherNo != ''">
+			and voucher.voucher_no like CONCAT('%' , #{voucherNo} ,
+			'%')
+		</if>
+		<if test="state != null">
+			and voucher.state = #{state}
+		</if>
+		<if test="billType != null">
+			and voucher.bill_type = #{billType}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and voucher.bill_no = #{billNo}
+		</if>
+		<if test="voucherSummary != null and voucherSummary != ''">
+			and voucher.voucher_summary like CONCAT('%' ,
+			#{voucherSummary} , '%')
+		</if>
+		<if test="startVoucherDate != null">
+	  			<![CDATA[
+					and voucher.voucher_date >= #{startVoucherDate}
+				]]>
+		</if>
+		<if test="endVoucherDate != null">
+	  			<![CDATA[
+					and voucher.voucher_date <= #{endVoucherDate}
+				]]>
+		</if>
+		<if test="projectId != null">
+			and exists (select 1 from tb_fi_voucher_line line where
+			line.project_id
+			= #{projectId} and line.voucher_id = voucher.id)
+		</if>
+		order by voucher.id desc
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="voucherResultMap">
+		select
+		<include refid="voucher_column_list" />
+		from tb_fi_voucher
+		where id=#{id} for update
+	</select>
+
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.Voucher">
+		update tb_fi_voucher
+		<set>
+			<if test="accountBookId != null">
+				account_book_id = #{accountBookId},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit},
+			</if>
+			<if test="voucherNo != null">
+				voucher_no = #{voucherNo},
+			</if>
+			<if test="voucherWord != null">
+				voucher_word = #{voucherWord},
+			</if>
+			<if test="voucherSummary != null">
+				voucher_summary = #{voucherSummary},
+			</if>
+			<if test="debitAmount != null">
+				debit_amount = #{debitAmount},
+			</if>
+			<if test="debitCurrencyType != null">
+				debit_currency_type = #{debitCurrencyType},
+			</if>
+			<if test="creditAmount != null">
+				credit_amount = #{creditAmount},
+			</if>
+			<if test="creditCurrencyType != null">
+				credit_currency_type = #{creditCurrencyType},
+			</if>
+			<if test="attachmentNumber != null">
+				attachment_number = #{attachmentNumber},
+			</if>
+			<if test="voucherDate != null">
+				voucher_date = #{voucherDate},
+			</if>
+			<if test="state != null">
+				state = #{state}
+			</if>
+			<if test="voucherLineNumber != null">
+				voucher_line_number = #{voucherLineNumber}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="submitById" parameterType="java.lang.Integer">
+		update tb_fi_voucher
+		set
+		state=#{state}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_fi_voucher
+		where id=#{id}
+	</delete>
+
+	<!-- 通过条件查询凭证信息 -->
+	<select id="queryEntityByParam" parameterType="com.scfs.domain.fi.entity.Voucher"
+		resultMap="voucherResultMap">
+		select
+		<include refid="voucher_column_list" />
+		from tb_fi_voucher
+		where 1=1
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and bill_no = #{billNo}
+		</if>
+		<if test="billType != null">
+			and bill_type = #{billType}
+		</if>
+	</select>
+</mapper>

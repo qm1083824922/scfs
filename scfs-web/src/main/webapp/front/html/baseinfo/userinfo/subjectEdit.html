@@ -1,0 +1,121 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">仓库</li>
+        </ol>
+    </section>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+          <div class="box no-margin">
+              <form class="form-horizontal">
+                  <div class="box-body">
+                      <ul class="nav nav-tabs">
+                          <li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/userInfoEdit.html">用户信息编辑</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/userRoleEdit.html">角色信息</a></li>
+                          <li role="presentation"><a class="tab-item" id="project" data-url="html/baseinfo/userinfo/projectEdit.html">项目信息</a></li>
+                          <li role="presentation"><a class="tab-item"  data-url="html/baseinfo/userinfo/wechatEdit.html">微信信息</a></li>
+                          <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/userinfo/subjectEdit.html">仓库信息</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/supplierEdit.html">供应商信息</a></li>                      
+                      </ul>
+                      <table id="js_dataTable" data-url="user/subject/query">
+                      </table>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer text-center">
+                      <button type="button" class="btn btn-danger btn-sm" data-url="user/subject/deleteAll" data-permissionUrl="/project/subject/deleteAll" id="multDel">批量作废</button>
+                      <button type="button" class="btn btn-primary btn-sm" data-url="html/baseinfo/userinfo/subjectDevide.html" data-permissionUrl="/user/subject/dividAll" id="devide">分配</button>
+                      <button type="button" data-url="html/baseinfo/userinfo/userManager.html" class="btn btn-default btn-sm js-back">返回</button>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+          </div>
+    </section>
+</div>
+<script>
+
+    /*数据表格*/
+    var tabCols = [
+       {
+           field: 'checkItem',
+           checkbox: true,
+       }, {  
+	       title: '序号',
+	       field: 'columnsNumber',  
+	       width: 10
+       }, {
+           title: '已分配仓库',
+           field: 'subjectName',
+           width: 210,
+           align: 'center'
+       }, {
+           title: '仓管操作',
+           field: 'operaterStr',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '分配人',
+           field: 'creator',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '分配日',
+           field: 'createAt',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '作废人',
+           field: 'deleter',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '作废日',
+           field: 'deleteAt',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '状态',
+           field: 'stateName',
+           width: 80,
+           align: 'center'
+       }
+   ];
+
+    options.initPage = function(){
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {userId: options.param.id});
+    };
+
+    $("#devide").click(function() {
+      var url = $(this).data("url");
+      GLOBAL.go(url);
+    })
+
+    $("#multDel").click(function() {
+    	var id = GLOBAL.selectIds($('#js_dataTable'));
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					$('#js_dataTable').bootstrapTable('refresh', {query: {userId: options.param.id}});
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+    
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    GLOBAL.goBack();
+
+</script>
+

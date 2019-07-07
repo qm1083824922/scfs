@@ -1,0 +1,498 @@
+.wrapper,body {
+	background: #f5f5f5
+}
+
+.sure-btn {
+	font-size: 12px
+}[data-dpr="2"] .sure-btn {
+	font-size: 24px
+}[data-dpr="3"] .sure-btn,[data-dpr="3.5"] .sure-btn,[data-dpr="4"] .sure-btn {
+	font-size: 36px
+}
+
+.wrapper {
+	padding: .2rem
+}
+
+.wrapper .search-box .keyword-box {
+	position: relative;
+	float: left;
+	width: 7rem;
+	text-align: center
+}
+
+.wrapper .search-box .keyword-box .inputKeyWrods {
+	width: 6rem;
+	height: .6rem;
+	padding: .2rem;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	box-shadow: inset 0 0 .5rem .05rem rgba(0,0,0,.1)
+}[data-dpr="2"] .wrapper .search-box .keyword-box .inputKeyWrods {
+	font-size: 28px
+}[data-dpr="3"] .wrapper .search-box .keyword-box .inputKeyWrods,[data-dpr="3.5"] .wrapper .search-box .keyword-box .inputKeyWrods,[data-dpr="4"] .wrapper .search-box .keyword-box .inputKeyWrods {
+	font-size: 42px
+}
+
+.wrapper .search-box .keyword-box .icon {
+	position: absolute;
+	width: .5rem;
+	height: .5rem;
+	border: 2px solid #ccc;
+	border-radius: 50%;
+	right: .7rem;
+	top: .15rem
+}
+
+.wrapper .search-box .keyword-box .icon:before {
+	content: "";
+	position: absolute;
+	top: -.15rem;
+	left: -.3rem;
+	width: .3rem;
+	height: .9rem;
+	border-left: 1px solid #ccc
+}
+
+.wrapper .search-box .keyword-box .icon:after {
+	content: "";
+	position: absolute;
+	top: .5rem;
+	right: -.2rem;
+	width: .3rem;
+	height: .08rem;
+	background: #ccc;
+	-webkit-transform: rotate(43deg);
+	-moz-transform: rotate(43deg);
+	-ms-transform: rotate(43deg);
+	transform: rotate(43deg);
+	border-top-right-radius: .1rem;
+	border-bottom-right-radius: .1rem
+}
+
+.wrapper .search-box .btn-audit-box {
+	width: 2rem;
+	float: right;
+	text-align: center
+}
+
+.wrapper .search-box .btn-audit-box .btn-batch-audit {
+	width: 100%;
+	height: 1rem;
+	background: #3c88ef;
+	color: #fff;
+	border: 0;
+	border-radius: .05rem;
+	font-size: 12px
+}[data-dpr="2"] .wrapper .search-box .btn-audit-box .btn-batch-audit {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .search-box .btn-audit-box .btn-batch-audit,[data-dpr="3.5"] .wrapper .search-box .btn-audit-box .btn-batch-audit,[data-dpr="4"] .wrapper .search-box .btn-audit-box .btn-batch-audit {
+	font-size: 36px
+}
+
+.wrapper .search-box:after {
+	content: "";
+	display: block;
+	clear: both
+}
+
+.wrapper .audit-list-info {
+	position: relative;
+	height: .8rem;
+	line-height: .8rem;
+	padding: .2rem;
+	margin-top: .5rem;
+	border: 1px solid #ccc;
+	text-align: right
+}
+
+.wrapper .audit-list li .checkbox-label,.wrapper .audit-list-info .select-all {
+	display: inline-block;
+	width: .5rem;
+	height: .5rem;
+	background-size: auto 100%;
+	background-image: url(../images/blue.png);
+	background-repeat: no-repeat
+}
+
+.wrapper .audit-list-info .select-count,.wrapper .audit-list-info .total {
+	font-size: 14px;
+	color: red;
+	padding: 0 .1rem
+}[data-dpr="2"] .wrapper .audit-list-info .select-count,[data-dpr="2"] .wrapper .audit-list-info .total {
+	font-size: 28px
+}[data-dpr="3"] .wrapper .audit-list-info .select-count,[data-dpr="3"] .wrapper .audit-list-info .total,[data-dpr="3.5"] .wrapper .audit-list-info .select-count,[data-dpr="3.5"] .wrapper .audit-list-info .total,[data-dpr="4"] .wrapper .audit-list-info .select-count,[data-dpr="4"] .wrapper .audit-list-info .total {
+	font-size: 42px
+}
+
+.wrapper .audit-list-info .select-all {
+	position: absolute;
+	left: .2rem;
+	top: .35rem;
+	background-position: -.475rem 0
+}
+
+.wrapper .audit-list-info .select-all.checked {
+	background-position: -.98rem 0
+}
+
+.wrapper .audit-list-info .select-all:after {
+	content: "全选";
+	position: absolute;
+	right: -1rem;
+	top: -.15rem
+}
+
+.wrapper .audit-list {
+	margin-top: .5rem
+}
+
+.wrapper .audit-list li {
+	position: relative;
+	padding-left: .6rem;
+	margin-top: .3rem
+}
+
+.wrapper .audit-list li .checkbox-label {
+	position: absolute;
+	left: -.05rem;
+	top: .5rem;
+	background-position: -.5rem 0
+}
+
+.wrapper .audit-list li .checkbox-label.checked {
+	background-position: -1rem 0
+}
+
+.wrapper .audit-list li .checkbox-label .checkbox-audit-item {
+	width: .2rem;
+	height: .2rem;
+	display: none
+}
+
+.wrapper .audit-list li .detail-box {
+	background: #fff;
+	padding: .3rem .1rem;
+	border-radius: .05rem
+}
+
+.wrapper .audit-list li .detail-box p.detail-item {
+	margin-bottom: .3rem;
+	vertical-align: top;
+	padding: 0
+}
+
+.wrapper .audit-list li .detail-box p.detail-item:last-child {
+	margin-bottom: 0
+}
+
+.wrapper .audit-list li .detail-box p.detail-item .detail-label {
+	display: inline-block;
+	width: 1.4rem;
+	font-weight: 700;
+	text-align: right;
+	vertical-align: top
+}
+
+.wrapper .audit-list li .detail-box p.detail-item .detail-label.money img {
+	width: .8rem;
+	vertical-align: middle
+}
+
+.wrapper .audit-list li .detail-box p.detail-item .detail-value {
+	display: inline-block;
+	width: 3.3rem;
+	vertical-align: top
+}
+
+.wrapper .audit-list li .detail-box p.detail-item .detail-value.money-val {
+	font-size: 16px;
+	color: red
+}[data-dpr="2"] .wrapper .audit-list li .detail-box p.detail-item .detail-value.money-val {
+	font-size: 32px
+}[data-dpr="3"] .wrapper .audit-list li .detail-box p.detail-item .detail-value.money-val,[data-dpr="3.5"] .wrapper .audit-list li .detail-box p.detail-item .detail-value.money-val,[data-dpr="4"] .wrapper .audit-list li .detail-box p.detail-item .detail-value.money-val {
+	font-size: 48px
+}
+
+.wrapper .audit-list li .detail-box p.detail-item .detail-date {
+	display: inline-block;
+	width: 4rem;
+	text-align: right;
+	color: #aaa;
+	vertical-align: top;
+	font-size: 11px;
+	float:right;
+}[data-dpr="2"] .wrapper .audit-list li .detail-box p.detail-item .detail-date {
+	font-size: 22px
+}[data-dpr="3"] .wrapper .audit-list li .detail-box p.detail-item .detail-date,[data-dpr="3.5"] .wrapper .audit-list li .detail-box p.detail-item .detail-date,[data-dpr="4"] .wrapper .audit-list li .detail-box p.detail-item .detail-date {
+	font-size: 33px
+}
+
+.wrapper .audit-form .js-initform {
+	font-size: 12px
+}[data-dpr="2"] .wrapper .audit-form .js-initform {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .audit-form .js-initform,[data-dpr="3.5"] .wrapper .audit-form .js-initform,[data-dpr="4"] .wrapper .audit-form .js-initform {
+	font-size: 36px
+}
+
+.wrapper .title {
+	position: relative;
+	height: .8rem;
+	line-height: .9rem;
+	padding-left: .25rem;
+	width: 4rem;
+	font-size: 14px;
+	margin-top: .3rem;
+	background: #3db25b;
+	border-top-right-radius: 1rem
+}[data-dpr="2"] .wrapper .title {
+	font-size: 28px
+}[data-dpr="3"] .wrapper .title,[data-dpr="3.5"] .wrapper .title,[data-dpr="4"] .wrapper .title {
+	font-size: 42px
+}
+
+.wrapper .title.detail-title {
+	background: #6c62c0
+}
+
+.wrapper .title.audit-record-title {
+	background: #34acdc
+}
+
+.wrapper .special {
+	color: red;
+	font-size: 14px;
+	font-weight: 700
+}[data-dpr="2"] .wrapper .special {
+	font-size: 28px
+}[data-dpr="3"] .wrapper .special,[data-dpr="3.5"] .wrapper .special,[data-dpr="4"] .wrapper .special {
+	font-size: 42px
+}
+
+.wrapper .audit-form {
+	background: #fff;
+	padding: .2rem
+}
+
+.wrapper .audit-form p {
+	margin-top: .3rem;
+	border-bottom: 1px dashed #ccc;
+	padding-bottom: .2rem
+}
+
+.wrapper .audit-form p .form-label {
+	display: inline-block;
+	width: 4rem;
+	padding-left: .1rem
+}
+
+.wrapper .audit-form p .form-value {
+	display: inline-block;
+	width: 4.7rem;
+	text-align: right
+}
+
+.wrapper .audit-form #parentReceiptDate {
+	font-size: 12px
+}[data-dpr="2"] .wrapper .audit-form #parentReceiptDate {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .audit-form #parentReceiptDate,[data-dpr="3.5"] .wrapper .audit-form #parentReceiptDate,[data-dpr="4"] .wrapper .audit-form #parentReceiptDate {
+	font-size: 36px
+}
+
+.wrapper .detail-box .detail-item {
+	position: relative;
+	padding: .2rem;
+	padding-top: .5rem;
+	background: #fff;
+	margin-bottom: .3rem
+}
+
+.wrapper .detail-box .detail-item:last-child {
+	margin-bottom: 0
+}
+
+.wrapper .detail-box .detail-item .availableAmount {
+	width: 5rem;
+	height: .8rem;
+	padding-left: .1rem;
+	font-size: 12px
+}[data-dpr="2"] .wrapper .detail-box .detail-item .availableAmount {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .detail-box .detail-item .availableAmount,[data-dpr="3.5"] .wrapper .detail-box .detail-item .availableAmount,[data-dpr="4"] .wrapper .detail-box .detail-item .availableAmount {
+	font-size: 36px
+}
+
+.wrapper .detail-box .detail-item .checkbox-label {
+	position: absolute;
+	top: .2rem;
+	right: .2rem;
+	display: inline-block;
+	width: .5rem;
+	height: .5rem;
+	background-size: auto 100%;
+	background-image: url(../images/blue.png);
+	background-position: -.5rem 0;
+	background-repeat: no-repeat
+}
+
+.wrapper .detail-box .detail-item .checkbox-label.checked {
+	background-position: -1rem 0
+}
+
+.wrapper .detail-box .detail-item .checkbox-label .checkbox-audit-item {
+	display: none
+}
+
+.wrapper .detail-box .detail-item .checkbox-label.disabled {
+	background-position: -1.5rem 0
+}
+
+.wrapper .detail-box .detail-item p {
+	margin-top: .2rem;
+	margin-bottom: .2rem;
+	padding-bottom: .2rem;
+	border-bottom: 1px dashed #aaa
+}
+
+.wrapper .detail-box .detail-item p .form-label {
+	display: inline-block;
+	width: 50%;
+	font-size: 12px
+}[data-dpr="2"] .wrapper .detail-box .detail-item p .form-label {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .detail-box .detail-item p .form-label,[data-dpr="3.5"] .wrapper .detail-box .detail-item p .form-label,[data-dpr="4"] .wrapper .detail-box .detail-item p .form-label {
+	font-size: 36px
+}
+
+.wrapper .detail-box .detail-item p .form-label .icon {
+	width: 1rem;
+	vertical-align: middle
+}
+
+.wrapper .detail-box .detail-item p .form-value {
+	display: inline-block;
+	width: 50%;
+	font-size: 12px
+}[data-dpr="2"] .wrapper .detail-box .detail-item p .form-value {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .detail-box .detail-item p .form-value,[data-dpr="3.5"] .wrapper .detail-box .detail-item p .form-value,[data-dpr="4"] .wrapper .detail-box .detail-item p .form-value {
+	font-size: 36px
+}
+
+.wrapper .audit-record-box {
+	background: #fff;
+	padding: .2rem
+}
+
+.wrapper .audit-record-box li {
+	position: relative;
+	padding-left: 1rem;
+	height: 1.8rem
+}
+
+.wrapper .audit-record-box li:before {
+	position: absolute;
+	left: .2rem;
+	top: .3rem;
+	content: "";
+	width: .3rem;
+	height: .3rem;
+	border-radius: 50%;
+	background: #ccc;
+	box-shadow: 0 0 .08rem .02rem rgba(0,0,0,.5);
+	border: 2px solid #fff
+}
+
+.wrapper .audit-record-box li:after {
+	position: absolute;
+	left: .37rem;
+	top: .7rem;
+	content: "";
+	width: 1px;
+	height: 1.5rem;
+	background: #ccc
+}
+
+.wrapper .audit-record-box li.passed p {
+	color: green
+}
+
+.wrapper .audit-record-box li.passed:before {
+	background: green
+}
+
+.wrapper .audit-record-box li.current p {
+	color: #00f
+}
+
+.wrapper .audit-record-box li.current:before {
+	background: #00f
+}
+
+.wrapper .audit-record-box li.reject p {
+	color: red
+}
+
+.wrapper .audit-record-box li.reject:before {
+	background: red
+}
+
+.wrapper .audit-record-box li:last-child:after {
+	content: "";
+	height: 0
+}
+
+.wrapper .box-footer #suggestion {
+	width: 80%;
+	height: 3rem;
+	margin: .2rem auto;
+	border: 1px solid #aaa;
+	font-size: 12px
+}[data-dpr="2"] .wrapper .box-footer #suggestion {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .box-footer #suggestion,[data-dpr="3.5"] .wrapper .box-footer #suggestion,[data-dpr="4"] .wrapper .box-footer #suggestion {
+	font-size: 36px
+}
+
+.wrapper .box-footer .btn {
+	min-width: 1.5rem;
+	height: .8rem;
+	font-size: 12px;
+	margin-right: .2rem;
+	border: 1px solid #ccc;
+	padding: .1rem;
+	background: #fff
+}[data-dpr="2"] .wrapper .box-footer .btn {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .box-footer .btn,[data-dpr="3.5"] .wrapper .box-footer .btn,[data-dpr="4"] .wrapper .box-footer .btn {
+	font-size: 36px
+}
+
+.wrapper .box-footer .psigh {
+	margin: .5rem
+}
+
+.wrapper .box-footer #deliverId,.wrapper .box-footer #sighId {
+	display: inline;
+	width: 5rem;
+	height: .8rem
+}
+
+.wrapper .box-footer select {
+	font-size: 12px
+}[data-dpr="2"] .wrapper .box-footer select {
+	font-size: 24px
+}[data-dpr="3"] .wrapper .box-footer select,[data-dpr="3.5"] .wrapper .box-footer select,[data-dpr="4"] .wrapper .box-footer select {
+	font-size: 36px
+}
+
+.wrapper .loading {
+	position: fixed;
+	width: .5rem;
+	height: .5rem;
+	left: 4.8rem;
+	bottom: 1rem;
+	display: none
+}

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.AccountPoolFundDao">
+	<resultMap type="com.scfs.domain.pay.entity.AccountPoolFund"
+		id="BaseResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="pool_id" property="poolId" jdbcType="BIGINT" />
+		<result column="account_id" property="accountId" jdbcType="BIGINT" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="customer_id" property="customerId" jdbcType="BIGINT" />
+		<result column="supplie_id" property="supplieId" jdbcType="BIGINT" />
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="bill_type" property="billType" jdbcType="TINYINT" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="bill_date" property="billDate" jdbcType="TIMESTAMP" />
+		<result column="bill_amount" property="billAmount" jdbcType="DECIMAL" />
+		<result column="bill_charge_amount" property="billChargeAmount"
+			jdbcType="DECIMAL" />
+		<result column="bill_third_id" property="billThirdId" jdbcType="BIGINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		pool_id,
+		account_id,
+		busi_unit,
+		project_id,
+		customer_id,
+		supplie_id,
+		bill_no,
+		bill_type,
+		currency_type,
+		bill_date,
+		bill_amount,
+		bill_charge_amount,
+		bill_third_id,
+		remark,
+		creator_id,
+		creator,
+		update_at,
+		create_at
+	</sql>
+
+	<!-- 获取数据 -->
+	<select id="queryAccountPoolResults" parameterType="com.scfs.domain.pay.dto.req.AccountPoolFundReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_account_pool_fund
+		where 1=1
+		<if test="poolId != null">
+			AND pool_id=#{poolId}
+		</if>
+		<if test="busiUnit != null">
+			AND busi_unit=#{busiUnit}
+		</if>
+		<if test="accountId != null">
+			AND account_id=#{accountId}
+		</if>
+		<if test="currencyType != null">
+			AND currency_type=#{currencyType}
+		</if>
+		order by id desc
+	</select>
+
+
+	<!-- 删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_account_pool
+		WHERE id = #{id}
+	</delete>
+	<delete id="deleteByPoolId" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_account_pool
+		WHERE id = #{poolId}
+	</delete>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.AccountPoolFund"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_account_pool_fund
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="poolId !=null">
+				pool_id,
+			</if>
+			<if test="accountId !=null">
+				account_id,
+			</if>
+			<if test="busiUnit !=null">
+				busi_unit,
+			</if>
+			<if test="projectId !=null">
+				project_id,
+			</if>
+			<if test="customerId !=null">
+				customer_id,
+			</if>
+			<if test="supplieId !=null">
+				supplie_id,
+			</if>
+			<if test="billNo !=null and billNo !=''">
+				bill_no,
+			</if>
+			<if test="billType !=null">
+				bill_type,
+			</if>
+			<if test="currencyType !=null">
+				currency_type,
+			</if>
+			<if test="billDate !=null">
+				bill_date,
+			</if>
+			<if test="billAmount !=null">
+				bill_amount,
+			</if>
+			<if test="billChargeAmount !=null">
+				bill_charge_amount,
+			</if>
+			<if test="billThirdId !=null">
+				bill_third_id,
+			</if>
+			<if test="remark !=null and remark !=''">
+				remark,
+			</if>
+			<if test="creatorId !=null">
+				creator_id,
+			</if>
+			<if test="creator !=null">
+				creator,
+			</if>
+			<if test="createAt !=null">
+				create_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="poolId !=null">
+				#{poolId,jdbcType=INTEGER},
+			</if>
+			<if test="accountId !=null">
+				#{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit !=null">
+				#{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId !=null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId !=null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="supplieId !=null">
+				#{supplieId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo !=null and billNo !=''">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billType !=null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+			<if test="currencyType !=null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="billDate !=null">
+				#{billDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billAmount !=null">
+				#{billAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billChargeAmount !=null">
+				#{billChargeAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billThirdId !=null">
+				#{billThirdId,jdbcType=INTEGER},
+			</if>
+			<if test="remark !=null and remark !=''">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId !=null">
+				#{creatorId},
+			</if>
+			<if test="creator !=null">
+				#{creator},
+			</if>
+			<if test="createAt !=null">
+				#{createAt},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

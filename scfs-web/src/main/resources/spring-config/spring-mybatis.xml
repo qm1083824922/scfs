@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          ">
+	<!--导入datasource -->
+	<import resource="classpath:spring-config/spring-datasource.xml" />
+
+	<bean id="dialect" class="com.scfs.dao.interceptor.dialect.MySql5Dialect" />
+
+	<bean id="paginationInterceptor" class="com.scfs.dao.interceptor.PaginationInterceptor">
+		<property name="dialect" ref="dialect" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:/sqlmap/**/*.xml</value>
+			</array>
+		</property>
+		<property name="plugins">
+			<array>
+				<ref bean="paginationInterceptor" />
+			</array>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.scfs.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+
+
+</beans>

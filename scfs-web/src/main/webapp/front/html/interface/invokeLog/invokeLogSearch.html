@@ -1,0 +1,243 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">接口日志</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">提供方：</label>
+                            <select class="form-control js-select" data-url="INVOKE_SYSTEM" id="provider" name="provider"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">调用方：</label>
+                            <select class="form-control js-select" data-url="INVOKE_SYSTEM" id="consumer" name="consumer"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">接口：</label>
+                            <select class="form-control js-select" data-url="INVOKE_TYPE" id="invokeType" name="invokeType"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">模块：</label>
+                            <select class="form-control js-select" data-url="INVOKE_MODULE_TYPE" id="moduleType" name="moduleType"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="INVOKE_BILL_TYPE" id="billType" name="billType"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据编号：</label>
+                            <input type="text" class="form-control" id="billNo" name="billNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">单据日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startBillDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endBillDate">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">调用是否成功：</label>
+                            <select class="form-control js-select" data-url="INVOKE_SUCCESS_FLAG" id="isSuccess" name="isSuccess"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">处理结果：</label>
+                            <select class="form-control js-select" data-url="DEAL_FLAG" id="dealFlag" name="dealFlag"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">创建时间：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeCreateAt" value="" name="startCreateAt"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeCreateAt" value="" name="endCreateAt">
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="invokeLog/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+<script>
+window.operateEvents = {
+    'click .reInvoke': function(e, value, row, index) {
+        var id = row.id;
+        if (id) {
+            layer.confirm('确定要重新调用接口吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function() {
+                GLOBAL.ajax("invokeLog/reInvoke", {
+                    id: id
+                }, function(e) {
+                    if (e.success) {
+                        layer.msg("重新调用接口成功！");
+                        $("#btnSearch").click();
+                    } else {
+                        layer.msg(e.msg);
+                    }
+                });
+            }, function() {});
+        }
+    },
+    'click .reDeal': function(e, value, row, index) {
+        var id = row.id;
+        if (id) {
+            layer.confirm('确定要重新处理吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function() {
+                GLOBAL.ajax("invokeLog/reDeal", {
+                    id: id
+                }, function(e) {
+                    if (e.success) {
+                        layer.msg("重新处理成功！");
+                        $("#btnSearch").click();
+                    } else {
+                        layer.msg(e.msg);
+                    }
+                });
+            }, function() {});
+        }
+    },
+    'click .invokeLogMsg': function(e, value, row, index) {
+        if (value) {
+            var that = this;
+            layer.msg(value, {
+                time: 5000,
+                closeBtn: [0, false]
+            });
+        }
+    },
+    'click .invokeLogExceptionMsg': function(e, value, row, index) {
+        if (value) {
+            var that = this;
+            layer.msg(value, {
+                time: 5000,
+                closeBtn: [0, false]
+            });
+        }
+    },
+    'click .invokeLogContent': function(e, value, row, index) {
+        if (value) {
+            var that = this;
+            layer.msg(value, {
+                time: 5000,
+                closeBtn: [0, false]
+            });
+        }
+    }
+};
+
+function msgFormatter(value, row, index) {
+    if (value) {
+        return '<a class="invokeLogMsg" href="javascript:void(0)">详情</a>';
+    }
+}
+
+function exceptionMsgFormatter(value, row, index) {
+    if (value) {
+        return '<a class="invokeLogExceptionMsg" href="javascript:void(0)">详情</a>';
+    }
+}
+
+function contentFormatter(value, row, index) {
+    if (value) {
+        return '<a class="invokeLogContent" href="javascript:void(0)">详情</a>';
+    }
+}
+
+/*数据表格*/
+var tabCols = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '提供方',
+    field: 'providerName',
+    align: 'center'
+}, {
+    title: '调用方',
+    field: 'consumerName',
+    align: 'center'
+}, {
+    title: '接口',
+    field: 'invokeTypeName',
+    align: 'center'
+}, {
+    title: '模块',
+    field: 'moduleTypeName',
+    align: 'center'
+}, {
+    title: '单据类型',
+    field: 'billTypeName',
+    align: 'center'
+}, {
+    title: '单据编号',
+    field: 'billNo',
+    align: 'center'
+}, {
+    title: '单据日期',
+    field: 'billDate',
+    align: 'center'
+}, {
+    title: '是否成功',
+    field: 'isSuccessName',
+    align: 'center'
+}, {
+    title: '调用返回消息',
+    field: 'returnMsg',
+    align: 'center',
+    formatter: msgFormatter,
+    events: operateEvents
+}, {
+    title: '调用异常信息',
+    field: 'exceptionMsg',
+    align: 'center',
+    formatter: exceptionMsgFormatter,
+    events: operateEvents
+}, {
+    title: '传输内容',
+    field: 'content',
+    align: 'center',
+    formatter: contentFormatter,
+    events: operateEvents
+}, {
+    title: '创建时间',
+    field: 'createAt',
+    align: 'center'
+}, {
+    title: '更新时间',
+    field: 'updateAt',
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'opertaList',
+    align: 'center',
+    events: operateEvents
+}];
+
+options.initPage = function() {
+    GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+    //还原查询条件及过滤后的数据
+    GLOBAL.restoreQuery($('#js_dataTable')); 
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+        var url = $('#js_dataTable').data("url");
+        GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+</script>

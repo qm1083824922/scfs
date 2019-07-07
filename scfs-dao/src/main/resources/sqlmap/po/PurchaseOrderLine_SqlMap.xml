@@ -1,0 +1,1192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.po.PurchaseOrderLineDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.po.entity.PurchaseOrderLine">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="po_id" property="poId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="goods_num" property="goodsNum" jdbcType="DECIMAL" />
+		<result column="storage_num" property="storageNum" jdbcType="DECIMAL" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+		<result column="invoice_num" property="invoiceNum" jdbcType="DECIMAL" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="batch_num" property="batchNum" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+		<result column="pay_price" property="payPrice" jdbcType="DECIMAL" />
+		<result column="discount_amount" property="discountAmount"
+			jdbcType="DECIMAL" />
+		<result column="discount_price" property="discountPrice"
+			jdbcType="DECIMAL" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="required_send_price" property="requiredSendPrice"
+			jdbcType="DECIMAL" />
+		<result column="bill_in_store_id" property="billInStoreId"
+			jdbcType="INTEGER" />
+		<result column="bill_in_store_dtl_id" property="billInStoreDtlId"
+			jdbcType="INTEGER" />
+		<result column="bill_in_store_tally_dtl_id" property="billInStoreTallyDtlId"
+			jdbcType="INTEGER" />
+		<result column="origin_goods_price" property="originGoodsPrice"
+			jdbcType="DECIMAL" />
+		<result column="goods_status" property="goodsStatus" jdbcType="INTEGER" />
+		<result column="stl_id" property="stlId" jdbcType="INTEGER" />
+		<result column="po_price" property="poPrice" jdbcType="DECIMAL" />
+		<result column="pledge_proportion" property="pledgeProportion"
+			jdbcType="DECIMAL" />
+		<result column="send_num" property="sendNum" jdbcType="DECIMAL" />
+		<result column="send_amount" property="sendAmount" jdbcType="DECIMAL" />
+		<result column="take_delivery_num" property="takeDeliveryNum"
+			jdbcType="DECIMAL" />
+		<result column="take_delivery_amount" property="takeDeliveryAmount"
+			jdbcType="DECIMAL" />
+		<result column="return_num" property="returnNum" jdbcType="DECIMAL" />
+		<result column="return_amount" property="returnAmount"
+			jdbcType="DECIMAL" />
+		<result column="distribute_id" property="distributeId"
+			jdbcType="INTEGER" />
+		<result column="purchase_delivery_sn" property="purchaseDeliverySn"
+			jdbcType="VARCHAR" />
+		<result column="remain_send_num" property="remainSendNum"
+			jdbcType="DECIMAL" />
+		<result column="stockin_time" property="stockinTime" jdbcType="TIMESTAMP" />
+		<result column="distribute_num" property="distributeNum"
+			jdbcType="DECIMAL" />
+		<result column="wait_distribute_num" property="waitDistributeNum"
+			jdbcType="DECIMAL" />
+		<result column="deduction_money" property="deductionMoney"
+			jdbcType="DECIMAL" />
+		<result column="occupy_day" property="occupyDay" jdbcType="INTEGER" />
+		<result column="occupy_service_amount" property="occupyServiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="fund_month_rate" property="fundMonthRate"
+			jdbcType="DECIMAL" />
+		<result column="distribute_line_id" property="distributeLineId"
+			jdbcType="INTEGER" />
+		<result column="refund_amount" property="refundAmount"
+			jdbcType="DECIMAL" />
+		<result column="pay_rate" property="payRate" jdbcType="DECIMAL" />
+		<result column="pay_real_currency" property="payRealCurrency"
+			jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, po_id, goods_id, goods_num, storage_num,
+		goods_price,
+		amount, cost_price, batch_num, invoice_num, invoice_amount,
+		paid_amount,
+		create_at, creator, creator_id, is_delete, pay_price,
+		pay_time, required_send_price,
+		discount_amount, discount_price,
+		bill_in_store_id, bill_in_store_dtl_id,
+		bill_in_store_tally_dtl_id,
+		origin_goods_price, goods_status, stl_id,
+		po_price, send_num,
+		send_amount, return_num,
+		return_amount, pledge_proportion,
+		purchase_delivery_sn, remain_send_num,
+		stockin_time, distribute_id,
+		distribute_num,wait_distribute_num,deduction_money,occupy_day,occupy_service_amount,fund_month_rate,
+		distribute_line_id, refund_amount,pay_rate,pay_real_currency
+	</sql>
+	<sql id="Query_Column_List">
+		pol.id, pol.po_id,pol.goods_id, pol.goods_num,
+		pol.storage_num,
+		pol.goods_price, pol.amount, pol.cost_price,
+		pol.batch_num, pol.invoice_num,pol.invoice_amount, pol.paid_amount,
+		pol.create_at, pol.creator, pol.creator_id, pol.is_delete,
+		pol.pay_price, pol.pay_time,pol.required_send_price,
+		pol.discount_amount,pol.discount_price, pol.bill_in_store_id,
+		pol.bill_in_store_dtl_id, pol.bill_in_store_tally_dtl_id,
+		pol.origin_goods_price, pol.goods_status, pol.stl_id,
+		pol.po_price,pol.send_num,pol.send_amount,pol.return_num,pol.return_amount,
+		pol.pledge_proportion,pol.purchase_delivery_sn,pol.remain_send_num,
+		pol.stockin_time, pol.distribute_id, pol.distribute_num,
+		pol.wait_distribute_num,
+		pol.occupy_day,pol.occupy_service_amount,pol.fund_month_rate,
+		pol.distribute_line_id, pol.refund_amount
+	</sql>
+
+	<sql id="Mix_Column_List">
+		pol.id id, pol.po_id poId, pol.goods_id goodsId,
+		pol.goods_num goodsNum, pol.goods_price goodsPrice,
+		pot.currency_id,
+		pol.storage_num arrivalNum,
+		ROUND(pol.storage_num*pol.goods_price, 2)
+		arrivalAmount,
+		pol.invoice_num invoiceTotalNum, pol.invoice_amount
+		invoiceTotalAmount,
+		pol.batch_num batchNum, pol.amount goodsAmount,
+		pot.order_total_num as orderTotalNum, pot.order_no as orderNo,
+		pot.order_total_amount
+		orderTotalAmount, pol.required_send_price as
+		requiredSendPrice,
+		pot.total_discount_amount as totalDiscountAmount,
+		pol.discount_amount
+		as discountAmount,
+		pol.discount_price as
+		discountPrice,
+		pol.goods_status as goodsStatus,
+		pol.send_num as sendNum,
+		pol.send_amount as sendAmount,
+		pol.return_num as returnNum,
+		pol.return_amount as returnAmount,
+		pol.distribute_num as distributeNum,
+		pol.wait_distribute_num as waitDistributeNum,
+		pol.distribute_id AS
+		distributeId,
+		pol.remain_send_num as
+		remainSendNum,
+		pol.pledge_proportion as pledgeProportion,
+		pol.pay_price as payPrice,
+		pol.pay_time as payTime,
+		pol.deduction_money as deductionMoney,
+		pol.occupy_day as occupyDay,
+		pol.occupy_service_amount as
+		occupyServiceAmount, pol.fund_month_rate
+		as fundMonthRate,
+		pol.distribute_line_id as distributeLineId,
+		pol.refund_amount as
+		refundAmount,IFNULL(pol.pay_rate,0) as payRate,
+		pol.pay_real_currency
+		as payRealCurrency
+	</sql>
+
+	<select id="queryPurchaseOrderLineById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_purchase_order_line
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryTotalByPoId" resultType="com.scfs.domain.po.entity.PurchaseOrderTitle"
+		parameterType="java.lang.Integer">
+		select sum(goods_num) orderTotalNum,
+		sum(amount)
+		orderTotalAmount,
+		IFNULL(sum(storage_num), 0) arrivalNum,
+		IFNULL(sum(discount_amount), 0) totalDiscountAmount,
+		IFNULL(sum(ROUND(storage_num*goods_price, 2)), 0) arrivalAmount,
+		IFNULL(sum(refund_amount), 0) totalRefundAmount
+		from
+		tb_purchase_order_line
+		where po_id = #{poId,jdbcType=INTEGER} AND
+		is_delete=0
+	</select>
+
+	<select id="queryPoLinesByIds" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="java.util.List">
+		select
+		id,po_id poId,goods_id goodsId,goods_num goodsNum,goods_price
+		goodsPrice,
+		batch_num batchNum,amount goodsAmount,discount_amount
+		discountAmount,
+		discount_price discountPrice,storage_num storageNum
+		from
+		tb_purchase_order_line
+		where id IN
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<!--根据采购单头ID查询详情数量 -->
+	<select id="countPoLineListByPoId" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer">
+		SELECT count(0)
+		from
+		tb_purchase_order_line pol INNER JOIN
+		tb_purchase_order_title pot on
+		pol.po_id=pot.id
+		WHERE pot.id = #{id,jdbcType=INTEGER}
+		AND pot.is_delete=0
+		AND pol.is_delete=0
+	</select>
+	<select id="countPoLineListByCon" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		select
+		count(0)
+		from tb_purchase_order_line pol INNER JOIN
+		tb_purchase_order_title pot on
+		pot.id = pol.po_id
+		INNER JOIN
+		tb_base_user_project bup on pot.project_id=bup.project_id
+		<where>
+			pot.is_delete=0 AND bup.state=1 AND bup.user_id=#{userId} AND
+			pol.is_delete=0
+			<if test="businessUnitId != null and businessUnitId != ''">
+				AND pot.business_unit_id =
+				#{businessUnitId,jdbcType=VARCHAR}
+			</if>
+			<if test="orderNo != null and orderNo != '' ">
+				AND pot.order_no like CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="appendNo != null and appendNo !='' ">
+				AND pot.append_no like CONCAT('%',#{appendNo},'%')
+			</if>
+			<if test="supplierId != null">
+				AND pot.supplier_id = #{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null ">
+				AND pot.project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="warehouseId != null">
+				AND pot.warehouse_id = #{warehouseId,jdbcType=INTEGER}
+			</if>
+			<if test=" customerId != null">
+				AND pot.customer_id = #{customerId,jdbcType=INTEGER}
+			</if>
+			<if test=" state != null">
+				AND pot.state = #{state,jdbcType=INTEGER}
+			</if>
+			<if test=" startOrderTime != null and startOrderTime != ''">
+	        <![CDATA[
+	        AND pot.order_time >= #{startOrderTime}
+	        ]]>
+			</if>
+			<if test=" endOrderTime != null and endOrderTime != '' ">
+	        <![CDATA[
+	       AND pot.order_time <= #{endOrderTime}
+	        ]]>
+			</if>
+			<if test="isPayAll != null and isPayAll == 0">
+				AND pot.order_total_amount == pay_amount
+			</if>
+			<if test="isPayAll != null and isPayAll == 1">
+				AND pot.order_total_amount > pay_amount
+			</if>
+			<if test="currencyId != null">
+				AND pot.currency_id = #{currencyId}
+			</if>
+			<if test="orderType != null">
+				AND pot.order_type = #{orderType}
+			</if>
+		</where>
+	</select>
+
+	<!--根据采购单头ID查询详情数量 -->
+	<select id="countPoReturnLineListByPoId" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT count(0)
+		from
+		tb_purchase_order_line pol INNER JOIN
+		tb_purchase_order_title pot on
+		pol.po_id=pot.id
+		WHERE pot.order_type =
+		#{orderType,jdbcType=INTEGER}
+		pol.is_delete=0
+	</select>
+	<!--根据采购单头ID查询详情信息 -->
+	<select id="queryPoLineListByPoId" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Mix_Column_List" />
+		from tb_purchase_order_line pol
+		INNER JOIN tb_purchase_order_title pot
+		on pol.po_id=pot.id
+		WHERE pot.id = #{id,jdbcType=INTEGER}
+		AND
+		pol.is_delete=0
+		ORDER BY pol.id DESC
+	</select>
+	<select id="queryPoLineByPoLineId" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Mix_Column_List" />
+		from tb_purchase_order_line pol
+		INNER JOIN tb_purchase_order_title pot
+		on pol.po_id=pot.id
+		WHERE pol.id = #{poLineId,jdbcType=INTEGER}
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.po.entity.PurchaseOrderLine"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_purchase_order_line
+		(id, po_id, goods_id,
+		goods_num, goods_price,amount, cost_price,
+		batch_num,invoice_num, invoice_amount, paid_Amount , create_at,
+		creator,
+		creator_id, is_delete, bill_in_store_id,
+		bill_in_store_dtl_id,
+		bill_in_store_tally_dtl_id, required_send_price,
+		discount_amount,
+		discount_price,storage_num,
+		po_price,stl_id,goods_status,
+		origin_goods_price,distribute_id,
+		distribute_num,
+		wait_distribute_num,
+		purchase_delivery_sn,
+		return_num,
+		return_amount,
+		pledge_proportion,
+		stockin_time,
+		remain_send_num,
+		pay_time,
+		pay_price,deduction_money,
+		occupy_day,occupy_service_amount,
+		fund_month_rate,
+		distribute_line_id,
+		refund_amount,
+		pay_rate,
+		pay_real_currency
+		)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{poId,jdbcType=INTEGER},
+		#{goodsId,jdbcType=INTEGER},
+		IFNULL(#{goodsNum,jdbcType=DECIMAL},0),
+		IFNULL(#{goodsPrice,jdbcType=DECIMAL},0),IFNULL(#{amount,jdbcType=DECIMAL},0),
+		IFNULL(#{costPrice,jdbcType=DECIMAL},0),
+		IFNULL(#{batchNum,jdbcType=VARCHAR},0),IFNULL(#{invoiceNum,jdbcType=DECIMAL},0),
+		IFNULL(#{invoiceAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{paidAmount,jdbcType=DECIMAL},0),
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{isDelete,jdbcType=INTEGER},
+		#{billInStoreId,jdbcType=INTEGER},
+		#{billInStoreDtlId,jdbcType=INTEGER},
+		#{billInStoreTallyDtlId,jdbcType=INTEGER},
+		IFNULL(#{requiredSendPrice,jdbcType=DECIMAL},0),
+		IFNULL(#{discountAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{discountPrice,jdbcType=DECIMAL},0),
+		IFNULL(#{storageNum,jdbcType=DECIMAL},0),
+		IFNULL(#{poPrice,jdbcType=DECIMAL},0),
+		#{stlId,jdbcType=INTEGER},
+		#{goodsStatus,jdbcType=INTEGER},
+		IFNULL(#{originGoodsPrice,jdbcType=DECIMAL}, 0),
+		#{distributeId,jdbcType=INTEGER},
+		IFNULL(#{distributeNum,jdbcType=DECIMAL}, 0),
+		IFNULL(#{waitDistributeNum,jdbcType=DECIMAL}, 0),
+		#{purchaseDeliverySn,jdbcType=VARCHAR},
+		#{returnNum,jdbcType=DECIMAL},
+		#{returnAmount,jdbcType=DECIMAL},
+		#{pledgeProportion,jdbcType=DECIMAL},
+		#{stockinTime,jdbcType=TIMESTAMP},
+		IFNULL(#{remainSendNum,jdbcType=DECIMAL}, 0),
+		#{payTime,jdbcType=TIMESTAMP},
+		IFNULL(#{payPrice,jdbcType=DECIMAL}, 0),
+		IFNULL(#{deductionMoney,jdbcType=DECIMAL}, 0),
+		#{occupyDay,jdbcType=INTEGER},
+		IFNULL(#{occupyServiceAmount,jdbcType=DECIMAL}, 0),
+		IFNULL(#{fundMonthRate,jdbcType=DECIMAL}, 0),
+		#{distributeLineId,jdbcType=INTEGER},
+		IFNULL(#{refundAmount,jdbcType=DECIMAL}, 0),
+		IFNULL(#{payRate,jdbcType=DECIMAL}, 0),
+		IFNULL(#{payRealCurrency,jdbcType=TINYINT},1)
+		)
+	</insert>
+	<update id="updatePurchaseOrderLineById" parameterType="com.scfs.domain.po.entity.PurchaseOrderLine">
+		update tb_purchase_order_line
+		<set>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsNum != null">
+				goods_num = #{goodsNum,jdbcType=DECIMAL},
+			</if>
+			<if test="storageNum != null">
+				storage_num = #{storageNum,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="paidAmount != null">
+				paid_amount = #{paidAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="costPrice != null">
+				cost_price =#{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="batchNum != null">
+				batch_num = #{batchNum,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceNum != null">
+				invoice_num = #{invoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="invoiceAmount != null">
+				invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payPrice != null">
+				pay_price = #{payPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payPrice == -1">
+				pay_price = null,
+			</if>
+			<if test="requiredSendPrice != null">
+				required_send_price =
+				#{requiredSendPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+			<if test="discountAmount != null">
+				discount_amount = #{discountAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountPrice != null">
+				discount_price = #{discountPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="billInStoreId != null">
+				bill_in_store_id = #{billInStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="billInStoreDtlId != null">
+				bill_in_store_dtl_id =
+				#{billInStoreDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="billInStoreTallyDtlId != null">
+				bill_in_store_tally_dtl_id =
+				#{billInStoreTallyDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="originGoodsPrice != null">
+				origin_goods_price =
+				#{originGoodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="stlId != null">
+				stl_id = #{stlId,jdbcType=INTEGER},
+			</if>
+			<if test="poPrice != null">
+				po_price = #{poPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="sendNum != null">
+				send_num = #{sendNum,jdbcType=DECIMAL},
+			</if>
+			<if test="sendAmount != null">
+				send_amount = #{sendAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainSendNum != null">
+				remain_send_num = #{remainSendNum,jdbcType=DECIMAL},
+			</if>
+			<if test="distributeNum != null">
+				distribute_num = #{distributeNum,jdbcType=DECIMAL},
+			</if>
+			<if test="waitDistributeNum != null">
+				wait_distribute_num =
+				#{waitDistributeNum,jdbcType=DECIMAL},
+			</if>
+			<if test="returnNum != null">
+				return_num = #{returnNum,jdbcType=DECIMAL},
+			</if>
+			<if test="returnAmount != null">
+				return_amount = #{returnAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pledgeProportion != null">
+				pledge_proportion = #{pledgeProportion},
+			</if>
+			<if test="occupyDay != null">
+				occupy_day = #{occupyDay,jdbcType=INTEGER},
+			</if>
+			<if test="occupyServiceAmount != null">
+				occupy_service_amount =
+				#{occupyServiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="fundMonthRate != null">
+				fund_month_rate = #{fundMonthRate,jdbcType=DECIMAL},
+			</if>
+			<if test="distributeLineId != null">
+				distribute_line_id =
+				#{distributeLineId,jdbcType=INTEGER},
+			</if>
+			<if test="refundAmount != null">
+				refund_amount = #{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="payRate != null">
+				pay_rate = #{payRate,jdbcType=DECIMAL},
+			</if>
+			<if test="payRealCurrency != null">
+				pay_real_currency = #{payRealCurrency,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="deleteAllPurchaseLineByPoId" parameterType="com.scfs.domain.po.entity.PurchaseOrderLine">
+		update tb_purchase_order_line
+		<set>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+		</set>
+		where tb_purchase_order_line.po_id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!--获取收票采购单信息 -->
+	<select id="queryPoLineListByCon" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		pol.id id,
+		pol.po_id poId,
+		pol.goods_id goodsId,
+		pol.goods_num
+		goodsNum,
+		pol.goods_price goodsPrice,
+		pol.storage_num arrivalNum,
+		ROUND(pol.storage_num * pol.goods_price, 2) arrivalAmount,
+		pol.invoice_num invoiceTotalNum,
+		pol.invoice_amount invoiceTotalAmount,
+		pol.batch_num batchNum,
+		pol.amount goodsAmount,
+		pol.amount amount,
+		pol.paid_amount paidAmount,
+		IFNULL(pol.discount_amount, 0)
+		discountAmount,
+		IFNULL(pol.discount_price, 0) discountPrice,
+		pol.pledge_proportion pledgeProportion,
+		pol.occupy_day occupyDay,
+		pol.occupy_service_amount occupyServiceAmount,
+		pol.fund_month_rate
+		fundMonthRate,
+		pot.order_time orderTime,
+		pot.order_no orderNo,
+		pot.append_no appendNo,
+		pot.project_id projectId,
+		pot.supplier_id
+		supplierId,
+		pot.warehouse_id warehouseId,
+		pot.customer_id customerId,
+		pot.currency_id currencyId,
+		g.unit unit,
+		g.number goodsNo,
+		g.name
+		goodsName,
+		g.type goodsType,
+		g.bar_code goodsBarCode,
+		g.unit goodsUnit,
+		g.specification specification,
+		g.tax_rate taxRate,
+		(pol.goods_num -
+		invoice_num) blanceNum,
+		(pol.amount - invoice_amount) blanceAmount,
+		pol.send_num as sendNum,
+		pol.send_amount as sendAmount,
+		pol.return_num
+		as returnNum,
+		pol.return_amount as returnAmount,
+		pol.distribute_num as
+		distributeNum,
+		pol.wait_distribute_num as waitDistributeNum,
+		pol.distribute_id AS distributeId,
+		pol.remain_send_num as remainSendNum
+		FROM
+		tb_purchase_order_line pol
+		INNER JOIN
+		tb_purchase_order_title pot
+		ON
+		pol.po_id = pot.id LEFT JOIN
+		tb_base_goods g ON pol.goods_id=g.id
+		<if test="userId !=null">
+			INNER JOIN
+			tb_base_user_project bup ON
+			pot.project_id=bup.project_id
+		</if>
+		WHERE
+		pol.is_delete=0
+		<if test="userId != null">
+			AND pot.is_delete=0 AND bup.state=1
+			AND
+			bup.user_id=#{userId}
+		</if>
+		<if test="orderType != null and orderType != ''">
+			AND pot.order_type = #{orderType,jdbcType=INTEGER}
+		</if>
+		<if test="businessUnitId != null and businessUnitId != ''">
+			AND pot.business_unit_id =
+			#{businessUnitId,jdbcType=VARCHAR}
+		</if>
+		<if test="orderNo != null and orderNo != '' ">
+			AND pot.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="appendNo != null and appendNo !='' ">
+			AND pot.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id = #{supplierId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null ">
+			AND pot.project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="warehouseId != null">
+			AND pot.warehouse_id = #{warehouseId,jdbcType=INTEGER}
+		</if>
+		<if test=" customerId != null">
+			AND pot.customer_id = #{customerId,jdbcType=INTEGER}
+		</if>
+		<if test=" currencyId != null">
+			AND pot.currency_Id = #{currencyId,jdbcType=INTEGER}
+		</if>
+		<if test=" state != null">
+			AND pot.state = #{state,jdbcType=INTEGER}
+		</if>
+		<if test=" startOrderTime != null and startOrderTime != ''">
+	       <![CDATA[
+	       		 AND pot.order_time >= #{startOrderTime}
+	        ]]>
+		</if>
+		<if test=" endOrderTime != null and endOrderTime != '' ">
+	       <![CDATA[
+	      		 AND pot.order_time <= #{endOrderTime}
+	        ]]>
+		</if>
+		<if test="goodsNo != null and goodsNo != '' ">
+			AND g.number like CONCAT('%',#{goodsNo},'%')
+		</if>
+		<if test="goodsName != null and goodsName != '' ">
+			AND g.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<if test="isPayAll != null and isPayAll == 0">
+			AND ROUND(pol.amount
+			- pol.discount_amount,2) ==
+			pol.paid_amount
+		</if>
+		<if test="isPayAll != null and isPayAll == 1">
+			AND ROUND(pol.amount
+			- pol.discount_amount,2) >
+			pol.paid_amount
+		</if>
+		<if test="isVatAll != null and isVatAll == 0">
+			AND (pol.amount -
+			pol.discount_amount) ==
+			pol.invoice_amount
+		</if>
+		<if test="isVatAll != null and isVatAll == 1">
+			AND (pol.amount -
+			pol.discount_amount) > pol.invoice_amount
+		</if>
+		ORDER BY pol.id DESC
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_purchase_order_line
+		where id = #{id}
+	</delete>
+
+	<select id="queryReceiveCountByPoId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT COUNT(tpol.id)
+		FROM tb_purchase_order_line tpol
+		WHERE
+		tpol.po_id = #{poId,jdbcType=INTEGER}
+		AND tpol.is_delete = 0
+		AND
+		IFNULL(tpol.storage_num, 0) &lt; IFNULL(tpol.goods_num, 0)
+	</select>
+	<select id="queryReturnNumByPoId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(tpol.goods_num)
+		FROM tb_purchase_order_line tpol
+		INNER JOIN tb_purchase_order_title tpot
+		ON tpol.po_id = tpot.id
+		WHERE
+		tpot.id = #{poId,jdbcType=INTEGER} AND
+		tpot.is_delete = 0 AND
+		tpol.is_delete = 0
+	</select>
+	<select id="queryReturnAmountByPoId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(tpol.goods_num * tpol.goods_price)
+		FROM
+		tb_purchase_order_line tpol
+		INNER JOIN tb_purchase_order_title tpot
+		ON
+		tpol.po_id = tpot.id
+		WHERE tpot.id = #{poId,jdbcType=INTEGER} AND
+		tpot.is_delete = 0 AND
+		tpol.is_delete = 0
+	</select>
+	<!-- 查询采购退货单对应的入库单明细信息 -->
+	<select id="queryBillInStoreListDivide" resultType="com.scfs.domain.po.entity.PurchaseReturnDtl"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		tpol.id id,
+		tpot.order_no orderNo,
+		tpot.append_no appendNo,
+		tpot.order_time orderTime,
+		tpot.project_id projectId,
+		tpot.supplier_id
+		supplierId,
+		tpot.warehouse_id warehouseId,
+		tpot.customer_id customerId,
+		tpot.currency_id currencyType,
+		tpol.goods_num returnNum,
+		tpol.batch_num
+		batchNo,
+		tpol.goods_price returnPrice,
+		tpol.origin_goods_price
+		receivePrice,
+		tpol.cost_price costPrice,
+		tpol.goods_status goodsStatus,
+		tpol.pay_price payPrice,
+		tpol.pay_time payTime,
+		tpol.pay_rate payRate,
+		tpol.pay_real_currency payRealCurrency,
+		tpol.goods_status goodsStatus,
+		tpol.goods_status goodsStatus,
+		ts.store_num - lock_num - sale_lock_num
+		tallyNum,
+		tbg.name goodsName,
+		tbg.type goodsType,
+		tbg.bar_code
+		goodsBarCode,
+		tbg.number goodsNumber,
+		tbg.unit goodsUnit,
+		tbg.specification specification,
+		tbg.id goodsId,
+		tpot.id poId,
+		ts.id
+		stlId,
+		ts.po_price poPrice
+		FROM
+		tb_purchase_order_line tpol
+		INNER JOIN
+		tb_purchase_order_title tpot ON
+		tpot.id = tpol.po_id
+		INNER JOIN
+		tb_base_goods tbg ON tpol.goods_id =
+		tbg.id
+		INNER JOIN
+		tb_base_user_project bup ON tpot.project_id =
+		bup.project_id
+		INNER JOIN
+		tb_stl ts ON ts.id = tpol.stl_id
+		<where>
+			tpot.is_delete=0 AND
+			bup.user_id=#{userId} AND
+			tpol.is_delete=0
+			<if test="id != null">
+				AND tpol.po_id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="businessUnitId != null and businessUnitId != ''">
+				AND tpot.business_unit_id =
+				#{businessUnitId,jdbcType=VARCHAR}
+			</if>
+			<if test="orderNo != null and orderNo != '' ">
+				AND tpot.order_no like CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="appendNo != null and appendNo !='' ">
+				AND tpot.append_no like CONCAT('%',#{appendNo},'%')
+			</if>
+			<if test="supplierId != null">
+				AND tpot.supplier_id = #{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null ">
+				AND tpot.project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="warehouseId != null">
+				AND tpot.warehouse_id = #{warehouseId,jdbcType=INTEGER}
+			</if>
+			<if test=" customerId != null">
+				AND tpot.customer_id = #{customerId,jdbcType=INTEGER}
+			</if>
+			<if test=" state != null">
+				AND tpot.state = #{state,jdbcType=INTEGER}
+			</if>
+			<if test=" startOrderTime != null and startOrderTime != ''">
+	       <![CDATA[ AND tpot.order_time >= #{startOrderTime}  ]]>
+			</if>
+			<if test=" endOrderTime != null and endOrderTime != '' ">
+	       <![CDATA[ AND tpot.order_time <= #{endOrderTime}  ]]>
+			</if>
+			<if test="currencyId != null">
+				AND tpot.currency_id = #{currencyId}
+			</if>
+			<if test="orderType != null">
+				AND tpot.order_type = #{orderType}
+			</if>
+		</where>
+		ORDER BY tpol.id DESC
+	</select>
+	<!-- 查询采购退货单对应的入库单明细信息 -->
+	<select id="queryAndLockReturnById" resultType="com.scfs.domain.po.entity.PurchaseReturnDtl"
+		parameterType="java.lang.Integer">
+		SELECT DISTINCT
+		tpol.id id,
+		tpot.order_no orderNo,
+		tpot.id poId,
+		tpot.project_id projectId,
+		tpot.supplier_id supplierId,
+		tpot.warehouse_id warehouseId,
+		tpot.customer_id customerId,
+		tpot.currency_id currencyType,
+		tpol.goods_num returnNum,
+		tpol.stl_id
+		stlId,
+		tpol.batch_num batchNo,
+		tpol.goods_price returnPrice,
+		tpol.goods_status goodsStatus,
+		ts.store_num - lock_num - sale_lock_num
+		- tpol.goods_num tallyNum,
+		tbg.name goodsName,
+		tbg.type goodsType,
+		tbg.bar_code goodsBarCode,
+		tbg.number goodsNumber,
+		tbg.unit goodsUnit,
+		tbg.specification specification
+		FROM
+		tb_purchase_order_line tpol
+		INNER
+		JOIN tb_purchase_order_title tpot ON tpot.id = tpol.po_id
+		INNER JOIN
+		tb_base_goods tbg ON tpol.goods_id = tbg.id
+		INNER JOIN tb_stl ts ON
+		ts.id = tpol.stl_id
+		<where>
+			tpol.is_delete=0 AND
+			tpol.id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+
+	<update id="updatePurchaseReturnLine" parameterType="com.scfs.domain.po.entity.PurchaseReturnDtl">
+		update tb_purchase_order_line
+		<set>
+			<if test="returnNum != null">
+				goods_num = #{returnNum,jdbcType=INTEGER},
+			</if>
+			<if test="returnPrice != null">
+				goods_price = #{returnPrice,jdbcType=INTEGER},
+			</if>
+			<if test="returnPrice != null and returnNum != null">
+				amount = #{returnPrice} * #{returnNum}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 通过sku和附属编号获取采购单号 -->
+	<select id="queryLineBySkuNumber" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		l.id,
+		l.po_id,
+		l.goods_id,
+		l.goods_num,
+		l.amount,
+		l.discount_amount,
+		l.goods_price,
+		l.discount_price,
+		l.storage_num,
+		l.cost_price,
+		l.batch_num,
+		l.invoice_num,
+		l.invoice_amount,
+		l.create_at,
+		l.creator,
+		l.creator_id,
+		l.is_delete,
+		l.paid_amount,
+		l.pay_time,
+		l.pay_price,
+		l.pay_rate,
+		l.pay_real_currency,
+		l.required_send_price,
+		l.bill_in_store_id,
+		l.bill_in_store_dtl_id,
+		l.bill_in_store_tally_dtl_id,
+		l.origin_goods_price,
+		l.goods_status,
+		l.stl_id,
+		l.po_price,
+		IFNULL(l.send_num,0)-
+		IFNULL(l.wait_distribute_num,0)
+		AS send_num,
+		l.send_amount,
+		l.return_num,
+		l.return_amount,
+		l.pledge_proportion,
+		l.purchase_delivery_sn,
+		l.remain_send_num,
+		l.stockin_time,
+		l.distribute_id,
+		l.distribute_num,
+		l.wait_distribute_num
+		FROM
+		tb_purchase_order_line l
+		LEFT
+		JOIN
+		tb_purchase_order_title t
+		ON l.po_id =
+		t.id
+		WHERE l.is_delete=0
+		<![CDATA[ and IFNULL(l.send_num,0)-IFNULL(l.wait_distribute_num,0) >0 ]]>
+		<if test="isPayAll == 1">
+			AND l.pay_time IS NOT NULL
+		</if>
+		<if test="goodsId != null">
+			and l.goods_id=#{goodsId}
+		</if>
+		<if test="appendNo != null">
+			and t.append_no=#{appendNo}
+		</if>
+		<if test="projectId != null">
+			and t.project_id=#{projectId}
+		</if>
+		<if test="id != null">
+			and t.id=#{id}
+		</if>
+		<if test="orderType != null">
+			and t.order_type=#{orderType}
+		</if>
+		order by stockin_time
+	</select>
+
+	<select id="queryRecPayAmount" resultType="java.lang.Integer"
+		parameterType="java.lang.Integer">
+		SELECT SUM((IFNULL(tpol.discount_price, 0) -
+		IFNULL(tpol.pay_price, 0)) * tpol.goods_num)
+		FROM
+		tb_purchase_order_line tpol
+		where tpol.po_id = #{poId,jdbcType=INTEGER}
+	</select>
+	<select id="queryPurchaseOrderLineByCon" resultType="com.scfs.domain.po.entity.PurchaseOrderLine"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		<include refid="Query_Column_List" />
+		from
+		tb_purchase_order_line pol INNER JOIN tb_purchase_order_title pot
+		on
+		pol.po_id=pot.id
+		WHERE pot.order_type = #{orderType,jdbcType=INTEGER}
+		and pol.goods_id=#{goodsId,jdbcType=INTEGER}
+		and
+		pot.append_no=#{appendNo,jdbcType=VARCHAR}
+		and
+		pot.currency_id=#{currencyId,jdbcType=INTEGER}
+		and pol.is_delete=0
+		order by pol.create_at
+	</select>
+
+	<select id="queryLineByGoodsIdAndAppendNo" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		select sum(IFNULL(pol.remain_send_num,0))
+		remainSendNum,pol.po_id poId
+		from tb_purchase_order_line pol INNER JOIN
+		tb_purchase_order_title pot
+		on pol.po_id=pot.id where pot.order_type =
+		#{orderType,jdbcType=INTEGER}
+		and
+		pol.goods_id=#{goodsId,jdbcType=INTEGER}
+		and
+		pot.append_no=#{appendNo,jdbcType=VARCHAR} and pol.is_delete=0
+		and
+		pot.state=5
+		order by pol.create_at desc
+	</select>
+
+	<select id="queryDistributionLinesByGoodsIdAndSupplierId"
+		resultType="com.scfs.domain.po.model.PoLineModel" parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		<include refid="Query_Column_List" />
+		,pot.order_no as orderNo
+		,pot.append_no as appendNo
+		,pot.currency_id as
+		currencyId
+		from tb_purchase_order_line pol
+		INNER JOIN
+		tb_purchase_order_title pot
+		on pol.po_id = pot.id
+		WHERE
+		pol.goods_id =
+		#{goodsId,jdbcType=INTEGER}
+		and pot.supplier_id =
+		#{supplierId,jdbcType=INTEGER}
+		and IFNULL(pol.remain_send_num, 0) > 0
+		and pol.is_delete = 0
+		and pot.is_delete = 0
+		and pot.order_type = 2
+		and
+		pot.state = 5
+		and pot.project_id = #{projectId,jdbcType=INTEGER}
+		order
+		by pol.create_at asc
+	</select>
+
+	<select id="queryDistribePoLineAppendNoAndGoodID" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		select
+		<include refid="Query_Column_List" />
+		from tb_purchase_order_title pot INNER JOIN tb_purchase_order_line pol
+		on pol.po_id=pot.id where pot.is_delete=0
+		<if test="orderType != null">
+			AND pot.order_type = #{orderType,jdbcType=INTEGER}
+		</if>
+		<if test="goodsId != null">
+			AND pol.goods_id=#{goodsId,jdbcType=INTEGER}
+		</if>
+		<if test="appendNo != null">
+			AND pot.append_no=#{appendNo,jdbcType=VARCHAR}
+		</if>
+		AND pot.state=5 ORDER BY pot.create_at asc
+	</select>
+
+	<select id="queryPoTitleResultByOrderType" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		select
+		<include refid="Query_Column_List" />
+		,pot.business_unit_id as businessUnitId,
+		pot.project_id as projectId,
+		pot.currency_id as currencyId,
+		pot.customer_id as customerId,
+		pot.order_time as orderTime
+		from tb_purchase_order_title pot INNER JOIN
+		tb_purchase_order_line pol
+		on pol.po_id=pot.id where pot.is_delete=0
+		<if test="orderType != null">
+			AND pot.order_type = #{orderType,jdbcType=INTEGER}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="currencyId != null">
+			AND pot.currency_id=#{currencyId,jdbcType=INTEGER}
+		</if>
+		AND ((IFNULL(pol.refund_amount,0) * (-1)) - (IFNULL(pol.paid_amount,0)
+		* (-1)) ) >0
+		AND pot.state=5 ORDER BY pot.create_at desc
+	</select>
+	<select id="queryPurchaseOrderLineAndTitleById" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Query_Column_List" />
+		,pot.business_unit_id as businessUnitId,
+		pot.project_id as projectId,
+		pot.currency_id as currencyId,
+		pot.customer_id as customerId
+		from
+		tb_purchase_order_title pot INNER JOIN tb_purchase_order_line pol
+		on
+		pol.po_id=pot.id where pot.is_delete=0
+		AND
+		pol.id=#{id,jdbcType=INTEGER}
+		AND pot.state=5 ORDER BY pot.create_at
+		desc
+	</select>
+
+	<select id="queryTitleAndLineByLineID" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Query_Column_List" />
+		,pot.order_time as orderTime
+		from tb_purchase_order_title pot INNER
+		JOIN tb_purchase_order_line pol
+		on pol.po_id=pot.id where
+		pot.is_delete=0
+		AND pol.id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<!--获取收票采购单信息 -->
+	<select id="queryLineResultAndPay" resultType="com.scfs.domain.po.model.PoLineModel"
+		parameterType="com.scfs.domain.po.dto.req.PoTitleReqDto">
+		SELECT
+		pol.id id,
+		pol.po_id poId,
+		pol.goods_id goodsId,
+		pol.goods_num
+		goodsNum,
+		pol.goods_price goodsPrice,
+		pol.amount amount,
+		pol.pay_rate as
+		payRate,
+		IFNULL(pol.invoice_amount,0) as invoiceTotalAmount,
+		pol.pay_real_currency as payRealCurrency,
+		IFNULL(pol.discount_amount,
+		0) discountAmount,
+		IFNULL(pol.discount_price, 0) discountPrice,
+		pot.order_time orderTime,
+		pot.order_no orderNo,
+		pot.append_no appendNo,
+		pot.project_id projectId,
+		pot.supplier_id supplierId,
+		pot.warehouse_id
+		warehouseId,
+		pot.customer_id customerId,
+		pot.currency_id currencyId,
+		g.unit unit,
+		g.number goodsNo,
+		g.name goodsName,
+		g.type goodsType,
+		g.bar_code
+		goodsBarCode,
+		g.unit goodsUnit,
+		g.specification specification,
+		(IFNULL(pol.amount , 0) - (IFNULL(pol.discount_amount ,
+		0))-(IFNULL(pol.invoice_amount,0))) afterDiscountAmount
+		FROM
+		tb_purchase_order_line pol
+		INNER JOIN
+		tb_purchase_order_title pot
+		ON
+		pol.po_id = pot.id LEFT JOIN
+		tb_base_goods g ON pol.goods_id=g.id
+		WHERE
+		pol.is_delete = 0
+		AND order_type = 0
+		<if test="orderType != null and orderType != ''">
+			AND pot.order_type = #{orderType,jdbcType=INTEGER}
+		</if>
+		<if test="businessUnitId != null and businessUnitId != ''">
+			AND pot.business_unit_id =
+			#{businessUnitId,jdbcType=VARCHAR}
+		</if>
+		<if test="orderNo != null and orderNo != '' ">
+			AND pot.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="appendNo != null and appendNo !='' ">
+			AND pot.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id = #{supplierId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null ">
+			AND pot.project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="warehouseId != null">
+			AND pot.warehouse_id = #{warehouseId,jdbcType=INTEGER}
+		</if>
+		<if test=" customerId != null">
+			AND pot.customer_id = #{customerId,jdbcType=INTEGER}
+		</if>
+		<if test=" currencyId != null">
+			AND pot.currency_Id = #{currencyId,jdbcType=INTEGER}
+		</if>
+		<if test=" state != null">
+			AND pot.state = #{state,jdbcType=INTEGER}
+		</if>
+		<if test=" startOrderTime != null and startOrderTime != ''">
+	       <![CDATA[
+	       		 AND pot.order_time >= #{startOrderTime}
+	        ]]>
+		</if>
+		<if test=" endOrderTime != null and endOrderTime != '' ">
+	       <![CDATA[
+	      		 AND pot.order_time <= #{endOrderTime}
+	        ]]>
+		</if>
+		<if test="goodsNo != null and goodsNo != '' ">
+			AND g.number like CONCAT('%',#{goodsNo},'%')
+		</if>
+		<if test="goodsName != null and goodsName != '' ">
+			AND g.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		AND
+		(ROUND(IFNULL(pol.goods_num,0)*IFNULL(pol.discount_price,0), 2)
+		-IFNULL(pol.invoice_amount,0)>0)
+		ORDER BY pol.id DESC
+	</select>
+</mapper>

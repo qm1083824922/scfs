@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.base.entity.BaseDepartmentDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.base.entity.BaseDepartment">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="number" jdbcType="VARCHAR" property="number" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="level" jdbcType="TINYINT" property="level" />
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, number, creator, creator_id, create_at,
+		update_at, remark,
+		is_delete,parent_id,level
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_department
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryByNumberAndName" parameterType="com.scfs.domain.base.entity.BaseDepartment"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_department
+		<where>
+			is_delete = 0
+			<if test=" id != null ">
+				and id != #{id,jdbcType=INTEGER}
+			</if>
+			and
+			(number =#{number,jdbcType=VARCHAR} or
+			name =
+			#{name,jdbcType=VARCHAR} )
+
+		</where>
+
+	</select>
+	<select id="queryDepartMentByParentId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_department
+		where parent_id = #{parentId,jdbcType=INTEGER}
+	</select>
+	<select id="queryDepartMentByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BaseDepartmentReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_department
+		<where>
+			is_delete = 0
+			<if test="number != null">
+				and number like CONCAT('%',#{number},'%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+		</where>
+		order by create_at desc
+	</select>
+	<update id="deleteById" parameterType="java.lang.Integer">
+		update tb_base_department
+		set is_delete = 1
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseDepartment">
+		insert into tb_base_department
+		(id,name,
+		number, creator, creator_id,
+		create_at, update_at,
+		remark,parent_id,level)
+		values (#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{number,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR}
+		,#{parentId,jdbcType=INTEGER},#{level,jdbcType=INTEGER})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.BaseDepartment">
+		update tb_base_department
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="number != null">
+				number = #{number,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+
+	<select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		id, name, number, is_delete,parent_id
+		FROM tb_base_department
+		<where>
+			<if test="updateAt != null">
+        <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_department
+	</select>
+
+
+	<!-- 查询部门信息 -->
+	<select id="queryEntityParam" parameterType="com.scfs.domain.base.entity.BaseDepartment"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_department
+		<where>
+			is_delete = 0
+			<if test=" id != null">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="number != null and number != ''">
+				and number = #{number}
+			</if>
+		</where>
+	</select>
+</mapper>

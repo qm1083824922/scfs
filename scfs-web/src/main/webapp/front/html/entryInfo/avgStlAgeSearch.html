@@ -1,0 +1,119 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>业务指标</li>
+            <li class="active">平均库存</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <form method="post" action="###" class="form-inline" id="searchForm">
+	                            <div class="form-group-sm">
+		                            <div class="search-item">                                
+		                            <label class="control-label ml10">项目：</label>
+		                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label ml10">供应商：</label>
+		                            <select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label ml10">客户：</label>
+		                            <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label ml10">仓库：</label>
+		                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label ml10">商品编号：</label>
+		                            <input class="form-control" id="goodsNumber" name="goodsNumber">     
+		                        </div>
+                                <div class="search-item">	
+                                    <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                    <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                                    <button type="button" id="back" data-url="html/entry.html" class="btn btn-default btn-sm js-back">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="js_dataTable" data-url="avgStlAge/query">
+                        </table>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{  
+			     title: '序号',
+			     field: 'columnsNumber',  
+			     width: 10
+            },{
+			     title: '项目',
+			     field: 'projectName',
+			     width: 100,
+			     align: 'center'
+			}, {
+				 title: '供应商',
+				 field: 'supplierName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '客户',
+				 field: 'customerName',
+				 width: 80,
+				 align: 'center'
+		    }, {
+				 title: '仓库',
+				 field: 'warehouseName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '商品编号',
+				 field: 'goodsNumber',
+				 width: 60,
+				 align: 'center'
+			}, {
+				 title: '入库日期',
+				 field: 'acceptTime',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '平均库龄(天)',
+				 field: 'avgAge',
+				 width: 100,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}
+	 ];
+	
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,null);
+	   	//还原查询条件及过滤后的数据
+		//GLOBAL.restoreQuery($('#js_dataTable')); 
+	};
+	
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	});
+	 GLOBAL.goBack();
+</script>

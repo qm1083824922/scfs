@@ -1,0 +1,367 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">铺货进销存报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+          <div class="box">
+              <div class="box-header">
+                  <form method="post" action="###" class="form-inline" id="searchForm">
+                      <div class="form-group-sm">
+                          <div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                          </div>
+                           <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="js_supplier" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="js_customer" name="customerId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" type="text"  id="goodsCode" name="goodsCode">
+                        </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">日期：</label>
+                              <input type="text" class="form-control js_datePicker" id="startCheckDate" value="" name="startCheckDate"> -
+                              <input type="text" class="form-control js_datePicker" id="endCheckDate" value="" name="endCheckDate">                                                    
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">是否合计：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                          </div>
+                          
+                          <div class="search-item">
+                              <label class="control-label ml10">是否超期：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needOver" name="needOver"></select>                            	
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                               <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                          </div>
+                          <div class="search-item">
+                          <div class="btn-group">
+	                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+	                               	导出 <span class="caret"></span>
+	                              </button>
+	                              <ul class="dropdown-menu" role="menu">
+	                                <li><a href="javascript:" data-permissionUrl="/goods/report/goodsReport.xls" data-url="goods/report/goodsReport.xls" id="btnExport" >导出单据</a></li>
+	                                <li><a href="javascript:" data-permissionUrl="/goods/report/goodsPmsInReport.xls" data-url="/goods/report/goodsPmsInReport.xls" id="btnExportInDtl">导出入库明细</a></li>
+	                                <li><a href="javascript:" data-permissionUrl="/goods/report/goodsPmsOutReport.xls" data-url="/goods/report/goodsPmsOutReport.xls" id="btnExportOutDtl">导出出库明细</a></li>
+	                                <li><a href="javascript:" data-permissionUrl="/goods/report/goodsPleaseReport.xls" data-url="/goods/report/goodsPleaseReport.xls" id="btnExportPleaseDtl">导出请款明细</a></li>
+	                                <li><a href="javascript:" data-permissionUrl="/goods/report/goodsReturnReport.xls" data-url="/goods/report/goodsReturnReport.xls" id="btnExportReturnDtl">导出退货明细</a></li>
+	                              </ul>
+	                            </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <table id="js_dataTable" data-url="goods/report/query">
+                  </table>
+              </div>
+              <!-- .box-body -->
+          </div>
+    </section>
+</div>
+<script>
+window.operateEvents = {
+    'click .goodaCodeScan': function (e, value, row, index) {
+    	if(row){
+    		scanForward(row,1);
+    	}
+    },
+    'click .inScan': function (e, value, row, index) {
+       	if(row){
+    		scanForward(row,2);
+    	}
+    },
+    'click .saleScan': function (e, value, row, index) {
+    	if(row){
+    		scanForward(row,3);
+    	}
+    },
+    'click .returnScan': function (e, value, row, index) {
+    	if(row){
+    		scanForward(row,4);
+    	}
+    },
+    'click .afterScan': function (e, value, row, index) {
+    	if(row){
+    		scanForward(row,5);
+    	}
+    },
+    'click .plScan': function (e, value, row, index) {
+    	if(row){
+    		scanForward(row,6);
+    	}
+    }
+};
+
+function scanForward(row,type){
+	options.param.projectId=row.projectId;
+	options.param.goodsCode=row.goodsCode;
+	options.param.supplierId=row.supplierId;
+	options.param.customerId=row.customerId;
+	options.param.startCheckDate=$("#startCheckDate").val();
+	options.param.endCheckDate= $("#endCheckDate").val();
+	if(type == 1){
+		GLOBAL.go("html/report/goods/goodsDetailScan.html");	
+	}if(type == 2){
+		GLOBAL.go("html/report/goods/goodsPmsInScan.html");	
+	}if(type == 3){
+		GLOBAL.go("html/report/goods/goodsPmsOutScan.html");	
+	}if(type == 4){
+		GLOBAL.go("html/report/goods/goodsReturnScan.html");	
+	}if(type == 5){
+		GLOBAL.go("html/report/goods/goodsStlScan.html");	
+	}if(type == 6){
+		GLOBAL.go("html/report/goods/goodsPleaseScan.html");	
+	}
+}
+
+//商品信息
+function  goodsForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="goodaCodeScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="goodaCodeScan">' + value + '</a>';
+		}
+	}
+}
+//入库
+function inForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="inScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="inScan">' + value + '</a>';
+		}
+	}
+}
+//销售
+function saleForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="saleScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="saleScan">' + value + '</a>';
+		}
+	}
+}
+//退货
+function returnForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="returnScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="returnScan">' + value + '</a>';
+		}
+	}
+}
+//期末
+function afterForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="afterScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="afterScan">' + value + '</a>';
+		}
+	}
+}
+//请款
+function plForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		if (row.warn) {
+            return '<span style="color:red">' + value + '</span>'
+        } else {
+            return value;
+        }
+	} else {
+		if(row.warn){
+			return '<a class="plScan" style="color:red">' + value + '</a>';
+		}else{
+			return '<a class="plScan">' + value + '</a>';
+		}
+	}
+}
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center',
+         formatter: function (value, row, index) {
+             return formatter(value, row, index)
+         }
+	 },  {
+	     title: '供应商',
+	     field: 'supplierName',
+	     align: 'center',
+         formatter: function (value, row, index) {
+             return formatter(value, row, index)
+         }
+	 },{
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center',
+         formatter: function (value, row, index) {
+             return formatter(value, row, index)
+         }
+	 },{
+	     title: '商品编号',
+	     field: 'goodsCode',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter: goodsForwardFormatter
+	 }, {
+	     title: '期初数量',
+	     field: 'beforeNumber',
+	     align: 'center',
+         formatter: function (value, row, index) {
+             return formatter(value, row, index)
+         }
+	 }, 
+	 {
+	     title: '本期入库数量',
+	     field: 'inNumber',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter: inForwardFormatter
+	 },{
+	     title: '本期销售数量',
+	     field: 'saleNumber',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter: saleForwardFormatter
+	 }, {
+	     title: '本期退货数量',
+	     field: 'returnNumber',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter:  returnForwardFormatter
+	 }, {
+	     title: '期末数量',
+	     field: 'afterNumber',
+	     align: 'center',
+         formatter: function (value, row, index) {
+             return formatter(value, row, index)
+         } 
+	 }, {
+	     title: '本期请款数量',
+	     field: 'pleaseNumber',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter:  plForwardFormatter
+	 }];
+	 
+function formatter(value, row, index) {
+    var optStr = "";
+    value = value == null ? "" : value;
+    if (row.warn) {
+        return '<span style="color:red">' + value + '</span>'
+    } else {
+        return value;
+    }
+}
+
+options.initPage = function(){ 
+	$(".js_datePicker").datetimepicker({format:"Y-m-d"});
+	var datea =  new Date(); 
+	$("#endCheckDate").val(GLOBAL.setDefaultDate(0));
+	$("#startCheckDate").val(GLOBAL.setDefaultDate(1-datea.getDate()));
+	
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if(data.options.totalStr != null){
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>"+data.options.totalStr+"</b></td></tr>");
+			}
+		},
+	});
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable')); 
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+$("#btnExport").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+$("#btnExportInDtl").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+$("#btnExportOutDtl").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+$("#btnExportPleaseDtl").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+$("#btnExportReturnDtl").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+</script>

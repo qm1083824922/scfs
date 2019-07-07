@@ -1,0 +1,244 @@
+
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>销售</li>
+          <li>销售退货单</li>
+          <li class="active">新建退货单</li>
+      </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="billReturnCreateForm">
+            <input type="hidden" id="billType" name="billType" value="2">       
+            <div class="box-body">
+            	<div class="row">
+					<div class="col-md-6">
+              <table class="table table-bordered table-hover no-margin">
+            	  <tr>
+                    <td width="180" class="text-right"><b>退货编号：</b></td>
+                    <td class="text-left">
+                      <label type="text" class="form-control" id="billNo" name="billNo"></label>
+                    </td>
+                  </tr>
+            	  <tr>
+                    <td class="text-right"><b>退货附属编号：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">
+                    </td>
+                  </tr>
+               	  <tr>
+                    <td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>退货仓库：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="PROJECT_WAREHOUSE" id="warehouseId" pid="projectId" name="warehouseId"><label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>客户：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="PROJECT_CUSTOMER" id="customerId" pid="projectId" name="customerId"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>运输方式：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="BILL_OUT_STORE_TRANSFER_MODE" id="transferMode" name="transferMode"></select>
+                    </td>
+                  </tr>  
+                  <tr>
+                    <td class="text-right"><b>发货地址：<em class="text-star cls_customerAddressId">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="SUBJECT_ADDRESS" id="customerAddressId" pid="customerId" name="customerAddressId"></select>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>退货日期：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input type="text" class="form-control js_datePicker" id="requiredSendDate" name="requiredSendDate">
+                    </td>
+                  </tr>                
+                  <tr>
+                    <td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currencyType" name="currencyType"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>签收标准：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-select" data-url="SIGN_STANDARD" id="signStandard" name="signStandard"></select>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateName" style="display:none">
+                    <td class="text-right"><b>签收人：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="certificateName" name="certificateName"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateId" style="display:none">
+                    <td class="text-right"><b>身份证：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="certificateId" name="certificateId"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_officialSeal" style="display:none">
+                    <td class="text-right"><b>公章：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input class="form-control" id="officialSeal" name="officialSeal"></input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td>
+                    <td class="text-left">
+                      <textarea class="form-control" id="remark" cols="50" rows="5" name="remark"></textarea>  
+                    </td>
+                  </tr>
+               </table>
+               		</div>
+               	</div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/billReturn/add" id="save" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" data-url="html/sale/billReturn/billReturnSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+    options.initPage = function(){
+     	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+     	
+        $("#transferMode").change(function(){
+            var thisValue = $(this).val();
+            if (thisValue == 1) {	//1-自提
+            	$(".cls_customerAddressId").hide();
+            	$("#customerAddressId").val("");
+   				$("#customerAddressId").rules("remove");  
+            } else {
+            	$(".cls_customerAddressId").show();            	
+    	 		$("#customerAddressId").rules("add", {required: true});
+            }
+        });
+        $("#signStandard").change(function(){
+            var thisValue = $(this).val();
+            if (thisValue === "" || thisValue == 3) {
+          	  	$(".tr_certificateName").hide();
+            	$("#certificateName").val("");
+   			  	$("#certificateName").rules("remove");
+   				
+            	$(".tr_certificateId").hide();
+            	$("#certificateId").val("");
+   			    $("#certificateId").rules("remove");
+   			  
+            	$(".tr_officialSeal").hide();
+            	$("#officialSeal").val("");
+   			    $("#officialSeal").rules("remove");
+            } else if (thisValue == 0) {	//0-身份证  
+            	$(".tr_certificateName").show();
+    	 		$("#certificateName").rules("add", {required: true});
+    	 		
+            	$(".tr_certificateId").show();
+    	 		$("#certificateId").rules("add", {required: true});
+    	 		
+            	$(".tr_officialSeal").hide();
+            	$("#officialSeal").val("");
+   				$("#officialSeal").rules("remove");
+            } else if (thisValue == 1) {	//1-公章 
+            	$(".tr_certificateName").hide();
+            	$("#certificateName").val("");
+   				$("#certificateName").rules("remove");
+   				
+            	$(".tr_certificateId").hide();
+            	$("#certificateId").val("");
+   				$("#certificateId").rules("remove");
+   				
+            	$(".tr_officialSeal").show();
+   				$("#officialSeal").rules("add", {required: true}); 
+            } else if (thisValue == 2) {	//2-身份证和公章
+            	$(".tr_certificateName").show();
+    	 		$("#certificateName").rules("add", {required: true});
+    	 		
+            	$(".tr_certificateId").show();
+    	 		$("#certificateId").rules("add", {required: true});
+    	 		
+            	$(".tr_officialSeal").show();
+   				$("#officialSeal").rules("add", {required: true}); 
+            }
+        });
+        
+        $("#billReturnCreateForm").validate({
+            rules: {
+            	affiliateNo: {
+            		required: true
+            	},
+            	billType: {
+            		required: true
+            	},
+            	projectId: {
+                  	required: true
+                },
+                supplierId: {
+                    required: true
+                },
+                customerId: {
+                    required: true
+                },
+                warehouseId: {
+                	required: true
+                },
+                customerAddressId: {
+                	required: true
+                },
+                currencyType: {
+                	required: true
+                },
+                requiredSendDate: {
+                	required: true
+                },
+                transferMode: {
+                	required: true
+                },
+                signStandard: {
+                	required: true
+                },
+                certificateName: {
+                	required: true
+                },
+                certificateId: {
+                	required: true
+                },
+                officialSeal: {
+                	required: true
+                }
+            },
+            submitHandler: function() {
+                var $this = $(this);
+                var data = $("#billReturnCreateForm").serialize();
+                GLOBAL.ajax("billReturn/add", data, function(e){
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                    	time: 1500
+                    },function(){
+                        options.param.id = e.items.id;
+                        options.param.projectId = e.items.projectId;
+                        GLOBAL.go("html/sale/billReturn/billReturnEdit.html", options.param);
+                    })
+                }, false, $("#save"));
+            }
+        });
+    }
+
+	GLOBAL.goBack();
+</script>

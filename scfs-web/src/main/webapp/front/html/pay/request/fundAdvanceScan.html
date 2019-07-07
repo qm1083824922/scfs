@@ -1,0 +1,109 @@
+<style>
+	.nav>li.one, .nav>li.two,.nav>li.state{
+		display: none;
+	}
+</style>
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>请款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation"><a class="tab-item"data-url="html/pay/request/fundBaseInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="li-po"><a class="tab-item" data-url="html/pay/request/fundOrderScan.html">订单信息</a></li>
+						<li role="presentation" class="li-fee"><a class="tab-item" data-url="html/pay/request/fundFeeScan.html">费用信息</a></li>
+						<li role="presentation" class="li-refund"><a class="tab-item" data-url="html/pay/request/fundRefundScan.html">退款信息</a></li>
+						<li role="presentation" class="li-advance active"><a class="tab-item" data-url="html/pay/request/fundAdvanceScan.html">预收单信息</a></li>
+						<li role="presentation" class="li-deduction-fee"><a class="tab-item" data-url="html/pay/request/fundDeductionFeeScan.html">抵扣费用信息</a></li>
+	                    <li role="presentation" class="li-attachment"><a class="tab-item" data-url="html/pay/request/attachmentScan.html">附件</a></li>
+	                    <li role="presentation" class="li-voucher"><a class="tab-item" data-url="html/pay/request/fundVoucherScan.html">付款凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="payAdvanRela/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/pay/request/fundSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script src="../../js/pay/payCommon.js"></script>
+<script>
+	window.operateEvents = {
+		'click .edit' : function(e, value, row, index) {
+			options.param.id = row.id;
+			GLOBAL.go("html/pay/payAdvanceEditModify.html");
+		}
+	};
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '项目',
+				field : 'projectName',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '客户',
+				field : 'custName',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '水单日期',
+				field : 'receiptDate',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '经营单位',
+				field : 'busiUnit',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '币种',
+				field : 'currencyTypeName',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '金额',
+				field : 'payAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var payType = options.param.payType;
+		var stateInt = options.param.stateInt;
+		showTab(payType, stateInt);
+		
+		options.param.payId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			payId : options.param.id
+		});
+	};
+
+
+	GLOBAL.goBack();
+</script>

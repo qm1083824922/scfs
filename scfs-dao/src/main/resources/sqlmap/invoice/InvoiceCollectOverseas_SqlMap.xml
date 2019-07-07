@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.invoice.InvoiceCollectOverseasDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceCollectOverseas">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="apply_no" jdbcType="VARCHAR" property="applyNo" />
+		<result column="business_unit" jdbcType="INTEGER" property="businessUnit" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="invoice_no" jdbcType="VARCHAR" property="invoiceNo" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="invoice_amount" jdbcType="DECIMAL" property="invoiceAmount" />
+		<result column="invoice_date" jdbcType="TIMESTAMP" property="invoiceDate" />
+		<result column="currnecy_type" jdbcType="TINYINT" property="currnecyType" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="approve_date" jdbcType="TIMESTAMP" property="approveDate" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="invoice_remark" jdbcType="VARCHAR" property="invoiceRemark" />
+		<result column="invoice_num" jdbcType="DECIMAL" property="invoiceNum" />
+		<result column="approve_remark" jdbcType="VARCHAR" property="approveRemark" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, apply_no, business_unit, project_id, supplier_id,
+		invoice_no,
+		bill_type, account_id,
+		invoice_amount, invoice_date,
+		currnecy_type, state, approve_date, creator_id,
+		creator,
+		is_delete,
+		create_at, remark, invoice_remark,invoice_num,approve_remark
+	</sql>
+	<sql id="Query_Column_List">
+		ov.id, apply_no, ov.business_unit, ov.project_id,
+		ov.supplier_id,
+		ov.invoice_no, ov.bill_type, ov.account_id,
+		ov.invoice_amount, ov.invoice_date, ov.currnecy_type, ov.state,
+		ov.approve_date,
+		ov.creator_id, ov.creator,
+		ov.is_delete, ov.create_at,
+		ov.remark,
+		ov.invoice_remark,ov.invoice_num,ov.approve_remark
+	</sql>
+	<sql id="T_Query_Column_List">
+		tmp.id, apply_no, tmp.business_unit, tmp.project_id,
+		tmp.supplier_id,
+		tmp.invoice_no, tmp.bill_type, tmp.account_id,
+		tmp.invoice_amount, tmp.invoice_date, tmp.currnecy_type, tmp.state,
+		tmp.approve_date,
+		tmp.creator_id, tmp.creator,
+		tmp.is_delete,
+		tmp.create_at, tmp.remark,
+		tmp.invoice_remark,tmp.invoice_num,tmp.approve_remark
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_overseas
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_invoice_collect_overseas
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.scfs.domain.invoice.entity.InvoiceCollectOverseas"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_invoice_collect_overseas (id, apply_no, business_unit,
+		project_id,
+		supplier_id, invoice_no,
+		bill_type, account_id, invoice_amount,
+		invoice_date, currnecy_type, state,
+		approve_date, creator_id, creator,
+		is_delete, create_at, remark,
+		invoice_remark,invoice_num,approve_remark)
+		values
+		(#{id,jdbcType=INTEGER}, #{applyNo,jdbcType=VARCHAR},
+		#{businessUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER}, #{invoiceNo,jdbcType=VARCHAR},
+		#{billType,jdbcType=TINYINT}, #{accountId,jdbcType=INTEGER},
+		#{invoiceAmount,jdbcType=DECIMAL},
+		#{invoiceDate,jdbcType=TIMESTAMP},
+		#{currnecyType,jdbcType=TINYINT}, #{state,jdbcType=TINYINT},
+		#{approveDate,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{isDelete,jdbcType=TINYINT},
+		#{createAt,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
+		#{invoiceRemark,jdbcType=VARCHAR},#{invoiceNum,jdbcType=DECIMAL},#{approveRemark,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateById"
+		parameterType="com.scfs.domain.invoice.entity.InvoiceCollectOverseas">
+		update tb_invoice_collect_overseas
+		<set>
+			<if test="applyNo != null">
+				apply_no = #{applyNo,jdbcType=VARCHAR},
+			</if>
+			<if test="businessUnit != null">
+				business_unit = #{businessUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceNo != null">
+				invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="accountId != null">
+				account_id = #{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceAmount != null">
+				invoice_amount = #{invoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="invoiceDate != null">
+				invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="currnecyType != null">
+				currnecy_type = #{currnecyType,jdbcType=TINYINT},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="approveDate != null">
+				approve_date = #{approveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceRemark != null">
+				invoice_remark = #{invoiceRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceNum != null">
+				invoice_num = #{invoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="approveRemark != null">
+				approve_remark = #{approveRemark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询境外收票列表信息 带分页 -->
+	<select id="queryInvoiceOverseasList" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectOverseasReqDto">
+		SELECT cov.id, cov.apply_no, cov.business_unit, cov.project_id,
+		cov.supplier_id, cov.bill_type, cov.account_id,
+		cov.invoice_amount,
+		cov.invoice_date, cov.currnecy_type, cov.state, cov.approve_date,
+		cov.creator_id, cov.creator,
+		cov.is_delete, cov.create_at, cov.remark,
+		cov.invoice_remark,cov.invoice_num,cov.approve_remark,cov.invoice_no,tm.orderNo
+		as orderNo from tb_invoice_collect_overseas
+		cov LEFT JOIN (
+		SELECT
+		<include refid="T_Query_Column_List" />
+		,
+		GROUP_CONCAT( DISTINCT tmp.orderNo) AS orderNo FROM (
+		SELECT
+		<include refid="Query_Column_List" />
+		,
+		(SELECT pot.order_no FROM tb_purchase_order_title pot
+		INNER JOIN
+		tb_purchase_order_line pol
+		ON pot.id = pol.po_id
+		WHERE pol.id =
+		po.po_line_id
+		AND pot.is_delete = 0
+		AND pol.is_delete = 0) AS orderNo
+		FROM
+		tb_invoice_collect_overseas ov
+		LEFT JOIN
+		tb_invoice_collect_overseas_po po
+		ON ov.id = po.collect_overseas_id
+		<where>
+			ov.is_delete=0 AND po.is_delete = 0
+			<if test="applyNo != null and applyNo != ''">
+				AND ov.apply_no=#{applyNo,jdbcType=INTEGER}
+			</if>
+			<if test="businessUnit != null and businessUnit !=''">
+				AND ov.business_unit=#{businessUnit,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null and projectId  !=''">
+				AND ov.project_id=#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="supplierId != null and supplierId !=''">
+				AND ov.supplier_id=#{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceNo != null and invoiceNo !=''">
+				AND ov.invoice_no=#{invoiceNo,jdbcType=VARCHAR}
+			</if>
+			<if test="billType != null and billType !=''">
+				AND ov.bill_type=#{billType,jdbcType=INTEGER}
+			</if>
+			<if test="state != null and state !=''">
+				AND ov.state=#{state,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null and currnecyType !=''">
+				AND ov.currnecy_type=#{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test=" startInvoiceDate != null and startInvoiceDate !=''">
+      <![CDATA[
+        AND ov.invoice_date >= #{startInvoiceDate}
+   	  ]]>
+			</if>
+			<if test=" endInvoiceDate != null and endInvoiceDate !=''">
+       <![CDATA[
+       AND ov.invoice_date <= #{endInvoiceDate}
+        ]]>
+			</if>
+			ORDER BY ov.create_at DESC
+		</where>
+		) tmp GROUP BY tmp.id) tm on tm.id=cov.id
+		<where>
+			cov.is_delete=0
+			<if test="applyNo != null and applyNo != ''">
+				AND cov.apply_no=#{applyNo,jdbcType=INTEGER}
+			</if>
+			<if test="businessUnit != null and businessUnit !=''">
+				AND cov.business_unit=#{businessUnit,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null and projectId  !=''">
+				AND cov.project_id=#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="supplierId != null and supplierId !=''">
+				AND cov.supplier_id=#{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceNo != null and invoiceNo !=''">
+				AND cov.invoice_no=#{invoiceNo,jdbcType=VARCHAR}
+			</if>
+			<if test="billType != null and billType !=''">
+				AND cov.bill_type=#{billType,jdbcType=INTEGER}
+			</if>
+			<if test="state != null and state !=''">
+				AND cov.state=#{state,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null and currnecyType !=''">
+				AND cov.currnecy_type=#{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test=" startInvoiceDate != null and startInvoiceDate !=''">
+      <![CDATA[
+        AND cov.invoice_date >= #{startInvoiceDate}
+   	  ]]>
+			</if>
+			<if test=" endInvoiceDate != null and endInvoiceDate !=''">
+       <![CDATA[
+       AND cov.invoice_date <= #{endInvoiceDate}
+        ]]>
+			</if>
+			ORDER BY cov.create_at DESC
+		</where>
+	</select>
+
+	<!--查询合計后的数据 -->
+	<select id="sumInvoiceCollectOversrea" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectOverseasReqDto">
+		select
+		SUM(ov.invoice_amount) invoiceAmount,
+		ov.currnecy_type
+		currnecyType
+		from
+		tb_invoice_collect_overseas ov INNER JOIN
+		tb_base_user_project bup on
+		ov.project_id=bup.project_id
+		<where>
+			ov.is_delete=0 AND bup.state=1 AND ov.currnecy_type is not null and
+			bup.user_id=#{userId}
+			<if test="applyNo != null and applyNo != ''">
+				AND ov.apply_no=#{applyNo,jdbcType=INTEGER}
+			</if>
+			<if test="businessUnit != null and businessUnit !=''">
+				AND ov.business_unit=#{businessUnit,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null and projectId  !=''">
+				AND ov.project_id=#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="supplierId != null and supplierId !=''">
+				AND ov.supplier_id=#{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceNo != null and invoiceNo !=''">
+				AND ov.invoice_no=#{invoiceNo,jdbcType=VARCHAR}
+			</if>
+			<if test="billType != null and billType !=''">
+				AND ov.bill_type=#{billType,jdbcType=INTEGER}
+			</if>
+			<if test="state != null and state !=''">
+				AND ov.state=#{state,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null and currnecyType !=''">
+				AND ov.currnecy_type=#{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test=" startInvoiceDate != null and startInvoiceDate !=''">
+      <![CDATA[
+        AND ov.invoice_date >= #{startInvoiceDate}
+   	  ]]>
+			</if>
+			<if test=" endInvoiceDate != null and endInvoiceDate !=''">
+       <![CDATA[
+       AND ov.invoice_date <= #{endInvoiceDate}
+        ]]>
+			</if>
+			GROUP BY ov.currnecy_type desc
+		</where>
+	</select>
+
+	<select id="isOverasyncMaxLine" resultType="int"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectOverseasReqDto">
+		select
+		count(*)
+		from
+		tb_invoice_collect_overseas c INNER
+		JOIN
+		tb_base_user_project b on
+		c.project_id=b.project_id
+		where c.is_delete=0
+		AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and c.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and c.project_id = #{projectId}
+		</if>
+		<if test="supplierId != null">
+			and c.supplier_id = #{supplierId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and c.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and c.invoice_no like CONCAT('%',#{invoiceNo},'%')
+		</if>
+		<if test="billType != null">
+			and c.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and c.state = #{state}
+		</if>
+	</select>
+	<select id="queryInvoiceByApplyNo"
+		parameterType="com.scfs.domain.invoice.entity.InvoiceCollectOverseas"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_overseas
+		where 1=1
+		<if test="applyNo != null and applyNo != ''">
+			and apply_no =#{applyNo}
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and invoice_no =#{invoiceNo}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="permissionList" var="permission"
+			varType="com.scfs.domain.base.dto.resp.BasePermissionResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">permission.name</mapping>
+				<mapping row="2" col="1">permission.url</mapping>
+				<mapping row="2" col="2">permission.ord</mapping>
+				<mapping row="2" col="3">permission.typeName</mapping>
+				<mapping row="2" col="4">permission.menuLevelName</mapping>
+				<mapping row="2" col="5">permission.parentName</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<title>合并装箱单打印</title>
+<!-- FontAwesome 4.3.0 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--bootstrap-->
+<link href="../../../css/bootstrap_min.css" rel="stylesheet"
+	type="text/css" />
+<!--AdminLTE theme-->
+<link href="../../../css/AdminLTE_min.css" rel="stylesheet"
+	type="text/css" />
+<!-- <link href="css/AdminLT_skins/_all-skins.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="../../../css/jquery.tag-editor.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="../../../css/sys_setting_min.css">
+<link rel="stylesheet" href="../../../css/mainframe_min.css">
+<link rel="stylesheet"
+	href="../../../js/plugins/bootstrap-table/bootstrap-table.min.css">
+<style type="text/css">
+@page {
+	size: auto; /* auto is the initial value */
+	margin: 0mm; /* this affects the margin in the printer settings */
+}
+
+body, table {
+	font-size: 14px;
+}
+
+table {
+	margin: auto;
+	border-collapse: collapse;
+}
+
+table.head {
+	font-size: 13px;
+	margin-top: -5px;
+}
+
+table.head td {
+	height: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+div.whole {
+	margin: 0px auto;
+	padding-top: 30px;
+	width: 730px;
+}
+
+td {
+	vertical-align: middle;
+}
+
+td input {
+	border: none;
+	text-align: center;
+	padding: 5px;
+	font-size: 14px;
+	cursor: pointer;
+	width: 86%;
+}
+
+hr {
+	margin: 5px 0 2px 0;
+}
+
+#qrcode {
+	float: right;
+}
+
+#qrcode img {
+	vertical-align: middle;
+	margin: auto;
+}
+</style>
+</head>
+
+<body>
+	<div class="whole">
+		<div class="print-top">
+			<button class="btn btn-primary mb20 printBtn">打印</button>
+			<button class="btn btn-default mb20 closeBtn">关闭</button>
+			<!-- <button class="btn btn-default mb20 copyUrl" data-clipboard-target="#bar" data-clipboard-action="copy">复制链接</button>
+                <button type="button" id="save" class="btn btn-primary mb20">保存</button> -->
+			<textarea id="bar" style="opacity: 0"></textarea>
+		</div>
+		<form class="form-horizontal form-inline" id="form1"
+			data-url="billDelivery/detail">
+			<table width="90%">
+				<tr>
+					<td colspan="4">
+						<table width="100%" style="float: left; width: 100%;">
+							<tr>
+								<td align="center" style="font-size: 23px; padding-top: 10px;">
+									<strong>PACKING&nbsp;&nbsp;LIST</strong>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" style="font-size: 23px; padding: 10px;">
+									<strong>装&nbsp;箱&nbsp;单</strong>
+								</td>
+							</tr>
+						</table>
+						<div id="qrcode"></div>
+					</td>
+				</tr>
+				<tr>
+					<td class="pt10" colspan="4" style="border: 0; padding-top: 30px">
+						<table id="js_dataTable" class="print-table" style="width: 100%">
+							<!-- border:1px solid #000; -->
+							<tr>
+								<td align="left" style="padding: 10px 0px 0px 0px;"><span>SHIPPER:</span>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 2px 0px 0px 0px;"><span><label
+										class="js-initform" id="businessUnitName"
+										name="businessUnitName" /></span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 2px 0px 0px 0px;"><span><label
+										class="js-initform" id="businessUnitEnglishName"
+										name="businessUnitEnglishName" /></span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 7px 0px 0px 0px;"><span>CONSIGNEE:</span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 1px 0px 0px 0px;"><span><label
+										class="js-initform" id="customerChineseName"
+										name="customerChineseName" /></span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 6px 0px 0px 0px;"><span><label
+										class="js-initform" id="customerEnglishName"
+										name="customerEnglishName" /></span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 1px 0px 0px 0px;"><span><label
+										class="js-initform" id="customerAddress"
+										name="customerAddress" /></span></td>
+							</tr>
+							<tr>
+								<td align="left" style="padding: 1px 0px 0px 0px;"><span>TEL:<label
+										class="js-initform" id="customerRegPhone"
+										name="customerRegPhone" /></span></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" style="border: 0; padding: 20px 0px 0px 0px">
+						<table width="100%" style="border: 0" class="poSearch_table"
+							id="js_goods">
+							<thead>
+								<th style="border: 1px solid #000; text-align: center;">Invoice&nbsp;NO<br>
+								<br>单号
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">Invoice&nbsp;Date<br>
+								<br>日期
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">ITEM&nbsp;NO<br>
+								<br>货号
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">NoGOOD&nbsp;<br>Name<br>品名
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">QUANTITY<br>
+								<br>数量
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">CTN&nbsp;NO<br>
+								<br>包装件数
+								</th>
+								<th
+									style="border: 1px solid #000; text-align: center; white-space: nowrap;">N.W.<br>(KGS)<br>净重(千克)
+								</th>
+								<th
+									style="border: 1px solid #000; text-align: center; white-space: nowrap;">G.W.<br>(KGS)<br>毛重(千克)
+								</th>
+								<th style="border: 1px solid #000; text-align: center;">MEASUREMENT<br>
+								<br>体积(CBM)
+								</th>
+							</thead>
+							<tbody>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td style="border: 1px solid #000;" colspan="1">总计： <label
+										class="js-initform"></label>
+									</td>
+									<td style="border: 1px solid #000;" colspan="1"><label
+										class="js-initform"></label></td>
+									<td style="border: 1px solid #000;" colspan="1"><label
+										class="js-initform"></label></td>
+									<td style="border: 1px solid #000;" colspan="1"><label
+										class="js-initform"></label></td>
+									<td style="border: 1px solid #000; text-align: center;"
+										colspan="1" id="number"><label class="js-initform"></label>
+									</td>
+									<td style="border: 1px solid #000; text-align: center;"
+										colspan="1"><label class="js-initform"></label></td>
+									<td style="border: 1px solid #000;" colspan="1"><label
+										class="js-initform"></label></td>
+									<td style="border: 1px solid #000; text-align: center;"
+										colspan="1""><label class="js-initform"></label></td>
+									</td>
+									<td style="border: 1px solid #000; text-align: center;"
+										colspan="1"><label class="js-initform"></label></td>
+								</tr>
+							</tfoot>
+						</table>
+					</td>
+				</tr>
+				<tr>
+				</tr>
+
+				<tr>
+					<td colspan="8" style="padding: 15px 0;">
+						<table style="width: 100%">
+							<tr>
+								<td
+									style="width: 110px; border: 0; padding: 5px; text-align: left; padding-right: 5px;"></td>
+								<td
+									style="width: 250px; padding: 5px 0; padding-left: 0px; text-align: left;">
+									<label class="js-initform"></label>
+								</td>
+								<td
+									style="width: 160px; border: 0; padding: 5px; text-align: right; padding-right: 5px;">SIGNATURE:</td>
+								<td style="padding: 5px 0; padding-left: 5px; text-align: left;">
+								</td>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script src="../../../js/lib/jquery-1.9.1.min.js"
+		type="text/javascript"></script>
+	<script src="../../../js/lib/qrcode.min.js" type="text/javascript"></script>
+	<script src='../../../js/plugins/bootstrap-table/bootstrap-table.js'
+		type='text/javascript'></script>
+	<script
+		src='../../../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js'
+		type='text/javascript'></script>
+	<script src='../../../js/plugins/layer/layer.js' type='text/javascript'></script>
+	<script src="../../../js/common.js"></script>
+	<script src='../../../js/purchase/clipboard.min.js'
+		type='text/javascript'></script>
+	<script src='../../../js/purchase/jquery.base64.js'
+		type='text/javascript'></script>
+</body>
+<script>
+        //复制页面url by hff 2017.5.23
+        var url=window.location.href;
+        var url1=url.split("?ids=")[1];
+        var hash;
+        if(/^[0-9]+$/.test(url1)){  //判断id是否加密 如果没加密则进行加密 by hff
+            hash = $.base64.btoa(url1); 
+        }else{
+           hash=url1; 
+        }                
+        $("#bar").val(url.split("?ids=")[0]+"?ids="+hash);
+        var clipboard = new Clipboard('.copyUrl');
+        clipboard.on('success', function(e) {
+            alert('复制成功');
+        });
+        clipboard.on('error', function(e) {
+            alert('复制失败');
+        });
+        var ids = GLOBAL.getParam("ids");
+        if(!/^[0-9]+$/.test(url1)){   //判断id是否加密 如果加密则解密 by hff
+             id=$.base64.atob(hash, true);   
+        }
+        
+       	var editData = GLOBAL.getEditData($("#form1"), ids.split(",")[0]);
+       	
+   	   	GLOBAL.ajax("merge/salePack/line/query",{ids:ids}, function(result) {
+          	if (result.items) {
+          		var tbody = "";
+          		var number=0;
+          		for (var i = 0; i < result.items.length; i++) {
+          			var data = result.items[i];
+          			var goodsNum=data.packages
+          			var grossWeight=data.grossWeight;
+          			var volume=data.volume;
+          			var netWeight=data.netWeight;
+          			number=number+goodsNum;
+          			if(grossWeight==null){
+          				grossWeight="";
+          			}
+          			if(volume==null){
+          				volume="";
+          			}
+          			if(netWeight==null){
+          				netWeight="";
+          			}
+          			var tr = "<tr>" 
+          					+ "<input type='hidden' id='id' name='id' value='" + data.id + "'></input>" 
+          					+ "<input type='hidden' id='poLineId' name='poLineId' value='" + data.poLineId + "'></input>" 
+          					+ "<td style='border: 1px solid #000;  text-align: center;'> " + data.orderNo+ "</td>"
+          					+ "<td style='border: 1px solid #000;  text-align: center;'> " + data.orderTime+ "</td>"
+  	        				+ "<td style='border: 1px solid #000;  text-align: center;'> " + data.goodsNo+ "</td>"
+  	        				+ "<td style='border: 1px solid #000;  text-align: left;'> " + data.goodsName + "</td>"
+  	        				+ "<td style='border: 1px solid #000;  text-align: center;'> " + goodsNum+ "</td>"
+  	        				+ "<td style='border: 1px solid #000; '><input id='packages' name='packages' value='"+data.packages+"'></input></td>"
+  	        				+ "<td style='border: 1px solid #000; '><input id='netWeight' name='netWeight' value='" +netWeight+ "'></input></td>"
+  	        				+ "<td style='border: 1px solid #000; '><input id='grossWeight' name='grossWeight' value='" +grossWeight  + "'></input></td>"
+  	        				+ "<td style='border: 1px solid #000; '><input id='volume' name='volume' value='" +volume + "'></input></td>"
+  	        				+ "</tr>";
+          			        tbody += tr;
+                  }
+          		$("#number").html(number);
+                  $(".poSearch_table").find("tbody").append(tbody);             
+          	}
+  	    });
+   	   	
+   	   /*  $("#save").click(
+ 			function() {
+ 				var isValid=true;
+ 				var  dtrArr=[];
+ 				var selectedRows = $('#js_goods tbody tr');
+ 				selectedRows.each(function(){
+ 					var id = $(this).find('#id').val();;
+ 					var poLineId = $(this).find('#poLineId').val();
+ 					
+ 					var packages = $(this).find('#packages').val();
+ 					var netWeight = $(this).find('#netWeight').val();
+ 					var grossWeight = $(this).find('#grossWeight').val();
+ 					var volume = $(this).find('#volume').val();
+ 					if(!packages || !netWeight || !grossWeight || !volume ){
+ 						layer.msg("不能为空");
+ 						isValid=false;
+ 					}
+ 					if(isValid){
+ 						if(!Number(packages) || !Number(netWeight) || !Number(grossWeight) || !Number(volume)){
+ 	 						layer.msg("请输入合法的数字");
+ 	 						isValid=false;
+ 	 					}
+ 					}
+ 					if(isValid){
+ 						dtrArr.push({
+ 							 "id": id,
+ 							 "poLineId" :poLineId,
+ 							 "packages" :packages,
+ 							 "netWeight" :netWeight,
+ 							 "grossWeight" :grossWeight,
+ 							 "volume" :volume
+ 						 });
+ 					}
+ 				})
+ 				console.log(dtrArr);
+ 				if(isValid){
+ 					GLOBAL.ajax("poPack/print/add",JSON.stringify(dtrArr), function(e){
+ 						if(e.success){
+ 							layer.msg("保存成功！", {
+ 								icon : 1,
+ 								time : 1500,
+ 							}, function() {
+ 								var userAgent = navigator.userAgent;
+ 					            if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) {
+ 					               window.location.href="about:blank";
+ 					            } else {
+ 					               window.opener = null;
+ 					               window.open("", "_self");
+ 					               window.close();
+ 					            }
+ 					            window.close();
+ 							});
+ 						}else{
+ 							layer.msg(e.msg, {
+ 								icon : 5,
+ 								time : 1500,
+ 							});
+ 						}
+ 					},true);
+ 				}
+ 			}); */   
+        
+        
+        
+        $(".printBtn").click(function() {
+            $(this).parent(".print-top").hide();
+            closeAfterPrint();
+        })
+        $(".closeBtn").click(function() {
+            var userAgent = navigator.userAgent;
+            if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) {
+               window.location.href="about:blank";
+            } else {
+               window.opener = null;
+               window.open("", "_self");
+               window.close();
+            }
+            window.close();
+        })
+        function closeAfterPrint() {
+            if (document.execCommand("print")) {
+                $(".print-top").show();
+
+                GLOBAL.ajax("common/updatePrintNum", {id:id, billType:19}, function(){
+					//layer.msg("打印次数 + 1");
+				});
+            } else
+                setTimeout("CloseAfterPrint();", 1000);
+        }
+
+        window.onafterprint = function() {
+            alert("Printing completed...");
+        }
+    </script>
+
+</html>

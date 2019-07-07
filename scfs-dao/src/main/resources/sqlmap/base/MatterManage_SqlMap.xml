@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.MatterManageDao">
+	<resultMap id="MatterManageMap" type="com.scfs.domain.base.entity.MatterManage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="matter_no" property="matterNo" jdbcType="VARCHAR" />
+		<result column="cust_main_id" property="custMainId" jdbcType="BIGINT" />
+		<result column="matter_name" property="matterName" jdbcType="BIGINT" />
+		<result column="matter_type" property="matterType" jdbcType="TINYINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="customer_name" property="customerName"
+			jdbcType="VARCHAR" />
+		<result column="customer_abbreviate" property="customerAbbreviate"
+			jdbcType="VARCHAR" />
+		<result column="stage" property="stage" jdbcType="TINYINT" />
+		<result column="hk_company" property="hkCompany" jdbcType="VARCHAR" />
+		<result column="enterprise_bus" property="enterpriseBus"
+			jdbcType="VARCHAR" />
+		<result column="matter_describe" property="matterDescribe"
+			jdbcType="VARCHAR" />
+		<result column="office_address" property="officeAddress"
+			jdbcType="VARCHAR" />
+		<result column="reg_address" property="regAddress" jdbcType="VARCHAR" />
+		<result column="contacts" property="contacts" jdbcType="VARCHAR" />
+		<result column="contacts_number" property="contactsNumber"
+			jdbcType="VARCHAR" />
+		<result column="dis_goods" property="disGoods" jdbcType="VARCHAR" />
+
+		<result column="biz_manager_id" property="bizManagerId"
+			jdbcType="BIGINT" />
+		<result column="business_manager_id" property="businessManagerId"
+			jdbcType="BIGINT" />
+		<result column="department_id" property="departmentId"
+			jdbcType="BIGINT" />
+		<result column="justice_id" property="justiceId" jdbcType="BIGINT" />
+		<result column="finance_manager_id" property="financeManagerId"
+			jdbcType="BIGINT" />
+		<result column="risk_manager_id" property="riskManagerId"
+			jdbcType="BIGINT" />
+
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		matter_no,
+		cust_main_id,
+		matter_name,
+		matter_type,
+		project_id,
+		customer_name,
+		customer_abbreviate,
+		stage,
+		hk_company,
+		enterprise_bus,
+		matter_describe,
+		office_address,
+		reg_address,
+		contacts,
+		contacts_number,
+		dis_goods,
+		biz_manager_id,
+		business_manager_id,
+		department_id,
+		justice_id,
+		finance_manager_id,
+		risk_manager_id,
+		state,
+		remark,
+		creator,
+		creator_id,
+		create_at,
+		delete_at,
+		update_at,
+		is_delete
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.MatterManage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_matter_manage(
+		matter_no,
+		cust_main_id,
+		matter_name,
+		matter_type,
+		project_id,
+		customer_name,
+		customer_abbreviate,
+		stage,
+		hk_company,
+		enterprise_bus,
+		matter_describe,
+		office_address,
+		reg_address,
+		contacts,
+		contacts_number,
+		dis_goods,
+		biz_manager_id,
+		business_manager_id,
+		department_id,
+		justice_id,
+		finance_manager_id,
+		risk_manager_id,
+		state,
+		remark,
+		creator,
+		creator_id,
+		create_at,
+		is_delete
+		)
+		values(
+		#{matterNo,jdbcType=BIGINT},
+		#{custMainId,jdbcType=BIGINT},
+		#{matterName,jdbcType=TINYINT},
+		#{matterType,jdbcType=TINYINT},
+		#{projectId,jdbcType=TINYINT},
+		#{customerName,jdbcType=VARCHAR},
+		#{customerAbbreviate,jdbcType=VARCHAR},
+		#{stage,jdbcType=TINYINT},
+		#{hkCompany,jdbcType=VARCHAR},
+		#{enterpriseBus,jdbcType=VARCHAR},
+		#{matterDescribe,jdbcType=VARCHAR},
+		#{officeAddress,jdbcType=VARCHAR},
+		#{regAddress,jdbcType=VARCHAR},
+		#{contacts,jdbcType=VARCHAR},
+		#{contactsNumber,jdbcType=VARCHAR},
+		#{disGoods,jdbcType=VARCHAR},
+		#{bizManagerId,jdbcType=BIGINT},
+		#{businessManagerId,jdbcType=BIGINT},
+		#{departmentId,jdbcType=BIGINT},
+		#{justiceId,jdbcType=BIGINT},
+		#{financeManagerId,jdbcType=BIGINT},
+		#{riskManagerId,jdbcType=BIGINT},
+		#{state,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=TINYINT},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+	<!-- 修改数据 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_matter_manage
+		WHERE id = #{id}
+	</delete>
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.MatterManage">
+		update tb_matter_manage
+		<set>
+			<if test="matterName != null">
+				matter_name=#{matterName},
+			</if>
+			<if test="custMainId != null">
+				cust_main_id=#{custMainId},
+			</if>
+			<if test="matterType != null">
+				matter_type=#{matterType},
+			</if>
+			<if test="projectId != null">
+				project_id=#{projectId},
+			</if>
+			<if test="customerName != null and customerName !=''">
+				customer_name=#{customerName},
+			</if>
+			<if test="customerAbbreviate != null and customerAbbreviate !=''">
+				customer_abbreviate=#{customerAbbreviate},
+			</if>
+			<if test="stage != null">
+				stage=#{stage},
+			</if>
+			<if test="hkCompany != null and hkCompany !=''">
+				hk_company=#{hkCompany},
+			</if>
+			<if test="enterpriseBus != null and enterpriseBus !=''">
+				enterprise_bus=#{enterpriseBus},
+			</if>
+			<if test="matterDescribe != null and matterDescribe !=''">
+				matter_describe=#{matterDescribe},
+			</if>
+			<if test="officeAddress != null and officeAddress !=''">
+				office_address=#{officeAddress},
+			</if>
+			<if test="regAddress != null and regAddress !=''">
+				reg_address=#{regAddress},
+			</if>
+			<if test="contacts != null and contacts !=''">
+				contacts=#{contacts},
+			</if>
+			<if test="contactsNumber != null and contactsNumber !=''">
+				contacts_number=#{contactsNumber},
+			</if>
+			<if test="disGoods != null and disGoods !=''">
+				dis_goods=#{contactsNumber},
+			</if>
+			<if test="bizManagerId !=null">
+				biz_manager_id=#{bizManagerId},
+			</if>
+			<if test="businessManagerId !=null">
+				business_manager_id=#{businessManagerId},
+			</if>
+			<if test="departmentId !=null">
+				department_id=#{departmentId},
+			</if>
+			<if test="justiceId !=null">
+				justice_id=#{justiceId},
+			</if>
+			<if test="financeManagerId !=null">
+				finance_manager_id=#{financeManagerId},
+			</if>
+			<if test="riskManagerId !=null">
+				risk_manager_id=#{riskManagerId},
+			</if>
+			<if test="state != null">
+				state=#{state},
+			</if>
+			<if test="remark != null and remark !=''">
+				remark=#{remark},
+			</if>
+			<if test="deleteAt != null">
+				delete_at=#{deleteAt},
+			</if>
+			<if test="isDelete != null">
+				is_delete=#{isDelete},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="MatterManageMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_matter_manage
+		where id=#{id} for update
+	</select>
+
+	<!-- 获取数据 -->
+	<select id="queryResultsByCon" resultMap="MatterManageMap"
+		parameterType="com.scfs.domain.base.dto.req.MatterManageReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_matter_manage
+		<where>
+			is_delete=0
+			<if test="userId != null">
+				and creator_id=#{userId}
+			</if>
+			<if test="matterNo != null and matterNo !=''">
+				and matter_no like CONCAT('%',#{matterNo},'%')
+			</if>
+			<if test="matterName !=null">
+				and matter_name=#{matterName}
+			</if>
+			<if test="matterType != null">
+				and matter_type=#{matterType}
+			</if>
+			<if test="projectId != null">
+				and project_id=#{projectId}
+			</if>
+			<if test="customerName != null and customerName !=''">
+				and customer_name like
+				CONCAT('%',#{customerName},'%')
+			</if>
+			<if test="startCreateTime != null ">
+			<![CDATA[
+					and create_at >=#{startCreateTime}
+				]]>
+			</if>
+			<if test="endCreateTime != null ">
+				<![CDATA[
+						and create_at <=#{endCreateTime}
+					]]>
+			</if>
+			<if test="state != null">
+				and state=#{state}
+			</if>
+			<if test="followId != null">
+				and cust_main_id=#{followId}
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+</mapper>

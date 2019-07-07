@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.DictRegionDao">
+	<sql id="Region_Column_List">
+		region_id, parent_id, region_name, region_type
+	</sql>
+	<resultMap id="RegionResultMap" type="com.scfs.domain.base.entity.DictRegion">
+		<result column="region_id" property="regionId" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="region_name" property="regionName" jdbcType="VARCHAR" />
+		<result column="region_type" property="regionType" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="queryParents" resultMap="RegionResultMap">
+		select
+		<include refid="Region_Column_List" />
+		from dict_region where parent_id = 0
+	</select>
+
+	<select id="queryChildsByParent" resultMap="RegionResultMap"
+		parameterType="Integer">
+		select
+		<include refid="Region_Column_List" />
+		from dict_region where parent_id = #{parentId}
+	</select>
+
+	<select id="queryAllDictRegion" resultMap="RegionResultMap">
+		select
+		<include refid="Region_Column_List" />
+		from dict_region
+	</select>
+</mapper>

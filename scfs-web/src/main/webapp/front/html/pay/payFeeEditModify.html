@@ -1,0 +1,135 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>资金</li>
+		<li>付款</li>
+		<li>费用明细编辑</li>
+		<li class="active">修改</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="payFeeRela/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id"> <input class="form-control js-initform"
+						type="hidden" id="payId" name="payId">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>费用编号：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="feeNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>费用类型：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="feeTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用日期：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="payDate"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用金额：</b></td>
+							<td class="text-left"><label
+								class=" js-initform toThound" id="expPayAmount"></label></td>
+						</tr>
+
+						<tr>
+							<td class="text-right"><b>已收票金额：</b></td>
+							<td class="text-left"><label
+								class=" js-initform toThound" id="acceptInvoiceAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已付款金额：</b></td>
+							<td class="text-left"><label
+								class=" js-initform toThound" id="oldPayAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可付款金额：</b></td>
+							<td class="text-left"><label
+								class=" js-initform toThound" id="paymentAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>本次付款金额：</b></td>
+							<td class="text-left"><input type="text"
+								class=" js-initform" id="payAmount"
+								name="payAmount"></td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="save" data-url="payFeeRela/update" data-permissionUrl="/payFeeRela/update"
+						class="btn btn-primary btn-sm">保存</button>
+					<button type="button" data-url="html/pay/payFeeEdit.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+	};
+
+	$("#save").click(function() {
+		var dtlArr = [];
+		var saveUrl = $(this).data("url");
+		var price = $("#payAmount");
+		var id = $("#id").val();
+		var payId = $("#payId").val();
+		var pattern = /^(-)?\d+(.\d{1,2})?$/;
+		var isValid = true;
+		if (price.val() == "") {
+			price.focus();
+			layer.msg("请输入金额");
+			isValid = false;
+		}
+		if (!pattern.test(price.val())) {
+			price.focus();
+			layer.msg("请输入正确格式");
+			isValid = false;
+		}
+		if (isValid) {
+			dtlArr.push({
+				"id" : id,
+				"payAmount" : price.val()
+			});
+			var saveData = {
+				relList : dtlArr,
+				payId : payId
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						options.param.id = $("#payId").val();
+						GLOBAL.go("html/pay/payFeeEdit.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType);
+		}
+	});
+
+	GLOBAL.goBack(function() {
+		options.param.id = options.param.payId
+	});
+</script>
+

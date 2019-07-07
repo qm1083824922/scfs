@@ -1,0 +1,99 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>财务</li>
+			<li>对账单</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td width="180" class="text-right"><b>项目：</b></td>
+									<td class="text-left"><span id="projectName" name="projectName"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>客户：</b></td>
+									<td class="text-left"><span id="custName" name="custName"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>单据附属编号：</b></td>
+									<td class="text-left"><span id="billAttachNo" name="billAttachNo"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>结算开始日期：</b></td>
+									<td class="text-left"><span id="astStartDate" name="astStartDate"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>结算结束日期：</b></td>
+									<td class="text-left"><span id="astEndDate" name="astEndDate"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>币种：</b></td>
+									<td class="text-left"><span id="currencyTypeName" name="currencyTypeName"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>项目总额度：</b></td>
+									<td class="text-left"><span id="projectAmount" name="projectAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>总占用额度：</b></td>
+									<td class="text-left"><span id="totalAmount" name="totalAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>可用额度：</b></td>
+									<td class="text-left"><span id="inUseAmount" name="inUseAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>在库监管总额：</b></td>
+									<td class="text-left"><span id="inStoreAmount" name="inStoreAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>在途总额：</b></td>
+									<td class="text-left"><span id="onWayAmount" name="onWayAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>借货总额：</b></td>
+									<td class="text-left"><span id="lendAmount" name="lendAmount"></span></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注： </b></td>
+									<td class="text-left" rows="3"><span id="note" name="note"></span></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/fi/accountStatement/accountStatementTitleSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		var callback = function(reply) {
+			var data = reply.items;
+	
+			for ( var i in data) {
+				var value = data[i];
+				$("#" + i).text(value);
+			}
+		}
+		GLOBAL.ajax("accountStatementTitle/detail", options.param, callback);
+	
+	}
+	GLOBAL.goBack();
+</script>

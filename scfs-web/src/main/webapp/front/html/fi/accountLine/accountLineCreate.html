@@ -1,0 +1,165 @@
+<div class="wrapper">
+	<?php include 'bread_crumbs.php' ?>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="accountLineForm">
+				<div class="box-body">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>科目编号：<em
+									class="text-star">*</em></b></td>
+							<td class="text-left"><input type="text"
+								id="accountLineNo" name="accountLineNo" class="form-control">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目级别：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="ACCOUNT_LINE_LEVEL"
+								id="accountLineLevel" name="accountLineLevel"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目名称：<em class="text-star">*</em></b></td>
+							<td class="text-left"><input class="form-control"
+								name="accountLineName" id="accountLineName"></input></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目分类：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="ACCOUNT_LINE_TYPE"
+								id="accountLineType" name="accountLineType"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>末级科目：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="isLast" name="isLast"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>借贷：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="DEBIT_OR_CREDIT"
+								id="debitOrCredit" name="debitOrCredit"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needProject" name="needProject" class="form-control"></select>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>供应商辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needSupplier" name="needSupplier" class="form-control"></select>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>客户辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needCust" name="needCust" class="form-control">
+							</select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>人员辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needUser" name="needUser" class="form-control">
+							</select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>账号辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needAccount" name="needAccount" class="form-control">
+							</select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>税率辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needTaxRate" name="needTaxRate" class="form-control">
+							</select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>内部经营单位辅助：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="needInnerBusiUnit" name="needInnerBusiUnit" class="form-control">
+							</select></td>
+						</tr>
+					</table>
+				</div>
+				<div class="box-footer text-center">
+					<button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/accountLine/add">保存</button>
+					<button type="button" id="back" class="btn btn-default btn-sm js-back"
+						data-url="html/fi/accountLine/accountLineSearch.html" >
+						返回</a>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+options.initPage = function(){
+	$("#accountLineForm").validate({
+	    rules: {
+	    	accountLineNo: {
+	          required: true
+	        },
+	        accountLineLevel: {
+	            required: true
+	        },
+	        accountLineName: {
+	            required: true
+	        },
+	        accountLineType: {
+	            required: true
+	        },
+	        isLast: {
+	            required: true
+	        },
+	        debitOrCredit: {
+	            required: true
+	        },
+	        needProject: {
+	            required: true
+	        },
+	        needSupplier: {
+	            required: true
+	        },
+	        needCust: {
+	            required: true
+	        },
+	        needUser: {
+	            required: true
+	        },
+	        needAccount: {
+	            required: true
+	        },
+	        needTaxRate: {
+	            required: true
+	        },
+	        needInnerBusiUnit: {
+	            required: true
+	        },
+	    },
+	  	submitHandler: function() {
+	       	var data = $("#accountLineForm").serializeObject();
+	   	    GLOBAL.ajax("accountLine/add",data, function(e){
+	  	    	if (e.success) {
+	                 layer.msg("新增成功！");
+	                 GLOBAL.go("html/fi/accountLine/accountLineSearch.html");
+	            } else {
+	                 layer.msg(e.msg);
+	            }
+	       }, false, $("#save"));
+	  	}
+	});
+}
+GLOBAL.goBack();
+
+</script>

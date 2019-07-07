@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.finance.CopeManageDao">
+	<sql id="CopeManage_Column_List">
+		cope.id,
+		cope.project_id,
+		cope.customer_id,
+		cope.busi_unit_id,
+		cope.currnecy_type,
+		cope.cope_amount,
+		cope.paid_amount,
+		cope.unpaid_amount,
+		cope.create_at,
+		cope.creator_id,
+		cope.update_at
+	</sql>
+	<resultMap id="CopeManageResultMap"
+		type="com.scfs.domain.finance.cope.entity.CopeManage">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="busi_unit_id" property="busiUnitId" jdbcType="INTEGER" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="cope_amount" property="copeAmount" jdbcType="DECIMAL" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="unpaid_amount" property="unpaidAmount"
+			jdbcType="DECIMAL" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryResultsByCon" resultMap="CopeManageResultMap"
+		parameterType="com.scfs.domain.finance.cope.dto.req.CopeManageReqDto">
+		select
+		<include refid="CopeManage_Column_List" />
+		from tb_cope_manage cope
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project bup ON
+			cope.project_id=bup.project_id
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND bup.state=1
+			AND bup.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			AND cope.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND cope.customer_id=#{customerId}
+		</if>
+		<if test="busiUnitId != null">
+			AND cope.busi_unit_id=#{busiUnitId}
+		</if>
+		<if test="currnecyType != null">
+			AND cope.currnecy_type=#{currnecyType}
+		</if>
+		<if test="startCopeTime != null">
+			AND cope.create_at &gt;=#{startCopeTime}
+		</if>
+		<if test="endCopeTime != null">
+			AND cope.create_at &lt;=#{endCopeTime}
+		</if>
+		order by cope.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="CopeManageResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="CopeManage_Column_List" />
+		from tb_cope_manage cope
+		where cope.id = #{id,jdbcType=INTEGER}
+		for
+		update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.finance.cope.entity.CopeManage"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_cope_manage(
+		project_id,
+		customer_id,
+		busi_unit_id,
+		currnecy_type,
+		cope_amount,
+		paid_amount,
+		unpaid_amount,
+		create_at,
+		creator_id
+		)
+		VALUES
+		(
+		#{projectId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{busiUnitId,jdbcType=INTEGER},
+		#{currnecyType,jdbcType=TINYINT},
+		#{copeAmount,jdbcType=DECIMAL},
+		#{paidAmount,jdbcType=DECIMAL},
+		#{unpaidAmount,jdbcType=DECIMAL},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.finance.cope.entity.CopeManage">
+		update tb_cope_manage
+		<set>
+			id = #{id}
+			<if test="projectId != null">
+				, project_id=#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null">
+				, customer_id=#{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="busiUnitId != null">
+				,busi_unit_id =#{busiUnitId,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null">
+				,currnecy_type =#{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test="copeAmount != null">
+				,cope_amount =#{copeAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="paidAmount != null">
+				, paid_amount=#{paidAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="unpaidAmount != null">
+				,unpaid_amount =#{unpaidAmount,jdbcType=DECIMAL}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+</mapper>

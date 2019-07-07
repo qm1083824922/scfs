@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<div class="wrapper">
+    <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>铺货商品</li>
+	    <li class="active">导入</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+            <div class="box-body">  
+	         <form class="form-horizontal form-inline" id="form1" enctype="multipart/form-data">
+                 <table class="table table-bordered table-hover no-margin">  
+                  	<tr>
+                       <td width="180" class="text-right"><b>导入说明： </b></td> 
+                       <td class="text-left">
+                       		1、导入条数不能超过999；</br>
+                            2、编码不能为空，编号不能超过50个字符，编号不能重复；</br>
+                            3、名称不能为空，名称不能超过100个字符；</br>
+                            4、事业部不能为空，事业部不能超过100个字符；</br>
+                            5、供应商不能为空，供应商不能超过100个字符；</br>
+                            6、质押比例不能为空，质押比例必须是不能大于1的数字；</br>
+                            7、型号不能为空，型号不能超过100个字符；</br>
+                            8、条码不能为空，条码不能超过20个字符；</br>
+                            9、规格不能为空，规格不能超过50个字符；</br>
+                            10、税收分类不能超过50个字符；</br>
+                            11、国内税率不能为空；</br>
+                            12、单位不能为空，单位不能超过20个字符；</br>
+                            13、体积不能为空；</br>
+                            14、毛重不能为空；</br>         
+                            15、净重不能为空；</br>
+                            16、采购指导价和币种不能为空；</br>   
+                            17、销售指导价和币种不能为空；</br>   
+                            18、事业部主管不能为空；</br>       
+                            19、采购部专员不能为空；</br> 
+                            20、供应链小组不能为空；</br>     
+                            21、供应链服务不能为空；</br>    
+                            22、风控专员不能为空； 
+                       </td>
+                    </tr>
+                    <tr>
+                       <td width="180" class="text-right"><b>下载导入模板： </b></td> 
+                       <td class="text-left"> 
+                            <button type="button" data-permissionUrl="/distributeGoods/excel/distributeTemplate.xls" 
+                            	data-url="distributeGoods/excel/distributeTemplate.xls" id="download" class="btn btn-default btn-sm">下载</button>
+                       </td>
+                    </tr>
+                    <tr>
+                       <td width="180" class="text-right"><b>选择导入文件： </b></td> 
+                       <td class="text-left"> 
+                            <span type="button" class="btn" data-permissionUrl="/distributeGoods/excel/import" id="upload"></span>
+                       </td>
+                    </tr>
+                  </table>
+	          </form>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/baseinfo/distribute/distributeGoodsSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+        </div>
+  </section>
+</div>
+
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script>
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+});
+
+$("#download").click(function(){
+	var url = $(this).data("url");
+	location.href = GLOBAL.host + url;
+});
+
+$("#upload").upload({
+ 	url: GLOBAL.host + "/distributeGoods/excel/import",
+ 	fileType: "xls, xlsx",
+ 	isMultiple: false,
+	success: function(){
+		
+    }
+}); 
+</script> 
+

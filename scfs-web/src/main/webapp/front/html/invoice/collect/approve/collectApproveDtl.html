@@ -1,0 +1,71 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>收票认证</li>
+            <li class="active">收票认证明细</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box">        
+            <div class="box-body">
+              	<ul class="nav nav-tabs">
+                   	<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/approve/collectApproveEdit.html">收票认证</a></li>
+                 	<li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/collect/approve/collectApproveDtl.html">收票认证明细</a></li>
+               	</ul>
+            
+                <table id="js_dataTable" data-url="invoiceCollect/approve/dtl/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+                <button type="button" data-url="html/invoice/collect/approve/collectApprove.html" class="btn btn-default btn-sm js-back">返回</button>          
+    		</div>
+    		<!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '认证日期',
+	     field: 'approveDate',
+	     align: 'center',
+    	 width: 250
+	 }, {
+         title: '认证金额',
+         field: 'approveAmount',
+         align: 'center',
+    	 width: 200,
+		 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+     }, {
+	     title: '认证备注',
+	     field: 'approveRemark',
+	     align: 'center'
+	 }, {
+	     title: '认证人',
+	     field: 'approver',
+	     align: 'center'
+	 }, {
+	     title: '认证时间',
+	     field: 'approverAt',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		invoiceCollectId : options.param.id
+	}, null);
+}
+
+GLOBAL.goBack();
+</script>

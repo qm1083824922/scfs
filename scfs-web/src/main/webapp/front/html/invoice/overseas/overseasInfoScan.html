@@ -1,0 +1,206 @@
+<style>
+.nav>li.one,
+.nav>li.two{
+    display: none;
+}
+.hideFeeTypeName,.hideIsMerge{
+    display: none;
+}
+</style>
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>境外收票</li>
+            <li class="active">浏览</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+          <div class="box no-margin">
+              <form class="form-horizontal form-inline" id="form1" data-url="invoiceOverseas/detail">
+                  <div class="box-body">
+                      <ul class="nav nav-tabs">
+                          <li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/overseas/overseasInfoScan.html">基础信息</a></li>
+                          <li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/overseas/overseasFeeScan.html">费用信息</a></li>
+                          <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/overseas/overseasPoScan.html">销售单信息</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/invoice/overseas/attachmentScan.html">附件</a></li>
+                      </ul>
+                      <input class="form-control js-initform" type="hidden" id="id" name="id">
+                      <table class="table table-bordered table-hover no-margin">
+                          <tr>
+                              <td class="text-right"><b>申请编号：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="applyNo" name="applyNo"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td width="180" class="text-right"><b>项目：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="projectName" name="projectName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>客户：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="customerName" name="customerName"></label>
+                              </td>
+                          </tr>
+                          
+                          <tr>
+                              <td class="text-right"><b>申请总额：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="invoiceAmount" name="invoiceAmount"></label>
+                              </td>
+                          </tr>
+                          
+                          <tr>
+                              <td class="text-right"><b>币种：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="currnecyTypeName" name="currnecyTypeName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>银行账号：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="accountNo" name="accountNo"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>开户人：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="subjectName" name="subjectName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>开户行：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="bankName" name="bankName"></label>
+                              </td>
+                          </tr>
+                          
+                          <tr>
+                              <td class="text-right"><b>结算周期：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="balanceStartDate" name="balanceStartDate"></label>
+                                  -
+                                  <label class="js-initform" id="balanceEndDate" name="balanceEndDate"></label>
+                              </td>
+                          </tr>
+                          
+                          <tr>
+                              <td class="text-right"><b>单据类别：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                              </td>
+                          </tr>
+                          
+                          <tr class="hideFeeTypeName">
+                              <td class="text-right"><b>开票明细：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="feeTypeName" name="feeTypeName"></label>
+                              </td>
+                          </tr>
+                          
+                          
+                          <tr class="hideIsMerge">
+                              <td class="text-right"><b>同品合并：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="isMerge" name="isMerge"></label>
+                              </td>
+                          </tr>
+                           <tr>
+                              <td class="text-right"><b>票据备注：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="invoiceRemark" name="invoiceRemark"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>单据备注：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="remark" name="remark"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>状态：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="stateName" name="stateName"></label>
+                              </td>
+                          </tr>
+                      </table>
+                      <div class="mt15">
+                          <h4 class="mb10">审核记录</h4>
+                          <table id="js_audit_dataTable" data-url="overseas/auditflow/audit/query"></table>
+                      </div>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer text-center">
+                      <button type="button" data-url="html/invoice/overseas/overseasInfoSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+          </div>
+    </section>
+</div>
+<script>
+/*审核数据表格*/
+var tabColsLog = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+}, {
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+}, {
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+}, {
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+}, {
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+}, {
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+
+    GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+        projectItemId: options.param.id
+    }, null, {
+        pagination: false
+    });
+    
+    var tabId = options.param.billType;
+    var isMerge = options.param.isMerge;
+    var tabArr = ["one", "two", "three"];
+    $(".nav>li." + tabArr[tabId - 1]).show();
+    if(tabId== "2"){
+    	$(".hideFeeTypeName").show();
+    }else{
+    	if(isMerge == "1"){
+    		$("#isMerge").text("是");
+    	}else{
+    		$("#isMerge").text("否");
+    	}
+    	$(".hideIsMerge").show();
+    }
+};
+
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

@@ -1,0 +1,63 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>接口</li>
+            <li class="active">PMS供应商绑定</li>
+            <li class="active">浏览PMS供应商绑定</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="form1" data-url="pmssSupplierBind/detail">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input class="form-control js-initform" type="hidden" id="id" name="id">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <td width="220" class="text-right"><b>项目：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="projectName"> </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="supplierName"> </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商编号    ： </b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="supplierNo"> </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>PMS供应商编号    ： </b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="pmsSupplierNo"> </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="button" data-url="html/interface/pmsSupplier/pmsSupplierSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+}
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

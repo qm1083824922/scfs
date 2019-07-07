@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.report.StockReportDao">
+	<!-- 库存报表 -->
+	<resultMap id="StockReportMap" type="com.scfs.domain.report.entity.StockReport">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<result column="department_id" property="departmentId"
+			jdbcType="INTEGER" />
+		<result column="biz_manager_id" property="bizManagerId"
+			jdbcType="INTEGER" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="INTEGER" />
+
+		<result column="sum_store" property="sumStore" jdbcType="DECIMAL" />
+		<result column="sum_lock" property="sumLock" jdbcType="DECIMAL" />
+		<result column="sum_not_lock" property="sumNotLock" jdbcType="DECIMAL" />
+		<result column="sum_num" property="sumNum" jdbcType="DECIMAL" />
+		<result column="sum_lock_num" property="sumLockNum" jdbcType="DECIMAL" />
+		<result column="sum_not_lock_num" property="sumNotLockNum"
+			jdbcType="DECIMAL" />
+		<result column="advent_amount1" property="adventAmount"
+			jdbcType="DECIMAL" />
+		<result column="expire_amount" property="expireAmount"
+			jdbcType="DECIMAL" />
+		<result column="expire_amount1" property="expireAmount1"
+			jdbcType="DECIMAL" />
+		<result column="expire_amount2" property="expireAmount2"
+			jdbcType="DECIMAL" />
+		<result column="expire_amount3" property="expireAmount3"
+			jdbcType="DECIMAL" />
+
+	</resultMap>
+
+	<!-- 统计维度条件查询 -->
+	<sql id="groupCondition">
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 1">
+			v_table.project_id, v_table.business_unit_id,
+			v_table.currency_type
+		</if>
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 2">
+			v_table.warehouse_id, v_table.currency_type
+		</if>
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 3">
+			v_table.project_id, v_table.business_unit_id,
+			v_table.warehouse_id,
+			v_table.currency_type
+		</if>
+		<if test="statisticsDimensionType == null">
+			v_table.project_id, v_table.currency_type
+		</if>
+	</sql>
+	<!-- 显示数据 -->
+	<sql id="selectCondition">
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 1">
+			v_table.project_id,v_table.business_unit_id,v_table.department_id,
+			v_table.biz_manager_id,
+		</if>
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 2">
+			v_table.warehouse_id,
+		</if>
+		<if test="statisticsDimensionType != null and statisticsDimensionType == 3">
+			v_table.project_id,v_table.business_unit_id,v_table.warehouse_id,v_table.department_id,
+			v_table.biz_manager_id,
+		</if>
+		<if test="statisticsDimensionType == null">
+			v_table.project_id,v_table.business_unit_id,v_table.department_id,
+			v_table.biz_manager_id,
+		</if>
+	</sql>
+
+	<!-- 库存报表列表信息查询 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.StockReportReqDto"
+		resultMap="StockReportMap">
+		SELECT
+		<include refid="selectCondition" />
+		v_table.id,
+		v_table.goods_id,
+		v_table.customer_id,
+		v_table.currency_type,
+		SUM(v_table.sum_store)
+		sum_store,
+		SUM(v_table.sum_lock) sum_lock,
+		(SUM(v_table.sum_store)-SUM(v_table.sum_lock)) sum_not_lock,
+		SUM(v_table.store_num) sum_num,
+		SUM(v_table.lock_num) sum_lock_num,
+		(SUM(v_table.store_num)-SUM(v_table.lock_num)) sum_not_lock_num,
+		SUM(adventAmount1) advent_amount1,
+		SUM(expireAmount) expire_amount,
+		SUM(expireAmount1) expire_amount1,
+		SUM(expireAmount2) expire_amount2,
+		SUM(expireAmount3) expire_amount3
+		FROM
+		(
+		SELECT
+		s.id,s.goods_id,b.department_id,
+		s.accept_time, b.biz_special_id as
+		biz_manager_id,
+		s.project_id,b.business_unit_id,s.warehouse_id,
+		s.currency_type,s.customer_id,
+		(s.store_num*s.cost_price) sum_store,
+		(s.lock_num*s.cost_price)
+		sum_lock,
+		s.store_num,s.lock_num,s.cost_price,s.supplier_id,
+				<![CDATA[
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=1 , (s.store_num*s.cost_price) , 0) AS expireAmount,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=1 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=7, (s.store_num*s.cost_price) , 0) AS expireAmount1,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=8 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=15 , (s.store_num*s.cost_price) , 0) AS expireAmount2,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>15 , (s.store_num*s.cost_price) , 0) AS expireAmount3,
+				
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=-7 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=0, (s.store_num*s.cost_price) , 0) AS adventAmount1	
+				]]>
+		FROM tb_stl s LEFT JOIN
+		tb_project_item p ON s.project_id=p.project_id
+		LEFT JOIN
+		tb_base_project b ON s.project_id=b.id
+		LEFT JOIN
+		tb_base_user_project bup ON s.project_id = bup.project_id
+		LEFT JOIN
+		tb_base_goods tbg ON s.goods_id=tbg.id
+		<where>
+			p.status=6
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="projectId != null">
+				and s.project_id = #{projectId}
+			</if>
+			<if test="warehouseId != null">
+				and s.warehouse_id = #{warehouseId}
+			</if>
+			<if test="businessUnitId != null">
+				and b.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="bizManagerId != null">
+				and b.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="departmentId != null">
+				and b.department_id = #{departmentId}
+			</if>
+			<if test="goodsNumber!=null and goodsNumber!=''">
+				AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND s.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+			AND( s.store_num > 0 OR s.cost_price>0 )
+		</where>
+		) AS v_table
+		group by
+		<include refid="groupCondition" />
+		having SUM(v_table.sum_store) > 0
+	</select>
+
+	<!-- 获取库存商品信息 -->
+	<select id="queryResultDetialByCon" parameterType="com.scfs.domain.report.req.StockReportReqDto"
+		resultMap="StockReportMap">
+		SELECT s.id,s.goods_id, b.department_id,
+		s.accept_time,
+		b.biz_special_id as biz_manager_id, s.customer_id,
+		s.project_id,b.business_unit_id,s.warehouse_id,
+		s.currency_type,s.supplier_id,
+		(s.store_num*s.cost_price) sum_store,
+		(s.lock_num*s.cost_price)
+		sum_lock,
+		((s.store_num-s.lock_num)*s.cost_price) sum_not_lock,
+		s.store_num
+		sum_num,s.lock_num sum_lock_num,
+		(s.store_num-s.lock_num)
+		sum_not_lock_num,
+		s.cost_price,
+				<![CDATA[
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=1 , (s.store_num*s.cost_price) , 0) AS expire_amount,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=1 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=7, (s.store_num*s.cost_price) , 0) AS expire_amount1,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=8 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=15 , (s.store_num*s.cost_price) , 0) AS expire_amount2,
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>15 , (s.store_num*s.cost_price) , 0) AS expire_amount3,
+				
+				IF(DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)>=-7 && DATEDIFF(CURDATE(),s.accept_time)-IFNULL(p.library_age,0)<=0, (s.store_num*s.cost_price) , 0) AS advent_amount1	
+				]]>
+		FROM tb_stl s LEFT JOIN
+		tb_project_item p ON s.project_id=p.project_id
+		LEFT JOIN
+		tb_base_project b ON s.project_id=b.id
+		LEFT JOIN
+		tb_base_user_project bup ON s.project_id = bup.project_id
+		<where>
+			p.status=6
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="projectId != null">
+				and s.project_id = #{projectId}
+			</if>
+			<if test="customerId != null">
+				and s.customer_id = #{customerId}
+			</if>
+			<if test="warehouseId != null">
+				and s.warehouse_id = #{warehouseId}
+			</if>
+			<if test="currencyType != null">
+				and s.currency_type = #{currencyType}
+			</if>
+			<if test="businessUnitId != null">
+				and b.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="bizManagerId != null">
+				and b.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="departmentId != null">
+				and b.department_id = #{departmentId}
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND s.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+			AND( s.store_num > 0 OR s.cost_price>0 )
+		</where>
+	</select>
+</mapper>

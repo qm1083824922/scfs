@@ -1,0 +1,31 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li class="active">开票申请</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box"> 
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                	<li role="presentation" ><a class="tab-item" data-url="html/invoice/makeinvoice/InvoiceEdit.html">基本信息</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/feeInfoSearch.html">费用信息</a></li> 
+                    <li role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/invoiceInfo.html">发票信息</a></li> 
+                    <li role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/attachment.html">附件</a></li> 
+              	</ul>
+                <table id="js_dataTable" data-url="invoiceFeeSelect/query">
+                </table>
+            </div>
+             <div class="box-footer text-center"> 
+               <button type="button" id="batchDelete" data-url="invoiceBatchFee/delete" data-permissionUrl="/invoiceBatchFee/delete" class="btn btn-primary btn-sm" >批量删除</button>
+   			   <button type="button" id="Add" data-url="html/invoice/makeinvoice/feeInfoAdd.html" data-permissionUrl="/invoiceBatchFee/add" class="btn btn-primary btn-sm">新增</button>
+   			   <button type="button" id="back" data-url="html/invoice/makeinvoice/invoiceSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+   			</div> 
+        </div>
+    </section>
+</div>
+
+<script src="../../../js/invoice/makeinvoice/feeInfoSerach.js"></script>

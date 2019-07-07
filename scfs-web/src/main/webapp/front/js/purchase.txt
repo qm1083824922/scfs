@@ -1,0 +1,209 @@
+$("#js_form_datetimeStart,#js_form_datetimeEnd").datetimepicker();
+
+/*数据表格*/
+var tabCols = [
+
+    {
+        title: '订单编号',
+        name: 'orderNo',
+        width: 92,
+        align: 'center',
+        type: 'number',
+        lockDisplay: true,
+        sortable: true,
+        hidden: false
+    },
+
+    {
+        title: '订单附属编号',
+        name: 'appendNo',
+        width: 85,
+        align: 'center',
+        type: 'number',
+        sortable: true,
+        hidden: false
+    },
+
+    {
+        title: '经营单位',
+        name: 'businessUnit',
+        width: 210,
+        align: 'center',
+        sortable: true,
+        renderer: function(val, item, rowIndex) {
+            return val.value
+        }
+    },
+
+    {
+        title: '项目',
+        name: 'project',
+        width: 210,
+        align: 'center',
+        sortable: true,
+        hidden: false,
+        renderer: function(val, item, rowIndex) {
+            var projects = [""]
+            return val.value
+        }
+    },
+
+    {
+        title: '供应商',
+        name: 'supplier',
+        width: 70,
+        align: 'center',
+        sortable: true,
+        renderer: function(val, item, rowIndex) {
+            return val.value
+        }
+    }, {
+        title: '仓库',
+        name: 'warehouse',
+        width: 70,
+        align: 'center',
+        sortable: true,
+        renderer: function(val, item, rowIndex) {
+            return val.value
+        }
+    }, {
+        title: '客户',
+        name: 'customer',
+        width: 76,
+        align: 'center',
+        sortable: true,
+        renderer: function(val, item, rowIndex) {
+            return val.value
+        }
+    }, {
+        title: '订单日期',
+        name: 'orderTime',
+        width: 96,
+        align: 'center',
+        type: 'number',
+        sortable: true
+    }, {
+        title: '预计到货日期',
+        name: 'perdictTime',
+        width: 110,
+        align: 'center'
+    }, {
+        title: '订单数量',
+        name: 'orderTotalNum',
+        width: 72,
+        align: 'center',
+        sortable: true
+    }, {
+        title: '订单金额',
+        name: 'orderTotalAmount',
+        width: 72,
+        align: 'center'
+    }, {
+        title: '状态',
+        name: 'state',
+        width: 88,
+        align: 'center',
+        sortable: true,
+        renderer: function(val, item, rowIndex) {
+            return val.value
+        }
+    }
+];
+
+var searchUrl = GLOBAL.host + "po/query?sort=&page=1&per_page=20";
+
+var dataTable = GLOBAL.initTable(searchUrl, tabCols, $('#js_dataTable'));
+
+$("#searchForm").submit(function() {
+    alert($(this).serialize());
+    return false;
+})
+
+$("#js_delete").click(function() {
+    var selectedRows = dataTable.selectedRows();
+    var ids = [];
+    for (var i = 0; i < selectedRows.length; i++) {
+        ids[i] = selectedRows[i].id;
+    }
+    if (selectedRows.length) {
+        layer.confirm('确定要删除吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            $.ajax({
+                url: GLOBAL.host + "po/delete",
+                type: "post",
+                data: {
+                    id: ids.join(",")
+                },
+                success: function(e) {
+                    layer.msg("删除成功", {
+                        icon: 1
+                    })
+                }
+            })
+        }, function() {});
+
+    } else {
+        layer.msg("请选择！")
+    }
+})
+
+$("#js_submit").click(function() {
+    var selectedRows = dataTable.selectedRows();
+    var ids = [];
+    for (var i = 0; i < selectedRows.length; i++) {
+        ids[i] = selectedRows[i].id;
+    }
+    if (selectedRows.length) {
+        layer.confirm('确定要提交吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            $.ajax({
+                url: GLOBAL.host + "po/submit",
+                type: "post",
+                data: {
+                    id: ids.join(",")
+                },
+                success: function(e) {
+                    layer.msg("提交成功", {
+                        icon: 1
+                    })
+                }
+            })
+        }, function() {});
+    } else {
+        layer.msg("请选择！")
+    }
+})
+
+$("#js_edit").click(function() {
+    var selectedRows = dataTable.selectedRows();
+    var ids = [];
+    for (var i = 0; i < selectedRows.length; i++) {
+        ids[i] = selectedRows[i].id;
+    }
+    if (selectedRows.length) {
+    	var url = $(this).data("url");
+    	var data = {
+    		id: 6,
+    		cid: 6
+    	}
+    	GLOBAL.go(url, data);
+
+    } else {
+        layer.msg("请选择！")
+    }
+})
+
+$("#js_scan").click(function() {
+    var selectedRows = dataTable.selectedRows();
+    var ids = [];
+    for (var i = 0; i < selectedRows.length; i++) {
+        ids[i] = selectedRows[i].id;
+    }
+    if (selectedRows.length) {
+        location.href = 'poBaseInfoScan.html?id=' + ids.join(",");
+    } else {
+        layer.msg("请选择！")
+    }
+})

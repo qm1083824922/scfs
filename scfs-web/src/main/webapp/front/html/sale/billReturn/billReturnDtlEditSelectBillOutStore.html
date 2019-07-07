@@ -1,0 +1,290 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>销售</li>
+            <li>销售退货单</li>            
+            <li>退货明细</li>
+            <li class="active">选择出库明细</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">                                       
+                            <label class="control-label ml10">销售编号：</label>
+                            <input type="text" class="form-control" id="billDeliveryNo" name="billDeliveryNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">销售附属编号：</label>
+                            <input type="text" class="form-control" id="billDeliveryAffiliateNo" name="billDeliveryAffiliateNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">出库编号：</label>
+                            <input type="text" class="form-control" id="billOutStoreNo" name="billOutStoreNo">     
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">出库附属编号：</label>
+                            <input type="text" class="form-control" id="billOutStoreAffiliateNo" name="billOutStoreAffiliateNo">  
+                        </div>
+                        <div class="search-item">
+                         	<label class="control-label">发货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartRequiredSendDate" name="startRequiredSendDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndRequiredSendDate" name="endRequiredSendDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">出库日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartDeliverTime" name="startDeliverTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndDeliverTime" name="endDeliverTime">           
+                        </div>
+                        <div class="search-item">                                        
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">    
+                         </div>
+                        <div class="search-item">   
+                            <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">  
+                        </div>
+                        <div class="search-item">    
+                        	<label class="control-label ml10">库存状态：</label>
+                            <select class="form-control js-select" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                        	<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button> 
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                              	
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="billReturnDtl/billOutStore/query">
+                </table>
+                <b><span class="total_sum"></span></b>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+      			<button type="button" data-permissionUrl="/billReturnDtl/billOutStore/add" class="btn btn-primary btn-sm" id="batchAdd">选择出库明细</button> 
+      			<button type="button" data-url="html/sale/billReturn/billReturnDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button> 
+    		</div>
+    		<!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+
+<script>
+
+function pickupNumFormatter(value, row, index) {
+    return "<input type='number' class='pickupNum' style='text-align:center;color:red' value=" + row.availableReturnNum + "></input>";
+}
+
+function sendPriceFormatter(value, row, index) {
+    return "<input type='number' class='sendPrice' style='text-align:center;color:red' value=" + row.sendPrice + "></input>";
+}
+
+/*数据表格*/
+var tabCols = [
+	{
+         field: 'checkItem',
+         checkbox: true,
+    }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '商品编号',
+	     field: 'goodsNumber',
+	     align: 'center'
+	 }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+	     title: '商品名称',
+	     field: 'goodsName',
+	     align: 'center'
+	 }, {
+	     title: '商品型号',
+	     field: 'goodsType',
+	     align: 'center'
+	 }, {
+	     title: '销售编号',
+	     field: 'billDeliveryNo',
+	     align: 'center'
+	 }, {
+	     title: '销售附属编号',
+	     field: 'billDeliveryAffiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '出库编号',
+	     field: 'billOutStoreNo',
+	     align: 'center'
+	 }, {
+	     title: '出库附属编号',
+	     field: 'billOutStoreAffiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '要求发货日期',
+	     field: 'requiredSendDate',
+	     align: 'center'
+	 }, {
+	     title: '出库日期',
+	     field: 'deliverTime',
+	     align: 'center'
+	 }, {
+	     title: '批次',
+	     field: 'batchNo',
+	     align: 'center'
+	 }, {
+	     title: '库存状态',
+	     field: 'goodsStatusName',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+         title: '成本单价',
+         field: 'costPrice',
+         align: 'center'
+     }, {
+         title: '退货数量',
+         field: 'pickupNum',
+         align: 'center',
+         formatter: pickupNumFormatter
+     }, {
+         title: '退货单价',
+         field: 'sendPrice',
+         align: 'center',
+         formatter: sendPriceFormatter
+     }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		billDeliveryId : options.param.id,
+	    querySource : 1
+	}, null, {
+		pagination: true,
+		onCheck: function(row, $element){
+			sum();
+        },
+        onUncheck:function(row, $element){
+            sum();
+        },
+        onCheckAll: function(){
+            sum();
+        },
+        onUncheckAll: function(){
+            sum();
+        },
+        onLoadSuccess: function(data) {
+        	sum();
+        }
+	});
+	$('#js_dataTable').on("input", ".pickupNum", function(){
+        sum();
+    });
+	$('#js_dataTable').on("input", ".sendPrice", function(){
+        sum();
+    });
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+function sum(){
+    var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+  	var totalPickupNum = 0;
+  	var totalSendAmount = 0;
+  	for(var i= 0; i < selectedRows.length; i++){
+        var id = selectedRows[i].id;
+      	var pickupNum = $('#js_dataTable tr[data-uniqueid='+id+']').find(".pickupNum").val().replace(/,/g, "");
+      	var sendPrice = $('#js_dataTable tr[data-uniqueid='+id+']').find(".sendPrice").val().replace(/,/g, "");
+      	var sendAmount = 0;
+      	if(pickupNum){
+      		totalPickupNum += parseFloat(pickupNum);
+      	}
+      	if(pickupNum && sendPrice) {
+      		sendAmount = pickupNum * sendPrice;
+      		totalSendAmount += parseFloat(sendAmount);
+      	}
+  	}
+  	totalPickupNum = totalPickupNum.toFixed(2);
+  	totalSendAmount = totalSendAmount.toFixed(2);
+  	$(".total_sum").text("合计：退货数量：" + totalPickupNum + "；退货金额：" + totalSendAmount);
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	$.extend(data, {
+		billDeliveryId : options.param.id,
+	    querySource : 1
+	});
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#batchAdd").click(function() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    if (idsLen == 0) {
+      	layer.msg("请选择！");
+      	return;
+    }
+    var rows = [];
+    for (var i = 0; i < idsLen; i++) {
+    	var row = new Object();
+    	var id = selectedRows[i].id;
+    	row.billOutStorePickDtlId = id;
+    	
+    	var pickupNum = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".pickupNum").val();
+    	var sendPrice = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".sendPrice").val();
+    	if (!pickupNum) {
+    		layer.msg("退货数量必填且正确，请重新输入");
+    		return;
+    	}
+    	if (pickupNum*1 <= 0) {
+    		layer.msg("退货数量不能为负数和零，请重新输入");
+    		return;
+    	}
+    	if (!sendPrice) {
+    		layer.msg("退货单价必填且正确，请重新输入");
+    		return;
+    	}
+    	if (sendPrice*1 < 0) {
+    		layer.msg("退货单价不能为负数，请重新输入");
+    		return;
+    	}
+    	row.requiredSendNum = pickupNum;
+    	row.requiredSendPrice = sendPrice;
+    	rows.push(row);
+    }
+    add(rows);
+})
+
+function add(rows) {
+	var params = {
+		id: options.param.id,
+		billOutStoreDetailReqDtoList: rows
+	}
+	GLOBAL.ajax("billReturnDtl/billOutStore/add", JSON.stringify(params), function(e){
+        if (e.success) {
+       		layer.msg("选择出库明细成功", {
+               icon: 1
+         	});
+         	$("#btnSearch").click();
+        } else {
+           layer.msg(e.msg);
+        } 		
+  	}, true)
+}
+
+GLOBAL.goBack();
+
+</script>

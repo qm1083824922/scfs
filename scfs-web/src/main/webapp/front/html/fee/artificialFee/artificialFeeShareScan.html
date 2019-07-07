@@ -1,0 +1,69 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>人工费用</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/fee/artificialFee/artificialFeeScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink"  data-url="html/fee/artificialFee/artificialFeeShareScan.html">分摊信息</a></li>
+						<li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/fee/artificialFee/attachmentScan.html">附件</a></li>
+					</ul>
+					<table id="js_share_dataTable" data-url="fee/share/query">
+					
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/fee/artificialFee/artificialFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	/*数据表格*/
+	var tabColsLog = [
+	{
+	    title: '项目',
+	    field: "shareProjectName",
+	    width: '15%'
+	}, {
+	    title: '人员',
+	    field: "shareUserName",
+	    width: '15%'
+	}, {
+	    title: '客户',
+	    field: "shareCustName",
+	    width: '25%'
+	}, {
+	    title: '日期',
+	    field: "shareDate",
+	    width: '25%'
+	}, {
+	    title: '分摊金额',
+	    field: "amount",
+	    width: '15%'
+	}];
+	var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_share_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabColsLog.length + "'>" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_share_dataTable'), tabColsLog, {manageId: options.param.id }, false, option);
+	};
+
+GLOBAL.goBack();
+</script>

@@ -1,0 +1,105 @@
+<style>
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>费用</li>
+		<li>应收费用</li>
+		<li class="active">浏览</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation"><a class="tab-item"data-url="html/fee/recFee/recFeeScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" data-url="html/fee/recFee/recFeePayScan.html">应付费用信息</a></li>
+						<li role="presentation" class="state"><a class="tab-item" id="orderDtlLink" data-url="html/fee/recFee/recFeeVoucherScan.html">应收费用凭证浏览</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="fee/spec/pay/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/fee/recFee/recFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				align : 'center',
+				width : '8%'
+			},{
+				title : '经营单位',
+				field : 'busiUnitNameNo',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '项目',
+				field : 'projectName',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '应付客户',
+				field : 'custReceiverName',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '应付费用科目',
+				field : 'payFeeSpecName',
+				align : 'center',
+				width : '7%'
+			},{
+				title : '应付费用类型',
+				field : 'payFeeTypeName',
+				align : 'center',
+				width : '7%'
+			},{
+				title : '应付日期',
+				field : 'payDate',
+				align : 'center',
+				width : '6%'
+			},{
+				title : '币种',
+				field : 'currencyTypeName',
+				align : 'center',
+				width : '3%'
+			},{
+				title : '应付金额',
+				field : 'payAmount',
+				align : 'center',
+				width : '4%',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var state = options.param.state;
+		if(state==3){
+			$(".nav>li.state").show();	
+		}
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, false);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+
+	GLOBAL.goBack();
+</script>

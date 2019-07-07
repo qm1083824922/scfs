@@ -1,0 +1,106 @@
+@import url("base/public.less");
+@import url("base/common.less");
+//网站设置table
+.web-setting-wrap {
+    min-height: 100%;
+}
+//角色权限table
+.role-auth-table {
+    .checkbox {
+        display: inline-block;
+        margin: 0px 15px 0px 0px;
+    }
+    .mytree{
+        p span{box-sizing: border-box;}
+
+        ul{
+           li{line-height:35px;border-top:1px solid #f4f4f4;}
+
+           p{
+            margin:0;
+            >span{width:40%; display: block;border-right:1px solid #f4f4f4;}
+            //&:hover{background-color:@colore;}
+           }
+            label{margin:0;}
+           .checkbox{line-height:normal;}
+        }
+
+        >ul{
+            li{border-top:none!important;}
+        }
+
+        ul.last-ul{
+            margin-left:40%;margin-top:-35px;
+            li{display:inline-block;padding-left:10px;border-top:none;}
+            p{            
+                &:hover{background:none;}
+                >span{width:auto;border:none;}
+            }
+
+        }
+        td{
+            >ul{
+                >li{border-top:none;}
+            }
+        }
+    }
+}
+
+//用户权限编辑
+.auth-role {
+    border: none;
+    td {
+        >span.checkbox {
+            float: left;
+            margin: 5px 8px 5px 12px;
+        }
+    }
+}
+
+.auth-category {
+    .checkbox {
+        margin: 0;
+        max-width: 500px;
+    }
+    ul {
+        background-color: @colorf;
+    }
+    ol {
+        padding-left: 40px;
+    }
+    p {
+        background-color: @colorf;
+        padding: 7px 10px;
+        border: 1px dotted @colord;
+        margin: 10px;
+        cursor: pointer;
+        &:hover {
+            background-color: #FAFFE4;
+            border: 1px dotted @colore;
+        }
+        &.active {
+            background-color: #FAFFE4;
+            border: 1px dotted @colord;
+            font-weight: bold;
+        }
+    }
+    .parent-li {
+        >p {
+            background-color: #D9EDF7;
+            border: 1px dotted @colord;
+        }
+    }
+}
+
+//选择翻译人员
+.choose-translator {
+    .select-title {
+        margin: 0;
+        background-color: #3c8dbc;
+        padding: 5px 10px;
+        color: @colorf;
+    }
+    .choose-btn-group {
+        margin-top: 30px;
+    }
+}

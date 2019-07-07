@@ -1,0 +1,74 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金池</li>
+            <li class="active">基本信息</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="accountPool" data-url="accountPool/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+               	  <li role="presentation" class="active"><a class="tab-item" data-url="html/pay/accountPool/accountPoolScan.html">基础信息</a></li>
+                  <li role="presentation" ><a class="tab-item" data-url="html/pay/accountPool/accountDetailScan.html">资金明细</a></li>
+                </ul>
+                	<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                 	<tr>
+						<td class="text-right"><b>经营单位：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="busiUnitName" name="busiUnitName"></label>
+                      	</td>
+					</tr>
+					<tr>
+						<td class="text-right"><b>账号：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="accountNo" name="accountNo"></label>
+                      	</td>
+					</tr>
+					
+					<tr>
+						<td class="text-right"><b>币种：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="currencyTypeName" name="currencyTypeName"></label>
+                      	</td>
+					</tr>
+					
+	                <tr>
+							<td  class="text-right"><b>可用资金：</b></td>
+							<td class="text-left">
+                         		 <label class="js-initform toThound" id="availableAmount"  name="availableAmount"></label>
+                      		</td>
+					</tr>
+					
+					<tr>
+							<td width="180" class="text-right"><b>账户余额：</b></td>
+							<td class="text-left">
+								 <label class="js-initform toThound" id="accountBalanceAmount"  name="accountBalanceAmount" ></label>
+                      		</td>
+					</tr>
+					
+					<tr>
+							<td class="text-right"><b>利润：</b></td>
+							<td class="text-left">
+								 <label class="js-initform toThound" id="profitAmount" name="profitAmount" ></label>
+                      		</td>
+					</tr>
+                  </table>
+            </div>
+             <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/pay/accountPool/accountPoolSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+          </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+	GLOBAL.getEditData($("#accountPool"),options.param.id);
+};
+	GLOBAL.goBack();
+</script>

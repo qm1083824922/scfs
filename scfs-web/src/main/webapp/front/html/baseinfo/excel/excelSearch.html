@@ -1,0 +1,40 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">excel</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        
+                        <div class="search-item">
+                            <label class="control-label">Excel名称：</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="FILE_BUS_TYPE" id="poType"  name="poType"> </select> 
+                        </div>   
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>  
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                                      
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="excelList/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script src="../../../js/baseinfo/excel/excelSearch.js"></script>

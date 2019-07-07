@@ -1,0 +1,34 @@
+<div class="wrapper">
+   <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+    		<li class="active">用户</li>
+        </ol>
+   </section>
+   <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="user/edit">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/userinfo/userInfoEdit.html">用户信息编辑</a></li>
+                 	<li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/userRoleEdit.html">角色信息</a></li>
+                  	<li role="presentation"><a class="tab-item" id="project" data-url="html/baseinfo/userinfo/projectEdit.html">项目信息</a></li>
+                    <li role="presentation" class="active"><a class="tab-item" id="wechat" data-url="html/baseinfo/userinfo/wechatEdit.html">微信信息</a></li>
+                    <li role="presentation"><a class="tab-item"  data-url="html/baseinfo/userinfo/subjectEdit.html">仓库信息</a></li>
+                    <li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/supplierEdit.html">供应商信息</a></li>                 
+                 </ul> 
+                 <table id="js_dataTable" data-url="user/wechat/bind/query">
+                </table>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center"> 
+              <button type="button" id="back" data-url="html/baseinfo/userinfo/userManager.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+          </form>
+        </div>
+  </section>
+</div>
+
+<script src="../../../js/baseinfo/userinfo/wechatManager.js"></script>

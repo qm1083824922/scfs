@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.sale.BillDeliveryDtlDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.sale.entity.BillDeliveryDtl">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_delivery_id" jdbcType="INTEGER" property="billDeliveryId" />
+		<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		<result column="required_send_num" jdbcType="DECIMAL" property="requiredSendNum" />
+		<result column="required_send_price" jdbcType="DECIMAL"
+			property="requiredSendPrice" />
+		<result column="stl_id" jdbcType="INTEGER" property="stlId" />
+		<result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+		<result column="goods_status" jdbcType="TINYINT" property="goodsStatus" />
+		<result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+		<result column="po_price" jdbcType="DECIMAL" property="poPrice" />
+		<result column="provide_invoice_num" jdbcType="DECIMAL"
+			property="provideInvoiceNum" />
+		<result column="provide_invoice_amount" jdbcType="DECIMAL"
+			property="provideInvoiceAmount" />
+		<result column="accept_invoice_num" jdbcType="DECIMAL"
+			property="acceptInvoiceNum" />
+		<result column="accept_invoice_amount" jdbcType="DECIMAL"
+			property="acceptInvoiceAmount" />
+		<result column="assign_stl_flag" jdbcType="INTEGER" property="assignStlFlag" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="pay_price" jdbcType="DECIMAL" property="payPrice" />
+		<result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+		<result column="profit_price" jdbcType="DECIMAL" property="profitPrice" />
+		<result column="sale_guide_price" jdbcType="DECIMAL" property="saleGuidePrice" />
+		<result column="bill_out_store_id" jdbcType="INTEGER" property="billOutStoreId" />
+		<result column="bill_out_store_dtl_id" jdbcType="INTEGER"
+			property="billOutStoreDtlId" />
+		<result column="bill_out_store_pick_dtl_id" jdbcType="INTEGER"
+			property="billOutStorePickDtlId" />
+		<result column="origin_send_price" jdbcType="DECIMAL" property="originSendPrice" />
+		<result column="pay_rate" jdbcType="DECIMAL" property="payRate" />
+		<result column="pay_real_currency" jdbcType="TINYINT" property="payRealCurrency" />
+
+
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="delivery_date" jdbcType="DATE" property="deliveryDate" />
+		<result column="required_send_date" jdbcType="DATE" property="requiredSendDate" />
+		<result column="return_time" jdbcType="DATE" property="returnTime" />
+	</resultMap>
+	<resultMap id="ExtResultMap"
+		type="com.scfs.domain.sale.entity.BillDeliveryDtlExt" extends="BaseResultMap">
+		<result column="t_bill_no" jdbcType="VARCHAR" property="tBillNo" />
+		<result column="t_bill_type" jdbcType="TINYINT" property="tBillType" />
+		<result column="t_affiliate_no" jdbcType="VARCHAR" property="tAffiliateNo" />
+		<result column="t_project_id" jdbcType="INTEGER" property="tProjectId" />
+		<result column="t_warehouse_id" jdbcType="INTEGER" property="tWarehouseId" />
+		<result column="t_customer_id" jdbcType="INTEGER" property="tCustomerId" />
+		<result column="t_status" jdbcType="TINYINT" property="tStatus" />
+		<result column="t_delivery_date" jdbcType="DATE" property="tDeliveryDate" />
+		<result column="t_required_send_date" jdbcType="DATE"
+			property="tRequiredSendDate" />
+		<result column="t_required_send_num" jdbcType="DECIMAL"
+			property="tRequiredSendNum" />
+		<result column="t_required_send_amount" jdbcType="DECIMAL"
+			property="tRequiredSendAmount" />
+		<result column="t_cost_amount" jdbcType="DECIMAL" property="tCostAmount" />
+		<result column="t_po_amount" jdbcType="DECIMAL" property="tPoAmount" />
+		<result column="t_customer_address_id" jdbcType="INTEGER"
+			property="tCustomerAddressId" />
+		<result column="t_transfer_mode" jdbcType="TINYINT" property="tTransferMode" />
+		<result column="t_currency_type" jdbcType="INTEGER" property="tCurrencyType" />
+		<result column="t_exchange_rate" jdbcType="DECIMAL" property="tExchangeRate" />
+		<result column="t_wms_status" jdbcType="INTEGER" property="tWmsStatus" />
+		<result column="t_remark" jdbcType="VARCHAR" property="tRemark" />
+		<result column="t_print_num" jdbcType="INTEGER" property="tPrintNum" />
+		<result column="t_return_time" jdbcType="DATE" property="tReturnTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, bill_delivery_id, goods_id, required_send_num,
+		required_send_price,
+		stl_id, batch_no,
+		goods_status, cost_price,
+		po_price, provide_invoice_num, provide_invoice_amount,
+		accept_invoice_num, accept_invoice_amount, assign_stl_flag, remark,
+		creator_id,
+		creator, create_at, update_at, pay_price, pay_time,
+		profit_price,
+		sale_guide_price,
+		bill_out_store_id,
+		bill_out_store_dtl_id, bill_out_store_pick_dtl_id,
+		origin_send_price,pay_rate,pay_real_currency
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		tbdd.id, tbdd.bill_delivery_id, tbdd.goods_id,
+		tbdd.required_send_num,
+		tbdd.required_send_price, tbdd.stl_id,
+		tbdd.batch_no,
+		tbdd.goods_status, tbdd.cost_price, tbdd.po_price,
+		tbdd.provide_invoice_num, tbdd.provide_invoice_amount,
+		tbdd.accept_invoice_num, tbdd.accept_invoice_amount,
+		tbdd.assign_stl_flag, tbdd.remark, tbdd.creator_id,
+		tbdd.creator,
+		tbdd.create_at, tbdd.update_at, tbdd.pay_price, tbdd.pay_time,
+		tbdd.profit_price, tbdd.sale_guide_price,
+		tbdd.bill_out_store_id,
+		tbdd.bill_out_store_dtl_id, tbdd.bill_out_store_pick_dtl_id,
+		tbdd.origin_send_price,tbdd.pay_rate,tbdd.pay_real_currency
+	</sql>
+	<sql id="Bill_Delivery_Alias_Base_Column_List">
+		tbd.bill_no t_bill_no, tbd.bill_type t_bill_type,
+		tbd.affiliate_no
+		t_affiliate_no, tbd.project_id t_project_id,
+		tbd.warehouse_id t_warehouse_id, tbd.customer_id t_customer_id,
+		tbd.status t_status,
+		tbd.delivery_date t_delivery_date,
+		tbd.required_send_date t_required_send_date, tbd.required_send_num
+		t_required_send_num,
+		tbd.required_send_amount t_required_send_amount,
+		tbd.cost_amount t_cost_amount, tbd.po_amount t_po_amount,
+		tbd.customer_address_id
+		t_customer_address_id, tbd.transfer_mode
+		t_transfer_mode,
+		tbd.currency_type t_currency_type, tbd.exchange_rate
+		t_exchange_rate,
+		tbd.wms_status t_wms_status, tbd.remark t_remark,
+		tbd.print_num t_print_num, tbd.return_time t_return_time
+	</sql>
+	<sql id="Sale_base_List">
+		del_dtl.id, delivery.bill_no,
+		delivery.bill_type,delivery.project_id,
+		delivery.customer_id,
+		delivery.delivery_date,del_dtl.goods_id,
+		delivery.required_send_date,
+		del_dtl.required_send_num,
+		del_dtl.required_send_price,
+		del_dtl.provide_invoice_num,
+		del_dtl.provide_invoice_amount
+	</sql>
+
+	<sql id="bill_delivery_condition">
+		<if test="businessUnitId!=null">
+			AND tbp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="projectId!=null">
+			AND tbd.project_id = #{projectId}
+		</if>
+		<if test="warehouseId!=null">
+			AND tbd.warehouse_id = #{warehouseId}
+		</if>
+		<if test="customerId!=null">
+			AND tbd.customer_id = #{customerId}
+		</if>
+		<if test="startRequiredSendDate!=null">
+			AND tbd.required_send_date &gt;= #{startRequiredSendDate}
+		</if>
+		<if test="endRequiredSendDate!=null">
+			AND tbd.required_send_date &lt;= #{endRequiredSendDate}
+		</if>
+		<if test="status!=null">
+			AND tbd.status = #{status}
+		</if>
+		<if test="billType!=null">
+			AND tbd.bill_type = #{billType}
+		</if>
+		<if test="billNo!=null and billNo!=''">
+			AND tbd.bill_no like CONCAT('%',#{billNo},'%')
+		</if>
+		<if test="affiliateNo!=null and affiliateNo!=''">
+			AND tbd.affiliate_no like CONCAT('%',#{affiliateNo},'%')
+		</if>
+		<if test="goodsNumber!=null and goodsNumber!=''">
+			AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+		</if>
+		<if test="goodsName!=null and goodsName!=''">
+			AND tbg.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<if test="goodsType!=null and goodsType!=''">
+			AND tbg.type like CONCAT('%',#{goodsType},'%')
+		</if>
+		<if test="goodsBarCode!=null and goodsBarCode!=''">
+			AND tbg.bar_code like CONCAT('%',#{goodsBarCode},'%')
+		</if>
+	</sql>
+
+	<select id="queryNotSelectByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceSaleManagerReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Sale_base_List" />
+		from tb_bill_delivery_dtl del_dtl LEFT JOIN tb_bill_delivery delivery
+		ON delivery.id=del_dtl.bill_delivery_id LEFT JOIN tb_base_goods goods
+		ON
+		goods.id = del_dtl.goods_id
+		<where>
+			delivery.is_delete=0
+			<if test="currencyType != null">
+				AND delivery.currency_type =
+				#{currencyType,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null">
+				AND delivery.customer_id =#{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				AND delivery.project_id =#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="billNo != null and billNo != ''">
+				AND delivery.bill_no like CONCAT('%',#{billNo},'%')
+			</if>
+			<if test="goodNum != null and goodNum != '' ">
+				AND goods.number like CONCAT('%',#{goodNum},'%')
+			</if>
+			<if test="goodName != null and goodName != ''">
+				AND goods.name like CONCAT('%',#{goodName},'%')
+			</if>
+			<if test="billType != null">
+				AND delivery.bill_type =#{billType,jdbcType=TINYINT}
+			</if>
+			AND delivery.status = 5
+			AND(IFNULL(del_dtl.provide_invoice_num,0) !=
+			IFNULL(del_dtl.required_send_num,0)
+			OR
+			IFNULL(del_dtl.provide_invoice_amount,0)!=
+			ROUND(IFNULL(del_dtl.required_send_price ,0) *
+			IFNULL(del_dtl.required_send_num,0), 2) )
+			ORDER BY delivery.bill_no
+		</where>
+	</select>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_delivery_dtl
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_bill_delivery_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<select id="queryAmountByInvAppId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_delivery_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.sale.entity.BillDeliveryDtl"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_bill_delivery_dtl
+		(id, bill_delivery_id, goods_id,
+		required_send_num,
+		required_send_price, stl_id,
+		batch_no, goods_status, cost_price,
+		po_price, assign_stl_flag, remark,
+		creator_id, creator, pay_price,
+		pay_time, profit_price, sale_guide_price,
+		bill_out_store_id,
+		bill_out_store_dtl_id, bill_out_store_pick_dtl_id,
+		origin_send_price,pay_rate,pay_real_currency
+		)
+		values
+		(#{id,jdbcType=INTEGER}, #{billDeliveryId,jdbcType=INTEGER},
+		#{goodsId,jdbcType=INTEGER},
+		#{requiredSendNum,jdbcType=DECIMAL},
+		#{requiredSendPrice,jdbcType=DECIMAL}, #{stlId,jdbcType=INTEGER},
+		#{batchNo,jdbcType=VARCHAR}, #{goodsStatus,jdbcType=TINYINT},
+		#{costPrice,jdbcType=DECIMAL},
+		#{poPrice,jdbcType=DECIMAL},
+		#{assignStlFlag,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR},
+		#{payPrice,jdbcType=DECIMAL},
+		#{payTime,jdbcType=TIMESTAMP},
+		#{profitPrice,jdbcType=DECIMAL}, #{saleGuidePrice,jdbcType=DECIMAL},
+		#{billOutStoreId,jdbcType=INTEGER},
+		#{billOutStoreDtlId,jdbcType=INTEGER},
+		#{billOutStorePickDtlId,jdbcType=INTEGER},
+		#{originSendPrice,jdbcType=DECIMAL},#{payRate,jdbcType=DECIMAL},#{payRealCurrency,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.sale.entity.BillDeliveryDtl">
+		update tb_bill_delivery_dtl
+		<set>
+			<if test="billDeliveryId != null">
+				bill_delivery_id = #{billDeliveryId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="requiredSendNum != null">
+				required_send_num = #{requiredSendNum,jdbcType=DECIMAL},
+			</if>
+			<if test="requiredSendPrice != null">
+				required_send_price =
+				#{requiredSendPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="stlId != null">
+				stl_id = #{stlId,jdbcType=INTEGER},
+			</if>
+			<if test="batchNo != null">
+				batch_no = #{batchNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=TINYINT},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="poPrice != null">
+				po_price = #{poPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoiceNum != null">
+				provide_invoice_num =
+				#{provideInvoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoiceAmount != null">
+				provide_invoice_amount =
+				#{provideInvoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="acceptInvoiceNum != null">
+				accept_invoice_num =
+				#{acceptInvoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="acceptInvoiceAmount != null">
+				accept_invoice_amount =
+				#{acceptInvoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="assignStlFlag != null">
+				assign_stl_flag = #{assignStlFlag,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="payPrice != null">
+				pay_price = #{payPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="profitPrice != null">
+				profit_price = #{profitPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="saleGuidePrice != null">
+				sale_guide_price = #{saleGuidePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="billOutStoreId != null">
+				bill_out_store_id = #{billOutStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="billOutStoreDtlId != null">
+				bill_out_store_dtl_id =
+				#{billOutStoreDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="billOutStorePickDtlId != null">
+				bill_out_store_pick_dtl_id =
+				#{billOutStorePickDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="originSendPrice != null">
+				origin_send_price = #{originSendPrice,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="queryResultsByBillDeliveryId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		,tbd.project_id as project_id
+		,tbd.required_send_date as
+		required_send_date
+		,tbd.return_time as return_time
+		from
+		tb_bill_delivery_dtl tbdd
+		left join tb_bill_delivery tbd
+		on
+		tbdd.bill_delivery_id = tbd.id
+		where tbdd.bill_delivery_id =
+		#{billDeliveryId,jdbcType=INTEGER}
+	</select>
+
+	<select id="querySumByBillDeliveryId" parameterType="com.scfs.domain.sale.entity.BillDeliveryDtl"
+		resultType="com.scfs.domain.sale.entity.BillDeliveryDtlSum">
+		select
+		IFNULL(sum(ROUND(required_send_num*required_send_price, 2)), 0) as
+		requiredSendAmount,
+		IFNULL(sum(required_send_num), 0) as
+		requiredSendNum,
+		IFNULL(sum(ROUND(required_send_num*cost_price, 2)), 0)
+		as costAmount,
+		IFNULL(sum(ROUND(required_send_num*po_price, 2)), 0) as
+		poAmount,
+		IFNULL(sum(ROUND(required_send_num*pay_price, 2)), 0) as
+		payAmount,
+		IFNULL(sum(ROUND(required_send_num*profit_price, 2)), 0) as
+		serviceAmount
+		from tb_bill_delivery_dtl
+		where bill_delivery_id =
+		#{billDeliveryId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryCountByBillDeliveryId" parameterType="com.scfs.domain.sale.entity.BillDeliveryDtl"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_bill_delivery_dtl
+		where
+		bill_delivery_id = #{billDeliveryId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryResultsByIds" resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		,tbd.project_id as project_id
+		,tbd.required_send_date as
+		required_send_date
+		,tbd.return_time as return_time
+		from
+		tb_bill_delivery_dtl tbdd
+		left join tb_bill_delivery tbd
+		on
+		tbdd.bill_delivery_id = tbd.id
+		where 1=1
+		<foreach collection="ids" item="id" open="AND tbdd.id in("
+			separator="," close=")">
+			#{id,jdbcType=INTEGER}
+		</foreach>
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		,tbd.project_id as project_id
+		,tbd.required_send_date as
+		required_send_date
+		,tbd.return_time as return_time
+		from
+		tb_bill_delivery_dtl tbdd
+		left join tb_bill_delivery tbd
+		on
+		tbdd.bill_delivery_id = tbd.id
+		where tbdd.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 导出明细查询 -->
+	<select id="queryResultsByBillDeliveryCon"
+		parameterType="com.scfs.domain.sale.dto.req.BillDeliverySearchReqDto"
+		resultMap="ExtResultMap">
+		<include refid="queryResultsByBillDeliveryCon_sql" />
+	</select>
+
+	<sql id="queryResultsByBillDeliveryCon_sql">
+		select
+		<include refid="Alias_Base_Column_List" />
+		,
+		<include refid="Bill_Delivery_Alias_Base_Column_List" />
+		from tb_bill_delivery_dtl tbdd
+		left join tb_bill_delivery tbd
+		on
+		tbdd.bill_delivery_id = tbd.id
+		left join tb_base_goods tbg
+		on
+		tbdd.goods_id = tbg.id
+		inner join tb_base_user_project bup
+		on
+		tbd.project_id = bup.project_id
+		inner join tb_base_project tbp
+		on tbp.id
+		= bup.project_id
+		where tbd.is_delete = 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<include refid="bill_delivery_condition" />
+		order by tbdd.id desc
+	</sql>
+
+	<select id="queryCountByBillDeliveryCon"
+		parameterType="com.scfs.domain.sale.dto.req.BillDeliverySearchReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="queryResultsByBillDeliveryCon_sql" />
+		) tmp
+	</select>
+
+	<select id="queryResultsByStlId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_delivery_dtl
+		where stl_id = #{stlId}
+	</select>
+
+
+</mapper>

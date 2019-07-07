@@ -1,0 +1,125 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+	          <li>当前位置</li>
+	          <li>发票</li>
+	          <li>Invoice收票</li>
+	          <li class="active">采购信息浏览</li>
+	      </ol>
+     </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+					     <li role="presentation" ><a class="tab-item" data-url="html/invoice/invoiceOverseas/invoiceOverseasScan.html">基础信息</a></li>
+					 	<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/invoiceOverseas/invoiceOverseasPoScan.html">采购单信息</a></li>
+					 	 <li role="presentation" ><a class="tab-item"  data-url="html/invoice/invoiceOverseas/attachmentScan.html">附件</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="invoiceCollectOverPo/query">
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+   				 <button type="button"  data-url="html/invoice/invoiceOverseas/invoiceOverseasSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	window.operateEvents = {
+	};
+	var tabCols = [
+	   			{
+	   				title : '采购编号',
+	   				field : 'orderNo',
+	   				width : 80,
+	   				align : 'center'
+	   			},
+	   			{
+	   				title : '订单日期',
+	   				field : 'orderTime',
+	   				width : 100,
+	   				align : 'center'
+	   			},
+	   			{
+	   				title : '商品编号',
+	   				field : 'goodsNo',
+	   				width : 70,
+	   				align : 'center'
+	   			},
+	   			{
+	   				title : '商品描述',
+	   				field : 'goodsDescribe',
+	   				width : 210,
+	   				align : 'center'
+	   			},{
+					title : '订单数量',
+					field : 'invoiceNum',
+					width : 210,
+					align : 'center'
+				},{
+					title : '订单金额',
+					field : 'invoiceAmoun',
+					width : 70,
+					align : 'center',
+					formatter : function(value , row , index) {
+						return value==null ? "": value.toThounds();
+				    }
+				},{
+					title : '订单币种',
+					field : 'currnecyTypeName',
+					width : 210,
+					align : 'center'
+				},{
+					title : '付款汇率',
+					field : 'rate',
+					width : 210,
+					align : 'rate'
+				},{
+					title : '实际收票币种',
+					field : 'realCurrnecyTypeName',
+					width : 210,
+					align : 'center'
+				},{
+					title : '实际收票金额',
+					field : 'realInvoiceAmount',
+					width : 70,
+					align : 'center',
+					formatter : function(value , row , index) {
+						return value==null ? "": value.toThounds();
+				    }
+				}
+	   			];
+
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			},
+    			onPostBody: function(){
+                    if($(".modify").length){
+                        GLOBAL.permissionBtn($(".modify .btn"));
+                    }
+                }
+    		}
+		options.param.collectOverseasId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {collectOverseasId: options.param.id}, false, option);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+	$("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    GLOBAL.go(url);
+	})
+	GLOBAL.goBack();
+</script>

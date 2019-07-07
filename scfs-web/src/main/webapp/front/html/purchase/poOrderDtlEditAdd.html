@@ -1,0 +1,180 @@
+<link rel="stylesheet" href="js/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>采购</li>
+        <li>订单明细编辑</li>
+        <li class="active">添加</li>
+    </ol>
+    <section class="product-wrap">
+          <div class="box no-margin">
+              <form class="form-horizontal form-inline" id="poOrderDtlEditAddForm" data-url="/po/line/edit">
+                  <div class="box-body">
+                      <input class="form-control" type="hidden" id="id" name="id">
+                      <table class="table goods-add-table">
+                          <thead>
+                              <tr>
+                                  <th>序号</th>
+                                  <th>商品编号</th>
+                                  <th>商品描述</th>
+                                  <th>数量</th>
+                                  <th>单价</th>
+                                  <th>金额</th>
+                                  <th>批次</th>
+                                  <th>折扣金额</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                      </table>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer text-center">
+                      <button type="button" id="save" class="btn btn-primary btn-sm" data-url="po/line/add" data-permissionUrl="/po/line/add">保存</button>
+                      <button type="button" data-url="html/purchase/poOrderDtlEdit.html" class="back-item btn btn-default btn-sm js-back">返回</button>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+          </div>
+    </section>
+</div>
+<script>
+
+  options.initPage = function(){
+
+  }
+
+  for(var k = 1; k <= 10; k++){
+      var tr = '<tr><td>'+k+'</td><td><input type="text"class="form-control goods-no" style="width:100%" placeholder="输入商品信息关健词(系统推荐值才为有效值)">' +
+              '<input type="hidden" class="goods-id"></td>' +
+              '<td><span class="goods-desc"></span></td>' +
+              '<td><input type="text"class="form-control goods-count"></td><td>' +
+              '<input type="text"class="form-control goods-price"></td><td><span class="goods-amount">0.00</span></td>' +
+              '<td><input type="text"class="form-control batch-num"></td>'+ '<td><input type="text"class="form-control discount-price"></td></tr>';
+      $(".goods-add-table tbody").append(tr);
+  }
+
+  $(".goods-no").each(function(){
+      var $this = $(this);
+
+      $this.autocomplete({
+        source: function (request, response) {
+            $.getJSON(GLOBAL.host + "common/project/goods/query?projectId="+options.param.projectId+"&term=" + request.term, function (data) {
+                if(data.items){
+                    response($.map(data.items, function (item, key) {
+                      if(item){
+                        return {
+                            label: item.number + "," + item.name + "," + item.type + ","+item.specification+"," + item.barCode,
+                            value: item.number,
+                            data: item
+                        };
+                      }
+                  }));
+                }
+            });
+        },
+        minLength: 2,
+
+        select: function( event, ui ) {
+            var data = ui.item.data;
+            if(data){
+              var goodsDesc = data.name+","+data.type+","+data.specification+","+data.barCode;
+              var $goodDesc= $this.closest("tr").find(".goods-desc");
+                $goodDesc.text(goodsDesc);
+              $this.next("[type='hidden']").val(data.id);
+            }
+        }
+    });
+  })
+
+  $("input.goods-count").on("input",function(){
+      var $goodsPrice = $(this).closest("tr").find("input.goods-price");
+      var $goodsAmount = $(this).closest("tr").find(".goods-amount");
+      var count = $(this).val();
+      var price = $goodsPrice.val();
+      $goodsAmount.text((count * price).toFixed(2));
+  })
+
+  $("input.goods-price").on("input",function(){
+      var $goodsCount = $(this).closest("tr").find("input.goods-count");
+      var $goodsAmount = $(this).closest("tr").find(".goods-amount");
+      var price = $(this).val();
+      var count = $goodsCount.val();
+      $goodsAmount.text((count * price).toFixed(2));
+  })
+
+  $("#save").click(function() {
+      var saveUrl = $(this).data("url");
+      var $trs = $(".goods-add-table tbody tr");
+      var dtlArr = [];
+      var isValid = true;
+      $trs.each(function(){
+        var goodsId = $(this).find("input.goods-id").val();
+        var $goodsNo = $(this).find(".goods-no");
+        var $goodsCount = $(this).find(".goods-count");
+        var $goodsPrice = $(this).find(".goods-price");
+        var $batchNum = $(this).find(".batch-num"); 
+        var $discountAmount = $(this).find(".discount-price");
+        if($goodsNo.val() !== ""){
+            if($goodsCount.val() == ""){
+                $goodsCount.focus();
+                layer.msg("请输入商品数量");
+                isValid = false;
+                return false;               
+            }else if($goodsPrice.val() == ""){
+                $goodsPrice.focus();
+                layer.msg("请输入商品价格 ");
+                isValid = false;
+                return false; 
+            }else{
+                if($goodsCount.val() <= 0){
+                    layer.msg("商品数量不能为负数");
+                    isValid = false;
+                }
+                if($goodsPrice.val() < 0){
+                    layer.msg("商品价格不能为负数");
+                    isValid = false;
+                }
+              dtlArr.push({
+                "goodsId": goodsId,
+                "goodsNo": $goodsNo.val(),
+                "goodsNum": $goodsCount.val(),
+                "goodsPrice": $goodsPrice.val(),
+                "batchNum": $batchNum.val(),
+                "discountAmount":$discountAmount.val()
+              });
+            }
+        }
+      })
+      if(dtlArr.length == 0){
+          layer.msg("至少输入一条数据", {icon: 5, time: 1500, shade:[0.3, '#000']});
+          return;
+      }
+      if(isValid){
+         var saveData = {
+            poLines: dtlArr,
+            id: options.param.id
+        };
+        var setContentType = true;
+        GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e){
+              if (e.success) {
+                  layer.msg("保存成功！", {
+                    icon: 1,
+                    time:1500,
+                  }, function(){
+                    GLOBAL.go("html/purchase/poOrderDtlEdit.html");
+                  });
+              } else {
+                  layer.msg(e.msg, {
+                    icon: 5,
+                    time:1500,
+                  });
+              }
+        }, setContentType, $("#save"));
+      }
+     
+  });
+
+  GLOBAL.goBack();
+
+</script>

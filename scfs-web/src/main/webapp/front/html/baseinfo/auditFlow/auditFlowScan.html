@@ -1,0 +1,152 @@
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>审核流</li>
+            <li class="active">编辑</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="auditFlow/detail">
+            <div class="box-body">  
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  		<tr>
+	                    	<td width="180" class="text-right"><b>审核流编号：</b></td>
+		                    <td class="text-left">
+		                      <label class="js-initform" id="auditFlowNo" name="auditFlowNo"></label>
+		                    </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>审核流名称：<em class="text-star">*</em></b></td>
+	                        <td class="text-left">
+	                            <label class="js-initform" id="auditFlowName" name="auditFlowName"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+		                    <td class="text-right"><b>审核流类型：<em class="text-star">*</em></b></td>
+		                    <td class="text-left">
+		                    	<label class="js-initform" id="auditFlowTypeName" name="auditFlowTypeName"></label>		                    
+		                    </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>法务审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="lawAudit" name="lawAudit"></label>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>商务审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="bizAudit" name="bizAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>事业部审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="careerAudit" name="careerAudit"></label>	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>采购审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="purchaseAudit" name="purchaseAudit"></label>	                        	                        
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>供应链小组审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="supplyChainGroupAudit" name="supplyChainGroupAudit"></label>	
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>供应链服务部审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="supplyChainServiceAudit" name="supplyChainServiceAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>商品风控审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="goodsRiskAudit" name="goodsRiskAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>业务审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="busiAudit" name="busiAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>财务专员审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="financeAudit" name="financeAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>财务主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="finance2Audit" name="finance2Audit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控专员审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="riskSpecialAudit" name="riskSpecialAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="riskAudit" name="riskAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>部门主管审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="deptManageAudit" name="deptManageAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>总经理审核：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="bossAudit" name="bossAudit"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>风控是否首单：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="isFirstRiskName" name="isFirstRiskName"></label>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td width="160" class="text-right"><b>法务是否首单：</b></td>
+	                        <td class="text-left">
+	                        	<label class="js-initform" id="isFirstLawName" name="isFirstLawName"></label>
+	                        </td>
+	                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button"  data-url="html/baseinfo/auditFlow/auditFlowSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+};
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+</script> 
+	 

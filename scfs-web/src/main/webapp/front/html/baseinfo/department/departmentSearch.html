@@ -1,0 +1,125 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">部门</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+            <div class="box">
+                <div class="box-header">
+                    <form method="post" action="###" class="form-inline" id="searchForm">
+                        <div class="form-group-sm">
+                            
+                            <div class="search-item">
+                                <label class="control-label ml10">名称：</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div> 
+                            <div class="search-item">
+                                <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>  
+                                <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                                     
+                                <button type="button" id="btnNew" data-permissionUrl="/department/add" data-url="html/baseinfo/department/newBuildDepartment.html" class="btn btn-warning btn-sm ml10">新建</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="js_dataTable" data-url="department/query">
+                    </table>
+                </div>
+                <!-- .box-body -->
+            </div>
+    </section>
+</div>
+
+<script >
+
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要删除吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("department/delete", {id: id}, function(){
+	    		layer.msg("删除成功", {
+	                icon: 1
+	            })
+	            $("#btnSearch").click();
+	    	})
+	    }, function() {});
+    },
+    'click .edit': function(e, value, row, index){ 
+    	options.param.id = row.id; 
+		options.param.cid = row.id;
+		GLOBAL.go("html/baseinfo/department/departmentEdit.html", options.param);
+    },
+    'click .scan': function(e, value, row, index){
+		options.param.id = row.id;
+		GLOBAL.go("html/baseinfo/department/departmentScan.html", options.param);
+    }
+};/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '编号',
+	     field: 'number',
+	     width: 72,
+	     align: 'center'
+	 }, {
+	     title: '名称',
+	     field: 'name',
+	     width: 110,
+	     align: 'center'
+	 }, {
+	     title: '上级部门',
+	     field: 'parentName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '操作',
+	     field: 'opertaList',
+	     width: 160,
+	     align: 'center',
+	     events: operateEvents
+	 } 
+];
+
+options.initPage = function() {
+	
+	GLOBAL.initOptionsParam('id,cid,hip');
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null); 
+	
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable'));
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	var url = $('#js_dataTable').data("url");
+	GLOBAL.local(url, data);
+
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+}) 
+    
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+ 
+
+</script>

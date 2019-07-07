@@ -1,0 +1,155 @@
+<style>
+.nav>li.li_po, .nav>li.li_fee,.li_invoiceNo{
+	display: none;
+}
+</style>
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>Invoice收票</li>
+            <li class="active">编辑</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="invoiceCollectOver/edit">
+            <div class="box-body">  
+           		  <ul class="nav nav-tabs">
+                          <li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/invoiceOverseas/invoiceOverseasEdit.html">基础信息</a></li>
+	                 	 <li role="presentation" class="li_po" ><a class="tab-item" id="orderDtlLink" data-url="html/invoice/invoiceOverseas/invoiceOverseasPoSearch.html">采购单信息</a></li>
+	                 	 <li role="presentation" class="li_fee"><a class="tab-item" data-url="html/invoice/invoiceOverseas/invoiceOverseasFeeSearch.html">费用信息</a></li>
+	                    <li role="presentation" ><a class="tab-item" data-url="html/invoice/invoiceOverseas/attachment.html">附件</a></li> 
+                  </ul>
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      	<td class="text-right"><b>申请编号：</b></td> 
+                        <td class="text-left">
+                           <label class="js-initform" id="applyNo" name="applyNo"></label>
+                        </td> 
+                    </tr>
+                    
+                  	<tr>
+                      	<td width="180" class="text-right"><b>项目：</b></td> 
+                        <td class="text-left">
+                           <label class="js-initform" id="projectName" name="projectName"></label>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>供应商：</b></td> 
+                        <td class="text-left"> 
+                            <label class="js-initform" id="supplierName" name="supplierName"></label>
+                        </td>
+                    </tr>
+	 			<tr> 
+                      <td class="text-right"><b>币种：</b></td>
+                      <td class="text-left">
+                       <label class="js-initform" id="currnecyTypeName" name="currnecyTypeName"></label>
+     	              </td>
+                  </tr>
+                   <tr>
+                           <td class="text-right"><b>收票金额：</b></td>
+                          <td class="text-left">
+                              <label class="js-initform" id="invoiceAmount" name="invoiceAmount"></label>
+                           </td>
+                    </tr>
+                    <tr>
+                       <td class="text-right"><b>单据类别：</b></td> 
+                       <td class="text-left">
+                            <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                       </td>
+                    </tr>
+                    <tr class="li_invoiceNo">
+						<td class="text-right"><b>发票号：<em class="text-star">*</em><em
+								class="text-star"></em></b></td>
+						<td class="text-left"><input type="text" class="js-initform form-control" id="invoiceNo" name="invoiceNo">
+						</td>
+					</tr>
+                    <tr class="li_invoiceNo">
+						<td class="text-right"><b>发票日期：<em class="text-star">*</em></b></td>
+						<td class="text-left"><input type="text" class="form-control js-initform  js_datePicker" id="invoiceDate" name="invoiceDate"></td>
+					</tr>
+                    <tr>
+                      <td class="text-right"><b>票据备注：</b></td> 
+                      <td class="text-left">
+                        	 <textarea class="form-control js-initform" id="invoiceRemark" cols="50" rows="5" name="invoiceRemark"></textarea>
+                       </td>
+                    </tr> 
+                     <tr>
+                         <td class="text-right"><b>单据备注：</b></td> 
+                         <td class="text-left">
+                        	<textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>
+                         </td>
+                     </tr> 
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/invoiceCollectOver/update" data-url="html/invoice/invoiceOverseas/invoiceOverseasEdit.html" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/invoice/invoiceOverseas/invoiceOverseasSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    var tabId = options.param.billType;
+    // 控制页面显示
+    var tabId = options.param.billType;
+    if(tabId==1){
+      $(".nav>li.li_po").show();
+    }
+    if(tabId==2){
+    	$(".li_invoiceNo").show();
+        $(".nav>li.li_fee").show();
+    }
+    $("#form1").validate({
+        rules: {
+            invoiceNo: {
+                required: true,
+                maxlength : 50
+            },
+            invoiceDate: {
+                required: true
+            },
+            invoiceRemark: {
+            	maxlength : 500
+            },
+            remark: {
+            	maxlength : 500
+            }
+        },
+        submitHandler: function() {
+          var data = $("#form1").serialize();
+	          GLOBAL.ajax("invoiceCollectOver/update",data, function(e){
+	        	  if (e.success) {
+	            	  layer.msg("保存成功！", {
+	                      icon: 1,
+	                      time: 1500
+	                  },function(){
+	                	  //GLOBAL.go("html/pay/paySearch.html");
+	                  });
+	              } else {
+	                  layer.msg(e.msg);
+	              }
+	          });
+        }
+    });
+    
+};
+
+$(".js_datePicker").datetimepicker();
+
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+</script> 
+	 

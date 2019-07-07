@@ -1,0 +1,176 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>接口</li>
+            <li class="active">pms铺货</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+              	<ul class="nav nav-tabs" >
+              		<li role="presentation" class="active"><a class="tab-item" data-url="html/interface/pmsDistribution/pmsDistributionSearch.html">PMS铺货失败</a></li> 
+                  	<li role="presentation"><a class="tab-item" data-url="html/interface/pmsDistribution/pmsDistributionSuccessSearch.html">PMS铺货成功</a></li> 
+                </ul>
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                            <label class="control-label ml10">接口类型：</label> 
+								<select class="form-control js-select"  data-url="PMS_SERIES_TYPE" id="type"  name="type"> </select>
+                        </div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">调用时间：</label> 
+								<input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endTime">
+                        </div>
+                        <div class="search-item">
+								<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>  
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="pmsDistributionSearch/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .reInvoke': function (e, value, row, index) {
+    	
+  		var id = $(this).closest("tr").data('uniqueid');
+  		var type=row.type;
+  		if (id) {
+  			GLOBAL.ajax("/pmsDistributionSearch/reset", {
+				id : id,
+				type:type
+			}, function(e) {
+				if (e.success) {
+					layer.msg("处理成功！");
+	                $("#btnSearch").click();
+				} else {
+					layer.msg(e.msg);
+				}
+			})
+		}
+    },
+    'click .scan': function (e, value, row, index) {
+    	var id = $(this).closest("tr").data('uniqueid');
+    	var type=row.type;
+    	 var dealflag=row.dealflag;
+    	if(type==1){//PMS入库单接口
+    		options.param.id = id;
+    		options.param.type = type;
+    		options.param.dealflag = dealflag;
+    		GLOBAL.go("html/interface/pmsDistribution/pmsStoreInScan.html");
+    	}
+    	if(type==2){//PMS出库单接口
+    		options.param.id = id;
+    		options.param.type = type;
+    		options.param.dealflag = dealflag;
+    		GLOBAL.go("html/interface/pmsDistribution/pmsStoreOutScan.html");
+    	}
+    	if(type==3){//PMS请款单接口
+    		options.param.id = id;
+    		options.param.type = type;
+    		options.param.dealflag = dealflag;
+    		GLOBAL.go("html/interface/pmsDistribution/pmsPayScan.html");
+    	}
+    },
+    'click .invokeLogMsg':function(e, value, row, index){
+    	var id = $(this).closest("tr").data('uniqueid');
+    	var type=row.type;
+  		if (id) {
+  			GLOBAL.ajax("/pmsDistributionSearch/failure/detail", {
+				id : id,
+				type:type
+			}, function(e) {
+				if (e.success) {
+			           layer.msg(e.items, {
+			                time: 5000,
+			                closeBtn: [0, false]
+			            });
+				} else {
+					layer.msg(e.items);
+				}
+			})
+		}
+    }
+};
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: '1%'
+     },{
+	     title: '单据编号',
+	     field: 'purchaseSn',
+	     align: 'center',
+	     width: '8%'
+	 },{
+	     title: '接口类型',
+	     field: 'typeName',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '调用时间',
+	     field: 'invokeTime',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '描述',
+	     field: 'message',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '失败详情',
+	     align: 'center',
+	     formatter: msgFormatter,
+	     width: '8%',
+	      events: operateEvents
+	 },{
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '修改时间',
+	     field: 'updateAt',
+	     align: 'center',
+	     width: '6%'
+	 },{
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents ,
+         width: '15%'
+	 }
+];
+function msgFormatter(value, row, index) {
+        return '<a class="invokeLogMsg" href="javascript:void(0)">详情</a>';
+}
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols);
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable')); 
+	$(".js_datePicker").datetimepicker({
+	    format:'Y-m-d',
+	});
+}
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+</script>

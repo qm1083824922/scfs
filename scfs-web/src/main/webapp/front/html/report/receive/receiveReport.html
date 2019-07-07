@@ -1,0 +1,60 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li class="active">应收报表</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="post" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<div class="search-item">
+							<label class="control-label">项目：</label> 
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select> 
+						</div>
+                        <div class="search-item">		
+							<label class="control-label ml10">客户：</label> 
+							<select class="form-control js-select" data-url="PROJECT_ALL_CUSTOMER" id="custId" name="custId" disabled="disabled"></select> 
+						</div>
+                        <div class="search-item">	
+            	            <label class="control-label ml10">对账日期：</label> 
+							<input type="text" class="form-control js_datePicker" id="startCheckDate" value="" name="startCheckDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endCheckDate" value="" name="endCheckDate">
+						</div>
+						<div class="search-item">	
+							<label class="control-label ml10">统计维度：</label> 
+							<select class="form-control js-select"  data-url="STATISTICS_DIMENSION_TYPE" id="statisticsDimension" name="statisticsDimension" data-empty-option=true>
+							</select>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">事业部：</label> 
+							<input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">业务员：</label> 
+							<select class="form-control js-select" data-url="DEPARTMENT_USER" pid="departmentId" id="bizManagerId" name="bizManagerId" ></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">是否合计：</label> 
+                            <select class="form-control js-select" data-url="PROMPT_STATUS" id="needSum" name="needSum"></select>
+							<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="button" id="btnExport" data-permissionUrl="/receive/report/excel/receiveReport.xls" data-url="receive/report/excel/receiveReport.xls" class="btn btn-warning btn-sm ml20">导出</button>
+							<button type="reset" id="resetEmpty" class="btn btn-success btn-sm ml10 mr20">清空</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table id="js_dataTable" data-url="receive/report/query">
+						
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
+<script type='text/javascript'
+	src="../js/report/receive/receiveReport.js"></script>

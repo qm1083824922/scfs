@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.export.RefundApplyLineDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.export.entity.RefundApplyLine">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="refund_apply_id" property="refundApplyId"
+			jdbcType="INTEGER" />
+		<result column="customs_apply_id" property="customsApplyId"
+			jdbcType="INTEGER" />
+		<result column="apply_amount" property="applyAmount" jdbcType="DECIMAL" />
+		<result column="apply_num" property="applyNum" jdbcType="DECIMAL" />
+		<result column="apply_tax" property="applyTax" jdbcType="DECIMAL" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<resultMap type="com.scfs.domain.export.entity.RefundApplyLine"
+		id="ModoleResultMap" extends="BaseResultMap">
+		<result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+		<result column="affiliate_no" property="affiliateNo" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		refund_apply_id,
+		customs_apply_id,
+		apply_amount,
+		apply_num,
+		apply_tax,
+		tax_rate,
+		creator,
+		creator_id,
+		create_at,
+		update_at,
+		is_delete
+	</sql>
+
+	<!-- 获取所有数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.export.dto.req.RefundApplyLineReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		r.id,
+		r.refund_apply_id,
+		r.customs_apply_id,
+		r.apply_amount,
+		r.apply_num,
+		r.apply_tax,
+		r.tax_rate,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.is_delete,
+		c.apply_no,
+		c.affiliate_no
+		FROM
+		tb_refund_apply_line r LEFT JOIN tb_customs_apply c ON
+		r.customs_apply_id=c.id
+		where
+		r.is_delete =0
+		<if test="id != null">
+			and r.id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="refundApplyId != null">
+			and r.refund_apply_id=#{refundApplyId,jdbcType=INTEGER}
+		</if>
+		order by r.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_refund_apply_line
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.export.entity.RefundApplyLine"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_refund_apply_line
+		(
+		refund_apply_id,
+		customs_apply_id,
+		apply_amount,
+		apply_num,
+		apply_tax,
+		tax_rate,
+		creator,
+		creator_id,
+		create_at,
+		update_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{refundApplyId,jdbcType=INTEGER},
+		#{customsApplyId,jdbcType=INTEGER},
+		#{applyAmount,jdbcType=DECIMAL},
+		#{applyNum,jdbcType=DECIMAL},
+		#{applyTax,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.export.entity.RefundApplyLine">
+		update tb_refund_apply_line
+		<set>
+			id = #{id}
+			<if test="refundApplyId != null">
+				,refund_apply_id = #{refundApplyId,jdbcType=INTEGER}
+			</if>
+			<if test="customsApplyId != null">
+				,customs_apply_id = #{customsApplyId,jdbcType=INTEGER}
+			</if>
+			<if test="applyAmount != null">
+				,apply_amount = #{applyAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="applyNum != null">
+				,apply_num = #{applyNum,jdbcType=DECIMAL}
+			</if>
+			<if test="applyTax != null">
+				,apply_tax = #{applyTax,jdbcType=DECIMAL}
+			</if>
+			<if test="taxRate != null">
+				,tax_rate = #{taxRate,jdbcType=DECIMAL}
+			</if>
+			<if test="creator != null">
+				,creator = #{creator,jdbcType=VARCHAR}
+			</if>
+			<if test="creatorId != null">
+				,creator_id = #{creatorId,jdbcType=INTEGER}
+			</if>
+			<if test="createAt != null">
+				,create_at = #{createAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

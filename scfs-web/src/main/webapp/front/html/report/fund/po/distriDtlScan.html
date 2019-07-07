@@ -1,0 +1,140 @@
+<div class="wrapper">
+   <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>采购</li>
+            <li>代销订单</li>
+            <li class="active">订单明细浏览</li>
+        </ol>
+    </section>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation"><a class="tab-item"  data-url="distributionScan.html">基础信息</a></li>
+                        <li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="distriDtlScan.html">订单明细</a>  </li>                     
+                    </ul>
+                    <table id="js_dataTable" data-url="distriOrder/line/query"></table> 
+                    
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '商品编号',
+        field: "goodsNo"
+    }, {
+        title: '商品条码',
+        field: "goodsBarCode"
+    }, {
+        title: '名称',
+        field: "goodsName"
+    }, {
+        title: '型号',
+        field: "goodsType"
+    }, {
+        title: '规格',
+        field: 'specification',
+        width: 100,
+        align: 'center'
+    },{
+        title: '数量',
+        field: "goodsNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '单价',
+        field: "goodsPrice",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '折后单价',
+        field: "discountPrice",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '订单金额',
+        field: "goodsAmount",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '订单折扣金额',
+        field: "discountAmount",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '币种',
+        field: "currencyName"
+    }, {
+        title: '发货数量',
+        field: "sendNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '发货金额',
+        field: "sendAmount",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '退货数量',
+        field: "returnNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '退货金额',
+        field: "returnAmount",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '可发货数量',
+        field: "remainSendNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    },{
+        title: "请款数量",
+        field: "distributeNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '质押比例',
+        field: "pledgeProportion" 
+    }
+    ];
+    options.initPage = function(){
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+    };
+    /* options.initPage = function () {
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, null ,{
+            onLoadSuccess: function(data){
+                    if(data.options.totalStr != null){
+                        $('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>"+data.options.totalStr+"</b></td></tr>");
+                    }
+            }
+        });
+    } */
+    GLOBAL.goBack();
+</script>

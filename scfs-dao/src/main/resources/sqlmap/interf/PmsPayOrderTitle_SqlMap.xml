@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.interf.PmsPayOrderTitleDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.api.pms.entity.PmsPayOrderTitle">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pay_no" jdbcType="VARCHAR" property="payNo" />
+		<result column="corporation_code" jdbcType="VARCHAR" property="corporation_code" />
+		<result column="corporation_name" jdbcType="VARCHAR" property="corporation_name" />
+		<result column="vendor_no" jdbcType="VARCHAR" property="vendorNo" />
+		<result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
+		<result column="pay_date" jdbcType="DATE" property="payDate" />
+		<result column="inner_pay_date" jdbcType="DATE" property="innerPayDate" />
+		<result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+		<result column="pay_currency" jdbcType="VARCHAR" property="payCurrency" />
+		<result column="currency_type" jdbcType="INTEGER" property="currencyType" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deduction_money" jdbcType="DECIMAL" property="deduction_money" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pay_no, corporation_code, corporation_name, vendor_no,
+		supplier_no ,
+		pay_date, inner_pay_date,
+		pay_money, pay_currency,
+		currency_type, state, message, create_at,
+		update_at,deduction_money
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_order_title
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.interf.dto.PmsPoTitleSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_order_title
+		<where>
+			<if test="searchType == 1">
+				and state in (1 , 3)
+			</if>
+			<if test="payNo != null">
+				and pay_no like CONCAT('%' , #{payNo} , '%')
+			</if>
+			<if test="corporation_code != null">
+				and corporation_code like CONCAT('%' ,
+				#{corporation_code} , '%')
+			</if>
+			<if test="corporation_name != null">
+				and corporation_name like CONCAT('%' ,
+				#{corporation_name} , '%')
+			</if>
+			<if test="vendorNo != null">
+				and vendor_no like CONCAT('%' , #{vendorNo} , '%')
+			</if>
+			<if test="supplierNo != null">
+				and supplier_no like CONCAT('%' , #{supplierNo} , '%')
+			</if>
+			<if test="state != null">
+				and state = #{state}
+			</if>
+			<if test="startPayDate != null">
+ 			<![CDATA[
+			and pay_date >= #{startPayDate}
+			]]>
+			</if>
+			<if test="endPayDate != null">
+ 			<![CDATA[
+			and pay_date <= #{endPayDate}
+			]]>
+			</if>
+		</where>
+		order by id desc
+	</select>
+	<select id="queryResultsByPayNo" parameterType="com.scfs.domain.interf.dto.PmsPoTitleSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_order_title
+		<where>
+			<if test="payNo != null">
+				and pay_no = #{payNo}
+			</if>
+		</where>
+		for update
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsPayOrderTitle"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pms_pay_order_title
+		(pay_no, corporation_code,
+		corporation_name, vendor_no, supplier_no ,
+		pay_date,
+		inner_pay_date, pay_money, pay_currency, currency_type,
+		state, message, create_at,deduction_money)
+		values (
+		#{payNo,jdbcType=VARCHAR}, #{corporation_code,jdbcType=VARCHAR},
+		#{corporation_name,jdbcType=VARCHAR}, #{vendorNo,jdbcType=VARCHAR},
+		#{supplierNo,jdbcType=VARCHAR}, #{payDate,jdbcType=DATE},
+		#{innerPayDate,jdbcType=DATE}, #{payMoney,jdbcType=DECIMAL},
+		#{payCurrency,jdbcType=VARCHAR}, #{currencyType,jdbcType=INTEGER},
+		#{state,jdbcType=TINYINT}, #{message,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},#{deduction_money,jdbcType=DECIMAL})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.entity.PmsPayOrderTitle">
+		update tb_pms_pay_order_title
+		<set>
+			<if test="payNo != null">
+				pay_no = #{payNo,jdbcType=VARCHAR},
+			</if>
+			<if test="corporation_code != null">
+				corporation_code = #{corporation_code,jdbcType=VARCHAR},
+			</if>
+			<if test="corporation_name != null">
+				corporation_name = #{corporation_name,jdbcType=VARCHAR},
+			</if>
+			<if test="vendorNo != null">
+				vendor_no = #{vendorNo,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierNo != null">
+				supplier_no = #{supplierNo,jdbcType=VARCHAR},
+			</if>
+			<if test="payDate != null">
+				pay_date = #{payDate,jdbcType=DATE},
+			</if>
+			<if test="innerPayDate != null">
+				inner_pay_date = #{innerPayDate,jdbcType=DATE},
+			</if>
+			<if test="payMoney != null">
+				pay_money = #{payMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="payCurrency != null">
+				pay_currency = #{payCurrency,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="message != null">
+				message = #{message,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

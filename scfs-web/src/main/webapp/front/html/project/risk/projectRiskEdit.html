@@ -1,0 +1,76 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>项目</li>
+        <li class="active">编辑项目事件</li>
+    </ol>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="projectRisk/edit">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                            <td class="text-left">
+                                <select class="form-control js-initform" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>事件标题：<em class="text-star">*</em></b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="title" name="title">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>事件内容：<em class="text-star">*</em></b></td>
+                            <td class="text-left">
+                                <textarea class="form-control js-initform" id="remarks" cols="50" rows="5" name="remarks"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" class="btn btn-primary btn-sm" data-url="projectRisk/update" data-permissionUrl="/projectRisk/update">保存</button>
+                    <button type="button" id="back" data-url="html/project/risk/projectRiskSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+
+    $("#form1").validate({
+        rules: {
+            title: {
+                required: true
+            },
+            remarks: {
+                required: true
+            }
+        },
+        submitHandler: function() {
+            var data = $("#form1").serialize();
+            GLOBAL.ajax("projectRisk/update", data, function(e) {
+                if (e.success) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        //GLOBAL.go("html/pay/paySearch.html");
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        }
+    });
+
+};
+
+GLOBAL.goBack();
+</script>

@@ -1,0 +1,147 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>报表</li>
+        <li class="active">入库明细</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                     <li role="presentation" ><a class="tab-item" data-url="html/report/goods/goodsDetailScan.html">基础信息</a></li>
+                     <li role="presentation" class="active"><a class="tab-item"  data-url="html/report/goods/goodsPmsInScan.html">入库明细</a></li>
+                 	 <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsPmsOutScan.html">出库明细</a></li>      
+                 	 <li role="presentation" ><a class="tab-item"  data-url="html/report/goods/goodsPleaseScan.html">请款明细</a></li>
+                    <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsReturnScan.html">退货明细</a></li>
+<!--                      <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsStlScan.html">库存明细</a></li> -->
+                    </ul>
+                    <table id="js_dataTable" data-url="goods/report/pmsin/query"> </table>
+                </div>
+
+                <div class="box-footer text-center">
+                   <button type="button" data-url="html/report/goods/goodsReportSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+window.operateEvents = {
+    'click .poNoScan': function (e, value, row, index) {
+		var open_url = "id=" + row.poId;
+		open_url += "&poState=" + row.poState;
+		window.open("/html/report/fund/po/poDetail.html?" + open_url);
+    },
+    'click .poOutScan': function (e, value, row, index) {
+    	var projectId= options.param.projectId;
+        var goodsCode= options.param.goodsCode;
+        var supplierId= options.param.supplierId;
+        var customerId= options.param.customerId;
+        var startCheckDate= options.param.startCheckDate;
+        var endCheckDate= options.param.endCheckDate;
+		var open_url = "id=" + row.poId+"&orderNo="+row.poOrderNo;
+		open_url += "&projectId=" + projectId+"&goodsCode=" + goodsCode+"&supplierId=" + supplierId+"&customerId=" + customerId+"&startCheckDate=" + startCheckDate+"&endCheckDate=" + endCheckDate;
+		window.open("/html/report/goods/goodsPmsOutDetail.html?" + open_url);
+    }
+};
+
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '入库编号',
+        field: "purchaseDeliverySn",
+        width: 100,
+        align: 'center'
+    }, {
+        title: '采购单号',
+        field: "purchaseSn",
+        width: 100,
+        align: 'center'
+    },{
+        title: '代销订单',
+        field: "poOrderNo",
+        width: 100,
+        align: 'center',
+	     events: operateEvents,
+	     formatter: orderNoForwardFormatter
+    },{
+        title: '入库数量',
+        field: "stockinNum",
+        width: 100,
+        align: 'center'
+    }, {
+        title: '入库价格',
+        field: "purchasePrice",
+        width: 100,
+        align: 'center',
+    	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    }, {
+        title: '入库金额',
+        field: 'stockinAmount',
+        width: 100,
+        align: 'center',
+    	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    },{
+        title: '入库日期',
+        field: "stockinTime",
+        width: 100,
+        align: 'center'
+    },{
+        title: '销售数量',
+        field: "wmsOutStockin",
+        width: 100,
+        align: 'center',
+	    events: operateEvents,
+	    formatter: orderOutFormatter
+    },{
+        title: '可用库存',
+        field: "remainSendNum",
+        width: 100,
+        align: 'center',
+    	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    },{
+        title: '库龄(天)',
+        field: "stlAge",
+        width: 100,
+        align: 'center'
+    } ];
+    function orderNoForwardFormatter(value, row, index) {
+    	if (!value) {
+    		value = "0";
+    		return value;
+    	} else {
+    	    return '<a class="poNoScan">' + value + '</a>';
+    	}
+    }
+    function orderOutFormatter(value, row, index) {
+    	if (!value) {
+    		value = "0";
+    		return value;
+    	} else {
+    	    return '<a class="poOutScan">' + value + '</a>';
+    	}
+    }
+    options.initPage = function () {
+        var projectId= options.param.projectId;
+        var goodsCode= options.param.goodsCode;
+        var supplierId= options.param.supplierId;
+        var customerId= options.param.customerId;
+        var startCheckDate= options.param.startCheckDate;
+        var endCheckDate= options.param.endCheckDate;
+         GLOBAL.initTable($('#js_dataTable'), tabCols, {projectId: projectId,goodsCode:goodsCode,supplierId:supplierId,
+         	startCheckDate:startCheckDate,endCheckDate:endCheckDate,customerId: customerId});
+    }
+
+    GLOBAL.goBack();
+</script>

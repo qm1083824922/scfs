@@ -1,0 +1,113 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>接口</li>
+            <li class="active">PMS供应商绑定</li>
+            <li class="active">新建PMS供应商绑定</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="form1">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <td width="240" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"> </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="PROJECT_SUPPLIER" id="supplierId" pid="projectId" name="supplierId"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商编号    ：<em class="text-star">*</em> </b></td>
+                                    <td class="text-left">
+                                        <input type="text" class="form-control" id="supplierNo" name="supplierNo" readonly="readonly">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>PMS供应商编号    ：<em class="text-star">*</em> </b></td>
+                                    <td class="text-left">
+                                        <input type="text" class="form-control" id="pmsSupplierNo" name="pmsSupplierNo">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-url="html/interface/pmsSupplier/pmsSupplierSearch.html" data-permissionUrl="/pmssSupplierBind/add" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" data-url="html/interface/pmsSupplier/pmsSupplierSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+var options = {
+    param: {
+        id: 0,
+        cid: 0
+    },
+    initPage: function() {
+        $("#supplierId").change(function() {
+            if ($("#supplierId").val() != "") {
+                GLOBAL.ajax("baseSubject/detail", {
+                    id: $("#supplierId").val()
+                }, function(e) {
+                    if (e.success) {
+                        $("#supplierNo").val(e.items.subjectNo);
+                    }
+                });
+            } else {
+                $("#supplierNo").val("");
+            }
+        });
+        $("#form1").validate({
+            rules: {
+                supplierId: {
+                    required: true
+                },
+                projectId: {
+                    required: true
+                },
+                supplierNo: {
+                    required: true
+                },
+                pmsSupplierNo: {
+                    required: true
+                }
+            },
+            submitHandler: function() {
+
+                var data = $("#form1").serialize();
+                var url = $(this).data("url")
+                GLOBAL.ajax("pmssSupplierBind/add", data, function(e) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        GLOBAL.go("html/interface/pmsSupplier/pmsSupplierSearch.html");
+                    })
+
+                });
+            }
+        });
+    }
+}
+
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.pay.RefundInformationDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.RefundInformation">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="receipt_date" jdbcType="TIMESTAMP" property="receiptDate" />
+		<result column="refund_amount" jdbcType="DECIMAL" property="refundAmount" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, cust_id, busi_unit, project_id, currency_type,
+		receipt_date,
+		refund_amount, is_delete
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_refund_information
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_refund_information
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.RefundInformation">
+		insert into
+		tb_refund_information (id, cust_id, busi_unit,
+		project_id,
+		currency_type, receipt_date,
+		refund_amount, is_delete)
+		values
+		(#{id,jdbcType=INTEGER}, #{custId,jdbcType=INTEGER},
+		#{busiUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=TINYINT}, #{receiptDate,jdbcType=TIMESTAMP},
+		#{refundAmount,jdbcType=DECIMAL}, #{isDelete,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.scfs.domain.pay.entity.RefundInformation">
+		insert into tb_refund_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="custId != null">
+				cust_id,
+			</if>
+			<if test="busiUnit != null">
+				busi_unit,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="receiptDate != null">
+				receipt_date,
+			</if>
+			<if test="refundAmount != null">
+				refund_amount,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="custId != null">
+				#{custId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit != null">
+				#{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="receiptDate != null">
+				#{receiptDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refundAmount != null">
+				#{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.pay.entity.RefundInformation">
+		update tb_refund_information
+		<set>
+			<if test="custId != null">
+				cust_id = #{custId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="receiptDate != null">
+				receipt_date = #{receiptDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refundAmount != null">
+				refund_amount = #{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.pay.entity.RefundInformation">
+		update
+		tb_refund_information
+		set cust_id = #{custId,jdbcType=INTEGER},
+		busi_unit = #{busiUnit,jdbcType=INTEGER},
+		project_id =
+		#{projectId,jdbcType=INTEGER},
+		currency_type =
+		#{currencyType,jdbcType=TINYINT},
+		receipt_date =
+		#{receiptDate,jdbcType=TIMESTAMP},
+		refund_amount =
+		#{refundAmount,jdbcType=DECIMAL},
+		is_delete =
+		#{isDelete,jdbcType=TINYINT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<insert id="insertRefundInformation" parameterType="com.scfs.domain.pay.entity.RefundInformation">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into tb_refund_information (id, cust_id, busi_unit,
+		project_id,
+		currency_type, receipt_date,
+		refund_amount)
+		values
+		(#{id,jdbcType=INTEGER}, #{custId,jdbcType=INTEGER},
+		#{busiUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=TINYINT}, #{receiptDate,jdbcType=TIMESTAMP},
+		#{refundAmount,jdbcType=DECIMAL})
+	</insert>
+</mapper>

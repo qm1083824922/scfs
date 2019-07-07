@@ -1,0 +1,144 @@
+<style>
+.li_invoiceNo{
+	display: none;
+}
+</style>
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>Invoice收票</li>
+            <li class="active">新建基本信息</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1">
+                <div class="box-body">
+                    <div class="row">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <td width="180" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="PROJECT_BCS" id="supplierId" name="supplierId" pid="projectId"> </select>
+                                    </td>
+                                </tr>
+                                <tr>
+									<td class="text-right"><b>收款账户：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="SUBJECT_ACCOUNT" id=accountId pid="supplierId"  name="accountId"></select>
+									</td>
+								</tr>
+<!--                                 <tr> -->
+<!-- 									<td width="180" class="text-right"><b>币种：<em class="text-star">*</em></b></td> -->
+<!-- 									<td class="text-left"><select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currnecyType" name="currnecyType"></select></td> -->
+<!-- 								</tr> -->
+                                <tr>
+                                    <td class="text-right"><b>单据类别：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="DOCUMENT_TYPE" id="billType" name="billType"> </select>
+                                    </td>
+                                </tr>
+                                <tr class="li_invoiceNo">
+                                    <td class="text-right"><b>发票号：<em class="text-star">*</em><em class="text-star"></em></b></td>
+                                    <td class="text-left">
+                                        <input type="text" class="form-control" id="invoiceNo" name="invoiceNo">
+                                    </td>
+                                </tr>
+                                <tr class="li_invoiceNo">
+									<td class="text-right"><b>发票日期：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input type="text" class="form-control js-initform  js_datePicker" id="invoiceDate" name="invoiceDate"></td>
+								</tr>
+                                <tr>
+                                    <td class="text-right"><b>票据备注：</b></td>
+                                    <td class="text-left">
+                                        <textarea class="form-control js-initform" id="invoiceRemark" cols="50" rows="5" name="invoiceRemark"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>单据备注：</b></td>
+                                    <td class="text-left">
+                                        <textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-permissionUrl="/invoiceCollectOver/add" data-url="html/invoice/invoiceOverseas/invoiceOverseasEdit.html" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" data-url="html/invoice/invoiceOverseas/invoiceOverseasSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+var options = {
+    param: {
+        id: 0,
+        cid: 0
+    },
+    initPage : function() {
+        $("#form1").validate({
+            rules: {
+                projectId: {
+                    required: true
+                },
+                supplierId: {
+                    required: true
+                },
+                accountId: {
+                    required: true
+                },
+                billType: {
+                    required: true
+                },
+                invoiceRemark: {
+                	maxlength : 500
+                },
+                remark: {
+                	maxlength : 500
+                }
+            },
+            submitHandler: function() {
+                var data = $("#form1").serialize();
+                GLOBAL.ajax("invoiceCollectOver/add", data, function(e) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        options.param.id = e.items;
+                        options.param.billType = $("#billType").val();
+                        GLOBAL.go("html/invoice/invoiceOverseas/invoiceOverseasEdit.html", options.param);
+                    })
+                }, false, $("#save"));
+            }
+        });
+    }
+}
+
+$(".js_datePicker").datetimepicker();
+  
+  $("#billType").change(function(){
+	  var billType=$("#billType").val();
+	  if(billType==1){
+		  $(".li_invoiceNo").hide();
+	  }else{
+		  $(".li_invoiceNo").show();
+	  }
+	  
+  });
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

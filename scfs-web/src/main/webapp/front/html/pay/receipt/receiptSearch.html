@@ -1,0 +1,81 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">水单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">客户：</label>
+                            <select class="form-control js-select" data-url="BCS" id="custId" name="custId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">水单编号：</label>
+                            <input type="text" class="form-control" id="receiptNo" name="receiptNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">银行水单号：</label>
+                            <input type="text" class="form-control" id="bankReceiptNo" name="bankReceiptNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">水单类型：</label>
+                            <select class="form-control js-select" data-url="RECEIPT_TYPE" id="receiptType" name="receiptType"></select>
+
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">水单日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startReceiptDate" value="" name="startReceiptDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endReceiptDate" value="" name="endReceiptDate">
+                        </div>
+                        <div class="search-item">	
+							<label class="control-label ml10">水单金额：</label>
+                            <input type="text" class="form-control" id="receiptAmount" name="receiptAmount">
+                        </div>
+                        <div class="search-item">
+                        	 <label class="control-label ml10">状态：</label>
+                        	 <select class="form-control js-select" data-url="RECEIPT_STATUS" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">	 
+                        	 <label class="control-label ml10">是否核完：</label>
+                        	 <select class="form-control" id="isOver" name="isOver">
+                        		 <option value="0"></option>
+                        	 	<option value="1">是</option>
+                        	 	<option value="2">否</option>
+                        	 </select>
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/pay/receipt/receiptCreate.html" data-permissionUrl="/bankReceipt/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <button type="button" id="btnExport" data-url="/bankReceipt/excel/collect.xls" data-permissionUrl="/bankReceipt/excel/collect.xls"  class="btn btn-warning btn-sm ml10">导出excel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="bankReceipt/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../../js/pay/receiptSearch.js"></script>

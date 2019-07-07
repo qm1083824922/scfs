@@ -1,0 +1,39 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>帐套</li>
+		<li class="active">科目编辑</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item"
+							data-url="html/fi/accountBook/abBaseEdit.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="html/fi/accountBook/abLineEdit.html">科目明细</a></li>
+					</ul>
+					<div class="box-body">
+						<table id="js_dataTable" data-url="accountBook/line/rel/query">
+						</table>
+					</div>
+				</div>
+				<div class="box-footer text-center">
+					<button type="button" class="btn btn-warning btn-sm"
+						data-url="accountBook/line/rel/batch/invalid" id="multInvalid" data-permissionUrl="/accountBook/line/rel/batch/invalid">作废</button>
+					<button type="button" class="btn btn-primary btn-sm"
+						data-url="html/fi/accountBook/abLineDivide.html"
+						id="abLineDivide" data-permissionUrl="/accountBook/line/rel/batch/add">分配</button>
+					<button type="button" id="back"
+						data-url="html/fi/accountBook/accountBookSearch.html"
+						class="btn btn-default btn-sm">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script src="../js/fi/accountBook/abLineEdit.js"></script>

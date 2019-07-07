@@ -1,0 +1,666 @@
+.pagination-wrap select, .pagination-wrap span {
+	font-family: Arial, "Microsoft Yahei"
+}
+
+li, ol, ul {
+	list-style: none;
+	margin: 0;
+	padding: 0
+}
+
+label {
+	max-width: auto;
+	font-weight: 300;
+	cursor: pointer
+}
+
+.error, .error:focus {
+	border-color: red !important;
+	padding: 0;
+	display: block;
+	color: #a94442 !important
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden
+}
+
+* html .clearfix {
+	height: 1%
+}
+
+.clearfix {
+	display: block
+}
+
+.no-border {
+	border: 0 !important
+}
+
+.transparent-bg {
+	background: url(../images/transparent.png)
+}
+
+.m10 {
+	margin: 10px
+}
+
+.m15 {
+	margin: 15px
+}
+
+.m30 {
+	margin: 30px
+}
+
+.mt5 {
+	margin-top: 5px
+}
+
+.mt10 {
+	margin-top: 10px
+}
+
+.mt15 {
+	margin-top: 15px
+}
+
+.mt20 {
+	margin-top: 20px
+}
+
+.mt25 {
+	margin-top: 25px
+}
+
+.mt30 {
+	margin-top: 30px
+}
+
+.mt35 {
+	margin-top: 35px
+}
+
+.mt40 {
+	margin-top: 40px
+}
+
+.mt45 {
+	margin-top: 45px
+}
+
+.mt50 {
+	margin-top: 50px
+}
+
+.mt100 {
+	margin-top: 100px
+}
+
+.mb5 {
+	margin-bottom: 5px
+}
+
+.mb10 {
+	margin-bottom: 10px
+}
+
+.mb15 {
+	margin-bottom: 15px
+}
+
+.mb20 {
+	margin-bottom: 20px
+}
+
+.mb30 {
+	margin-bottom: 30px
+}
+
+.mb35 {
+	margin-bottom: 35px
+}
+
+.mb45 {
+	margin-bottom: 45px
+}
+
+.mb50 {
+	margin-bottom: 50px
+}
+
+.mb100 {
+	margin-bottom: 100px
+}
+
+.ml5 {
+	margin-left: 5px
+}
+
+.ml10 {
+	margin-left: 10px
+}
+
+.ml15 {
+	margin-left: 15px
+}
+
+.ml20 {
+	margin-left: 20px
+}
+
+.ml30 {
+	margin-left: 30px
+}
+
+.ml50 {
+	margin-left: 50px
+}
+
+.ml100 {
+	margin-left: 100px
+}
+
+.mr5 {
+	margin-right: 5px
+}
+
+.mr10 {
+	margin-right: 10px
+}
+
+.mr15 {
+	margin-right: 15px
+}
+
+.mr20 {
+	margin-right: 20px
+}
+
+.mr30 {
+	margin-right: 30px
+}
+
+.mr35 {
+	margin-right: 35px
+}
+
+.mr50 {
+	margin-right: 50px
+}
+
+.mr100 {
+	margin-right: 100px
+}
+
+.p5 {
+	padding: 5px
+}
+
+.p10 {
+	padding: 10px
+}
+
+.p15 {
+	padding: 15px
+}
+
+.p20 {
+	padding: 20px
+}
+
+.p30 {
+	padding: 30px
+}
+
+.pt5 {
+	padding-top: 5px
+}
+
+.pt10 {
+	padding-top: 10px
+}
+
+.pt15 {
+	padding-top: 15px
+}
+
+.pt20 {
+	padding-top: 20px
+}
+
+.pt30 {
+	padding-top: 30px
+}
+
+.pt35 {
+	padding-top: 35px
+}
+
+.pt40 {
+	padding-top: 40px
+}
+
+.pt45 {
+	padding-top: 45px
+}
+
+.pt50 {
+	padding-top: 50px
+}
+
+.pb0 {
+	padding-bottom: 0
+}
+
+.pb5 {
+	padding-bottom: 5px
+}
+
+.pb10 {
+	padding-bottom: 10px
+}
+
+.pb15 {
+	padding-bottom: 15px
+}
+
+.pb20 {
+	padding-bottom: 20px
+}
+
+.pb30 {
+	padding-bottom: 30px
+}
+
+.pb40 {
+	padding-bottom: 40px
+}
+
+.pb45 {
+	padding-bottom: 45px
+}
+
+.pb50 {
+	padding-bottom: 50px
+}
+
+.pb100 {
+	padding-bottom: 100px
+}
+
+.pl5 {
+	padding-left: 5px
+}
+
+.pl10 {
+	padding-left: 10px
+}
+
+.pl15 {
+	padding-left: 15px
+}
+
+.pl20 {
+	padding-left: 20px
+}
+
+.pl30 {
+	padding-left: 30px
+}
+
+.pl40 {
+	padding-left: 40px
+}
+
+.pl50 {
+	padding-left: 50px
+}
+
+.pl100 {
+	padding-left: 100px
+}
+
+.pr0 {
+	padding-right: 0
+}
+
+.pr5 {
+	padding-right: 5px
+}
+
+.pr10 {
+	padding-right: 10px
+}
+
+.pr15 {
+	padding-right: 15px
+}
+
+.pr20 {
+	padding-right: 20px
+}
+
+.pr30 {
+	padding-right: 30px
+}
+
+.pr50 {
+	padding-right: 50px
+}
+
+.my-content-header {
+	background: #fff !important;
+	padding-top: 0;
+	border-bottom: 1px solid #eee
+}
+
+.my-content-header .breadcrumb {
+	float: none;
+	position: static;
+	font-size: 14px
+}
+
+.breadcrumb {
+	margin-bottom: 0
+}
+
+.search-box {
+	margin-top: 10px;
+	border: 1px solid #eee
+}
+
+.search-box input[type=text] {
+	margin-right: 10px
+}
+
+.table-wrap {
+	width: 100%;
+	overflow-x: scroll;
+	overflow-y: hidden
+}
+
+.box {
+	border-top: 0;
+	border-radius: 0;
+	margin-bottom: 1px
+}
+
+.box .box-header .box-title-sm {
+	line-height: 30px
+}
+
+.box .box-header .box-title-sm span {
+	padding: 0 10px
+}
+
+.box .box-header .box-form {
+	margin-bottom: 0;
+	width: 70%
+}
+
+.box .box-header .box-form p {
+	margin: 0;
+	padding: 0 5px
+}
+
+.box .box-header .checkbox-list {
+	padding: 5px 10px
+}
+
+.box .box-header .checkbox-list b {
+	display: block;
+	float: left;
+	padding-right: 10px
+}
+
+.box .box-header .checkbox-list ul {
+	float: left
+}
+
+.box .box-header .checkbox-list li {
+	float: left;
+	margin-right: 20px
+}
+
+.box .box-header .checkbox-list .checkbox {
+	margin: 0
+}
+
+.box .box-body {
+	width: 100%;
+	min-height: 300px
+}
+
+.box .box-body .form-group .checkbox, .box .box-body .form-group .radio
+	{
+	display: inline-block;
+	float: none;
+	padding-right: 15px;
+	min-width: 100px
+}
+
+.box .box-body .box-body-title {
+	background-color: #eee;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	border: 1px solid #ddd;
+	border-right: 0
+}
+
+.box .box-body .box-body-title li {
+	border-right: 1px solid #ddd;
+	padding: 8px 15px
+}
+
+.box .box-footer .btn {
+	margin: 0 10px;
+	padding: 6px 20px
+}
+
+.pagination-wrap .pagination-detail, .pagination-wrap .pagination-total,
+	.pagination-wrap ul {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0 10px
+}
+
+.pagination-wrap select {
+	margin: 0 5px;
+	border: 1px solid #ddd;
+	padding: 3px 5px
+}
+
+.fixed-table-container {
+	border-radius: 0;
+	border: none
+}
+
+.bootstrap-table .table>thead>tr>th {
+	border-width: 1px;
+	border-color: #f4f4f4
+}
+
+.text-star {
+	color: red;
+	font-style: normal;
+	vertical-align: middle;
+	padding: 0 5px
+}
+
+.form-group-tips {
+	vertical-align: middle;
+	color: #999;
+	margin-bottom: 0
+}
+
+.panel {
+	border-radius: 0;
+	box-shadow: none
+}
+
+.panel-title {
+	font-size: 14px
+}
+
+.panel-default, .panel-default>.panel-heading {
+	border-color: #eee
+}
+
+.uploadify-button {
+	padding: 0 !important
+}
+
+.nav-tabs {
+	border-bottom: 1px solid #eee
+}
+
+.nav-tabs>li {
+	float: left;
+	margin-bottom: -1px
+}
+
+.nav-tabs>li>a {
+	color: #999;
+	margin-right: 15px;
+	line-height: 1.42857143;
+	border: 1px solid transparent;
+	border-radius: 4px 4px 0 0
+}
+
+.nav-tabs>li>a:hover {
+	color: #666;
+	border-color: #eee
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
+	{
+	color: #337ab7;
+	cursor: default;
+	border: 1px solid #eee;
+	background: #f5f5f5;
+	font-weight: 700;
+	border-bottom-color: transparent
+}
+
+.web-setting-wrap {
+	min-height: 100%
+}
+
+.role-auth-table .checkbox {
+	display: inline-block;
+	margin: 0 15px 0 0
+}
+
+.role-auth-table .mytree ul label, .role-auth-table .mytree ul p {
+	margin: 0
+}
+
+.role-auth-table .mytree p span {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+.role-auth-table .mytree ul li {
+	line-height: 35px;
+	border-top: 1px solid #f4f4f4
+}
+
+.role-auth-table .mytree ul p>span {
+	width: 40%;
+	display: block;
+	border-right: 1px solid #f4f4f4
+}
+
+.role-auth-table .mytree ul .checkbox {
+	line-height: normal
+}
+
+.role-auth-table .mytree>ul li {
+	border-top: none !important
+}
+
+.role-auth-table .mytree ul.last-ul {
+	margin-left: 40%;
+	margin-top: -35px
+}
+
+.role-auth-table .mytree ul.last-ul li {
+	display: inline-block;
+	padding-left: 10px;
+	border-top: none
+}
+
+.role-auth-table .mytree ul.last-ul p:hover {
+	background: 0 0
+}
+
+.auth-category p, .auth-category ul {
+	background-color: #fff
+}
+
+.role-auth-table .mytree ul.last-ul p>span {
+	width: auto;
+	border: none
+}
+
+.role-auth-table .mytree td>ul>li {
+	border-top: none
+}
+
+.auth-role {
+	border: none
+}
+
+.auth-role td>span.checkbox {
+	float: left;
+	margin: 5px 8px 5px 12px
+}
+
+.auth-category .checkbox {
+	margin: 0;
+	max-width: 500px
+}
+
+.auth-category ol {
+	padding-left: 40px
+}
+
+.auth-category p {
+	padding: 7px 10px;
+	border: 1px dotted #ddd;
+	margin: 10px;
+	cursor: pointer
+}
+
+.auth-category p:hover {
+	background-color: #FAFFE4;
+	border: 1px dotted #eee
+}
+
+.auth-category p.active {
+	background-color: #FAFFE4;
+	border: 1px dotted #ddd;
+	font-weight: 700
+}
+
+.auth-category .parent-li>p {
+	background-color: #D9EDF7;
+	border: 1px dotted #ddd
+}
+
+.choose-translator .select-title {
+	margin: 0;
+	background-color: #3c8dbc;
+	padding: 5px 10px;
+	color: #fff
+}
+
+.choose-translator .choose-btn-group {
+	margin-top: 30px
+}

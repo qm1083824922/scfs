@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.api.pms.InvoicingWecharDao">
+	<sql id="InvoicingWechar_Column_List">
+		id,
+		supplier_id,
+		sku,
+		send_time,
+		salse_num,
+		stockin_num,
+		remain_send_num,
+		daily_salse_num,
+		daily_stockin_num,
+		send_type,
+		good_type,
+		send_sate,
+		create_at,
+		update_at
+	</sql>
+	<resultMap id="InvoicingWecharResultMap" type="com.scfs.domain.api.pms.model.InvoicingWechar">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<result column="sku" property="sku" jdbcType="VARCHAR" />
+		<result column="send_time" property="sendTime" jdbcType="VARCHAR" />
+		<result column="salse_num" property="salseNum" jdbcType="DECIMAL" />
+		<result column="stockin_num" property="stockinNum" jdbcType="DECIMAL" />
+		<result column="remain_send_num" property="remainSendNum"
+			jdbcType="DECIMAL" />
+		<result column="daily_salse_num" property="dailySalseNum"
+			jdbcType="DECIMAL" />
+		<result column="daily_stockin_num" property="dailyStockinNum"
+			jdbcType="DECIMAL" />
+		<result column="send_type" property="sendType" jdbcType="TINYINT" />
+		<result column="send_sate" property="sendSate" jdbcType="TINYINT" />
+		<result column="good_type" property="goodsType" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryResultsByCon" resultMap="InvoicingWecharResultMap"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		select
+		<include refid="InvoicingWechar_Column_List" />
+		from tb_invoicing_wechar
+		where 1=1
+		<if test="supplierId != null">
+			AND supplier_id=#{supplierId}
+		</if>
+		<if test="sendTime != null and sendTime !=''">
+			AND send_time=#{sendTime}
+		</if>
+		<if test="type != null">
+			AND send_type=#{type}
+		</if>
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.model.InvoicingWechar"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoicing_wechar(
+		supplier_id,
+		sku,
+		send_time,
+		salse_num,
+		stockin_num,
+		remain_send_num,
+		daily_salse_num,
+		daily_stockin_num,
+		send_type,
+		send_sate,
+		good_type,
+		create_at
+		)
+		VALUES
+		(
+		#{supplierId,jdbcType=INTEGER},
+		#{sku,jdbcType=VARCHAR},
+		#{sendTime,jdbcType=VARCHAR},
+		#{salseNum,jdbcType=DECIMAL},
+		#{stockinNum,jdbcType=DECIMAL},
+		#{remainSendNum,jdbcType=DECIMAL},
+		#{dailySalseNum,jdbcType=DECIMAL},
+		#{dailyStockinNum,jdbcType=DECIMAL},
+		#{sendType,jdbcType=TINYINT},
+		#{sendSate,jdbcType=TINYINT},
+		#{goodsType,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.model.InvoicingWechar">
+		update tb_invoicing_wechar
+		<set>
+			id = #{id}
+			<if test="sendState !=null">
+				,send_sate=#{sendState,jdbcType=DECIMAL}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+
+	<!-- 获取入库相关 -->
+	<resultMap id="StoreInResultMap" type="com.scfs.domain.api.pms.model.InvoicingWechar">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="sku" jdbcType="VARCHAR" property="sku" />
+		<result column="stockin_num" jdbcType="DECIMAL" property="stockinNum" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="remain_send_num" jdbcType="DECIMAL" property="remainSendNum" />
+	</resultMap>
+	<!-- 通过sku获取信息 -->
+	<select id="queryStoreInBySkuDate" resultMap="StoreInResultMap"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT a.sku AS sku,a.stockin_num AS stockin_num,b.supplier_id AS
+		supplier_id,b.remain_send_num AS remain_send_num FROM (
+		SELECT
+		sout.sku,SUM(sout.stockin_num) AS stockin_num,stockin_time FROM
+		tb_pms_store_in sout
+		WHERE sout.flag=0 AND sout.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(sout.stockin_time,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(sout.stockin_time,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY sout.sku) a
+		INNER JOIN
+		(
+		SELECT sku,supplier_id ,
+		(
+		SELECT
+		IFNULL(SUM(remain_send_num),0) AS remain_send_num FROM
+		tb_purchase_order_line line
+		INNER JOIN tb_purchase_order_title po ON
+		line.po_id=po.id
+		INNER JOIN tb_base_goods goods ON
+		line.goods_id=goods.id
+		WHERE po.is_delete=0 AND po.state=5 AND
+		po.order_type=2 AND
+		po.supplier_id=temp.supplier_id AND
+		goods.number=temp.sku
+		) AS
+		remain_send_num
+		FROM (
+		SELECT
+		sout.sku,po.supplier_id FROM tb_pms_store_in sout
+		INNER JOIN
+		tb_purchase_order_title po ON sout.purchase_sn=po.append_no
+		WHERE
+		sout.flag=0 AND sout.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(sout.stockin_time,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(sout.stockin_time,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY sout.sku
+		) temp) b
+		ON a.sku = b.sku WHERE 1 = 1
+		AND
+		b.supplier_id = #{supplierId}
+	</select>
+	<!-- 入库数量 -->
+	<select id="queryStockInNum" resultType="java.math.BigDecimal"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT SUM(IFNULL(store.stockin_num, 0)) FROM tb_pms_store_in store
+		WHERE store.flag=0 AND store.deal_flag=3
+		<if test="sku != null and sku !=''">
+			AND store.sku=#{sku}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(store.stockin_time,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(store.stockin_time,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+	</select>
+	<!-- 获取sku昨日入库数量 -->
+	<select id="queryYesterdayStockInNum" resultType="java.math.BigDecimal"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT SUM(IFNULL(store.stockin_num, 0)) FROM
+		tb_pms_store_in store
+		WHERE store.flag=0 AND store.deal_flag=3
+		AND
+		store.sku=#{sku}
+		AND
+		DATE_FORMAT(store.stockin_time,'%Y-%m-%d')=#{endDate}
+	</select>
+	<!-- 获取期间所有供应商 -->
+	<select id="querySupplierIdByDate" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT po.supplier_id FROM tb_pms_store_in stin
+		INNER JOIN
+		tb_purchase_order_title po ON stin.purchase_sn=po.append_no
+		INNER JOIN
+		tb_purchase_order_line line ON po.id=line.po_id
+		WHERE
+		stin.flag=0 AND
+		stin.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(stin.stockin_time,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(stin.stockin_time,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY po.supplier_id
+	</select>
+
+	<!-- 获取出库相关 -->
+	<resultMap id="StoreOutResultMap" type="com.scfs.domain.api.pms.model.InvoicingWechar">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="sku" jdbcType="VARCHAR" property="sku" />
+		<result column="wms_out_stockin" jdbcType="DECIMAL" property="salseNum" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="remain_send_num" jdbcType="DECIMAL" property="remainSendNum" />
+	</resultMap>
+	<!-- 通过sku获取信息 -->
+	<select id="queryStoreOutBySkuDate" resultMap="StoreOutResultMap"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT a.sku AS sku,a.wms_out_stockin AS wms_out_stockin,b.supplier_id
+		AS supplier_id,b.remain_send_num AS remain_send_num FROM (
+		SELECT
+		sout.sku,SUM(sout.wms_out_stockin) AS wms_out_stockin,sales_date FROM
+		tb_pms_store_out sout
+		WHERE sout.flag=0 AND sout.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY sout.sku) a
+		INNER JOIN
+		(
+		SELECT sku,supplier_id ,
+		(
+		SELECT
+		IFNULL(SUM(remain_send_num),0) AS remain_send_num FROM
+		tb_purchase_order_line line
+		INNER JOIN tb_purchase_order_title po ON
+		line.po_id=po.id
+		INNER JOIN tb_base_goods goods ON
+		line.goods_id=goods.id
+		WHERE po.is_delete=0 AND po.state=5 AND
+		po.order_type=2 AND
+		po.supplier_id=temp.supplier_id AND
+		goods.number=temp.sku
+		) AS
+		remain_send_num
+		FROM (
+		SELECT
+		sout.sku,po.supplier_id FROM tb_pms_store_out sout
+		INNER JOIN
+		tb_purchase_order_title po ON sout.purchase_sn=po.append_no
+		WHERE
+		sout.flag=0 AND sout.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY sout.sku
+		) temp) b
+		ON a.sku=b.sku
+		where 1=1
+		<if test="supplierId != null">
+			AND b.supplier_id=#{supplierId}
+		</if>
+	</select>
+	<!-- 获取sku销售数量 -->
+	<select id="queryStockOutNum" resultType="java.math.BigDecimal"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT SUM(IFNULL(store.wms_out_stockin, 0)) FROM tb_pms_store_out
+		store
+		WHERE store.flag=0 AND store.deal_flag=3
+		<if test="sku != null and sku !=''">
+			AND store.sku=#{sku}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(store.sales_date,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(store.sales_date,'%Y-%m-%d')
+			&lt;=#{endDate}
+		</if>
+	</select>
+	<!-- 获取sku昨日销售数量 -->
+	<select id="queryStoreOutByDate" resultType="java.math.BigDecimal"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT SUM(sout.wms_out_stockin) FROM tb_pms_store_out
+		sout
+		WHERE sout.flag=0 AND sout.deal_flag=3
+		AND sout.sku=#{sku}
+		AND
+		DATE_FORMAT(sales_date,'%Y-%m-%d')=#{endDate}
+	</select>
+	<!-- 入库之外所有供应商 -->
+	<select id="querySupplierIdOutByDate" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.pay.dto.req.InvoicingWecharReqDto">
+		SELECT po.supplier_id FROM tb_pms_store_out sout
+		INNER JOIN
+		tb_purchase_order_title po ON sout.purchase_sn=po.append_no
+		INNER JOIN
+		tb_purchase_order_line line ON po.id=line.po_id
+		WHERE
+		sout.flag=0 AND
+		sout.deal_flag=3
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d')
+			&gt;=#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(sout.sales_date,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		<if test="supplierIds != null">
+			<foreach collection="supplierIds" item="dId"
+				open="AND po.supplier_id NOT IN(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		GROUP BY po.supplier_id
+	</select>
+</mapper>

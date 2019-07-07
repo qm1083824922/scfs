@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>供应链金融</title>
+<script src="js/lib/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script src="js/plugins/jquery.cookie.js" type="text/javascript"></script>
+<script>
+            var userChineseName = $.cookie("CHINESE_NAME") || $.cookie("CNAME");
+            if(!userChineseName || userChineseName == "null"){
+                location.href = "login.html";
+            }
+        </script>
+
+<link rel="stylesheet" href="js/plugins/select2/select2.min.css">
+<!-- FontAwesome 4.3.0 -->
+<link href="fonts/font-awesome-4.4.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css" />
+<!-- Ionicons 2.0.1 -->
+<link href="fonts/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet"
+	type="text/css" />
+<!--bootstrap-->
+<link href="css/bootstrap_min.css" rel="stylesheet" type="text/css" />
+<!--AdminLTE theme-->
+<link href="css/AdminLTE_min.css" rel="stylesheet" type="text/css" />
+<!-- <link href="css/AdminLT_skins/_all-skins.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="css/jquery.tag-editor.css" rel="stylesheet" type="text/css" />
+<!--web css-->
+<link rel="stylesheet"
+	href="js/plugins/jquery.datetimepicker/jquery.datetimepicker.css">
+<link rel="stylesheet" href="css/sys_setting_min.css">
+<link rel="stylesheet" href="css/mainframe_min.css">
+<link rel="stylesheet"
+	href="js/plugins/bootstrap-table/bootstrap-table.min.css">
+<link href="css/zTreeStyle/zTreeStyle.css" rel="stylesheet"></link>
+<link rel="stylesheet"
+	href="js/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+<!--[if lt IE 9]>
+            <script src="../js/lib/html5shiv.min.js"></script>
+            <script src="../js/lib/respond.min.js"></script>
+        <![endif]-->
+</head>
+<body class="skin-blue">
+	<header class="main-header">
+		<a href="javascript:" class="logo nav-item" data-url="html/entry.html"
+			title="首页"></a>
+		<!--logo结束-->
+
+		<nav class="navbar navbar-static-top" role="navigation">
+			<div class="top-nav-item">
+				<ul class="nav navbar-nav" id="navBar">
+				</ul>
+			</div>
+			<!--下拉导航结束-->
+			<div class="top-nav-item navbar-right user-info">
+				<i class="fa fa-user"></i>&nbsp;欢迎你， <span href="javascript:;"
+					class="user-chanese-name" ></span><span class="caret"></span>
+				<div class="user-info-dropdown">
+					<ul>
+						<li><a href="javascript:" class="nav-item" id="editPass"
+							data-url="html/editPwd.html"><i class="fa fa-lock"></i>&nbsp;修改密码</a></li>
+						<li><a href="javascript:" id="logout" data-url="logout"><i
+								class="fa fa-sign-out"></i>&nbsp;退出</a></li>
+						<li><a href="javascript:">版本：v1.0.0</a></li>
+					</ul>
+				</div>
+			</div>
+			<!--用户信息结束-->
+		</nav>
+	</header>
+	<!--头部结束-->
+	<!-- overflow-y:auto;overflow-x:auto; -->
+	<div id="js_mainWrap" class="main-wrap" style="padding-top:50px;">
+	</div>
+	<div id="treeBox" class="treeBox"
+		style="position: absolute; display: none;">
+		<ul id="dataTree" class="ztree" style="margin-top: 0;"></ul>
+	</div>
+	<script src='js/lib/base64.js' type='text/javascript'></script>
+	<script>
+            if(userChineseName && userChineseName !== "null"){
+                $(".user-chanese-name").text(userChineseName.base64Decode());
+            }
+        </script>
+	<script src="js/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+	<script src="js/lib/bootstrap.min.js" type="text/javascript"></script>
+	<script
+		src="js/plugins/jquery.datetimepicker/jquery.datetimepicker.full.min.js"></script>
+	<script src='js/plugins/layer/layer.js' type='text/javascript'></script>
+	<script src="js/plugins/jquery.tag-editor.min.js"
+		type="text/javascript"></script>
+	<script src='js/plugins/bootstrap-table/bootstrap-table.js'
+		type='text/javascript'></script>
+	<script
+		src='js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js'
+		type='text/javascript'></script>
+	<script src='js/plugins/jquery.validate.min.js' type='text/javascript'></script>
+	<script src="js/plugins/zeroclipboard/ZeroClipboard.min.js"></script>
+	<script
+		src='js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'
+		type='text/javascript'></script>
+	<script
+		src='js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js'
+		type='text/javascript'></script>
+	<script src='js/plugins/select2/select2.min.js' type='text/javascript'></script>
+	<script src='js/plugins/select2/i18n/zh-CN.js' type='text/javascript'></script>
+	<script src="../../js/plugins/jquery.ztree.all-3.5.min.js"></script>
+	<script src="../../js/plugins/jquery.mousewheel.min.js"></script>
+	<script src="js/plugins/highcharts/highcharts.js"></script>
+	<script src="js/plugins/highcharts/data.js"></script>
+	<script src="js/plugins/highcharts/drilldown.js"></script>
+	<script src="js/plugins/highcharts/highcharts-more.js"></script>
+	<script src="js/plugins/highcharts/solid-gauge.js"></script>
+	<script src="js/plugins/highcharts/exporting.js"></script>
+
+
+	<script src="js/config.js"></script>
+	<!--common js-->
+	<script src="js/common.js"></script>
+
+	<script>
+        	$(function(){
+                var url = "";
+
+                var urlMap = {
+                    'html/baseinfo/goods/goodsSearch.html': 'goods/query',
+                    'html/subject/subjectSearch.html': 'baseSubject/query',
+                    'html/baseinfo/userinfo/userManager.html': 'user/query',
+                    'html/baseinfo/role/rolesearch.html': 'role/query',
+                    'html/baseinfo/authorityGroup/authorityGroupSearch.html': 'permissionGroup/query',
+                    'html/baseinfo/authority/authoritySearch.html': 'permission/query',
+                    'html/baseinfo/exchangerate/exRateSearch.html': 'exchangeRate/query',
+                    'html/baseinfo/system/systemSearch.html': '',
+                    'html/baseinfo/department/departmentSearch.html': 'department/query',
+                    'html/project/projectSearch.html': 'project/query',
+                    'html/project/item/projectItemSearch.html': 'projectItem/query',
+                    'html/project/projectPool.html': 'projectPool/query',
+                    'html/project/risk/projectRiskSearch.html': 'projectRisk/query',
+                    'html/purchase/poSearch.html': 'po/query',
+                    'html/sale/billDelivery/billDeliverySearch.html': 'billDelivery/query',
+                    'html/logistics/billInStore/billInStoreSearch.html': 'billInStore/query',
+                    'html/logistics/billOutStore/billOutStoreSearch.html': 'billOutStore/query',
+                    'html/logistics/stl/stlSearch.html': 'stl/query',
+                    'html/logistics/stl/stlHistorySearch.html': 'stlHistory/query',
+                    'html/fee/recFee/recFeeSearch.html': 'fee/receive/query',
+                    'html/fee/payFee/payFeeSearch.html': 'fee/pay/query',
+                    'html/fee/recPayFee/recPayFeeSearch.html': 'fee/receive/pay/query',
+                    'html/fee/recDeductionFee/recDeductionFeeSearch.html': 'fee/rec/deduction/query',
+                    'html/fee/payDeductionFee/payDeductionFeeSearch.html': 'fee/pay/deduction/query',
+                    'html/fi/checkBill/checkBillSearch.html': 'voucherLine/group/query',
+                    'html/fi/receiveManage/receiveSearch.html': 'receive/query',
+                    'html/fi/accountStatement/accountStatementTitleSearch.html': 'accountStatementTitle/query',
+                    'html/fi/voucher/voucherSearch.html': 'voucher/query',
+                    'html/fi/accountBook/accountBookSearch.html': 'accountBook/query',
+                    'html/fi/accountLine/accountLineSearch.html': 'accountLine/query',
+                    'html/pay/paySearch.html': 'payOrder/query',
+                    'html/pay/audit/payWiteComf.html': 'payOrder/write/query',
+                    'html/pay/audit/payWiteOpen.html': 'payOrder/open/query',
+                    'html/pay/receipt/receiptSearch.html': 'bankReceipt/query',
+                    'html/pay/advance/advanceManage.html': 'advance/manager/query',
+                    'html/pay/fundPool/fundPoolSearch.html': 'fundPool/query',
+                    'html/pay/word/keyWordSearch.html': 'payKeyWord/query',
+                    'html/invoice/collect/collectInfoSearch.html': 'invoiceCollect/query',
+                    'html/invoice/collect/approve/collectApprove.html': 'invoiceCollect/approve/query',
+                    'html/invoice/makeinvoice/invoiceSearch.html': 'invoiceServiceItem/query',
+                    'html/invoice/invoiceEnsure/invoiceEnsureSearch.html': 'invoiceEnsureItem/query',
+                    'html/report/businessAnalysis/businessAnalysis.html': '',
+                    'html/export/customsApply/customsApplySearch.html': 'customsApply/query',
+                    'html/export/refundApply/refundApplySearch.html': 'refundApply/query',
+                    'html/interface/invokeLog/invokeLogSearch.html': 'invokeLog/query',
+                    'html/interface/pmsSupplier/pmsSupplierSearch.html': 'pmssSupplierBind/query',
+                    'html/interface/pmsPayOrder/pmsPayOrderTitleSearch.html': 'pmsPayOrderTitle/query',
+                    'html/purchaseReturn/poReturnSearch.html': 'poReturn/query',
+                    'html/sale/billReturn/billReturnSearch.html': 'billReturn/query',
+                    'html/report/fund/fundReportSearch.html': 'fund/report/query',
+                    'html/report/invoicingReport/invoicingReport.html': 'invoicingReport/query',
+                    'html/report/orderProfit/orderProfitReport.html': 'orderProfitReport/query',
+                    'html/report/receive/receiveReport.html': 'receive/report/query',
+                    'html/report/sale/saleReport.html': 'saleReport/query',
+                    'html/report/stock/stockReport.html': 'stock/report/query',
+                    'html/report/distribution/billsReport.html':'goods/report/query',
+                    'html/invoice/invoiceOverseas/invoiceOverseasSearch.html':'/invoiceCollectOver/query'
+                }
+
+
+                if(localStorage.currentUrl){
+                    url = localStorage.currentUrl;
+                }else{
+                    //加载初始页面
+                    url = "html/entry.html";
+                }
+
+                $("#js_mainWrap").height($(window).height() - $("header").height() - 20);
+
+                GLOBAL.go(url);
+
+                GLOBAL.ajax("common/menus/query", null, function(data){
+                    var menuList = data.items;
+                    var menuHtml = "";
+                    if(menuList){
+                        for(var i = 0; i < menuList.length; i++){
+                            if(menuList[i]){
+                                var menuName = menuList[i].name;
+                                var subMenu = menuList[i].twoLevelPermissions;
+                                menuHtml += '<li class="dropdown"><a href="#"class="dropdown-toggle"data-toggle="dropdown">' + menuName + '</a><dl class="dropdown-menu head-sub-nav"><dd>';
+                                if(subMenu != null && subMenu.length >0 ){
+                                    for(var j = 0; j < subMenu.length; j++){
+                                        if(subMenu[j]){
+                                            var subMenuName = subMenu[j].name;
+                                            var subMenuUrl = subMenu[j].url;
+                                            menuHtml += '<a href="javascript:void(0)" class="nav-item head-sub-menu btn btn-default btn-sm" style="margin:5px" data-url="' + subMenuUrl + '">' + subMenuName + '</a>';
+                                        }
+                                    }
+                                }
+                                menuHtml += '</dd></dl></li>';
+                            }
+                        }
+                        $("#navBar").empty().append(menuHtml);
+                        // .append('<li class="dropdown"><a href="#"class="dropdown-toggle"data-toggle="dropdown">报表</a><dl class="dropdown-menu head-sub-nav"><dd><a href="javascript:void(0)"class="nav-item"data-url="html/report/search.html">报表1</a></dd></dl></li>').append('<li class="dropdown"><a href="#"class="dropdown-toggle"data-toggle="dropdown">项目申请</a><dl class="dropdown-menu head-sub-nav"><dd><a href="javascript:void(0)"class="nav-item"data-url="html/project/projectApply.html">项目申请</a></dd></dl></li>');
+                    }
+                    
+                });
+
+                $("header").on("click", ".nav-item", function(){
+                    var url = $(this).data("url");
+                    for(var i in urlMap){
+                        GLOBAL.local(urlMap[i], '');
+                    }
+                    GLOBAL.go(url);
+                })
+
+                $("#logout").click(function(){
+                    var url = $(this).data("url");
+                    GLOBAL.ajax(url, null, function(){
+                        localStorage.currentUrl = "";
+                        GLOBAL.local("param", "");
+                        setTimeout(function(){
+                            location.href = "/login.html";
+                        },500)
+                    });
+                });
+        	});
+        </script>
+</body>
+</html>

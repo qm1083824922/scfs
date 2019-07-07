@@ -1,0 +1,148 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">帐号信息编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectBaseInfoEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAddressEdit.html">地址信息</a></li>
+                  <li role="presentation"  class="active"><a class="tab-item" data-url="html/subject/subjectAccountEdit.html">帐号信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectInvoiceEdit.html">开票信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectUserInfoEdit.html">用户信息</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="baseSubject/account/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-primary btn-sm" data-url="html/subject/subjectAccountEditAdd.html" data-permissionUrl="/baseSubject/account/add" id="add">添加</button> 
+              <button type="button" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+              <button type="button" class="btn btn-danger btn-sm" data-url="baseSubject/account/batch/invalid" data-permissionUrl="/baseSubject/account/batch/invalid" id="multDel">批量作废</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [
+	{
+	    field: 'checkItem',
+	    checkbox: true,
+	}, {  
+	    title: '序号',
+	    field: 'columnsNumber',  
+	    width: 10
+	}, {
+        title: '开户姓名',
+        field: 'accountor',
+        width: 60,
+        align: 'center'
+    }, {
+         title: '银行代码',
+         field: 'bankCode',
+         width: 60,
+         align: 'center'
+     }, {
+         title: '开户银行',
+         field: 'bankName',
+         width: 80,
+         align: 'center'
+     }, {
+         title: '银行简称',
+         field: 'bankSimple',
+         width: 80,
+         align: 'center'
+     }, {
+         title: '开户账号',
+         field: 'accountNo',
+         width: 100,
+         align: 'center'
+     }, {
+         title: '资金占用',
+         field: 'capitalAccountName',
+         width: 100,
+         align: 'center'
+     },{
+         title: 'IBAN',
+         field: 'iban',
+         width: 60,
+         align: 'center'
+     }, {
+         title: '银行地址',
+         field: 'bankAddress',
+         width: 100,
+         align: 'center'
+     }, {
+         title: '电话',
+         field: 'phoneNumber',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '默认币种',
+         field: 'defaultCurrencyName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '账户类型',
+         field: 'accountTypeName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '状态',
+         field: 'stateLabel',
+         width: 50,
+         align: 'center'
+     }];
+
+    options.initPage = function(){
+    	var subjectType = options.param.subjectType;
+    	if(subjectType == 1 || subjectType == 5 || subjectType == 9 || subjectType == 13){
+    		tabCols[7].visible=true;
+    	}else{
+    		tabCols[7].visible=false;
+    	}
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+      };
+      
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url, options.param);
+    })
+
+    $("#multDel").click(function(){
+    	var id = GLOBAL.selectIds($('#js_dataTable'));
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					$('#js_dataTable').bootstrapTable('refresh', {query: {id: options.param.id}});
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+
+    $("#add").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url, options.param);
+    })
+    
+    GLOBAL.goBack();
+
+</script>

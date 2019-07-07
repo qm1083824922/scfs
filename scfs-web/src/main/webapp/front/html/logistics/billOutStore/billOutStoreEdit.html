@@ -1,0 +1,329 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>出库单</li>
+    <li class="active">基本信息编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="billOutStoreEditForm" data-url="billOutStore/edit">
+            <div class="box-body">
+                <ul class="nav nav-tabs"> 	  
+               	  <li role="presentation" class="active"><a class="tab-item" data-url="html/logistics/billOutStore/billOutStoreEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/logistics/billOutStore/billOutStoreDtlEdit.html">发货明细</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/logistics/billOutStore/billOutStorePickDtlEdit.html">拣货明细</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/logistics/billOutStore/attachment.html">附件</a></li>
+                </ul>
+                 <input class="js-initform" type="hidden" id="id" name="id">
+                 <input class="js-initform" type="hidden" id="status" name="status"/>
+                
+                 <table class="table table-bordered table-hover no-margin">
+            	  <tr>
+                    <td width="180" class="text-right"><b>出库编号：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="billNo" name="billNo"></label>
+                    </td>
+                  </tr>
+            	  <tr>
+                    <td class="text-right"><b>出库附属编号：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" type="text" class="form-control js-initform" id="affiliateNo" name="affiliateNo">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>出库类型：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                      <input type="hidden" class="js-initform" id="billType" name="billType">                      
+                    </td>
+                  </tr>
+               	  <tr>
+                    <td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="projectName" name="projectName"></label>
+                    	<input type="hidden" class="js-initform" id="projectId" name="projectId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>发货仓库：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                    	<input type="hidden" class="js-initform" id="warehouseId" name="warehouseId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>接收仓库：<em class="text-star cls_receiveWarehouse">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="receiveWarehouseName" name="receiveWarehouseName"></label>
+                    	<input type="hidden" class="js-initform" id="receiveWarehouseId" name="receiveWarehouseId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>运输方式：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                       <select style="width:300px" class="form-control js-initform" data-url="BILL_OUT_STORE_TRANSFER_MODE" id="transferMode" name="transferMode"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>送货地址：<em class="text-star cls_customerAddressId">*</em></b></td>
+                    <td class="text-left">
+                        <select style="width:300px" class="form-control js-initform" data-url="SUBJECT_ADDRESS" id="customerAddressId" pid="receiveWarehouseId" name="customerAddressId"></select>                
+                        <label class="js-initform" id="customerAddress" style="display:none"></label>
+                    </td>
+                  </tr> 
+                  <tr class="tr_customerId">
+                    <td class="text-right"><b>客户：<em class="text-star cls_customerName">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="customerName" name="customerName"></label>
+                    	<input type="hidden" class="js-initform" id="customerId" name="customerId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>要求发货日期：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" type="text" class="form-control js-initform js_datePicker" id="requiredSendDate" name="requiredSendDate">
+                    </td>
+                  </tr>                
+                  <tr>
+                    <td class="text-right"><b>币种：</b></td>
+                    <td class="text-left">
+                       <label class="js-initform" id="currencyTypeName" name="currencyTypeName"></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>签收标准：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <select class="form-control js-initform" data-url="SIGN_STANDARD" id="signStandard" name="signStandard"></select>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateName">
+                    <td class="text-right"><b>签收人：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" class="form-control js-initform" id="certificateName" name="certificateName"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_certificateId">
+                    <td class="text-right"><b>身份证： </b></td>
+                    <td class="text-left">
+                      <input style="width:300px" class="form-control js-initform" id="certificateId" name="certificateId"></input>
+                    </td>
+                  </tr>
+                  <tr class="tr_officialSeal">
+                    <td class="text-right"><b>公章：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" class="form-control js-initform" id="officialSeal" name="officialSeal"></input>
+                    </td>
+                  </tr>    
+                  <tr>
+                    <td class="text-right"><b>出库人：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="deliverer" name="deliverer"></label>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>出库时间：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="deliverTime" name="deliverTime"></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>创建人：</b></td>
+                    <td class="text-left"><label class="js-initform" id="creator"></label></td>
+                  </tr>  
+                  <tr>
+                    <td class="text-right"><b>创建时间：</b></td>
+                    <td class="text-left"><label class="js-initform" id="createAt"></label></td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td>
+                    <td class="text-left">
+                      <textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>  
+                    </td>
+                  </tr>
+               </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/billOutStore/update" data-url="billOutStore/update">保存</button>
+              <button type="button" data-url="html/logistics/billOutStore/billOutStoreSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  var editData = GLOBAL.getEditData($("#billOutStoreEditForm"), options.param.id);
+      $(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+      var billType = $("#billType").val();
+      var status = $("#status").val();
+      if (billType == 1 || billType == 5 || (status == 2 || status == 3 || status == 4)) {	//2-待业务审核 3-待财务审核 4-待发货
+      	 $("#save").hide();
+      	 $("#billOutStoreEditForm").find("input").attr("disabled", true);
+      	 $("#billOutStoreEditForm").find("textarea").attr("disabled", true);
+      	 $("#billOutStoreEditForm").find("select").attr("disabled", true);
+      	 $(".cls_receiveWarehouse").hide();
+      	 if (billType == 1 || billType == 5) {
+      		 $("#customerAddressId").hide();
+      		 $("#customerAddress").show();
+      	 }
+      }
+      if (billType == 2) {
+       	 $(".cls_customerName").hide();
+      } else {
+    	  $(".cls_customerName").show();
+      }
+
+	  var customerAddressIdrequired = true;
+      var transferMode = $("#transferMode").val();
+      if (transferMode == 1) {
+    	  $(".cls_customerAddressId").hide();
+    	  customerAddressIdrequired = false;
+      }
+      var signStandard = $("#signStandard").val();
+      if (signStandard == 0) {	//0-身份证  
+      	  $(".tr_certificateName").show();	 		
+      	  $(".tr_certificateId").show(); 		
+      	  $(".tr_officialSeal").hide();
+      } else if (signStandard == 1) {	//1-公章 
+      	  $(".tr_certificateName").hide();				
+      	  $(".tr_certificateId").hide();				
+      	  $(".tr_officialSeal").show();
+      } else if (signStandard == 2) {	//2-身份证和公章
+      	  $(".tr_certificateName").show();	 		
+      	  $(".tr_certificateId").show();	 		
+      	  $(".tr_officialSeal").show();
+      } else if (signStandard == 3) {	//3-见环球签收标准
+    	  $(".tr_certificateName").hide(); 		
+      	  $(".tr_certificateId").hide();	 		
+      	  $(".tr_officialSeal").hide();
+      }
+      
+      $("#transferMode").change(function(){
+          var thisValue = $(this).val();
+          if (thisValue == 1) {	//1-自提
+          	  $(".cls_customerAddressId").hide();
+          	  $("#customerAddressId").val("");
+ 		      $("#customerAddressId").rules("remove");  
+          } else {
+          	  $(".cls_customerAddressId").show();            	
+  	 		  $("#customerAddressId").rules("add", {required: true});
+          }
+      });
+      $("#customerAddressId").change(function(){
+    	  var transferMode2 = $("#transferMode").val();
+          if (transferMode2 == 1) {	//1-自提
+ 		      $("#customerAddressId").rules("remove");  
+          } else {
+  	 		  $("#customerAddressId").rules("add", {required: true});
+          }
+      });
+      $("#signStandard").change(function(){
+          var thisValue = $(this).val();
+          if (thisValue === "" || thisValue == 3) {
+       	  	  $(".tr_certificateName").hide();
+         	  $("#certificateName").val("");
+			  $("#certificateName").rules("remove");
+				
+         	  $(".tr_certificateId").hide();
+         	  $("#certificateId").val("");
+			  $("#certificateId").rules("remove");
+			  
+              $(".tr_officialSeal").hide();
+         	  $("#officialSeal").val("");
+			  $("#officialSeal").rules("remove");
+          } else if (thisValue == 0) {	//0-身份证  
+          	  $(".tr_certificateName").show();
+  	 		  $("#certificateName").rules("add", {required: true});
+  	 		
+          	  $(".tr_certificateId").show();
+  	 		  $("#certificateId").rules("add", {required: true});
+  	 		
+          	  $(".tr_officialSeal").hide();
+          	  $("#officialSeal").val("");
+ 			  $("#officialSeal").rules("remove");
+          } else if (thisValue == 1) {	//1-公章 
+          	  $(".tr_certificateName").hide();
+          	  $("#certificateName").val("");
+ 			  $("#certificateName").rules("remove");
+ 				
+          	  $(".tr_certificateId").hide();
+          	  $("#certificateId").val("");
+ 			  $("#certificateId").rules("remove");
+ 				
+          	  $(".tr_officialSeal").show();
+ 			  $("#officialSeal").rules("add", {required: true}); 
+          } else if (thisValue == 2) {	//2-身份证和公章
+          	  $(".tr_certificateName").show();
+  	 		  $("#certificateName").rules("add", {required: true});
+  	 		
+          	  $(".tr_certificateId").show();
+  	 		  $("#certificateId").rules("add", {required: true});
+  	 		
+          	  $(".tr_officialSeal").show();
+ 			  $("#officialSeal").rules("add", {required: true}); 
+          }
+      });
+      
+      $("#billOutStoreEditForm").validate({
+          rules: {
+        	  affiliateNo: {
+          		  required: true
+          	  },
+        	  projectId: {
+                  required: true
+              },
+              supplierId: {
+                  required: true
+              },
+              warehouseId: {
+              	  required: true
+              },
+              receiveWarehouseId: {
+              	  required: true
+              },
+              customerAddressId: {
+              	  required: customerAddressIdrequired
+              },
+              requiredSendDate: {
+              	  required: true
+              },
+              transferMode: {
+              	  required: true
+              },
+              signStandard: {
+              	  required: true
+              },
+              certificateName: {
+              	  required: true
+              }, 
+              officialSeal: {
+              	  required: true
+              }
+          },
+          submitHandler: function() {      	 
+        	  var formData = $("#billOutStoreEditForm").serializeObject();
+              GLOBAL.ajax("billOutStore/update", formData, function(e) {
+                  if (e.success) {
+                      layer.msg("保存成功！");
+                  } else {
+                      layer.msg(e.msg);
+                  }
+              });             
+           }
+      });
+  }
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  })
+
+  GLOBAL.goBack();
+
+</script>

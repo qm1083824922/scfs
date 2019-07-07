@@ -1,0 +1,174 @@
+<link href="../../css/zTreeStyle/zTreeStyle.css" rel="stylesheet"></link>
+<style>
+.wrapper {
+    overflow: visible !important;
+}
+
+#menuContent {
+    border: 1px solid #ccc;
+    background: #fff;
+}
+</style>
+<div class="wrapper">
+    <section class="content-header my-content-header">
+	 	<ol class="breadcrumb">
+		    <li>当前位置</li>
+		    <li>基础信息</li>
+		    <li>部门</li>
+		    <li class="active">编辑部门</li>
+	 	</ol>
+  	</section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="department/edit">
+            <div class="box-body">  
+               	  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>编号：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="number" name="number">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>名称：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="name" name="name">
+                       </td>
+                    </tr> 
+                    <tr id="parentName1">
+                      <td class="text-right"><b>上级部门：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">  
+                      	<input type="text" class="form-control js-tree js-initform" name="parentName" id="parentName" data-id="parentId" data-url="common/department/tree">                    
+                      </td>
+                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/department/update" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/baseinfo/department/departmentSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<div id="menuContent" class="menuContent" style="position:absolute;display:none;">
+    <ul id="departmentTree" class="ztree" style="margin-top:0;"></ul>
+</div>
+<script src="../../js/plugins/jquery.ztree.all-3.5.min.js"></script>
+<script>
+
+options.initPage = function(){ 
+	var data = GLOBAL.getEditData($("#form1"), options.param.id);
+		if(data.level == 0){
+			$("#parentName1").hide();
+		}
+	 $("#form1").validate({
+		 rules: {
+			 number: {
+                 required: true 
+             },
+             name: {
+                 required: true 
+             }, 
+             parentName: {
+                 required: true 
+             }
+         },
+	        submitHandler: function() {
+	          var data = $("#form1").serialize();
+	          GLOBAL.ajax("department/update",data, function(e){
+	        	  if (e.success) {
+	            	  layer.msg("更新成功！", {
+	                      icon: 1,
+	                      time: 1500
+	                  },function(){
+	                	  GLOBAL.go("html/baseinfo/department/departmentSearch.html");
+	                  })
+	              } else {
+	                  layer.msg(e.msg);
+	              }
+	          });
+	        }
+	    });
+	 var setting = {
+		        view: {
+		            dblClickExpand: false
+		        },
+		        data: {
+		            simpleData: {
+		                enable: true
+		            }
+		        },
+		        callback: {
+		            onClick: function(e, treeId, treeNode) {
+		                var zTree = $.fn.zTree.getZTreeObj("departmentTree"),
+		                    nodes = zTree.getSelectedNodes(),
+		                    v = "", ids="";
+		                nodes.sort(function compare(a, b) {
+		                    return a.id - b.id;
+		                });
+		                for (var i = 0, l = nodes.length; i < l; i++) {
+		                    v += nodes[i].name + ",";
+		                    ids += nodes[i].id + ",";
+		                }
+		                if (v.length > 0){
+		                   v = v.substring(0, v.length - 1);
+		                   ids = ids.substring(0, ids.length - 1);
+		                }
+		                $("#parentName").val(v);
+		                $("#parentId").val(ids);
+		            }
+		        }
+		    };
+
+		    function showMenu() {
+		        var cityObj = $("#parentName");
+		        var cityOffset = $("#parentName").offset();
+		        $("#menuContent").css({
+		            left: cityOffset.left + "px",
+		            top: cityOffset.top + cityObj.outerHeight() - 1 + "px"
+		        }).slideDown("fast");
+		    }
+
+		    function hideMenu() {
+		        $("#menuContent").fadeOut("fast");
+		    }
+
+		    $.ajax({
+		        type: "get",
+		        url: "http://10.32.4.220/scf/common/department/tree",
+		        dataType: "json",
+		        success: function(e){
+		            var data = e.items;
+		            $.fn.zTree.init($("#departmentTree"), setting, data);
+		        }
+		    })
+		    
+
+		    $("body").mousedown(function(event) {
+		        if ($(event.target).closest("#menuContent").length <= 0 && $(event.target).attr('id') !== "parentName") {
+		            hideMenu();
+		        }
+		    })
+
+		    $("#parentName").focus(function() {
+		        showMenu();
+		    })
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  }) 
+  $("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    options.param.id=options.param.cid;
+	    GLOBAL.go(url, options.param);
+  })
+  
+</script>
+

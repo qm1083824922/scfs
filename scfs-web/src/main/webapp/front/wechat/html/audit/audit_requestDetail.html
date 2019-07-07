@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>瑞翰供应链</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet"></link>
+<link href="../../css/public.css" rel="stylesheet"></link>
+<link href="../../css/mobile.css" rel="stylesheet"></link>
+<link href="../../css/msg.css" rel="stylesheet"></link>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<h4 class="title mb10 ml5 mt5">
+			<strong>请款基础信息</strong>
+		</h4>
+		<form class="audit-form" id="payAuditInfoForm"
+			data-url="payOrder/detail">
+			<input class="js-initform" type="hidden" id="id" name="id">
+			<p>
+				<span class="form-label">附属编号</span> <span
+					class="form-value js-initform" id="attachedNumbe"></span>
+			</p>
+			<p>
+				<span class="form-label">付款编号</span> <span
+					class="form-value js-initform" id="payNo"></span>
+			</p>
+			<p>
+				<span class="form-label">付款类型</span> <span
+					class="form-value js-initform" id="payTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">项目</span> <span
+					class="form-value js-initform" id="projectName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款单位</span> <span
+					class="form-value js-initform" id="payerName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款方式</span> <span
+					class="form-value js-initform" id="payWayName"></span>
+			</p>
+			<p>
+				<span class="form-label">支付类型</span> <span
+					class="form-value js-initform" id="payWayTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">币种</span> <span
+					class="form-value js-initform" id="currnecyTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款金额</span> <span
+					class="form-value js-initform" id="payAmount"></span>
+			</p>
+			<p>
+				<span class="form-label">预收金额</span> <span
+					class="form-value js-initform" id="advanceAmount"></span>
+			</p>
+			<p>
+				<span class="form-label">收款单位</span> <span
+					class="form-value js-initform" id="payeeName"></span>
+			</p>
+			<p>
+				<span class="form-label">收款账号</span> <span
+					class="form-value js-initform" id="accountNo"></span>
+			</p>
+			<p>
+				<span class="form-label">开户行</span> <span
+					class="form-value js-initform" id="bankName"></span>
+			</p>
+			<p>
+				<span class="form-label">收款银行地址</span> <span
+					class="form-value js-initform" id="bankAddress"></span>
+			</p>
+			<p>
+				<span class="form-label">收款账号开户人</span> <span
+					class="form-value js-initform" id="subjectName"></span>
+			</p>
+			<p>
+				<span class="form-label">收款银行代码</span> <span
+					class="form-value js-initform" id="bankCode"></span>
+			</p>
+			<p>
+				<span class="form-label">收款人电话</span> <span
+					class="form-value js-initform" id="phoneNumber"></span>
+			</p>
+		</form>
+
+		<div style="display: none" class="pay-detail-box">
+			<h3 class="title one mb10 ml5 mt5">
+				<strong>付款订单明细</strong>
+			</h3>
+			<div class="detail-box pay-detail"></div>
+		</div>
+
+		<div style="display: none" class="advance_dataTable">
+			<h3 class="title mb10 ml5 mt5">
+				<strong>付款预收明细</strong>
+			</h3>
+			<div class="detail-box js_advance_dataTable"></div>
+		</div>
+
+
+		<div class="box-footer text-center mb10">
+
+			<div class="form-inline" id="buttom2">
+				<p class="mt20">
+					<button type="button" class="btn btn-default btn-sm fundsRequest "
+						data-url="payOrder/config/submit" id="fundsRequest"
+						style="background-color: #0099FF">确认请款</button>
+					<button type="button" class="btn btn-danger btn-sm multDel"
+						data-url="payOrder/reject/update" id="multDel"
+						style="background-color: #FF3300">驳回请款</button>
+					<button type="button" class="btn btn-default btn-sm js-back"
+						id="fundsBack">返回</button>
+				</p>
+			</div>
+		</div>
+		<script src="../../../js/lib/jquery-1.11.0.min.js"
+			type="text/javascript"></script>
+		<script src="../../js/common.js?v=1.0.0"></script>
+		<script>
+        var id = GLOBAL.getParam("id");
+        var payNo = GLOBAL.getParam("payNo");
+        var flag = GLOBAL.getParam("flag");
+        var auditId = GLOBAL.getParam("auditId");
+        if (flag) {
+            $('#buttom2').show();
+            $('#buttom1').hide();
+        }
+
+        $(function() {
+            $(".advance_dataTable").hide();
+            var $from = $("#payAuditInfoForm");
+            var url = $from.data("url");
+            GLOBAL.ajax(url, {
+               id:id
+            }, function(e) {
+                if (e.success) {
+                    var data = e.items;
+                    var type;
+                    if (data) {
+                        type = data.payType;
+                        $(".js-initform", $from).each(function() {
+                            var $this = $(this);
+                            var id = $this.attr("id");
+                            data[id] = data[id] == null ? "" : data[id];
+
+                            if (this.nodeName.toLowerCase() == "span") {
+                                if (data[id]) {
+                                    if ($this.attr('class') == "js-initform toThound") {
+                                        $this.text(data[id].toThounds());
+                                    } else {
+                                        $this.text(data[id]);
+                                    }
+                                }
+                            } else {
+                                $this.val(data[id]);
+                            }
+                        });
+                    }
+
+                    //付款预收明细；
+                   GLOBAL.ajax("payAdvanRela/query",{
+                        payId:id
+                   },function(e){
+                        var data = e.items;
+                         if (data.length !== 0) {
+                            $(".advance_dataTable").show();
+                                var tabStr = "";
+                                for (var i = 0; i < data.length; i++) {
+                                    tabStr += '<div class="detail-item"><p><span class="form-label">项目：' + data[i].projectName + '</span><span class="form-value">客户：' + data[i].custName + '</span></p><p><span class="form-label">水单日期：' + data[i].receiptDate + '</span><span class="form-value">经营单位：' + data[i].busiUnit + '</span></p><p><span class="form-label">币种：' + data[i].currencyTypeName + '</span><span class="form-value">金额：' + data[i].payAmount.toThounds() + '</span></p></div>';
+                        }
+                        $('.js_advance_dataTable').empty().append(tabStr);
+                    } else {
+                    }
+                   });
+
+                    //获取付款明细；
+                    var tabId;
+                    if (type ===1) {
+                        $(".pay-detail-box").show();
+                        GLOBAL.ajax("payPoRela/query",{
+                            payId:id
+                        },function(e){
+                              var dtls = e.items;
+                            if (dtls) {
+                                var tabStr = "";
+                                for (var i = 0; i < dtls.length; i++) {
+                                    tabStr += '<div class="detail-item"><p><span class="form-label">订单编号：' + dtls[i].orderNo + '</span><span class="form-value">附属编号：' + dtls[i].appendNo + '</span></p><p><span class="form-label">采购数量：' + dtls[i].goodsNum + '</span><span class="form-value">采购单价：' + dtls[i].goodsPrice.toThounds() + '</span></p><p><span class="form-label">销售价：' + dtls[i].requiredSendPrice.toThounds() + '</span><span class="form-value">折扣率：' + dtls[i].discountRateStr + '</span></p><p><span class="form-label">币种：' + dtls[i].currencyName + '</span><span class="form-value">采购金额：' + dtls[i].goodsAmount.toThounds() + '</span></p><p><span class="form-label">已收货金额：' + dtls[i].arrivalAmount.toThounds() + '</span><span class="form-value">本次付款金额：' + dtls[i].payAmount.toThounds() + '</span></p><p><span class="form-label">质押比例：' + dtls[i].pledge + '</span><span class="form-label">日期：' + dtls[i].orderTime + '</span></p></div>';
+
+                                }
+                                $('.pay-detail').empty().append(tabStr);
+                        }
+                    });
+                    }else if (type === 2) {
+                           $(".pay-detail-box").show();
+                           GLOBAL.ajax("payFeeRela/query",{
+                              payId:id
+                           },function(e){
+                               var fees = e.items;
+                                    tabId = 2;
+                                    if (fees) {
+                                        var tabStr = "";
+                                        for (var i = 0; i < fees.length; i++) {
+                                            tabStr += '<div class="detail-item"><p><span class="form-label">费用编号：' + fees[i].feeNo + '</span><span      class="form-value">费用类型：' + fees[i].feeTypeName + '</span></p><p><span class="form-label">日期：' + fees[i]. payDate + '</span><span class="form-value">费用金额：' + fees[i].expPayAmount.toThounds() + '</span></p><p><span    class="form-label">已收票金额：' + fees[i].acceptInvoiceAmount.toThounds() + '</span><span class="form-value">     本次付款金额：' + fees[i].payAmount.toThounds() + '</span></p></div>';
+                                        }
+                                        $('.detail-box').empty().append(tabStr);
+                                    }
+                           })
+                    } else if (type === 6){
+                            $(".pay-detail-box").show();    
+                            GLOBAL.ajax("payRefundRela/query",{
+                              payId:id
+                           },function(e){
+                               var fees = e.items;
+                                    if (fees) {
+                                        var tabStr = "";
+                                        for (var i = 0; i < fees.length; i++) {
+                                            tabStr += '<div class="detail-item"><p><span class="form-label">费用编号：' + fees[i].feeNo + '</span><span      class="form-value">费用类型：' + fees[i].feeTypeName + '</span></p><p><span class="form-label">日期：' + fees[i]. payDate + '</span><span class="form-value">费用金额：' + fees[i].expPayAmount.toThounds() + '</span></p><p><span class="form-label">已收票金额：' + fees[i].acceptInvoiceAmount.toThounds() + '</span><span class="form-value"> 本次付款金额：' + fees[i].payAmount.toThounds() + '</span></p></div>';
+                                        }
+                                        $('.detail-box').empty().append(tabStr);
+                                    }
+                           })
+                    }
+                }
+            });
+
+        })
+        GLOBAL.initSelect();
+		 
+         //供应商确认
+         $("#fundsRequest").click(function() {
+          	var url = $(this).data("url");
+             MOBILE.confirm('确认提交确认请款吗？', function() {
+                 GLOBAL.ajax("payOrder/config/submit", {
+                 	id:id
+                 }, function(e) {
+                 	if (e.success) {
+                         MOBILE.msg("请款成功！", function() {
+                             window.location.href = "audit_requestFunds.html";
+                         });
+                     } else {
+                         MOBILE.msg(e.msg);
+                     }
+                 });
+             });
+         })
+         //供应商确认
+         $("#multDel").click(function() {
+          var url = $(this).data("url");
+          MOBILE.confirm("确认要驳回请款吗？", function(){
+                 GLOBAL.ajax("payOrder/reject/update",{
+                	 auditId: auditId,
+                     projectItemId: id
+                 },function(e){
+                 	if (e.success) {
+                 		MOBILE.msg("驳回请款成功！", function() {
+                 			window.location.href = "audit_requestFunds.html";
+                         });
+                     } else {
+                         MOBILE.msg(e.msg);
+                     }
+                 })
+             })
+         })
+         
+         //返回
+         $(".js-back").click(function() {
+        	 if (flag) {
+                 location.href = "myApplying.html";
+             } else {
+            	 window.location.href = "audit_requestFunds.html";
+             }
+         })
+    </script>
+</body>
+
+</html>

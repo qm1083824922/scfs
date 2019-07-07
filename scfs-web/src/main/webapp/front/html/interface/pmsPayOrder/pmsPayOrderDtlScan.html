@@ -1,0 +1,71 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>接口</li>
+		<li class="active">pms请款单明细浏览</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<div class="box-body">
+						<table id="js_dataTable" data-url="pmsPayOrderDtl/detail">
+						</table>
+					</div>
+				</div>
+				<div class="box-footer text-center">
+				<button type="button"  data-url="html/interface/pmsPayOrder/pmsPayOrderTitleSearch.html"
+					class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+			</form>
+		</div>
+	</section>
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: '2%'
+     }, {
+	     title: '采购订单编号',
+	     field: 'poNo',
+	     align: 'center',
+	     width: '20%'
+	 }, {
+	     title: '商品编号',
+	     field: 'goodsNo',
+	     align: 'center',
+	     width: '20%'
+	 }, {
+	     title: '商品名称',
+	     field: 'goodsName',
+	     align: 'center',
+	     width: '10%'
+	 }, {
+	     title: '入库数量',
+	     field: 'inQty',
+	     align: 'center',
+	     width: '9%'
+	 }, {
+	     title: '不含税成本单价',
+	     field: 'inPrice',
+	     align: 'center',
+	     width: '9%',
+	     formatter : function(value , row , index) {
+	    	 return value.toThounds();
+	     }
+	 }, {
+	     title: '描述',
+	     field: 'message',
+	     align: 'center',
+	   	 width: '30%'
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {titleId : options.param.id});
+}
+GLOBAL.goBack();
+</script>

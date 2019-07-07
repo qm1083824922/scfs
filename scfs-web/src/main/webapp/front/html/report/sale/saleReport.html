@@ -1,0 +1,333 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">销售报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+          <div class="box">
+              <div class="box-header">
+                  <form method="post" action="###" class="form-inline" id="searchForm">
+                      <div class="form-group-sm">
+                          <div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                          </div>
+                          <div class="search-item">
+                        	<label class="control-label">业务类别：</label>
+                            <select class="form-control  js-select" data-url="PROJECT_BIZTYPE" id="bizType" name="bizType"></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">客户：</label>
+                              <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+                          </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">日期：</label>
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startBusinessDate"> -
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endBusinessDate">                                                    
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">统计维度：</label>
+                              <select class="form-control js-select" data-url="STATISTICS_DIMENSION_TYPE" id="statisticsDimensionType" name="statisticsDimensionType" data-empty-option=true></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">部门：</label>
+                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">业务员：</label>
+                              <select class="form-control js-select" data-url="DEPARTMENT_USER" id="bizManagerId" name="bizManagerId"></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">是否合计：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                              <button type="reset" id="btnClear" onclick="clearSearch();" class="btn btn-success btn-sm ml10 mr10">清空</button>
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnExport" data-permissionUrl="/saleReport/excel/saleReport.xls"
+                           		 data-url="saleReport/excel/saleReport.xls" class="btn btn-warning btn-sm ml10">导出</button>                                 	
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <table id="js_dataTable" data-url="saleReport/query">
+                  </table>
+              </div>
+              <!-- .box-body -->
+          </div>
+    </section>
+</div>
+
+<script>
+function clearSearch() {
+	$('#searchForm')[0].reset();
+	$('#departmentId').val('');
+};
+
+function scanForward(row, amountTypeFlag) {
+	var condition = "?forward=1";
+	if (row.projectId) {
+		condition = condition + "&projectId=" + row.projectId;
+	}
+	if (row.customerId) {
+		condition = condition + "&customerId=" + row.customerId;
+	}
+	if (row.departmentId) {
+		condition = condition + "&departmentId=" + row.departmentId;
+	}
+	if (row.bizManagerId) {
+		condition = condition + "&bizManagerId=" + row.bizManagerId;
+	}
+	if (row.currencyType) {
+		condition = condition + "&currencyType=" + row.currencyType;
+	}
+	if (amountTypeFlag) {
+		condition = condition + "&amountTypeFlag=" + amountTypeFlag;
+	}
+	condition = condition + "&startBusinessDate=" + $("#js_form_datetimeStart").val() 
+		+ "&endBusinessDate=" + $("#js_form_datetimeEnd").val();
+	if (amountTypeFlag == 3) {
+		window.open("html/report/sale/feeProfitDtl.html" + condition);
+	} else {
+		window.open("html/report/sale/saleDtl.html" + condition);
+	}
+}
+
+window.operateEvents = {
+    'click .outerScan': function (e, value, row, index) {
+    	scanForward(row, 1);
+    },
+    'click .innerScan': function (e, value, row, index) {
+    	scanForward(row, 2);
+    },
+    'click .scan': function (e, value, row, index) {
+    	scanForward(row, 0);
+    },
+    'click .feeProfitAmountScan': function (e, value, row, index) {
+    	scanForward(row, 3);
+    }
+};
+
+function outerForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0.00";
+	}
+    return '<a class="outerScan">' + value + '</a>';
+}
+
+function innerForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0.00";
+	}
+    return '<a class="innerScan">' + value + '</a>';
+}
+
+function forwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0.00";
+	} 
+    return '<a class="scan">' + value + '</a>';
+}
+
+function feeProfitAmountForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0.00";
+	} 
+    return '<a class="feeProfitAmountScan">' + value + '</a>';
+}
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '部门',
+	     field: 'departmentName',
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '业务类别',
+	     field: 'bizTypeName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '业务员',
+	     field: 'bizManagerName',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+	     title: '外部销售金额',
+	     field: 'outerSaleAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: outerForwardFormatter
+	 }, {
+	     title: '内部销售金额',
+	     field: 'innerSaleAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: innerForwardFormatter
+	 }, {
+	     title: '销售金额',
+	     field: 'saleAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: forwardFormatter
+	 }, {
+	     title: '销售成本',
+	     field: 'costAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: forwardFormatter
+	 }, {
+	     title: '销售利润',
+	     field: 'profitAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: forwardFormatter
+	 }, {
+	     title: '费用利润',
+	     field: 'feeProfitAmount',
+	     align: 'center',
+         events: operateEvents,
+	     formatter: feeProfitAmountForwardFormatter
+	 }, {
+	     title: '合计利润',
+	     field: 'sumProfitAmount',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	var datea =  new Date(); 
+	$("#js_form_datetimeEnd").val(GLOBAL.setDefaultDate(0));
+	$("#js_form_datetimeStart").val(GLOBAL.setDefaultDate(1-datea.getDate()));
+	
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+
+  	//还原查询条件及过滤后的数据
+  	//GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+	$("#statisticsDimensionType").change(function(){
+        var thisValue = $(this).val();
+        if (thisValue == 1) {	//1-项目
+        	$("#customerId").val("");
+			$("#customerId").attr("disabled","disabled");
+			$("#projectId").val("");
+			$("#projectId").removeAttr("disabled");
+			$("#bizManagerId").val("");
+			$("#bizManagerId").removeAttr("disabled");
+			$("#departmentName").val("");
+			$("#departmentName").removeAttr("disabled","disabled");
+			$("#departmentId").val("");
+			$("#departmentId").removeAttr("disabled","disabled"); 
+        } else if (thisValue == 2) {	//2-客户
+        	$("#customerId").val("");
+			$("#customerId").removeAttr("disabled");
+			$("#projectId").val("");
+			$("#projectId").attr("disabled","disabled");
+			$("#bizManagerId").val("");
+			$("#bizManagerId").attr("disabled","disabled");
+			$("#departmentName").val("");
+			$("#departmentName").attr("disabled","disabled");
+			$("#departmentId").val("");
+			$("#departmentId").attr("disabled","disabled");  
+        } else {	//3-项目+客户
+        	$("#customerId").val("");
+			$("#customerId").removeAttr("disabled");
+			$("#projectId").val("");
+			$("#projectId").removeAttr("disabled");
+			$("#bizManagerId").val("");
+			$("#bizManagerId").removeAttr("disabled");
+			$("#departmentName").val("");
+			$("#departmentName").removeAttr("disabled");
+			$("#departmentId").val("");
+			$("#departmentId").removeAttr("disabled");
+        }
+    });
+	$("#customerId").val("");
+	$("#customerId").attr("disabled","disabled");
+	$("#projectId").val("");
+	$("#projectId").removeAttr("disabled");
+	$("#bizManagerId").val("");
+	$("#bizManagerId").removeAttr("disabled");
+	$("#departmentName").val("");
+	$("#departmentName").removeAttr("disabled","disabled");
+	$("#departmentId").val("");
+	$("#departmentId").removeAttr("disabled","disabled"); 
+}
+
+$("#btnSearch").click(function() {
+	var startDate = $("#js_form_datetimeEnd").val();
+	var endDate = $("#js_form_datetimeStart").val();
+	if (!startDate || !endDate) {
+        layer.msg("请选择查询日期范围！");
+		return;
+	}
+	
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#departmentName").change(function() {
+	$("#bizManagerId").empty();
+	GLOBAL.ajax("common/selected/query?key=DEPARTMENT_USER&pId=" + $("#departmentId").val(), null, function(data) {
+        if (data) {
+            var option = "<option value=''>请选择</option>";
+            var items = data.items;
+            if (items) {
+                for (var k = 0; k < items.length; k++) {
+                	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                }
+                $("#bizManagerId").append(option);
+            }
+        }
+    })
+    $('select').select2({language: "zh-CN"});
+});
+
+$("#btnExport").click(function() {
+    var count_url = "saleReport/excel/saleReport/count";
+    var data = $("#searchForm").serializeObject();
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+	
+})
+
+</script>

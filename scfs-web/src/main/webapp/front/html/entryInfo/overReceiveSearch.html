@@ -1,0 +1,123 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>业务指标</li>
+            <li class="active">超期应收</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <form method="post" action="###" class="form-inline" id="searchForm">
+	                            <div class="search-item">
+		                        	<label class="control-label">部门：</label>
+		                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+		                        </div>
+		                        <div class="search-item">
+									<label class="control-label">项目：</label> 
+									<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select> 
+								</div>
+		                        <div class="search-item">		
+									<label class="control-label ml10">客户：</label> 
+									<select class="form-control js-select" data-url="PROJECT_BCS" pid="projectId" id="custId" name="custId"></select> 
+								</div>
+                                <div class="search-item">	
+                                	<label class="control-label ml10">合计：</label>
+                            		<select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                                    <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                    <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                                    <button type="button" id="back" data-url="html/entry.html" class="btn btn-default btn-sm js-back">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="js_dataTable" data-url="overReceive/query">
+                        </table>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{  
+			     title: '序号',
+			     field: 'columnsNumber',  
+			     width: 10
+            },{
+			     title: '部门',
+			     field: 'departmentName',
+			     width: 100,
+			     align: 'center'
+			}, {
+				 title: '项目',
+				 field: 'projectName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '客户',
+				 field: 'custName',
+				 width: 80,
+				 align: 'center'
+		    }, {
+				 title: '应收到期金额',
+				 field: 'blance',
+				 width: 100,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '币种',
+				 field: 'currencyTypeName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '应收到期日',
+				 field: 'expireDate',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '超期天数',
+				 field: 'overDay',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '汇率(CNY)',
+				 field: 'cnyRate',
+				 width: 80,
+				 align: 'center'
+			}
+	 ];
+	
+	options.initPage = function() {
+		var option = {
+				onLoadSuccess : function(data) {
+					if(data.options.totalStr != null){
+						$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+					}
+				}
+			}
+		
+		GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+	};
+	
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	});
+	 GLOBAL.goBack();
+</script>

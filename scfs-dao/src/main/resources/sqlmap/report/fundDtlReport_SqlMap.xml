@@ -1,0 +1,1539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.FundDtlReportDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.FundDtlReport">
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_date" jdbcType="TIMESTAMP" property="billDate" />
+		<result column="bill_type" jdbcType="INTEGER" property="billType" />
+		<result column="pay_type" jdbcType="TINYINT" property="payType" />
+		<result column="receipt_type" jdbcType="TINYINT" property="receiptType" />
+		<result column="pay_state" jdbcType="TINYINT" property="payState" />
+		<result column="receipt_state" jdbcType="TINYINT" property="receiptState" />
+		<result column="capital_account_type" jdbcType="TINYINT"
+			property="capitalAccountType" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+	</resultMap>
+
+	<sql id="selectCondition">
+		<if test="statisticsDimension != null and statisticsDimension == 1">
+			u_table.project_id,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 2">
+			tba.capital_account_type,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 3">
+			u_table.project_id,tba.capital_account_type,
+		</if>
+		<if test="statisticsDimension == null">
+			u_table.project_id,
+		</if>
+	</sql>
+	<sql id="selectDtlsSql">
+		<if test="statisticsDimension ==2 and   capitalAccountType== 2">
+			union all
+			SELECT DISTINCT receipt.id, 0 as relation_id,
+			receipt.project_id AS
+			project_id,receipt.rec_account_no AS account_id,
+			receipt.actual_currency_type AS currency_type,0 as payAmount,
+			receipt.actual_receipt_amount AS receiptAmount,
+			-1*receipt.actual_receipt_amount AS curBalance,
+			receipt.receipt_no as
+			bill_no, receipt.receipt_date as bill_date, receipt.id as
+			bill_id, 7
+			as bill_type, null as pay_state, null as pay_type,
+			receipt.state as
+			receipt_state, receipt.receipt_type as receipt_type
+			,receipt.busi_unit
+			FROM tb_fi_bank_receipt receipt
+			where 1=1 and
+			is_delete=0
+			and receipt.receipt_type =5
+			<if test="startDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+		</if>
+		<if test="statisticsDimension !=2 or  capitalAccountType != 2">
+			union all
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS
+			project_id,receipt.rec_account_no AS account_id,
+			receipt.actual_currency_type AS currency_type,0 as payAmount,
+			tfrrr.fund_used AS receiptAmount,
+			-1*tfrrr.fund_used AS curBalance,
+			receipt.receipt_no as bill_no, receipt.receipt_date as bill_date,
+			receipt.id as
+			bill_id, 7 as bill_type, null as pay_state, null as
+			pay_type,
+			receipt.state as receipt_state, receipt.receipt_type as
+			receipt_type
+			,receipt.busi_unit
+			FROM tb_fi_bank_receipt receipt
+			INNER
+			JOIN tb_fi_rec_receipt_rel tfrrr ON receipt.id = tfrrr.receipt_id
+			and
+			tfrrr.is_delete = 0
+			INNER JOIN tb_fi_rec_line tfrl ON tfrl.rec_id =
+			tfrrr.rec_id
+			INNER JOIN tb_bill_out_store tbos ON tbos.id =
+			tfrl.out_store_id AND
+			tbos.is_delete = 0
+			<where>
+				tfrl.bill_type = 3 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3 ) AND
+				receipt.state = 3
+				<if test="startDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date >= #{startDate}
+				]]>
+				</if>
+				<if test="endDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+				]]>
+				</if>
+				<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+			</where>
+			UNION ALL
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS
+			project_id, receipt.rec_account_no AS
+			account_id,
+			receipt.actual_currency_type AS currency_type,0 as
+			payAmount,
+			tfrrr.fund_used AS receiptAmount,
+			-1*tfrrr.fund_used AS
+			curBalance,
+			receipt.receipt_no as bill_no, receipt.receipt_date as
+			bill_date, receipt.id as
+			bill_id, 7 as bill_type, null as pay_state,
+			null as pay_type,
+			receipt.state as receipt_state, receipt.receipt_type
+			as receipt_type
+			,receipt.busi_unit
+			FROM tb_fi_bank_receipt receipt
+			INNER JOIN tb_fi_rec_receipt_rel tfrrr ON receipt.id =
+			tfrrr.receipt_id
+			and tfrrr.is_delete = 0
+			INNER JOIN tb_fi_rec_line tfrl
+			ON tfrl.rec_id = tfrrr.rec_id
+			INNER JOIN tb_fee tf ON tfrl.fee_id =
+			tf.id AND tf.is_delete = 0
+			<where>
+				tfrl.bill_type = 1 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3 ) AND
+				receipt.state = 3 AND tf.pay_fee_type = 1
+				<if test="startDate != null">
+	  			<![CDATA[ and receipt.receipt_date >= #{startDate} ]]>
+				</if>
+				<if test="endDate != null">
+	  			<![CDATA[ and receipt.receipt_date < date_sub(#{endDate},interval -1 day) ]]>
+				</if>
+				<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+			</where>
+		</if>
+	</sql>
+	<sql id="selectBankSql">
+		<if test="statisticsDimension ==2 and   capitalAccountType== 2">
+			SELECT DISTINCT receipt.id, 0 as relation_id, receipt.project_id AS
+			project_id,receipt.rec_account_no AS account_id,
+			receipt.actual_currency_type AS currency_type,0 as payAmount,
+			-1*receipt.actual_receipt_amount AS curBalance,
+			receipt.actual_receipt_amount AS receiptAmount,
+			receipt.receipt_date
+			as bill_date ,receipt.busi_unit as busi_unit
+			FROM tb_fi_bank_receipt
+			receipt
+			where 1=1 and is_delete=0
+			and receipt.receipt_type =5
+			<if test="startDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date >= #{startDate}
+						]]>
+			</if>
+			<if test="endDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+						]]>
+			</if>
+		</if>
+		<if test="statisticsDimension !=2 or  capitalAccountType != 2">
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS project_id,receipt.rec_account_no AS
+			account_id, receipt.actual_currency_type AS currency_type,0 as
+			payAmount,
+			-1*tfrrr.fund_used AS curBalance,
+			tfrrr.fund_used AS
+			receiptAmount,
+			receipt.receipt_date as bill_date ,receipt.busi_unit as
+			busi_unit
+			FROM tb_fi_bank_receipt receipt
+			INNER JOIN
+			tb_fi_rec_receipt_rel tfrrr ON receipt.id = tfrrr.receipt_id
+			and
+			tfrrr.is_delete = 0
+			INNER JOIN tb_fi_rec_line tfrl ON tfrl.rec_id =
+			tfrrr.rec_id
+			INNER JOIN tb_bill_out_store tbos ON tbos.id =
+			tfrl.out_store_id AND
+			tbos.is_delete = 0
+			<where>
+				tfrl.bill_type = 3 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3 ) AND
+				receipt.state = 3
+				<if test="startDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date >= #{startDate}
+						]]>
+				</if>
+				<if test="endDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+						]]>
+				</if>
+				<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension == 3"> <!-- 项目 资金占用维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension == 2  and  capitalAccountType== 1">  <!-- 资金占用维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+			</where>
+			UNION ALL
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS
+			project_id, receipt.rec_account_no AS
+			account_id,
+			receipt.actual_currency_type AS currency_type,0 as
+			payAmount,
+			-1*tfrrr.fund_used AS curBalance,
+			tfrrr.fund_used AS
+			receiptAmount,
+			receipt.receipt_date as bill_date, receipt.busi_unit as
+			busi_unit
+			FROM tb_fi_bank_receipt receipt
+			INNER JOIN
+			tb_fi_rec_receipt_rel tfrrr ON receipt.id = tfrrr.receipt_id
+			and
+			tfrrr.is_delete = 0
+			INNER JOIN tb_fi_rec_line tfrl ON tfrl.rec_id =
+			tfrrr.rec_id
+			INNER JOIN tb_fee tf ON tfrl.fee_id = tf.id AND
+			tf.is_delete = 0
+			<where>
+				tfrl.bill_type = 1 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3) AND
+				receipt.state = 3 AND tf.pay_fee_type = 1
+				<if test="startDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date >= #{startDate}
+						]]>
+				</if>
+				<if test="endDate != null">
+			  			<![CDATA[
+							and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+						]]>
+				</if>
+				<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension == 3"> <!-- 项目 资金占用维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+				<if test="statisticsDimension == 2  and  capitalAccountType== 1">  <!-- 资金占用维度 付借款 内部不人 -->
+					and receipt.receipt_type !=5
+				</if>
+			</where>
+		</if>
+	</sql>
+
+	<sql id="selectFundCostSql">
+		<if test="statisticsDimension ==2 and  capitalAccountType== 2">
+			union all
+			SELECT DISTINCT receipt.id, 0 as relation_id,
+			receipt.project_id AS
+			project_id,receipt.rec_account_no AS account_id,
+			receipt.actual_currency_type AS currency_type,
+			receipt.actual_receipt_amount AS receiptAmount, receipt.receipt_date
+			as bill_date, receipt.receipt_no as bill_no,
+			receipt.id as bill_id, 7
+			as bill_type, receipt.state as receipt_state,
+			receipt.receipt_type as
+			receipt_type ,null as pay_state, null as
+			pay_type,receipt.busi_unit as
+			busi_unit
+			FROM tb_fi_bank_receipt receipt
+			where 1=1 and is_delete=0
+			and
+			receipt.receipt_type =5
+			<if test="billDate != null">
+	  			<![CDATA[
+					and DATE(receipt.receipt_date) = #{billDate}
+				]]>
+			</if>
+
+		</if>
+		<if test="statisticsDimension !=2 or  capitalAccountType != 2">
+			union all
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS
+			project_id,receipt.rec_account_no AS account_id,
+			receipt.actual_currency_type AS currency_type,
+			tfrrr.fund_used AS
+			receiptAmount, receipt.receipt_date as bill_date,
+			receipt.receipt_no
+			as bill_no,
+			receipt.id as bill_id, 7 as bill_type, receipt.state as
+			receipt_state,
+			receipt.receipt_type as receipt_type ,null as
+			pay_state, null as
+			pay_type,receipt.busi_unit as busi_unit
+			FROM
+			tb_fi_bank_receipt receipt
+			INNER JOIN tb_fi_rec_receipt_rel tfrrr ON
+			receipt.id = tfrrr.receipt_id
+			and tfrrr.is_delete = 0
+			INNER JOIN
+			tb_fi_rec_line tfrl ON tfrl.rec_id = tfrrr.rec_id
+			INNER JOIN
+			tb_bill_out_store tbos ON tbos.id = tfrl.out_store_id AND
+			tbos.is_delete = 0
+			<where>
+				tfrl.bill_type = 3 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3) AND
+				receipt.state = 3
+				<if test="billDate != null">
+	  			<![CDATA[
+					and DATE(receipt.receipt_date) = #{billDate}
+				]]>
+				</if>
+			</where>
+			UNION ALL
+			SELECT DISTINCT receipt.id, tfrrr.id as relation_id,
+			receipt.project_id AS
+			project_id, receipt.rec_account_no AS
+			account_id,
+			receipt.actual_currency_type AS currency_type,
+			tfrrr.fund_used AS receiptAmount, receipt.receipt_date as bill_date,
+			receipt.receipt_no as bill_no,
+			receipt.id as bill_id, 7 as bill_type,
+			receipt.state as receipt_state,
+			receipt.receipt_type as receipt_type ,
+			null as pay_state, null as
+			pay_type,receipt.busi_unit as busi_unit
+			FROM tb_fi_bank_receipt receipt
+			INNER JOIN tb_fi_rec_receipt_rel tfrrr
+			ON receipt.id = tfrrr.receipt_id
+			and tfrrr.is_delete = 0
+			INNER JOIN
+			tb_fi_rec_line tfrl ON tfrl.rec_id = tfrrr.rec_id
+			INNER JOIN tb_fee tf
+			ON tfrl.fee_id = tf.id AND tf.is_delete = 0
+			<where>
+				tfrl.bill_type = 1 AND (receipt.receipt_type = 1 OR
+				receipt.receipt_type = 2 OR receipt.receipt_type = 3) AND
+				receipt.state = 3 AND tf.pay_fee_type = 1
+				<if test="billDate != null">
+	  			<![CDATA[
+					and DATE(receipt.receipt_date) = #{billDate}
+				]]>
+				</if>
+			</where>
+		</if>
+
+
+	</sql>
+
+	<!-- 查询余额明细 -->
+	<select id="queryFundDtlsByCon" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="selectCondition" />
+		u_table.currency_type, u_table.bill_id, u_table.bill_date,
+		u_table.bill_no, u_table.bill_type, sum(u_table.payAmount) as
+		payAmount,
+		sum(u_table.receiptAmount) as receiptAmount,
+		IFNULL(sum(u_table.curBalance),0) as curBalance,
+		u_table.pay_state,
+		u_table.pay_type, u_table.receipt_state,
+		u_table.receipt_type,u_table.busi_unit
+		from (
+		select DISTINCT pay.id,
+		tpfr.id as relation_id, pay.project_id,
+		pay.payment_account as
+		account_id, pay.real_currency_type as
+		currency_type,
+		CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as payAmount,
+		0 as receiptAmount,
+		CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as curBalance,
+		pay.pay_no as bill_no,
+		pay.confirmor_at as bill_date, pay.id as bill_id, 4 as
+		bill_type,
+		pay.state as pay_state,pay.pay_type as pay_type, null as
+		receipt_state, null as receipt_type,pay.busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on pay.id = tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id = tpfr.fee_id and
+		tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			<if test="startDate != null">
+		  			<![CDATA[
+						and pay.confirmor_at >= #{startDate}
+					]]>
+			</if>
+			<if test="endDate != null">
+		  			<![CDATA[
+						and pay.confirmor_at < date_sub(#{endDate},interval -1 day)
+					]]>
+			</if>
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		union all
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type, 0-IFNULL(tpar.pay_amount, 0)
+		AS payAmount,0 as
+		receiptAmount, 0-IFNULL(tpar.pay_amount, 0) AS
+		curBalance,
+		pay.pay_no as bill_no, pay.confirmor_at as bill_date,
+		pay.id as bill_id, 4 as
+		bill_type, pay.state as pay_state,pay.pay_type
+		as pay_type, null as
+		receipt_state, null as receipt_type,pay.busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_advance_relation tpar ON pay.id
+		= tpar.pay_id and
+		tpar.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_type != 2
+			and
+			pay.pay_way_type not in (2)
+			<if test="startDate != null">
+		  			<![CDATA[
+						and pay.confirmor_at >= #{startDate}
+					]]>
+			</if>
+			<if test="endDate != null">
+		  			<![CDATA[
+						and pay.confirmor_at < date_sub(#{endDate},interval -1 day)
+					]]>
+			</if>
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+
+		union all
+		select DISTINCT pay.id, tpfr.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type,
+		0 as payAmount,
+		CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as receiptAmount,
+		-1*(CASE WHEN pay.pay_type =
+		2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type = 2 OR
+		tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END) as curBalance,
+		pay.pay_no as bill_no,
+		IFNULL(tf.expire_date, pay.inner_pay_date) as bill_date,
+		pay.id as
+		bill_id, 4 as bill_type, pay.state as pay_state,pay.pay_type
+		as
+		pay_type, null as receipt_state, null as receipt_type,pay.busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on pay.id =
+		tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id and tf.is_delete = 0
+		LEFT JOIN tb_base_subject basu on
+		basu.id=pay.busi_unit
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			basu.subject_no='L05'
+			and ((
+			tf.expire_date is not null
+			<if test="startDate != null"> 
+				  			<![CDATA[
+								and tf.expire_date >= #{startDate}
+							]]>
+			</if>
+			<if test="endDate != null">
+				  			<![CDATA[
+								and tf.expire_date < date_sub(#{endDate},interval -1 day)
+							]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="startDate != null">
+				  			<![CDATA[
+								and pay.inner_pay_date >= #{startDate}
+							]]>
+			</if>
+			<if test="endDate != null">
+				  			<![CDATA[
+								and pay.inner_pay_date < date_sub(#{endDate},interval -1 day)
+							]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		union all
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type,0 AS payAmount, 0 -
+		IFNULL(tpar.pay_amount, 0) as
+		receiptAmount, IFNULL(tpar.pay_amount, 0)
+		AS curBalance,
+		pay.pay_no as bill_no, IFNULL(tf.expire_date,
+		pay.inner_pay_date) as bill_date,
+		pay.id as bill_id, 4 as bill_type,
+		pay.state as pay_state,pay.pay_type
+		as pay_type, null as receipt_state,
+		null as receipt_type,pay.busi_unit
+		from tb_pay_order pay
+		LEFT JOIN
+		tb_pay_advance_relation tpar ON pay.id = tpar.pay_id and
+		tpar.is_delete = 0
+		LEFT JOIN tb_pay_fee_relation tpfr ON pay.id =
+		tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id AND tf.is_delete = 0
+		LEFT JOIN tb_base_subject basu on
+		basu.id=pay.busi_unit
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			basu.subject_no='L05'
+			and ((
+			tf.expire_date is not null
+			<if test="startDate != null"> 
+				  			<![CDATA[
+								and tf.expire_date >= #{startDate}
+							]]>
+			</if>
+			<if test="endDate != null">
+				  			<![CDATA[
+								and tf.expire_date < date_sub(#{endDate},interval -1 day)
+							]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="startDate != null">
+				  			<![CDATA[
+								and pay.inner_pay_date >= #{startDate}
+							]]>
+			</if>
+			<if test="endDate != null">
+				  			<![CDATA[
+								and pay.inner_pay_date < date_sub(#{endDate},interval -1 day)
+							]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		<include refid="selectDtlsSql" />
+		) as u_table
+		<if test="statisticsDimension == 2 or statisticsDimension == 3 ">
+			inner join tb_base_account tba on u_table.account_id =
+			tba.id
+		</if>
+		<if test="userId != null and projectId != null">
+			left join tb_base_user_project bup on u_table.project_id =
+			bup.project_id
+		</if>
+		<if test="projectId != null">
+			left join tb_base_project bp on u_table.project_id = bp.id
+		</if>
+		<if test="businessUnitId  != null and userId != null ">
+			left join tb_base_user_subject sub on
+			sub.subject_id=u_table.busi_unit
+		</if>
+		<if test="businessUnitId  != null ">
+			left join tb_base_subject su on su.id=u_table.busi_unit
+		</if>
+		<!-- <if test="userId"> -->
+		<!-- left join tb_base_user_project bup on u_table.project_id = bup.project_id -->
+		<!-- </if> -->
+		<!-- left join tb_base_project bp on u_table.project_id = bp.id -->
+		where 1=1
+
+		<if test="userId != null and projectId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="userId != null and businessUnitId != null">
+			and sub.user_id = #{userId}
+			and sub.is_delete = 0
+		</if>
+		<if test="statisticsDimension  != 2 or  capitalAccountType !=1">
+			<if test="projectId">
+				and u_table.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="bizManagerId">
+			and bp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="currencyType">
+			and u_table.currency_type = #{currencyType}
+		</if>
+		<if test="businessUnitId">
+			and u_table.busi_unit = #{businessUnitId}
+		</if>
+		<if
+			test="statisticsDimension  == 2 and  accountId != null  and capitalAccountType ==2">
+			and u_table.account_id=#{accountId}
+		</if>
+		<if test="departmentList != null">
+			and bp.department_id in (
+			<foreach collection="departmentList" item="departmentId"
+				separator=",">
+				${departmentId}
+			</foreach>
+			)
+		</if>
+		<if test="statisticsDimension  != 2 or capitalAccountType !=2">
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND u_table.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</if>
+		group by u_table.bill_no, u_table.bill_date
+		order by u_table.bill_date
+	</select>
+
+	<!-- 废弃 -->
+	<select id="queryFundDtlsGroupByDate" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select Date(u_table.bill_date) as bill_date,
+		IFNULL(sum(u_table.payAmount),0) as payAmount,
+		sum(u_table.receiptAmount) as receiptAmount,
+		IFNULL(u_table.sum(curBalance),0) as curBalance
+		from (
+		(select
+		pay.project_id, pay.payment_account as account_id,
+		pay.real_currency_type as currency_type,
+		CASE WHEN pay.pay_type = 2 AND
+		(tf.fee_type = 2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount
+		ELSE
+		pay.real_pay_amount END as payAmount,
+		0 as receiptAmount,
+		CASE WHEN
+		pay.pay_type = 2 AND (tf.fee_type = 2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount
+		ELSE
+		pay.real_pay_amount END as curBalance,
+		pay.real_pay_amount as
+		payAmount, 0 as receiptAmount, real_pay_amount as curBalance,
+		pay.confirmor_at as bill_date
+		from tb_pay_order pay LEFT JOIN
+		tb_pay_fee_relation tpfr on pay.id =
+		tpfr.pay_id AND tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id and tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			<if test="startDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at <  date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+		</where>
+		)
+		union all
+		(select receipt.project_id, receipt.rec_account_no as
+		account_id,
+		receipt.actual_currency_type as currency_type, 0 as
+		payAmount,
+		receipt.receipt_amount as receiptAmount, (0-receipt_amount)
+		as
+		curBalance, receipt.receipt_date as bill_date
+		from tb_fi_bank_receipt
+		receipt
+		<where>
+			receipt.receipt_type = 1 AND (tf.fee_type = 1 OR tf.fee_type = 2 OR
+			tf.fee_type = 3) and receipt.state = 3
+			<if test="startDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					and receipt.receipt_date < date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+		</where>
+		)
+		union all (
+		select pay.project_id, pay.payment_account as account_id,
+		pay.real_currency_type as currency_type, 0 as payAmount,
+		pay.real_pay_amount as receiptAmount,(0-real_pay_amount ) as
+		curBalance, pay.inner_pay_date as bill_date
+		from tb_pay_order pay
+		<where>
+			pay.state = 6
+			and pay.inner_pay_date IS NOT NULL
+			and pay.pay_way_type
+			not in (2)
+			<if test="startDate != null">
+	  			<![CDATA[
+					AND pay.inner_pay_date >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					AND pay.inner_pay_date <  date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+		</where>
+		)
+		) as u_table
+		inner join tb_base_account tba on u_table.account_id =
+		tba.id
+		<if test="userId">
+			left join tb_base_user_project bup
+			on u_table.project_id =
+			bup.project_id
+		</if>
+		left join tb_base_project bp
+		on u_table.project_id = bp.id
+		where 1=1
+		<if test="userId">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="projectId">
+			and u_table.project_id = #{projectId}
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="currencyType">
+			and u_table.currency_type = #{currencyType}
+		</if>
+		<if test="bizManagerId">
+			and bp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="businessUnitId">
+			and bp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="departmentList != null">
+			and bp.department_id in (
+			<foreach collection="departmentList" item="departmentId"
+				separator=",">
+				${departmentId}
+			</foreach>
+			)
+		</if>
+		group by Date(u_table.bill_date)
+	</select>
+
+	<!-- 付款 -->
+	<select id="queryFundCostPayByCon" parameterType="com.scfs.domain.report.req.FundCostBillSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="selectCondition" />
+		u_table.currency_type, sum(u_table.payAmount) as payAmount,
+		u_table.bill_no, u_table.bill_date, u_table.bill_id,
+		u_table.bill_type, u_table.pay_state,
+		u_table.pay_type,u_table.busi_unit
+		from (
+		select DISTINCT pay.id,
+		tpfr.id as relation_id, pay.project_id,
+		pay.payment_account as
+		account_id, pay.real_currency_type as
+		currency_type,
+		CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as payAmount,
+		pay.pay_no as bill_no,
+		pay.confirmor_at as bill_date, pay.id as bill_id, 4 as
+		bill_type,
+		pay.state as pay_state,pay.pay_type as
+		pay_type,pay.busi_unit as
+		busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on
+		pay.id = tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id
+		= tpfr.fee_id and tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			<if test="billDate != null">
+	  			<![CDATA[
+					and DATE(pay.confirmor_at) = #{billDate}
+				]]>
+			</if>
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		union all
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type, 0-IFNULL(tpar.pay_amount, 0)
+		AS payAmount,
+		pay.pay_no as bill_no, pay.confirmor_at as bill_date,
+		pay.id as bill_id, 4 as
+		bill_type, pay.state as pay_state,pay.pay_type
+		as
+		pay_type,pay.busi_unit as busi_unit
+		from tb_pay_order pay
+		LEFT JOIN
+		tb_pay_advance_relation tpar ON pay.id = tpar.pay_id and
+		tpar.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_type != 2
+			and
+			pay.pay_way_type not in (2)
+			<if test="billDate != null">
+	  			<![CDATA[
+					and DATE(pay.confirmor_at) = #{billDate}
+				]]>
+			</if>
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		) AS u_table
+		<if test="statisticsDimension == 2 or statisticsDimension == 3 ">
+			inner join tb_base_account tba on u_table.account_id =
+			tba.id
+		</if>
+		<if test="userId != null and projectId != null">
+			left join tb_base_user_project bup on u_table.project_id =
+			bup.project_id
+		</if>
+		<if test="projectId != null">
+			left join tb_base_project bp on u_table.project_id = bp.id
+		</if>
+		<if test="businessUnitId  != null and userId != null ">
+			left join tb_base_user_subject sub on
+			sub.subject_id=u_table.busi_unit
+		</if>
+		<if test="businessUnitId  != null ">
+			left join tb_base_subject su on su.id=u_table.busi_unit
+		</if>
+		<where>
+			1=1
+			<if test="userId != null and projectId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="userId != null and businessUnitId != null">
+				and sub.user_id = #{userId}
+				and sub.is_delete = 0
+			</if>
+			<if test="statisticsDimension  != 2 or  capitalAccountType !=2">
+				<if test="projectId">
+					and u_table.project_id = #{projectId}
+				</if>
+			</if>
+			<if test="bizManagerId">
+				and bp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="capitalAccountType">
+				and tba.capital_account_type = #{capitalAccountType}
+			</if>
+			<if test="currencyType">
+				and u_table.currency_type = #{currencyType}
+			</if>
+
+			<if test="businessUnitId">
+				and u_table.busi_unit = #{businessUnitId}
+			</if>
+			<if
+				test="statisticsDimension  == 2 and  accountId != null  and capitalAccountType ==2">
+				and u_table.account_id=#{accountId}
+			</if>
+			<if test="departmentList != null  ">
+				and bp.department_id in (
+				<foreach collection="departmentList" item="departmentId"
+					separator=",">
+					${departmentId}
+				</foreach>
+				)
+			</if>
+			<if test="statisticsDimension  != 2 or capitalAccountType !=2">
+				<if test="excludeProjectIdList!=null">
+					<foreach collection="excludeProjectIdList" item="pId"
+						open="AND u_table.project_id not in(" separator="," close=")">
+						${pId}
+					</foreach>
+				</if>
+			</if>
+			group by u_table.bill_no
+		</where>
+	</select>
+
+	<!-- 收款 -->
+	<select id="queryFundCostReceiptByCon" parameterType="com.scfs.domain.report.req.FundCostBillSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="selectCondition" />
+		u_table.currency_type,
+		sum(u_table.receiptAmount) as
+		receiptAmount,u_table.bill_date, u_table.bill_no, u_table.bill_id,
+		u_table.bill_type,
+		u_table.receipt_state,
+		u_table.receipt_type,u_table.pay_state,
+		u_table.pay_type,u_table.busi_unit
+		FROM (
+		select DISTINCT pay.id,
+		tpfr.id as relation_id, pay.project_id,
+		pay.payment_account as
+		account_id, pay.real_currency_type as
+		currency_type,
+		CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as receiptAmount,
+		IFNULL(tf.expire_date,
+		pay.inner_pay_date) as bill_date, pay.pay_no as bill_no, pay.id as
+		bill_id, 4 as bill_type, null as receipt_state, null as receipt_type,
+		pay.state as pay_state,pay.pay_type as pay_type,pay.busi_unit as
+		busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on
+		pay.id = tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id
+		= tpfr.fee_id and tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			((
+			tf.expire_date is not null
+			<if test="billDate != null"> 
+				  			<![CDATA[
+								and DATE(tf.expire_date) = #{billDate}
+							]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="billDate != null">
+				  			<![CDATA[
+								and DATE(pay.inner_pay_date) = #{billDate}
+							]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		union all
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type,
+		0 - IFNULL(tpar.pay_amount, 0)
+		as receiptAmount,
+		IFNULL(tf.expire_date, pay.inner_pay_date) as
+		bill_date, pay.pay_no as bill_no, pay.id as
+		bill_id, 4 as bill_type,
+		null as receipt_state, null as receipt_type,
+		pay.state as
+		pay_state,pay.pay_type as pay_type,pay.busi_unit as
+		busi_unit
+		from
+		tb_pay_order pay
+		LEFT JOIN tb_pay_advance_relation tpar ON pay.id =
+		tpar.pay_id and
+		tpar.is_delete = 0
+		LEFT JOIN tb_pay_fee_relation tpfr ON
+		pay.id = tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id
+		= tpfr.fee_id AND tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			((
+			tf.expire_date is not null
+			<if test="billDate != null"> 
+				  			<![CDATA[
+								and DATE(tf.expire_date) = #{billDate}
+							]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="billDate != null">
+				  			<![CDATA[
+								and DATE(pay.inner_pay_date) = #{billDate}
+							]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==3"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==1"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension ==2 and  capitalAccountType==2"><!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		<include refid="selectFundCostSql" />
+		)as u_table
+		<if test="statisticsDimension == 2 or statisticsDimension == 3 ">
+			inner join tb_base_account tba on u_table.account_id =
+			tba.id
+		</if>
+		<if test="userId != null and projectId != null">
+			left join tb_base_user_project bup on u_table.project_id =
+			bup.project_id
+		</if>
+		<if test="projectId != null">
+			left join tb_base_project bp on u_table.project_id = bp.id
+		</if>
+		<if test="businessUnitId  != null and userId != null ">
+			left join tb_base_user_subject sub on
+			sub.subject_id=u_table.busi_unit
+		</if>
+		<if test="businessUnitId  != null ">
+			left join tb_base_subject su on su.id=u_table.busi_unit
+		</if>
+		where 1=1
+		<if test="userId != null and projectId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="userId != null and businessUnitId != null">
+			and sub.user_id = #{userId}
+			and sub.is_delete = 0
+		</if>
+		<if test="statisticsDimension  != 2 or capitalAccountType !=1">
+			<if test="projectId">
+				and u_table.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="bizManagerId">
+			and bp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="currencyType">
+			and u_table.currency_type = #{currencyType}
+		</if>
+
+		<if test="businessUnitId">
+			and u_table.busi_unit = #{businessUnitId}
+		</if>
+		<if
+			test="statisticsDimension  == 2 and  accountId != null  and capitalAccountType ==2">
+			and u_table.account_id=#{accountId}
+		</if>
+		<if test="departmentList != null">
+			and bp.department_id in (
+			<foreach collection="departmentList" item="departmentId"
+				separator=",">
+				${departmentId}
+			</foreach>
+			)
+		</if>
+		<if test="statisticsDimension  != 2 or capitalAccountType !=2">
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND u_table.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</if>
+		group by u_table.bill_no
+	</select>
+
+	<!-- 查询资金成本明细 -->
+	<select id="queryFundDtlListByDate" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="selectCondition" />
+		Date(u_table.bill_date) as bill_date, IFNULL(sum(u_table.payAmount),0)
+		as payAmount,
+		sum(u_table.receiptAmount) as receiptAmount,
+		IFNULL(sum(u_table.curBalance),0) as
+		curBalance,u_table.busi_unit as
+		busi_unit
+		from (
+		select DISTINCT pay.id, tpfr.id as relation_id,
+		pay.project_id,pay.payment_account as account_id,
+		pay.real_currency_type as currency_type,
+		CASE WHEN pay.pay_type = 2
+		THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type = 2 OR tf.fee_type
+		= 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0
+		END)
+		ELSE pay.real_pay_amount END as payAmount,
+		CASE WHEN pay.pay_type =
+		2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type = 2 OR
+		tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END as curBalance,
+		0 as receiptAmount
+		,pay.confirmor_at as bill_date,pay.busi_unit as
+		busi_unit
+		from
+		tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on pay.id =
+		tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id and tf.is_delete = 0
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			<if test="startDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at < date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+			<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 3"> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==1 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==2 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		UNION ALL
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type, 0-IFNULL(tpar.pay_amount, 0)
+		AS payAmount,
+		0-IFNULL(tpar.pay_amount, 0) AS curBalance,
+		0 as
+		receiptAmount,pay.confirmor_at as bill_date,pay.busi_unit as
+		busi_unit
+		from tb_pay_order pay
+		LEFT JOIN tb_pay_advance_relation tpar ON pay.id
+		= tpar.pay_id and
+		tpar.is_delete = 0
+		<where>
+			pay.state = 6 and pay.is_delete = 0 and pay.pay_type != 2
+			<if test="startDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at >= #{startDate}
+				]]>
+			</if>
+			<if test="endDate != null">
+	  			<![CDATA[
+					and pay.confirmor_at < date_sub(#{endDate},interval -1 day)
+				]]>
+			</if>
+			<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 3"> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==1 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==2 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+
+		UNION ALL
+		select DISTINCT pay.id, tpfr.id as relation_id,
+		pay.project_id,pay.payment_account as account_id,
+		pay.real_currency_type as currency_type,
+		0 as payAmount,
+		-1*(CASE WHEN
+		pay.pay_type = 2 THEN (CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type =
+		2 OR tf.fee_type = 3) THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE
+		pay.real_pay_amount END) as curBalance,
+		CASE WHEN pay.pay_type = 2 THEN
+		(CASE WHEN tf.pay_fee_type =1 AND
+		(tf.fee_type = 2 OR tf.fee_type = 3)
+		THEN
+		tpfr.pay_amount/pay.pay_amount*pay.real_pay_amount ELSE 0 END)
+		ELSE pay.real_pay_amount END as receiptAmount , IFNULL(tf.expire_date,
+		pay.inner_pay_date) as bill_date ,pay.busi_unit as busi_unit
+		from
+		tb_pay_order pay
+		LEFT JOIN tb_pay_fee_relation tpfr on pay.id =
+		tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id and tf.is_delete = 0
+		LEFT JOIN tb_base_subject basu on
+		basu.id=pay.busi_unit
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			basu.subject_no='L05'
+			and ((
+			tf.expire_date is not null
+			<if test="startDate != null"> 
+			  			<![CDATA[
+							and tf.expire_date >= #{startDate}
+						]]>
+			</if>
+			<if test="endDate != null">
+			  			<![CDATA[
+							and tf.expire_date < date_sub(#{endDate},interval -1 day)
+						]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="startDate != null">
+			  			<![CDATA[
+							and pay.inner_pay_date >= #{startDate}
+						]]>
+			</if>
+			<if test="endDate != null">
+			  			<![CDATA[
+							and pay.inner_pay_date < date_sub(#{endDate},interval -1 day)
+						]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 3"> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==1 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==2 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		UNION ALL
+		select DISTINCT pay.id, tpar.id as relation_id,
+		pay.project_id,
+		pay.payment_account as account_id,
+		pay.real_currency_type as
+		currency_type,0 AS payAmount,
+		IFNULL(tpar.pay_amount, 0) AS
+		curBalance,
+		0 - IFNULL(tpar.pay_amount, 0)
+		as receiptAmount,IFNULL(tf.expire_date,
+		pay.inner_pay_date) as
+		bill_date,pay.busi_unit as busi_unit
+		from tb_pay_order pay
+		LEFT JOIN
+		tb_pay_advance_relation tpar ON pay.id = tpar.pay_id and
+		tpar.is_delete = 0
+		LEFT JOIN tb_pay_fee_relation tpfr ON pay.id =
+		tpfr.pay_id AND
+		tpfr.is_delete = 0
+		LEFT JOIN tb_fee tf ON tf.id =
+		tpfr.fee_id AND tf.is_delete = 0
+		LEFT JOIN tb_base_subject basu on
+		basu.id=pay.busi_unit
+		<where>
+			pay.state = 6
+			and pay.is_delete = 0
+			and pay.pay_way_type not in (2)
+			and
+			basu.subject_no='L05'
+			and ((
+			tf.expire_date is not null
+			<if test="startDate != null"> 
+			  			<![CDATA[
+							and tf.expire_date >= #{startDate}
+						]]>
+			</if>
+			<if test="endDate != null">
+			  			<![CDATA[
+							and tf.expire_date < date_sub(#{endDate},interval -1 day)
+						]]>
+			</if>
+			) or (
+			pay.inner_pay_date is not null
+			<if test="startDate != null">
+			  			<![CDATA[
+							and pay.inner_pay_date >= #{startDate}
+						]]>
+			</if>
+			<if test="endDate != null">
+			  			<![CDATA[
+							and pay.inner_pay_date < date_sub(#{endDate},interval -1 day)
+						]]>
+			</if>
+			)
+			)
+			<if test="statisticsDimension == 1"> <!-- 项目维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 3"> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==1 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type !=3
+			</if>
+			<if test="statisticsDimension == 2 and  capitalAccountType ==2 "> <!-- 项目资金维度 付借款 内部不人 -->
+				and pay.pay_type =3
+			</if>
+		</where>
+		UNION ALL
+		<include refid="selectBankSql" />
+		) as u_table
+		<if test="statisticsDimension == 2 or statisticsDimension == 3 ">
+			inner join tb_base_account tba on u_table.account_id =
+			tba.id
+		</if>
+
+		<if test="userId != null and projectId != null">
+			left join tb_base_user_project bup on u_table.project_id =
+			bup.project_id
+		</if>
+		<if test="projectId != null">
+			left join tb_base_project bp on u_table.project_id = bp.id
+		</if>
+		<if test="businessUnitId  != null and userId != null ">
+			left join tb_base_user_subject sub on
+			sub.subject_id=u_table.busi_unit
+		</if>
+		<if test="businessUnitId  != null ">
+			left join tb_base_subject su on su.id=u_table.busi_unit
+		</if>
+		where 1=1
+		<if test="userId != null and projectId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="userId != null and businessUnitId != null">
+			and sub.user_id = #{userId}
+			and sub.is_delete = 0
+		</if>
+		<if test="statisticsDimension  != 2 or  capitalAccountType !=1 ">
+			<if test="projectId">
+				and u_table.project_id = #{projectId}
+			</if>
+		</if>
+		<if test="bizManagerId">
+			and bp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="currencyType">
+			and u_table.currency_type = #{currencyType}
+		</if>
+		<if test="businessUnitId">
+			and u_table.busi_unit = #{businessUnitId}
+		</if>
+		<if
+			test="statisticsDimension  == 2 and  accountId != null and capitalAccountType ==2 ">
+			and u_table.account_id=#{accountId}
+		</if>
+		<if test="departmentList != null">
+			and bp.department_id in (
+			<foreach collection="departmentList" item="departmentId"
+				separator=",">
+				${departmentId}
+			</foreach>
+			)
+		</if>
+		<if test="statisticsDimension  != 2 or capitalAccountType !=2">
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND u_table.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</if>
+		group by Date(u_table.bill_date)
+	</select>
+</mapper>

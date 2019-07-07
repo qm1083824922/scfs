@@ -1,0 +1,156 @@
+.msg-box {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+}
+
+.msg-box .m-mask {
+	position: fixed;
+	background: rgba(0, 0, 0, .1);
+	width: 100vw;
+	height: 100vh;
+	z-index: 998;
+}
+
+.msg-box .m-content-box {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform-origin: left top;
+	width: 6rem;
+	min-height: 1.5rem;
+	margin: auto;
+	background: #fff;
+	border: 1px solid #888;
+	box-shadow: 0 0 5.46875rem 0.03125rem rgba(0, 0, 0, .3);
+	z-index: 999;
+}
+
+.msg-box .m-content-box .m-title {
+	width: 5.5rem;
+	padding: .05rem .25rem;
+	background: #3c88ef;
+}
+
+.msg-box .m-content-box .m-msg-text {
+	padding: .5rem;
+	min-height: 0.5rem;
+	line-height: .5rem
+}
+
+.msg-box .m-footer {
+	height: 1rem;
+	text-align: center;
+}
+
+.msg-box .m-footer button {
+	width: 1.5rem;
+	height: .65rem;
+	line-height: .5rem;
+	padding: .1rem;
+}
+
+[data-dpr="1"] .msg-box .m-footer button {
+	font-size: 12px;
+}
+
+[data-dpr="2"] .msg-box .m-footer button {
+	font-size: 24px;
+}
+
+[data-dpr="3"] .msg-box .m-footer button {
+	font-size: 36px;
+}
+
+[data-dpr="4"] .msg-box .m-footer button {
+	font-size: 36px;
+}
+
+@
+-webkit-keyframes bounceIn { 0% {
+	opacity: 0;
+	-webkit-transform: scale(.5) translate(-50%, -50%);;
+	transform: scale(.5) translate(-50%, -50%);
+}
+
+100%
+{
+opacity
+:
+ 
+1;
+-webkit-transform
+:
+ 
+scale
+(1)
+ 
+translate
+(-50%
+,
+-50%);;
+transform
+:
+ 
+scale
+(1)
+ 
+translate
+(-50%
+,
+-50%);
+}
+}
+@
+keyframes bounceIn { 0% {
+	opacity: 0;
+	-webkit-transform: scale(.5) translate(-50%, -50%);;
+	-ms-transform: scale(.5) translate(-50%, -50%);;
+	transform: scale(.5) translate(-50%, -50%);
+}
+
+100%
+{
+opacity
+:
+ 
+1;
+-webkit-transform
+:
+ 
+scale
+(1)
+ 
+translate
+(-50%
+,
+-50%);;
+-ms-transform
+:
+ 
+scale
+(1);
+
+        
+transform
+:
+ 
+scale
+(1)
+ 
+translate
+(-50%
+,
+-50%);
+}
+}
+.msg-anim {
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+	-webkit-animation-duration: .3s;
+	animation-duration: .3s;
+	-webkit-animation-name: bounceIn;
+	animation-name: bounceIn
+}

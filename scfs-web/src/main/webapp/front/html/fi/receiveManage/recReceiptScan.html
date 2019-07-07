@@ -1,0 +1,28 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>应收管理</li>
+		<li class="active">应收浏览</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item"
+							data-url="html/fi/receiveManage/receiveScan.html">应收明细</a></li>
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="html/fi/receiveManage/recReceiptScan.html">水单明细</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="recReceiptRel/query"></table>
+				</div>
+				<div class="box-footer text-center" id="btn_div">
+					<button type="button"
+						data-url="html/fi/receiveManage/receiveSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+<script src="../js/fi/receiveManage/recReceiptScan.js"></script>

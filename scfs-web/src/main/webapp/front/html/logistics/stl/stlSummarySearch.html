@@ -1,0 +1,239 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>物流</li>
+            <li>库存</li>
+            <li class="active">库存汇总查询</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">                               
+                            <label class="control-label ml10">项目：</label>
+                            <input type="checkbox" id="projectFlag" name="projectFlag" value="1">
+						
+                            <label class="control-label ml10">供应商：</label>
+                            <input type="checkbox" id="supplierFlag" name="supplierFlag" value="1">
+                            
+                            <label class="control-label ml10">仓库：</label>
+                            <input type="checkbox" id="warehouseFlag" name="warehouseFlag" value="1">
+                            
+                            <label class="control-label ml10">客户：</label>
+                            <input type="checkbox" id="customerFlag" name="customerFlag" value="1">
+                            
+                            <label class="control-label ml10">商品：</label>
+                            <input type="checkbox" id="goodsFlag" name="goodsFlag" value="1">
+                            
+                            <label class="control-label ml10">批次：</label>
+                            <input type="checkbox" id="batchNoFlag" name="batchNoFlag" value="1">                                   
+                            
+                            <label class="control-label ml10">库存状态：</label>
+                            <input type="checkbox" id="goodsStatusFlag" name="goodsStatusFlag" value="1">   
+                            
+                            <label class="control-label ml10">币种：</label>
+                            <input type="checkbox" id="currencyTypeFlag" name="currencyTypeFlag" value="1">  
+                            
+                            <label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select> 
+                        </p>
+                        <div class="mt10">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                        	<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        	<!-- Single button -->
+                            <div class="btn-group  ml10">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+                               	导出 <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" data-permissionUrl="/stl/summary/excel/stlSummary.xls" id="btnExport">导出库存汇总</a></li>
+                              </ul>
+                            </div>   
+                            
+                            <button type="button" data-url="html/logistics/stl/stlSearch.html" class="btn btn-default btn-sm ml10 js-back">返回</button>                                                               	
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="stl/summary/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+
+/*数据表格*/
+var tabCols = [
+	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'warehouseName',
+	     align: 'center'
+	 }, {
+	     title: '供应商',
+	     field: 'supplierName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     }, {
+	     title: '批次',
+	     field: 'batchNo',
+	     align: 'center'
+	 }, {
+	     title: '库存状态',
+	     field: 'goodsStatusName',
+	     align: 'center'
+	 }, {
+	     title: '库存数量',
+	     field: 'storeNum',
+	     align: 'center'
+	 }, {
+	     title: '出库锁定数量',
+	     field: 'lockNum',
+	     align: 'center'
+	 }, {
+	     title: '销售锁定数量',
+	     field: 'saleLockNum',
+	     align: 'center'
+	 }, {
+	     title: '可用数量',
+	     field: 'availableNum',
+	     align: 'center'
+	 }, {
+	     title: '库存金额',
+	     field: 'storeAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '出库锁定金额',
+	     field: 'lockAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '销售锁定金额',
+	     field: 'saleLockAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '可用金额',
+	     field: 'availableAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnExport").click(function() {
+	var projectFlag = 0;
+	if ($("#projectFlag").prop("checked")) {
+		projectFlag = 1;
+	}
+	var supplierFlag = 0;
+	if ($("#supplierFlag").prop("checked")) {
+		supplierFlag = 1;
+	}
+	var warehouseFlag = 0;
+	if ($("#warehouseFlag").prop("checked")) {
+		warehouseFlag = 1;
+	}
+	var customerFlag = 0;
+	if ($("#customerFlag").prop("checked")) {
+		customerFlag = 1;
+	}
+	var goodsFlag = 0;
+	if ($("#goodsFlag").prop("checked")) {
+		goodsFlag = 1;
+	}
+	var batchNoFlag = 0;
+	if ($("#batchNoFlag").prop("checked")) {
+		batchNoFlag = 1;
+	}
+	var goodsStatusFlag = 0;
+	if ($("#goodsStatusFlag").prop("checked")) {
+		goodsStatusFlag = 1;
+	}
+	var currencyTypeFlag = 0;
+	if ($("#currencyTypeFlag").prop("checked")) {
+		currencyTypeFlag = 1;
+	}
+	
+	var condition = "?projectFlag=" +  projectFlag
+	+ "&supplierFlag=" + supplierFlag 
+	+ "&warehouseFlag=" + warehouseFlag
+	+ "&customerFlag=" + customerFlag
+	+ "&goodsFlag=" + goodsFlag
+	+ "&batchNoFlag=" + batchNoFlag
+	+ "&goodsStatusFlag=" + goodsStatusFlag
+	+ "&currencyTypeFlag=" + currencyTypeFlag;
+	
+    var count_url = "stl/summary/excel/stlSummary/count";
+    var data = {
+    	projectFlag: projectFlag,
+    	supplierFlag: supplierFlag,
+    	warehouseFlag: warehouseFlag,
+    	customerFlag: customerFlag,
+    	goodsFlag: goodsFlag,
+    	batchNoFlag: batchNoFlag,
+    	goodsStatusFlag: goodsStatusFlag,
+    	currencyTypeFlag: currencyTypeFlag
+    };
+	var url = "stl/summary/excel/stlSummary.xls";
+	url = url + condition;	
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+			location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+GLOBAL.goBack();
+</script>

@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.ReceiveDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.Receive">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="amount_receivable" jdbcType="DECIMAL" property="amountReceivable" />
+		<result column="amount_received" jdbcType="DECIMAL" property="amountReceived" />
+		<result column="check_date" jdbcType="DATE" property="checkDate" />
+		<result column="expire_date" jdbcType="DATE" property="expireDate" />
+		<result column="check_note" jdbcType="VARCHAR" property="checkNote" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, cust_id, busi_unit, project_id, currency_type,
+		amount_receivable,
+		amount_received,
+		check_date, expire_date, creator,
+		creator_id , create_at , check_note
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		a.id, a.cust_id, a.busi_unit, a.project_id,
+		a.currency_type,
+		a.amount_receivable, a.amount_received,
+		a.check_date as
+		check_date, a.expire_date, a.creator, a.creator_id , a.create_at ,
+		a.check_note
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_rec
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_rec a
+		<if test="userId != null">
+			left join tb_base_user_project bup
+			on a.project_id =
+			bup.project_id
+		</if>
+		<if
+			test="(billNo != null and billNo != '') or billType != null or startBillDate != null or endBillDate != null">
+			left join tb_fi_rec_line frl
+			on a.id = frl.rec_id
+		</if>
+		<where>
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="id != null">
+				and a.id = #{id}
+			</if>
+			<if test="searchType == 1">
+				and a.amount_received = 0
+			</if>
+			<if test="searchType == 2">
+  			<![CDATA[
+				and a.amount_received != 0 and ABS(a.amount_received) < ABS(a.amount_receivable)
+			]]>
+			</if>
+			<if test="searchType == 3">
+				and a.amount_received = a.amount_receivable
+			</if>
+			<if test="searchType == 4">
+  			<![CDATA[
+  				and ABS(a.amount_received) < ABS(a.amount_receivable)
+  			]]>
+			</if>
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="busiUnit != null">
+				and a.busi_unit = #{busiUnit}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="startCheckDate != null">
+				and a.check_date >= #{startCheckDate}
+			</if>
+			<if test="endCheckDate != null">
+  			<![CDATA[
+ 	 			and a.check_date <= #{endCheckDate}
+  			]]>
+			</if>
+			<if test="startExpireDate != null">
+				and a.expire_date >= #{startExpireDate}
+			</if>
+			<if test="endExpireDate != null">
+  			<![CDATA[
+ 	 			and a.expire_date <= #{endExpireDate}
+  			]]>
+			</if>
+			<if test="billType != null">
+				and frl.bill_type = #{billType}
+			</if>
+			<if test="outStoreId != null">
+				and frl.out_store_id = #{outStoreId}
+			</if>
+			<if test="billNo != null and billNo != ''">
+				and frl.bill_no like CONCAT('%' , #{billNo} , '%')
+			</if>
+			<if test="startBillDate != null">
+  			<![CDATA[
+				and frl.bill_date >= #{startBillDate}
+			]]>
+			</if>
+			<if test="endBillDate != null">
+  			<![CDATA[
+				and frl.bill_date <= #{endBillDate}
+			]]>
+			</if>
+		</where>
+		<if test="orderType != null and orderType == 2">
+			order by a.expire_date
+		</if>
+		<if test="orderType != null and orderType == 1">
+			order by a.id desc
+		</if>
+		<if test="orderType == null">
+			order by a.id desc
+		</if>
+	</select>
+
+	<select id="querySumResultsByCon" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultType="com.scfs.domain.fi.dto.resp.RecSumModel">
+		select sum(amount_receivable) as amountReceivableSum ,
+		sum(amount_received) as amountReceivedSum , currency_type as
+		currencyType
+		from tb_fi_rec a
+		<if test="userId != null">
+			left join tb_base_user_project bup
+			on a.project_id =
+			bup.project_id
+		</if>
+		<if
+			test="(billNo != null and billNo != '') or billType != null or startBillDate != null or endBillDate != null">
+			left join tb_fi_rec_line frl
+			on a.id = frl.rec_id
+		</if>
+		<where>
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="searchType == 1">
+				and a.amount_received = 0
+			</if>
+			<if test="searchType == 2">
+  			<![CDATA[
+				and a.amount_received != 0 and ABS(a.amount_received) < ABS(a.amount_receivable)
+			]]>
+			</if>
+			<if test="searchType == 3">
+				and a.amount_received = a.amount_receivable
+			</if>
+			<if test="searchType == 4">
+  			<![CDATA[
+  				and ABS(a.amount_received) < ABS(a.amount_receivable)
+  			]]>
+			</if>
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="busiUnit != null">
+				and a.busi_unit = #{busiUnit}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="startCheckDate != null">
+				and a.check_date >= #{startCheckDate}
+			</if>
+			<if test="endCheckDate != null">
+  			<![CDATA[
+ 	 			and a.check_date <= #{endCheckDate}
+  			]]>
+			</if>
+			<if test="startExpireDate != null">
+				and a.expire_date >= #{startExpireDate}
+			</if>
+			<if test="endExpireDate != null">
+  			<![CDATA[
+ 	 			and a.expire_date <= #{endExpireDate}
+  			]]>
+			</if>
+			<if test="billType != null">
+				and frl.bill_type = #{billType}
+			</if>
+			<if test="billNo != null and billNo != ''">
+				and frl.bill_no like CONCAT('%' , #{billNo} , '%')
+			</if>
+			<if test="startBillDate != null">
+  			<![CDATA[
+				and frl.bill_date >= #{startBillDate}
+			]]>
+			</if>
+			<if test="endBillDate != null">
+  			<![CDATA[
+				and frl.bill_date <= #{endBillDate}
+			]]>
+			</if>
+		</where>
+		group by currency_type
+	</select>
+
+	<select id="queryResultsByConNoUser" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultMap="BaseResultMap">
+		select distinct
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_rec a
+		<if
+			test="feeId != null or outStoreId != null or (billNo != null and billNo != '') or billType != null or startBillDate != null or endBillDate != null">
+			left join tb_fi_rec_line frl
+			on a.id = frl.rec_id
+		</if>
+		<where>
+			<if test="searchType == 1">
+				and a.amount_received = 0
+			</if>
+			<if test="searchType == 2">
+  			<![CDATA[
+				and a.amount_received != 0 and ABS(a.amount_received) < ABS(a.amount_receivable)
+			]]>
+			</if>
+			<if test="searchType == 3">
+				and a.amount_received = a.amount_receivable
+			</if>
+			<if test="searchType == 4">
+  			<![CDATA[
+  				and ABS(a.amount_received) < ABS(a.amount_receivable)
+  			]]>
+			</if>
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="busiUnit != null">
+				and a.busi_unit = #{busiUnit}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="startCheckDate != null">
+				and a.check_date >= #{startCheckDate}
+			</if>
+			<if test="endCheckDate != null">
+  			<![CDATA[
+ 	 			and a.check_date <= #{endCheckDate}
+  			]]>
+			</if>
+			<if test="startExpireDate != null">
+				and a.expire_date >= #{startExpireDate}
+			</if>
+			<if test="endExpireDate != null">
+  			<![CDATA[
+ 	 			and a.expire_date <= #{endExpireDate}
+  			]]>
+			</if>
+			<if test="billType != null">
+				and frl.bill_type = #{billType}
+			</if>
+			<if test="billNo != null and billNo != ''">
+				and frl.bill_no like CONCAT('%' , #{billNo} , '%')
+			</if>
+			<if test="startBillDate != null">
+  			<![CDATA[
+				and frl.bill_date >= #{startBillDate}
+			]]>
+			</if>
+			<if test="endBillDate != null">
+  			<![CDATA[
+				and frl.bill_date <= #{endBillDate}
+			]]>
+			</if>
+			<if test="feeId != null">
+				and frl.fee_id = #{feeId}
+			</if>
+			<if test="outStoreId != null">
+				and frl.out_store_id = #{outStoreId}
+			</if>
+		</where>
+		<if test="orderType != null and orderType == 2">
+			order by a.expire_date
+		</if>
+		<if test="orderType != null and orderType == 1">
+			order by a.id desc
+		</if>
+		<if test="orderType == null">
+			order by a.id desc
+		</if>
+	</select>
+
+	<select id="queryListByBillNo" resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_rec a
+		where a.id in
+		(
+		select distinct frl.rec_id
+		from
+		tb_fi_rec_line frl
+		where frl.bill_type = #{billType} and frl.bill_no =
+		#{billNo}
+		)
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.Receive"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fi_rec (id,
+		cust_id, busi_unit,
+		project_id, currency_type, amount_receivable,
+		amount_received, check_date, expire_date,
+		creator, creator_id,
+		check_note
+		)
+		values (#{id,jdbcType=INTEGER}, #{custId,jdbcType=INTEGER},
+		#{busiUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=TINYINT},
+		#{amountReceivable,jdbcType=DECIMAL},
+		IFNULL(#{amountReceived,jdbcType=DECIMAL},0),
+		#{checkDate,jdbcType=DATE}, #{expireDate,jdbcType=DATE},
+		#{creator,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{checkNote,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.Receive">
+		update tb_fi_rec
+		<set>
+			<if test="custId != null">
+				cust_id = #{custId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="amountReceivable != null">
+				amount_receivable = #{amountReceivable,jdbcType=DECIMAL},
+			</if>
+			<if test="amountReceived != null">
+				amount_received = #{amountReceived,jdbcType=DECIMAL},
+			</if>
+			<if test="checkDate != null">
+				check_date = #{checkDate,jdbcType=DATE},
+			</if>
+			<if test="expireDate != null">
+				expire_date = #{expireDate,jdbcType=DATE},
+			</if>
+			<if test="checkNote != null">
+				check_note = #{checkNote,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_fi_rec
+		where id = #{id}
+	</delete>
+
+
+	<select id="queryResultsGroupBy" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultType="com.scfs.domain.fi.entity.Receive">
+		select
+		a.id , a.cust_id, a.busi_unit, a.project_id, a.currency_type,
+		a.amount_receivable, a.amount_received,
+		check_date as check_date,
+		a.expire_date, a.creator, a.creator_id , a.create_at ,
+		a.check_note,
+		SUM(IFNULL(a.amount_receivable, 0) - IFNULL(a.amount_received, 0)) AS
+		blance
+		from tb_fi_rec a
+		left join tb_base_user_project bup
+		on
+		a.project_id = bup.project_id
+		where
+		IFNULL( DATEDIFF(CURDATE(),
+		a.expire_date), 0 ) &gt; 0
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		GROUP BY a.currency_type;
+	</select>
+
+	<!-- 获取超期数据 -->
+	<select id="queryResultsByOverDay" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultType="com.scfs.domain.fi.entity.Receive">
+		select
+		a.id , a.cust_id, a.busi_unit, a.project_id, a.currency_type,
+		a.amount_receivable, a.amount_received,
+		check_date as check_date,
+		a.expire_date, a.creator, a.creator_id , a.create_at ,
+		a.check_note,
+		IFNULL(a.amount_receivable, 0) - IFNULL(a.amount_received, 0) AS
+		blance,
+		IFNULL( DATEDIFF(CURDATE(), a.expire_date), 0 ) AS overDay,
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = a.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(a.expire_date, '%Y-%m-%d')
+		) cnyRate
+		FROM
+		tb_fi_rec a
+		LEFT JOIN tb_base_project bp
+		ON
+		a.project_id=bp.id
+		LEFT
+		JOIN
+		tb_base_user_project bup
+		ON
+		bup.project_id=bp.id
+		where
+		IFNULL(
+		DATEDIFF(CURDATE(), a.expire_date), 0
+		) &gt; 0
+		AND
+		IFNULL(a.amount_receivable, 0) - IFNULL(a.amount_received,
+		0) &gt; 0
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND bp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="custId != null">
+			and a.cust_id = #{custId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			and a.project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND a.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="queryResultsSum" parameterType="com.scfs.domain.fi.dto.req.ReceiveSearchReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT
+		SUM(
+		((IFNULL(a.amount_receivable, 0) -
+		IFNULL(a.amount_received,
+		0))
+		*
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = a.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(a.expire_date, '%Y-%m-%d')
+		)) 
+		) AS
+		blance
+		FROM
+		tb_fi_rec a
+		LEFT JOIN tb_base_project bp
+		ON
+		a.project_id=bp.id
+		LEFT JOIN
+		tb_base_user_project bup
+		ON
+		bup.project_id=bp.id
+		where
+		IFNULL(
+		DATEDIFF(CURDATE(), a.expire_date), 0
+		) &gt; 0
+		AND
+		IFNULL(a.amount_receivable, 0) - IFNULL(a.amount_received,
+		0) &gt; 0
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND bp.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="custId != null">
+			and a.cust_id = #{custId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			and a.project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND a.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.PayAdvanceRelationDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayAdvanceRelation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+		<result column="advance_id" property="advanceId" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+
+		<result column="cust_id" property="custId" jdbcType="BIGINT" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="receipt_date" property="receiptDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		r.id,
+		r.pay_id,
+		r.advance_id,
+		r.pay_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.is_delete,
+		a.currency_type,
+		a.cust_id,
+		a.busi_unit,
+		a.project_id,
+		a.paid_amount,
+		a.receipt_amount as preRecSum,
+		a.receipt_date
+	</sql>
+
+	<sql id="Alias_Base_Column_List">
+		r.id,
+		r.pay_id,
+		r.advance_id,
+		r.pay_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.is_delete,
+		a.currency_type,
+		a.cust_id,
+		a.busi_unit,
+		a.project_id,
+		a.paid_amount,
+		a.receipt_amount as preRecSum,
+		p.pay_no,
+		a.receipt_date
+
+	</sql>
+
+	<select id="queryPayAdvanceById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_advance_relation r left join
+		tb_fi_bank_receipt a on
+		r.advance_id = a.id
+		where r.id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayAdvanceRelation">
+		insert into
+		tb_pay_advance_relation
+		(
+		pay_id,
+		advance_id,
+		pay_amount,
+		creator,
+		creator_id,
+		create_at
+		)
+		values (
+		#{payId,jdbcType=INTEGER},
+		#{advanceId,jdbcType=INTEGER},
+		#{payAmount,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayAdvanceRelation">
+		update tb_pay_advance_relation
+		<set>
+			id=#{id}
+			<if test=" payId != null">
+				,pay_id = #{payId,jdbcType=INTEGER}
+			</if>
+			<if test="advanceId != null">
+				,advance_id = #{advanceId,jdbcType=INTEGER}
+			</if>
+			<if test="payAmount != null">
+				,pay_amount = #{payAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<!-- 查询列表信息 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.pay.dto.req.PayAdvanceRelationReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		FROM tb_pay_advance_relation r
+		left join tb_fi_bank_receipt a
+		on
+		r.advance_id = a.id
+		left join tb_pay_order p
+		on r.pay_id = p.id
+		WHERE
+		r.is_delete = 0
+		<if test="id != null">
+			and r.id = #{id}
+		</if>
+		<if test="payId != null">
+			and r.pay_id=#{payId}
+		</if>
+		<if test="payIds != null">
+			<foreach collection="payIds" item="payId" open="and r.pay_id in ("
+				separator="," close=")">
+				${payId}
+			</foreach>
+		</if>
+		order by r.id desc
+	</select>
+
+	<!-- 获取付款下面预收单总额 -->
+	<select id="sumPayAmount" parameterType="java.lang.Integer"
+		resultType="DECIMAL">
+		SELECT
+		SUM(IFNULL(pay_amount, 0)) FROM
+		tb_pay_advance_relation
+		where is_delete=0
+		and pay_id=#{payId}
+	</select>
+
+	<!-- 获取付款下面预收单总额 -->
+	<select id="queryPayAdvByPayId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT
+		id,
+		pay_id,
+		advance_id,
+		pay_amount
+		FROM
+		tb_pay_advance_relation
+		where
+		pay_id=#{payId}
+	</select>
+
+</mapper>

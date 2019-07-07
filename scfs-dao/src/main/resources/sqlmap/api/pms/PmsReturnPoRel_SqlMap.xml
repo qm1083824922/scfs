@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsReturnPoRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsReturnPoRel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="rt_po_id" jdbcType="INTEGER" property="rtPoId" />
+		<result column="rt_po_line_id" jdbcType="INTEGER" property="rtPoLineId" />
+		<result column="po_id" jdbcType="INTEGER" property="poId" />
+		<result column="po_line_id" jdbcType="INTEGER" property="poLineId" />
+		<result column="return_number" jdbcType="DECIMAL" property="returnNumber" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, rt_po_id, rt_po_line_id, po_id, po_line_id,
+		return_number, create_at,
+		update_at
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_retun_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_pms_retun_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsReturnPoRel">
+		insert into tb_pms_retun_po_rel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="rtPoId != null">
+				rt_po_id,
+			</if>
+			<if test="rtPoLineId != null">
+				rt_po_line_id,
+			</if>
+			<if test="poId != null">
+				po_id,
+			</if>
+			<if test="poLineId != null">
+				po_line_id,
+			</if>
+			<if test="returnNumber != null">
+				return_number,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="rtPoId != null">
+				#{rtPoId,jdbcType=INTEGER},
+			</if>
+			<if test="rtPoLineId != null">
+				#{rtPoLineId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				#{poId,jdbcType=INTEGER},
+			</if>
+			<if test="poLineId != null">
+				#{poLineId,jdbcType=INTEGER},
+			</if>
+			<if test="returnNumber != null">
+				#{returnNumber,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.api.pms.entity.PmsReturnPoRel">
+		update tb_pms_retun_po_rel
+		<set>
+			<if test="rtPoId != null">
+				rt_po_id = #{rtPoId,jdbcType=INTEGER},
+			</if>
+			<if test="rtPoLineId != null">
+				rt_po_line_id = #{rtPoLineId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="poLineId != null">
+				po_line_id = #{poLineId,jdbcType=INTEGER},
+			</if>
+			<if test="returnNumber != null">
+				return_number = #{returnNumber,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.api.pms.entity.PmsReturnPoRel">
+		update
+		tb_pms_retun_po_rel
+		set rt_po_id = #{rtPoId,jdbcType=INTEGER},
+		rt_po_line_id = #{rtPoLineId,jdbcType=INTEGER},
+		po_id =
+		#{poId,jdbcType=INTEGER},
+		po_line_id = #{poLineId,jdbcType=INTEGER},
+		return_number = #{returnNumber,jdbcType=DECIMAL},
+		create_at =
+		#{createAt,jdbcType=TIMESTAMP},
+		update_at =
+		#{updateAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

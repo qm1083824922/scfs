@@ -1,0 +1,82 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>资金</li>
+	<li>关键词</li>
+    <li class="active">付款关键词</li>
+  </ol>
+  </section>
+  <section class="product-wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="payKeyWord/edit">
+            <div class="box-body">
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                	 <tr>
+	                     <td width="180" class="text-right">
+	                     <b>关键词：<em class="text-star">*</em></b></td>
+	                     <td class="text-left" >
+	                     	<input type="text" class="form-control js-initform" id="word" name="word" />
+	                     </td>
+                    </tr>
+					</tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+             <div class="box-footer text-center">
+              <button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/payKeyWord/update" data-url="payKeyWord/update">保存</button>
+              <button type="button" id="back" data-url="html/pay/word/keyWordSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    
+    
+    $("#form1").validate({
+        rules: {
+        	word: {
+                required: true,
+              	maxlength:50
+            }
+        },
+        submitHandler: function() {
+          var data = $("#form1").serialize();
+          GLOBAL.ajax("payKeyWord/update",data, function(e){
+        	  if (e.success) {
+            	  layer.msg("保存成功！", {
+                      icon: 1,
+                      time: 1500
+                  },function(){
+                	  GLOBAL.go("html/pay/word/keyWordSearch.html");
+                  });
+              } else {
+                  layer.msg(e.msg);
+              }
+          });
+        }
+    });
+    
+};
+
+$(".tab-item").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+
+GLOBAL.goBack();
+  
+</script>

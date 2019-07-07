@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ProfitReportDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.ProfitReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="report_record_id" jdbcType="INTEGER" property="reportRecordId" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+		<result column="biz_manager_id" jdbcType="INTEGER" property="bizManagerId" />
+		<result column="biz_manager_name" jdbcType="VARCHAR" property="bizManagerName" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="business_unit_name" jdbcType="VARCHAR"
+			property="businessUnitName" />
+		<result column="biz_type" jdbcType="TINYINT" property="bizType" />
+		<result column="biz_type_name" jdbcType="VARCHAR" property="bizTypeName" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_type_name" jdbcType="VARCHAR" property="billTypeName" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="product_no" jdbcType="VARCHAR" property="productNo" />
+		<result column="num" jdbcType="DECIMAL" property="num" />
+		<result column="place_date" jdbcType="DATE" property="placeDate" />
+		<result column="statistics_date" jdbcType="DATE" property="statisticsDate" />
+		<result column="sale_amount" jdbcType="DECIMAL" property="saleAmount" />
+		<result column="service_amount" jdbcType="DECIMAL" property="serviceAmount" />
+		<result column="composite_tax_amount" jdbcType="DECIMAL"
+			property="compositeTaxAmount" />
+		<result column="purchase_cost" jdbcType="DECIMAL" property="purchaseCost" />
+		<result column="fund_cost" jdbcType="DECIMAL" property="fundCost" />
+		<result column="warehouse_amount" jdbcType="DECIMAL" property="warehouseAmount" />
+		<result column="market_amount" jdbcType="DECIMAL" property="marketAmount" />
+		<result column="finance_amount" jdbcType="DECIMAL" property="financeAmount" />
+		<result column="manage_amount" jdbcType="DECIMAL" property="manageAmount" />
+		<result column="manual_amount" jdbcType="DECIMAL" property="manualAmount" />
+		<result column="profit_amount" jdbcType="DECIMAL" property="profitAmount" />
+		<result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+		<result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, report_record_id, issue, bill_id, project_id,
+		project_name,
+		department_id, department_name, customer_id,
+		customer_name, biz_manager_id, biz_manager_name, warehouse_id,
+		warehouse_name,
+		business_unit_id,
+		business_unit_name, biz_type,
+		biz_type_name, bill_type, bill_type_name, order_no,
+		bill_no,
+		product_no, num, place_date, statistics_date, sale_amount,
+		service_amount,
+		composite_tax_amount, purchase_cost, fund_cost,
+		warehouse_amount, market_amount,
+		finance_amount, manage_amount,
+		manual_amount, profit_amount,
+		profit_rate, tax_rate,
+		currency_type,
+		currency_name, exchange_rate, creator_id, creator, create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_profit_report
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_profit_report
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteProfitReport" parameterType="com.scfs.domain.report.req.ProfitReportReqDto">
+		delete from tb_profit_report
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="reportRecordId != null">
+			AND report_record_id = #{reportRecordId,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null and issue != ''">
+			AND issue = #{issue,jdbcType=VARCHAR}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND statistics_date &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND statistics_date &lt;= #{endStatisticsDate}
+		</if>
+	</delete>
+
+	<select id="queryProfitReportCount" parameterType="com.scfs.domain.report.req.ProfitReportReqDto"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_profit_report
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="reportRecordId != null">
+			AND report_record_id = #{reportRecordId,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null and issue != ''">
+			AND issue = #{issue,jdbcType=VARCHAR}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND statistics_date &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND statistics_date &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.ProfitReport"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_profit_report (id,
+		report_record_id, issue,
+		bill_id, project_id,
+		project_name,
+		department_id, department_name,
+		customer_id, customer_name,
+		biz_manager_id,
+		biz_manager_name, warehouse_id, warehouse_name,
+		business_unit_id, business_unit_name, biz_type,
+		biz_type_name,
+		bill_type, bill_type_name,
+		order_no, bill_no, product_no,
+		num,
+		place_date, statistics_date,
+		sale_amount, service_amount,
+		composite_tax_amount,
+		purchase_cost, fund_cost, warehouse_amount,
+		market_amount, finance_amount, manage_amount,
+		manual_amount,
+		profit_amount, profit_rate,
+		tax_rate, currency_type, currency_name,
+		exchange_rate, creator_id, creator)
+		values (#{id,jdbcType=INTEGER},
+		#{reportRecordId,jdbcType=INTEGER},
+		#{issue,jdbcType=VARCHAR},
+		#{billId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER},
+		#{projectName,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER},
+		#{departmentName,jdbcType=VARCHAR},
+		#{customerId,jdbcType=INTEGER},
+		#{customerName,jdbcType=VARCHAR},
+		#{bizManagerId,jdbcType=INTEGER},
+		#{bizManagerName,jdbcType=VARCHAR}, #{warehouseId,jdbcType=INTEGER},
+		#{warehouseName,jdbcType=VARCHAR},
+		#{businessUnitId,jdbcType=INTEGER},
+		#{businessUnitName,jdbcType=VARCHAR}, #{bizType,jdbcType=TINYINT},
+		#{bizTypeName,jdbcType=VARCHAR}, #{billType,jdbcType=TINYINT},
+		#{billTypeName,jdbcType=VARCHAR},
+		#{orderNo,jdbcType=VARCHAR},
+		#{billNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR},
+		#{num,jdbcType=DECIMAL}, #{placeDate,jdbcType=DATE},
+		#{statisticsDate,jdbcType=DATE},
+		#{saleAmount,jdbcType=DECIMAL},
+		#{serviceAmount,jdbcType=DECIMAL},
+		#{compositeTaxAmount,jdbcType=DECIMAL},
+		#{purchaseCost,jdbcType=DECIMAL}, #{fundCost,jdbcType=DECIMAL},
+		#{warehouseAmount,jdbcType=DECIMAL},
+		#{marketAmount,jdbcType=DECIMAL},
+		#{financeAmount,jdbcType=DECIMAL}, #{manageAmount,jdbcType=DECIMAL},
+		#{manualAmount,jdbcType=DECIMAL}, #{profitAmount,jdbcType=DECIMAL},
+		#{profitRate,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{currencyType,jdbcType=TINYINT}, #{currencyName,jdbcType=VARCHAR},
+		#{exchangeRate,jdbcType=DECIMAL}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.ProfitReport">
+		update tb_profit_report
+		<set>
+			<if test="reportRecordId != null">
+				report_record_id = #{reportRecordId,jdbcType=INTEGER},
+			</if>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="projectName != null">
+				project_name = #{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="departmentId != null">
+				department_id = #{departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentName != null">
+				department_name = #{departmentName,jdbcType=VARCHAR},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="customerName != null">
+				customer_name = #{customerName,jdbcType=VARCHAR},
+			</if>
+			<if test="bizManagerId != null">
+				biz_manager_id = #{bizManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="bizManagerName != null">
+				biz_manager_name = #{bizManagerName,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseName != null">
+				warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitName != null">
+				business_unit_name =
+				#{businessUnitName,jdbcType=VARCHAR},
+			</if>
+			<if test="bizType != null">
+				biz_type = #{bizType,jdbcType=TINYINT},
+			</if>
+			<if test="bizTypeName != null">
+				biz_type_name = #{bizTypeName,jdbcType=VARCHAR},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="billTypeName != null">
+				bill_type_name = #{billTypeName,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="productNo != null">
+				product_no = #{productNo,jdbcType=VARCHAR},
+			</if>
+			<if test="num != null">
+				num = #{num,jdbcType=DECIMAL},
+			</if>
+			<if test="placeDate != null">
+				place_date = #{placeDate,jdbcType=DATE},
+			</if>
+			<if test="statisticsDate != null">
+				statistics_date = #{statisticsDate,jdbcType=DATE},
+			</if>
+			<if test="saleAmount != null">
+				sale_amount = #{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="serviceAmount != null">
+				service_amount = #{serviceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="compositeTaxAmount != null">
+				composite_tax_amount =
+				#{compositeTaxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="purchaseCost != null">
+				purchase_cost = #{purchaseCost,jdbcType=DECIMAL},
+			</if>
+			<if test="fundCost != null">
+				fund_cost = #{fundCost,jdbcType=DECIMAL},
+			</if>
+			<if test="warehouseAmount != null">
+				warehouse_amount = #{warehouseAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="marketAmount != null">
+				market_amount = #{marketAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="financeAmount != null">
+				finance_amount = #{financeAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="manageAmount != null">
+				manage_amount = #{manageAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="manualAmount != null">
+				manual_amount = #{manualAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitAmount != null">
+				profit_amount = #{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitRate != null">
+				profit_rate = #{profitRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="currencyName != null">
+				currency_name = #{currencyName,jdbcType=VARCHAR},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="querySaleAmount" parameterType="com.scfs.domain.report.req.ProfitReportReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(sale_amount) FROM tb_profit_report WHERE 1=1
+		AND issue
+		=#{issue}
+		<foreach collection="projectList" item="project" open="and project_id in ("
+			separator="," close=")">
+			${project}
+		</foreach>
+	</select>
+
+	<select id="queryProfitReportByDepartmentId" parameterType="com.scfs.domain.report.req.ProfitReportReqDto"
+		resultType="com.scfs.domain.report.entity.ProfitReport">
+		select
+		<include refid="Base_Column_List" />
+		from tb_profit_report
+		where 1=1
+
+		<if test="departmentId != null">
+			and department_id = #{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			and project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			and issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			and issue &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+
+</mapper>

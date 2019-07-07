@@ -1,0 +1,165 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+			<div class="box no-margin">
+				<form class="form-horizontal">
+					<div class="box-body">
+						<ul class="nav nav-tabs">
+		                    <li role="presentation"><a class="tab-item"data-url="html/pay/payBaseInfoScan.html">基础信息</a></li>
+							<li role="presentation" class="li-po active"><a class="tab-item" data-url="html/pay/payOrderScan.html">订单信息</a></li>
+							<li role="presentation" class="li-fee"><a class="tab-item" data-url="html/pay/payFeeScan.html">费用信息</a></li>
+							<li role="presentation" class="li-refund"><a class="tab-item" data-url="html/pay/payRefundScan.html">退款信息</a></li>
+							<li role="presentation" class="li-advance"><a class="tab-item" data-url="html/pay/payAdvanceScan.html">预收单信息</a></li>
+							<li role="presentation" class="li-deduction-fee"><a class="tab-item" data-url="html/pay/payDeductionFeeScan.html">抵扣费用信息</a></li>
+		                    <li role="presentation" class="li-attachment"><a class="tab-item" data-url="html/pay/attachmentScan.html">附件</a></li>
+		                    <li role="presentation" class="li-voucher"><a class="tab-item" data-url="html/pay/payVoucherScan.html">付款凭证</a></li>
+						</ul>
+						<table id="js_dataTable" data-url="payPoRela/query">
+
+						</table>
+					</div>
+					<!-- /.box-body -->
+					<div class="box-footer text-center">
+						<button type="button" data-url="html/pay/paySearch.html"
+							class="btn btn-default btn-sm js-back">返回</button>
+					</div>
+					<!-- /.box-footer -->
+				</form>
+			</div>
+	</section>
+</div>
+
+<script src="../../js/pay/payCommon.js"></script> 
+<script>
+
+    /*数据表格*/
+    var tabCols = [
+      {
+    	  title: '序号',
+	  	  field: 'columnsNumber',  
+	  	  width: 10
+      }, {
+           title: '订单编号',
+           field: 'orderNo',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '订单附属编号',
+           field: 'appendNo',
+           width: 210,
+           align: 'center'
+       }, {
+           title: '商品编号',
+           field: 'goodsNo',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '商品名称',
+           field: 'goodsName',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '订单日期',
+           field: 'orderTime',
+           width: 100,
+           align: 'center'
+       }, {
+           title: '采购数量',
+           field: 'goodsNum',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '采购单价',
+           field: 'goodsPrice',
+           width: 70
+       },{
+	   	    title: '币种',
+		    field: 'currencyName',
+		    width: 70,
+		    align: 'center'
+		},{
+		    title: '采购金额',
+		    field: 'goodsAmount',
+		    width: 70,
+		    align: 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},{
+           title: '已收货金额',
+           field: 'arrivalAmount',
+           width: 70,
+           align: 'center',
+	       formatter : function(value , row , index) {
+	    		return value==null ? "": value.toThounds();
+	       }
+       },{
+	   	    title: '折扣金额',
+		    field: 'discountAmount',
+		    width: 70,
+		    align: 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		 	}
+	   }, {
+           title: '折扣率',
+           field: 'discountRateStr',
+           width: 80,
+           align: 'center'
+       },{
+           title: '质押比例',
+           field: 'pledge',
+           width: 80,
+           align: 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		 	}
+       },{
+           title: '已付款金额',
+           field: 'paidAmount',
+           width: 70,
+           align: 'center',
+	       formatter : function(value , row , index) {
+	    		return value==null ? "": value.toThounds();
+	       }
+       }, {
+           title: '本次付款金额',
+           field: 'payAmount',
+           width: 70,
+           align: 'center',
+	       formatter : function(value , row , index) {
+	    		return value==null ? "": value.toThounds();
+	       }
+       }
+   ];
+    var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+    options.initPage = function(){
+		var payType = options.param.payType;
+		var stateInt = options.param.stateInt;
+		var noneOrderFlag = options.param.noneOrderFlag;
+		showTab(payType, stateInt, noneOrderFlag);
+		
+        options.param.payId = options.param.id;
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {payId: options.param.id}, false, option);
+    };
+
+
+    GLOBAL.goBack();
+  
+
+</script>

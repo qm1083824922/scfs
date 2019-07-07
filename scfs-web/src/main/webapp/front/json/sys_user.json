@@ -1,0 +1,10 @@
+[{
+    "op_operation": < a href = \"sys_menu_add.php\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-original-title=\"编辑用户权限\"><i class=\"fa fa-key\"></i></a>,
+    "id": 1,
+    "username": "Mr Zhang",
+    "name": "Hua",
+    "department": "前端",
+    "role": "管理员",
+    "op_people": "张老师",
+    "op_time": "2015-08-03"
+}]

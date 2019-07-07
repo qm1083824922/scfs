@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseAccountDao">
+	<resultMap id="AccountResultMap" type="com.scfs.domain.base.entity.BaseAccount">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="subject_id" property="subjectId" jdbcType="TINYINT" />
+		<result column="account_type" property="accountType" jdbcType="TINYINT" />
+		<result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+		<result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="bank_address" property="bankAddress" jdbcType="VARCHAR" />
+		<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="default_currency" property="defaultCurrency"
+			jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="accountor" property="accountor" jdbcType="VARCHAR" />
+		<result column="iban" property="iban" jdbcType="VARCHAR" />
+		<result column="bank_simple" property="bankSimple" jdbcType="VARCHAR" />
+		<result column="capital_account_type" property="capitalAccountType"
+			jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="account_column_list">
+		id, subject_id, account_type, account_no, bank_code,
+		bank_name, bank_address, phone_number, default_currency, state,
+		creator,
+		create_at, update_at
+		,accountor,iban,bank_simple,capital_account_type
+	</sql>
+	<insert id="insertBaseAccount" parameterType="com.scfs.domain.base.subject.dto.req.AddAccountDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_base_account(
+		subject_id,
+		account_type,
+		account_no,
+		bank_code,
+		bank_name,
+		bank_address,
+		phone_number,
+		default_currency,
+		state,
+		creator,
+		accountor,
+		bank_simple,
+		iban,
+		capital_account_type)
+		VALUES (#{subjectId , jdbcType=TINYINT},
+		#{accountType , jdbcType=TINYINT},
+		#{accountNo},
+		#{bankCode},
+		#{bankName},
+		#{bankAddress},
+		#{phoneNumber},
+		#{defaultCurrency ,
+		jdbcType=TINYINT},
+		#{state , jdbcType=TINYINT},
+		#{creator},
+		#{accountor},
+		#{bankSimple},
+		#{iban},
+		#{capitalAccountType ,
+		jdbcType=TINYINT})
+	</insert>
+	<select id="queryAccountBySubjectId"
+		parameterType="com.scfs.domain.base.subject.dto.req.QueryAccountReqDto"
+		resultMap="AccountResultMap">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		where subject_id = #{id}
+		order by id desc
+	</select>
+	<select id="queryFicBySubjectId"
+		parameterType="com.scfs.domain.base.subject.dto.req.QueryAccountReqDto"
+		resultMap="AccountResultMap">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		where subject_id = #{subjectId}
+		<if test="currencyType != null">
+			AND default_currency = #{currencyType}
+		</if>
+		<if test="accountType != null">
+			AND account_type = #{accountType}
+		</if>
+		<if test="state != null">
+			AND state = #{state}
+		</if>
+		ORDER BY id
+	</select>
+
+	<select id="queryAllAccount" resultMap="AccountResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_account
+	</select>
+
+
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="AccountResultMap">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		where id = #{id} for update
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="AccountResultMap">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		where id = #{id}
+	</select>
+
+	<update id="updateBaseAccountById" parameterType="com.scfs.domain.base.entity.BaseAccount">
+		update tb_base_account
+		<set>
+			<if test="accountNo != null">
+				account_no=#{accountNo},
+			</if>
+			<if test="bankCode != null">
+				bank_code=#{bankCode},
+			</if>
+			<if test="bankName != null">
+				bank_name=#{bankName},
+			</if>
+			<if test="bankAddress != null">
+				bank_address=#{bankAddress},
+			</if>
+			<if test="phoneNumber != null">
+				phone_number=#{phoneNumber},
+			</if>
+			<if test="accountor != null">
+				accountor=#{accountor},
+			</if>
+			<if test="iban != null">
+				iban=#{iban},
+			</if>
+			<if test="bankSimple != null">
+				bank_simple=#{bankSimple},
+			</if>
+			<if test="capitalAccountType != null">
+				capital_account_type=#{capitalAccountType},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="invalidAccountById" parameterType="com.scfs.domain.base.entity.BaseAccount">
+		update
+		tb_base_account
+		set state=#{state} , deleter=#{deleter} ,
+		delete_at=#{deleteAt}
+		where
+		id=#{id}
+	</update>
+
+	<select id="queryAccountByAccountNo" parameterType="java.lang.String"
+		resultMap="AccountResultMap">
+		select
+		<include refid="account_column_list" />
+		from tb_base_account
+		where account_no = #{accountNo}
+		and state = 1
+	</select>
+
+</mapper>

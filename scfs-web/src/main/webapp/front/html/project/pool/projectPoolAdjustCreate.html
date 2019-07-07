@@ -1,0 +1,153 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>项目</li>
+          <li>临时额度</li>
+          <li class="active">新建</li>
+      </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1">
+            <div class="box-body">
+              <table class="table table-bordered table-hover no-margin">
+              	   <tr>
+                       	  <td width="200" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                          <td class="text-left"> 
+                        	 <select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+                     	  </td>
+                   </tr>
+                   <tr>
+	                     <td width="200" class="text-right"><b>项目当前总额度：</b></td>
+	                     <td class="text-left">
+	                       <label class="js-initform" id="projectAmount" name="projectAmount"></label>
+	                     </td>
+                   </tr>
+                  
+                  <tr>
+                     <td class="text-right"><b>项目当前可用额度：</b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="remainFundAmount" name="remainFundAmount"></label>
+                     </td>
+                  </tr>
+                  
+                  <tr>
+                     <td class="text-right"><b>项目当前资金占用：</b></td>
+                     <td class="text-left">
+                        <label class="js-initform" id="usedFundAmount" name="usedFundAmount"></label>
+                     </td>
+                  </tr>
+                  
+                  <tr>
+                     <td class="text-right"><b>临时调整额度：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="adjustAmount" name="adjustAmount">
+                     </td>
+                  </tr>
+                  
+                  <tr>
+					<td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+					<td class="text-left">
+						<label class="form-control"  id="currencyTypeName" name="currencyTypeName"></label></td>
+				  </tr>
+				  
+				   <tr>
+					<td class="text-right"><b>有效期：<em class="text-star">*</em></b></td>
+					<td class="text-left">
+						<input type="text" class="form-control js_datePicker" id="startValidDate" value="" name="startValidDate"> -
+                        <input type="text" class="form-control js_datePicker" id="endValidDate" value="" name="endValidDate">	
+					</td>
+				  </tr>
+				  <tr>
+						<td class="text-right"><b>备注：</b></td>
+						<td class="text-left">
+							<textarea class="form-control"	id="remark" cols="50" rows="5" name="remark"></textarea>
+						</td>
+				 </tr>
+              </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-url="projectPoolAdjust/add"  data-permission="/projectPoolAdjust/add" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" id="js-back" data-url="html/project/pool/projectPoolAdjustSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+	options.initPage = function(){
+	        $("#form1").validate({
+	            rules: {
+	            	projectId: {
+	                  	required: true
+	                },
+	                currencyType: {
+	                    required: true
+	                },
+	                startValidDate:{
+	                    required: true
+	                },
+	                endValidDate:{
+	                    required: true
+	                },
+	                remark : {
+						maxlength : 200
+					}
+	            },
+	            submitHandler: function() {
+	              var data = $("#form1").serialize();
+	              var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+					var adjustAmount = $("#adjustAmount");
+					if (!pattern.test(adjustAmount.val())) {
+						layer.msg("请输入正确格式");
+						adjustAmount.focus();
+					} else {
+						GLOBAL.ajax("projectPoolAdjust/add",data, function(e){
+			            	  console.log(e);
+		                      layer.msg("保存成功！", {
+		                          icon: 1,
+		                          time: 1500
+		                      },function(){
+		                          options.param.id = e.items;
+		                    	  options.param.cid = e.items;
+		                    	  GLOBAL.go("html/project/pool/projectPoolAdjustEdit.html", options.param);
+		                      })
+		                      
+		                  }, false, $("#save"));
+					}
+	            }
+	        }); 
+	        
+	        $(".js_datePicker").datetimepicker({
+			    format:'Y-m-d',
+			});
+	}
+	
+	$("#projectId").change(
+			function() {
+				var value = $(this).val();
+				if (value) {
+					GLOBAL.ajax("projectPoolByProjectId/query?projectId=" + value, null,
+							function(data) {
+								$("#projectAmount").text(data.items.projectAmount);
+								$("#remainFundAmount").text(data.items.remainFundAmount);
+								$("#usedFundAmount").text(data.items.usedFundAmount);
+								$("#currencyTypeName").text(data.items.currencyTypeName);
+							})
+				} else {
+					$("#projectAmount").text("");
+					$("#remainFundAmount").text("");
+					$("#usedFundAmount").text("");
+					$("#currencyTypeName").text("");
+				}
+			})
+	
+	GLOBAL.goBack();
+    
+</script>

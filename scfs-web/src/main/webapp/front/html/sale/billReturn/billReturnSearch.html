@@ -1,0 +1,310 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>销售</li>
+            <li class="active">销售退货单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">     
+                             <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+                        </div>
+                        <div class="search-item">      
+					                  <label class="control-label ml10">退货编号：</label>
+                            <input type="text" class="form-control" id="billNo" name="billNo">   
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">退货附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">                
+                        </div>
+                        <div class="search-item">   
+                            <label class="control-label">退货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartSend" value="" name="startRequiredSendDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndSend" value="" name="endRequiredSendDate"> 
+                        </div>
+                        <div class="search-item">                                                                                
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">       
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">   
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">   
+                        </div>
+                        <div class="search-item">                                                                                           
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">    
+                        </div>
+                        <div class="search-item">  
+                            <label class="control-label ml10">运输方式：</label>
+                            <select class="form-control js-select" data-url="BILL_OUT_STORE_TRANSFER_MODE" id="transferMode" name="transferMode"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="BILL_RETURN_STATUS" id="status" name="status"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/sale/billReturn/billReturnCreate.html" 
+                            	data-permissionUrl="/billReturn/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <!-- 
+                           	<button type="button" id="btnImport" data-permissionUrl="/billReturn/excel/import" data-url="html/sale/billReturn/billReturnImport.html" 
+                           		 class="btn btn-warning btn-sm ml10">导入</button>  
+                           	-->         
+                        </div>
+                        <div class="search-item">    
+                            <!-- Single button -->
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+                               	导出 <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" data-permissionUrl="/billReturn/excel/billReturn.xls" id="btnExport">导出单据</a></li>
+                                <li><a href="javascript:" data-permissionUrl="/billReturn/excel/billReturnDtl.xls" id="btnExportDtl">导出单据明细</a></li>
+                              </ul>
+                            </div> 
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="billReturn/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+  	    var id = row.id;
+  	    layer.confirm('确定要删除吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	    	GLOBAL.ajax("billReturn/delete", {ids: id}, function(){
+  	    		layer.msg("删除成功", {
+  	                icon: 1
+  	            })
+  	            $("#btnSearch").click();
+  	    	})
+  	    }, function() {});
+    },
+    'click .submit': function (e, value, row, index) {
+  		var id = row.id;
+  	    if(id){
+  	    	layer.confirm('确定要提交吗？', {
+  		        btn: ['确定', '取消'] //按钮
+  		    }, function() {
+  		         GLOBAL.ajax("billReturn/submit", {id: id}, function(e) {
+  	                if (e.success) {
+  	                    layer.msg("提交成功！");
+  	                    $("#btnSearch").click();
+  	                } else {
+  	                    layer.msg(e.msg);
+  	                }
+  	            });
+  		    }, function() {});
+  	    }
+    },
+    'click .edit': function (e, value, row, index) {
+  		var id = row.id;
+  		options.param.id = id;
+  		options.param.projectId = row.projectId;
+  		GLOBAL.go("html/sale/billReturn/billReturnEdit.html", options.param);
+    },
+    'click .scan': function (e, value, row, index) {
+    	var id = row.id;
+  		options.param.id = id;
+  		options.param.projectId = row.projectId;
+  		options.param.status = row.status;
+  		GLOBAL.go("html/sale/billReturn/billReturnScan.html", options.param);
+    },
+    'click .print': function(e, value, row, index){
+		if(row){
+			var id = row.id;
+	  		options.param.projectId = row.projectId;
+			window.open("html/sale/billReturn/billReturnPrint.html?id="+id);
+		}
+    }
+};
+
+/*数据表格*/
+var tabCols = [
+	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '退货编号',
+	     field: 'billNo',
+	     align: 'center'
+	 }, {
+	     title: '退货附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '退货日期',
+	     field: 'requiredSendDate',
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'warehouseName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '退货数量',
+	     field: 'requiredSendNum',
+	     align: 'center'
+	 }, {
+	     title: '退货金额',
+	     field: 'requiredSendAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+	     title: '运输方式',
+	     field: 'transferModeName',
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'statusName',
+	     align: 'center'
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents 
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+
+  //还原查询条件及过滤后的数据
+  GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$("#js_form_datetimeStartSend,#js_form_datetimeEndSend").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+$("#btnImport").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+function getCondition() {
+	return "?" + $("#searchForm").serialize();
+	/**
+	return "?projectId=" + $("#projectId").val() 
+	+ "&warehouseId=" + $("#warehouseId").val()
+	+ "&customerId=" + $("#customerId").val()
+	+ "&billNo=" + $("#billNo").val()
+	+ "&affiliateNo=" + $("#affiliateNo").val()
+	+ "&startRequiredSendDate=" + $("#js_form_datetimeStartSend").val()
+	+ "&endRequiredSendDate=" + $("#js_form_datetimeEndSend").val()
+	+ "&goodsNumber=" + $("#goodsNumber").val()
+	+ "&goodsBarCode=" + $("#goodsBarCode").val()
+	+ "&goodsName=" + $("#goodsName").val()
+	+ "&goodsType=" + $("#goodsType").val()
+	+ "&billType=" + $("#billType").val()
+	+ "&transferMode=" + $("#transferMode").val()
+	+ "&status=" + $("#status").val();
+	**/
+}
+
+$("#btnExport").click(function() {
+    var count_url = "billReturn/excel/billReturn/count";
+    var data = $("#searchForm").serializeObject();
+	var url = "billReturn/excel/billReturn.xls";
+	url = url + getCondition();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$("#btnExportDtl").click(function() {
+    var count_url = "billReturn/excel/billReturnDtl/count";
+    var data = $("#searchForm").serializeObject();
+	var url = "billReturn/excel/billReturnDtl.xls";
+	url = url + getCondition();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+</script>

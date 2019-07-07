@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.FundTotalReportDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.FundTotalReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="report_record_id" jdbcType="INTEGER" property="reportRecordId" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="account_no" jdbcType="VARCHAR" property="accountNo" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
+		<result column="begin_balance" jdbcType="DECIMAL" property="beginBalance" />
+		<result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+		<result column="receipt_amount" jdbcType="DECIMAL" property="receiptAmount" />
+		<result column="balance" jdbcType="DECIMAL" property="balance" />
+		<result column="fund_cost" jdbcType="DECIMAL" property="fundCost" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, report_record_id, department_id, department_name,
+		project_id,
+		project_name, account_id,
+		account_no, currency_type,
+		currency_name, begin_balance,
+		pay_amount, receipt_amount, balance,
+		fund_cost, issue, creator_id, creator,
+		create_at,
+		update_at,busi_unit
+	</sql>
+	<sql id="Column_List">
+		trf.id, trf.report_record_id, trf.department_id,
+		trf.department_name,
+		trf.project_id, trf.project_name, trf.account_id,
+		trf.account_no, trf.currency_type, trf.currency_name,
+		trf.begin_balance,
+		trf.pay_amount, trf.receipt_amount, trf.balance,
+		trf.fund_cost,
+		trf.issue, trf.creator_id, trf.creator, trf.create_at,
+		trf.update_at,trf.busi_unit
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_fund
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_report_fund
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.FundTotalReport">
+		insert into tb_report_fund
+		(id, report_record_id, department_id,
+		department_name, project_id,
+		project_name,
+		account_id, account_no, currency_type, currency_name,
+		begin_balance, pay_amount, receipt_amount,
+		balance, fund_cost, issue,
+		creator_id, creator, create_at,
+		update_at)
+		values
+		(#{id,jdbcType=INTEGER}, #{reportRecordId,jdbcType=INTEGER},
+		#{departmentId,jdbcType=INTEGER},
+		#{departmentName,jdbcType=VARCHAR},
+		#{projectId,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR},
+		#{accountId,jdbcType=INTEGER},
+		#{accountNo,jdbcType=VARCHAR},#{currencyType,jdbcType=TINYINT},
+		#{currencyName,jdbcType=VARCHAR},
+		#{beginBalance,jdbcType=DECIMAL},
+		#{payAmount,jdbcType=DECIMAL}, #{receiptAmount,jdbcType=DECIMAL},
+		#{balance,jdbcType=DECIMAL}, #{fundCost,jdbcType=DECIMAL},
+		#{issue,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.FundTotalReport">
+		update tb_report_fund
+		<set>
+			<if test="reportRecordId != null">
+				report_record_id = #{reportRecordId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentId != null">
+				department_id = #{departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentName != null">
+				department_name = #{departmentName,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="projectName != null">
+				project_name = #{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountId != null">
+				account_id = #{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="accountNo != null">
+				account_no = #{accountNo,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="currencyName != null">
+				currency_name = #{currencyName,jdbcType=VARCHAR},
+			</if>
+			<if test="beginBalance != null">
+				begin_balance = #{beginBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="payAmount != null">
+				pay_amount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="receiptAmount != null">
+				receipt_amount = #{receiptAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="balance != null">
+				balance = #{balance,jdbcType=DECIMAL},
+			</if>
+			<if test="fundCost != null">
+				fund_cost = #{fundCost,jdbcType=DECIMAL},
+			</if>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="queryResultsBySta" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select tmp.id, tmp.report_record_id, tmp.department_id,
+		tmp.department_name, tmp.project_id, tmp.project_name, tmp.account_id,
+		tmp.account_no, tmp.currency_type, tmp.currency_name,
+		tmp.begin_balance,
+		tmp.pay_amount, tmp.receipt_amount, tmp.balance,
+		tmp.fund_cost, tmp.issue,
+		tmp.creator_id, tmp.creator, tmp.create_at,
+		tmp.update_at,tmp.busi_unit from (
+		select
+		trf.id, trf.report_record_id,
+		trf.department_id, trf.department_name,
+		trf.project_id,
+		trf.project_name, trf.account_id,
+		trf.account_no, trf.currency_type,
+		trf.currency_name,IFNULL(sum(trf.begin_balance),0)
+		as begin_balance,
+		IFNULL(sum(trf.pay_amount),0) as pay_amount,
+		IFNULL(sum(trf.receipt_amount),0) as receipt_amount ,
+		IFNULL(sum(trf.balance),0) as balance,
+		IFNULL(sum(trf.fund_cost),0) as
+		fund_cost ,
+		trf.issue, trf.creator_id, trf.creator, trf.create_at,
+		trf.update_at,trf.busi_unit
+		from tb_report_fund trf
+		left join
+		tb_base_account tba
+		on trf.account_id = tba.id
+		left join
+		tb_base_user_project bup
+		on trf.project_id = bup.project_id
+		left join
+		tb_base_project bp
+		on trf.project_id = bp.id
+		where 1=1
+		<if test="userId">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		and tba.capital_account_type = 1
+		<if test="startPeriod">
+			and trf.issue &gt;= #{startPeriod}
+		</if>
+		<if test="endPeriod">
+			and trf.issue &lt;= #{endPeriod}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND trf.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		GROUP BY tba.capital_account_type,
+		trf.department_id,
+		trf.currency_type,
+		<!-- trf.project_id, -->
+		trf.issue
+		UNION ALL
+		select
+		<include refid="Column_List" />
+		from tb_report_fund trf
+		left join tb_base_account tba
+		on trf.account_id
+		= tba.id
+		left join tb_base_user_subject sub on
+		sub.subject_id=trf.busi_unit
+		left join tb_base_subject su on
+		su.id=trf.busi_unit
+		where 1=1
+		<if test="userId">
+			and sub.user_id = #{userId}
+			and sub.is_delete = 0
+		</if>
+		and trf.project_id is null
+		and tba.capital_account_type =2
+		<if test="startPeriod">
+			and trf.issue &gt;= #{startPeriod}
+		</if>
+		<if test="endPeriod">
+			and trf.issue &lt;= #{endPeriod}
+		</if>
+		) tmp
+	</select>
+
+	<select id="queryResultsByStaTwo" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		trf.id, trf.report_record_id, trf.department_id,
+		trf.department_name,
+		trf.project_id, trf.project_name, trf.account_id,
+		trf.account_no, trf.currency_type, trf.currency_name,
+		<if test="capitalAccountType ==1">
+			IFNULL(sum(trf.begin_balance),0)as begin_balance,
+			IFNULL(sum(trf.pay_amount),0) as pay_amount,
+			IFNULL(sum(trf.receipt_amount),0) as receipt_amount ,
+			IFNULL(sum(trf.balance),0) as balance,
+			IFNULL(sum(trf.fund_cost),0) as
+			fund_cost ,
+		</if>
+		<if test="capitalAccountType ==2">
+			trf.begin_balance, trf.pay_amount, trf.receipt_amount ,
+			trf.balance, fund_cost,
+		</if>
+		trf.issue, trf.creator_id, trf.creator, trf.create_at,
+		trf.update_at,trf.busi_unit
+		from tb_report_fund trf
+		left join
+		tb_base_account tba
+		on trf.account_id = tba.id
+		<if test="capitalAccountType ==1">
+			<if test="userId">
+				left join tb_base_user_project bup on trf.project_id =
+				bup.project_id
+			</if>
+			left join tb_base_project bp
+			on trf.project_id = bp.id
+		</if>
+		<if test="capitalAccountType ==2  ">
+			<if test="userId">
+				left join tb_base_user_subject sub on
+				sub.subject_id=trf.busi_unit
+			</if>
+			left join tb_base_subject su on su.id=trf.busi_unit
+		</if>
+		where 1=1
+		<if test="capitalAccountType ==1 and userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="capitalAccountType ==2">
+			and trf.project_id is null
+			<if test="userId != null">
+				and sub.user_id = #{userId}
+				and sub.is_delete = 0
+			</if>
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="startPeriod">
+			and trf.issue &gt;= #{startPeriod}
+		</if>
+		<if test="endPeriod">
+			and trf.issue &lt;= #{endPeriod}
+		</if>
+		<if test="excludeProjectIdList!=null and capitalAccountType ==1">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND trf.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="capitalAccountType ==1">
+			GROUP BY tba.capital_account_type,
+			trf.department_id,
+			trf.currency_type,
+			trf.issue
+		</if>
+	</select>
+
+
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.FundReportSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		trf.id, trf.report_record_id, trf.department_id,
+		trf.department_name,
+		trf.project_id, trf.project_name, trf.account_id,
+		trf.account_no, trf.currency_type, trf.currency_name,
+		<if test="statisticsDimension ==1">
+			IFNULL(sum(trf.begin_balance),0) as begin_balance,
+			IFNULL(sum(trf.pay_amount),0) as pay_amount,
+			IFNULL(sum(trf.receipt_amount),0) as receipt_amount ,
+			IFNULL(sum(trf.balance),0) as balance,
+			IFNULL(sum(trf.fund_cost),0) as
+			fund_cost ,
+		</if>
+		<if test="statisticsDimension ==3">
+			trf.begin_balance,
+			trf.pay_amount, trf.receipt_amount,
+			trf.balance, trf.fund_cost,
+		</if>
+		trf.issue, trf.creator_id, trf.creator, trf.create_at,
+		trf.update_at
+		from tb_report_fund trf
+		left join tb_base_account tba
+		on trf.account_id
+		= tba.id
+		<if test="userId">
+			left join tb_base_user_project bup
+			on trf.project_id =
+			bup.project_id
+		</if>
+		left join tb_base_project bp
+		on trf.project_id = bp.id
+		where 1=1
+		<if test="userId">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="projectId">
+			and trf.project_id = #{projectId}
+		</if>
+		<if test="capitalAccountType">
+			and tba.capital_account_type = #{capitalAccountType}
+		</if>
+		<if test="currencyType">
+			and trf.currency_type = #{currencyType}
+		</if>
+		<if test="bizManagerId">
+			and bp.biz_special_id = #{bizManagerId}
+		</if>
+		<if test="businessUnitId">
+			and bp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="startPeriod">
+			and trf.issue &gt;= #{startPeriod}
+		</if>
+		<if test="endPeriod">
+			and trf.issue &lt;= #{endPeriod}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND trf.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="departmentList != null">
+			and bp.department_id in (
+			<foreach collection="departmentList" item="departmentId"
+				separator=",">
+				${departmentId}
+			</foreach>
+			)
+		</if>
+		group by trf.project_id,trf.issue,trf.department_id,trf.currency_type
+		<if test="statisticsDimension ==3">
+			,tba.capital_account_type
+		</if>
+	</select>
+	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into tb_report_fund(id, report_record_id, department_id,
+		department_name, project_id, project_name,account_id, account_no,
+		currency_type, currency_name,
+		begin_balance, pay_amount,
+		receipt_amount, balance, fund_cost,
+		issue, creator_id, creator,
+		create_at, update_at,busi_unit)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id,jdbcType=INTEGER},
+			#{item.reportRecordId,jdbcType=INTEGER},
+			#{item.departmentId,jdbcType=INTEGER},
+			#{item.departmentName,jdbcType=VARCHAR},
+			#{item.projectId,jdbcType=INTEGER},
+			#{item.projectName,jdbcType=VARCHAR},
+			#{item.accountId,jdbcType=INTEGER},
+			#{item.accountNo,jdbcType=VARCHAR},
+			#{item.currencyType,jdbcType=TINYINT},
+			#{item.currencyName,jdbcType=VARCHAR},
+			#{item.beginBalance,jdbcType=DECIMAL},
+			#{item.payAmount,jdbcType=DECIMAL},
+			#{item.receiptAmount,jdbcType=DECIMAL},
+			#{item.balance,jdbcType=DECIMAL}, #{item.fundCost,jdbcType=DECIMAL},
+			#{item.issue,jdbcType=VARCHAR},
+			#{item.creatorId,jdbcType=INTEGER},
+			#{item.creator,jdbcType=VARCHAR},
+			#{item.createAt,jdbcType=TIMESTAMP},
+			#{item.updateAt,jdbcType=TIMESTAMP},#{item.busiUnit,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+</mapper>

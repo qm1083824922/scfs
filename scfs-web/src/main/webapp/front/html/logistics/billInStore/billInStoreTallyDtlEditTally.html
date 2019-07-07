@@ -1,0 +1,166 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>入库单</li>
+    <li>理货明细</li>
+    <li class="active">理货</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="billInStoreTallyDtlEditTallyForm" data-url="billInStoreDtl/edit">
+            <div class="box-header">
+                 <input class="form-control js-initform" type="hidden" id="id" name="id">
+                
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td class="text-right" style="width:15%"><b>订单编号：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="orderNo" name="orderNo"></label>                      
+                      </td>
+                      
+                      <td class="text-right" style="width:15%"><b>订单附属编号：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="appendNo" name="appendNo"></label>
+                      </td>
+                    </tr>
+                    <tr>                   
+                      <td class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品条码：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsBarCode" name="goodsBarCode"></label>
+                      </td>                     
+                    </tr>
+                  	<tr>
+					  <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                    </tr>
+                    <tr>                                                 
+                      <td class="text-right"><b>收货数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="receiveNum" name="receiveNum"></label>                      
+                      </td>
+                                 
+                      <td class="text-right"><b>已理货数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="tallyNum" name="tallyNum"></label>                     
+                      </td>
+                    </tr>  
+                    <tr>
+                      <td class="text-right"><b>可理货数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="unTallyNum" name="unTallyNum"></label>                      
+                      </td>
+                    </tr>              
+                  </table>  
+            </div>
+            <!-- /.box-header -->
+          
+            <div class="box-body">
+	          <table class="table billInStoreTallyDtl-table" style="width:50%">
+	              <thead>
+	                  <tr>
+	                  	  <th>序号</th>
+	                      <th>理货数量</th>
+	                      <th>库存状态</th>
+	                      <th>批次</th>
+	                  </tr>
+	              </thead>
+	              <tbody>
+	              </tbody>
+	          </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" data-permissionUrl="/billInStoreTallyDtl/add" id="save" class="btn btn-primary btn-sm" data-url="billInStoreTallyDtl/add">保存</button>
+              <button type="button" data-url="html/logistics/billInStore/billInStoreTallyDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  GLOBAL.getEditData($("#billInStoreTallyDtlEditTallyForm"), options.param.cid);
+  }
+
+  for(var k = 1; k <= 5; k++){
+      var tr = '<tr><td>'+k+'</td>' 
+      + '<td><input type="number" class="form-control" id="tallyNum" style="width:100%"></td>'
+      + '<td><select class="form-control js-select" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" style="width:100%"></select>'
+      + '<td><input type="text" class="form-control" id="batchNo" style="width:100%"></td></tr>';
+      $(".billInStoreTallyDtl-table tbody").append(tr);
+  }
+  
+  $("#save").click(function(){
+      var saveUrl = $(this).data("url");
+      var $trs = $(".billInStoreTallyDtl-table tbody tr");
+      var rows = [];
+      var isValid = true;
+      $trs.each(function(index, data){
+        var tallyNum = $(this).find("#tallyNum").val();
+        var goodsStatus = $(this).find("#goodsStatus option:selected").val();
+        var batchNo = $(this).find("#batchNo").val();
+        if (tallyNum || goodsStatus || batchNo) {
+           	if (!tallyNum) {
+           		layer.msg("理货数量必填且正确，请重新输入");
+           		isValid = false;
+                return false; 
+           	}
+        	if(tallyNum*1 <= 0){
+                layer.msg("理货数量不能为负数和零，请重新输入");
+           		isValid = false;
+                return false;
+            }
+           	if (!goodsStatus) {
+          		layer.msg("请选择库存状态");
+          		isValid = false;
+          		return false; 
+          	}
+           	rows.push({
+            	"tallyNum": tallyNum,
+                "goodsStatus": goodsStatus,
+                "batchNo": batchNo
+            });
+        }
+      });
+      if (isValid) {
+          if (rows.length <= 0) {
+          	layer.msg("请录入理货明细");
+          	return false;
+          }
+          
+          var params = {
+        		id: options.param.cid,
+        		billInStoreId: options.param.id,
+        		billInStoreTallyDtlList : rows
+          }
+          GLOBAL.ajax(saveUrl, JSON.stringify(params),
+            function(e) {
+                if (e.success) {
+                    layer.msg("保存成功！");
+                    GLOBAL.go("html/logistics/billInStore/billInStoreTallyDtlEdit.html", options.param);
+                } else {
+                    layer.msg(e.msg);
+                }
+            }, true);
+      }
+  });
+
+  GLOBAL.goBack();
+</script>

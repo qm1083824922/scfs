@@ -1,0 +1,56 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>部门</li>
+	    <li class="active">浏览部门</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="department/detail">
+            <div class="box-body">  
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>编号：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="number"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>名称：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="name" ></label>
+                       </td>
+                    </tr>
+                    <tr id="parentName1">
+                      <td class="text-right"><b>上级部门：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="parentName"></label>
+                       </td>
+                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center"> 
+              <button type="button"  data-url="html/baseinfo/department/departmentSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function() { 
+	var data = GLOBAL.getEditData($("#form1"), options.param.id);
+	if(data.parentName == ""){
+		$("#parentName1").hide();
+	}
+	$("#js-back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}   
+</script>

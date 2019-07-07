@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>瑞翰供应链</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet"></link>
+<link href="../../css/public.css" rel="stylesheet"></link>
+<link href="../../css/mobile.css" rel="stylesheet"></link>
+<link href="../../css/msg.css" rel="stylesheet"></link>
+<style>
+.one, .two {
+	display: none;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<h4 class="title mb10 ml5 mt5">
+			<strong>财务主管审核</strong>
+		</h4>
+		<form class="audit-form" id="payAuditInfoForm"
+			data-url="payOrder/info/audit">
+			<input class="js-initform" type="hidden" id="id" name="id">
+			<p>
+				<span class="form-label">付款编号</span> <span
+					class="form-value js-initform" id="payNo"></span>
+			</p>
+			<p>
+				<span class="form-label">项目</span> <span
+					class="form-value js-initform" id="projectName"></span>
+			</p>
+			<p>
+				<span class="form-label">业务类别</span> <span
+					class="form-value js-initform" id="bizTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款类型</span> <span
+					class="form-value js-initform" id="payTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款支付类型</span> <span
+					class="form-value js-initform" id="payWayTypeName"></span>
+			</p>
+			<p>
+				<span class="form-label">付款方式</span> <span
+					class="form-value js-initform" id="payWayName"></span>
+			</p>
+			<p>
+				<span class="form-label">收款单位</span> <span
+					class="form-value js-initform" id="payeeName"></span>
+			</p>
+			<p>
+				<span class="form-label">银行</span> <span
+					class="form-value js-initform" id="bankName"></span>
+			</p>
+			<p>
+				<span class="form-label">要求付款时间</span> <span
+					class="form-value js-initform" id="requestPayTime"></span>
+			</p>
+			<p>
+				<span class="form-label">收款账号</span> <span
+					class="form-value js-initform" id="accountNo"></span>
+			</p>
+			<p>
+				<span class="form-label">付款金额</span> <span
+					class="form-value js-initform" id="payAmount"></span>
+			</p>
+			<p>
+				<span class="form-label">付款币种</span> <span
+					class="form-value js-initform" id="defaultCurrency"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">预收金额</span> <span
+					class="form-value js-initform" id="advanceAmount"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">预收比例</span> <span
+					class="form-value js-initform" id="advanceAmountRateName"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">占用额度</span> <span
+					class="form-value js-initform" id="payAdvanceAmount"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">占用比例</span> <span
+					class="form-value js-initform" id="payAdvanceAmountRateName"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">付款前项目余额</span> <span
+					class="form-value js-initform" id="projectBalanceAmount"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">付款后项目余额</span> <span
+					class="form-value js-initform" id="payProjectBalanceAmount"></span>
+			</p>
+			<p>
+				<span class="form-label">项目总额度</span> <span
+					class="form-value js-initform" id="projectTotalAmount"></span>
+			</p>
+			<p>
+				<span class="form-label">开立类型</span> <span
+					class="form-value js-initform" id="openType"></span>
+			</p>
+			<p class="payFiveType">
+				<span class="form-label">折扣率</span> <span
+					class="form-value js-initform" id="discountRateStr"></span>
+			</p>
+			<p>
+				<span class="form-label">备注</span> <span
+					class="form-value js-initform" id="remark"></span>
+			</p>
+		</form>
+		<h3 class="title one mb10 ml5 mt5">
+			<strong>付款订单明细</strong>
+		</h3>
+		<h3 class="title two mb10 ml5 mt5">
+			<strong>付款费用明细</strong>
+		</h3>
+		<div class="detail-box pay-detail">
+			<p>
+				<span class="form-label">PO170411000010</span> <span
+					class="form-value js-initform">2017-04-15 20:00:15</span>
+			</p>
+		</div>
+		<h3 class="title mb10 ml5 mt5 payFiveType">
+			<strong>付款预收明细</strong>
+		</h3>
+		<div class="detail-box js_advance_dataTable">
+			<p>
+				<span class="form-label">PO170411000010</span> <span
+					class="form-value js-initform">2017-04-15 20:00:15</span>
+			</p>
+		</div>
+		<h4 class="title mb10 ml5 mt5 audit-record-title">
+			<strong>审核节点</strong>
+		</h4>
+		<div class="audit-record-box">
+			<ul></ul>
+		</div>
+		<div class="box-footer text-center mb10">
+			<div class="form-inline" id="buttom1">
+				<textarea class="form-control js-initform" id="suggestion" rows="3"
+					name="suggestion" placeholder="审核意见"></textarea>
+				<p class="mt20">
+					<button type="button" data-url="/payOrder/finance2/audit"
+						class="btn btn-primary btn-sm" id="pass">审核通过</button>
+					<button type="button" data-url="/payOrder/unpass/audit"
+						class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+					<button type="button" class="btn btn-default btn-sm js-back">返回</button>
+				</p>
+				<div class="row mt20 psigh" style="display: none;">
+					<label class="control-label col-md-2">加签给:</label> <select
+						class="form-control col-md-8 js-select" data-url="USER"
+						id="sighId" name="sighId"></select>
+					<button type="button" data-url="payOrder/sigh/audit"
+						class="btn btn-primary btn-sm col-md-2" id="sigh">加签</button>
+				</div>
+				<div class="row mt20 pdeliver" style="display: none;">
+					<label class="control-label col-md-2">转交给:</label> <select
+						class="form-control col-md-8 js-select" data-url="USER"
+						id="deliverId" name="deliverId"></select>
+					<button type="button" data-url="payOrder/deliver/audit"
+						class="btn btn-primary btn-sm col-md-2" id="deliver">转交</button>
+				</div>
+				<div class="form-inline" style="display: none" id="buttom2">
+					<p class="mt20">
+						<button type="button" class="btn btn-default btn-sm js-back">返回</button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../../../js/lib/jquery-1.11.0.min.js"
+		type="text/javascript"></script>
+	<script src="../../js/common.js?v=1.0.0"></script>
+	<script>
+    var id = GLOBAL.getParam("id");
+    var poId = GLOBAL.getParam("poId");
+    var flag = GLOBAL.getParam("flag");
+
+    if (flag) {
+        $('#buttom2').show();
+        $('#buttom1').hide();
+    }
+
+    $(function() {
+        var $from = $("#payAuditInfoForm");
+        var url = $from.data("url");
+        GLOBAL.ajax(url, {
+            payId: poId
+        }, function(e) {
+            if (e.success) {
+                var data = e.items.payOrderResDto;
+                if(data.payType == '3'){
+                	$(".payFiveType").hide();
+                }
+                var type;
+                if (data) {
+                    type = data.payType;
+                    $(".js-initform", $from).each(function() {
+                        var $this = $(this);
+                        var id = $this.attr("id");
+                        data[id] = data[id] == null ? "" : data[id];
+
+                        if (this.nodeName.toLowerCase() == "span") {
+                            if (data[id]) {
+                                if ($this.attr('class') == "js-initform toThound") {
+                                    $this.text(data[id].toThounds());
+                                } else {
+                                    $this.text(data[id]);
+                                }
+                            }
+                        } else {
+                            $this.val(data[id]);
+                        }
+                    });
+                }
+
+                var payAdvanceRelation = e.items.payAdvanceRelation;
+                if (payAdvanceRelation) {
+                    var tabStr = "";
+                    for (var i = 0; i < payAdvanceRelation.length; i++) {
+                        tabStr += '<div class="detail-item"><p><span class="form-label">项目：' + payAdvanceRelation[i].projectName + '</span><span class="form-value">客户：' + payAdvanceRelation[i].custName + '</span></p><p><span class="form-label">水单日期：' + payAdvanceRelation[i].receiptDate + '</span><span class="form-value">经营单位：' + payAdvanceRelation[i].busiUnit + '</span></p><p><span class="form-label">币种：' + payAdvanceRelation[i].currencyTypeName + '</span><span class="form-value">金额：' + payAdvanceRelation[i].payAmount.toThounds() + '</span></p></div>';
+                    }
+                    $('.js_advance_dataTable').empty().append(tabStr);
+                }
+
+                var tabId;
+                if (type) {
+                    if (type == 1) {
+                        var dtls = e.items.payPoRelationResDto;
+                        tabId = 1;
+                        if (dtls) {
+                            var tabStr = "";
+                            for (var i = 0; i < dtls.length; i++) {
+                            	tabStr += '<div class="detail-item"><p><span class="form-label">订单编号：' + dtls[i].orderNo + '</span><span class="form-value">订单日期：' + dtls[i].orderTime + '</span></p><p><span class="form-label">商品编号：' + dtls[i].goodsNo + '</span><span class="form-value">商品名称：' + dtls[i].goodsName + '</span></p><p><span class="form-label">采购数量：' + dtls[i].goodsNum + '</span><span class="form-value">采购单价：' + dtls[i].goodsPrice.toThounds() + '</span></p><p><span class="form-label">销售价：' + dtls[i].requiredSendPrice.toThounds() + '</span><span class="form-value">折扣率：' + dtls[i].discountRateStr + '</span></p><p><span class="form-label">币种：' + dtls[i].currencyName + '</span><span class="form-value">采购金额：' + dtls[i].goodsAmount.toThounds() + '</span></p><p><span class="form-label">已收货金额：' + dtls[i].arrivalAmount.toThounds() + '</span><span class="form-value">本次付款金额：' + dtls[i].payAmount.toThounds() + '</span></p><p><span class="form-label">质押比例：' + dtls[i].pledge + '</span></p></div>';
+
+                            }
+                            $('.pay-detail').empty().append(tabStr);
+                        }
+                    } else if (type == 2) {
+                        var fees = e.items.payFeeRelationResDto;
+                        tabId = 2;
+                        if (fees) {
+                            var tabStr = "";
+                            for (var i = 0; i < fees.length; i++) {
+                                tabStr += '<div class="detail-item"><p><span class="form-label">费用编号：' + fees[i].feeNo + '</span><span class="form-value">费用类型：' + fees[i].feeTypeName + '</span></p><p><span class="form-label">费用日期：' + fees[i].payDate + '</span><span class="form-value">费用金额：' + fees[i].expPayAmount.toThounds() + '</span></p><p><span class="form-label">已收票金额：' + fees[i].acceptInvoiceAmount.toThounds() + '</span><span class="form-value">本次付款金额：' + fees[i].payAmount.toThounds() + '</span></p></div>';
+                            }
+                            $('.detail-box').empty().append(tabStr);
+                        }
+                    }
+                    var tabArr = ["one", "two", "three"];
+                    $("." + tabArr[tabId - 1]).show();
+                }
+
+                //获取审核记录数据并在表格中展示
+                GLOBAL.ajax('payOrder/auditflow/audit/query', {
+                    projectItemId: poId
+                }, function(e) {
+                    var data = e.items;
+                    if (data) {
+                        var nodeLists = "";
+                        for (var i = 0; i < data.length; i++) {
+
+                            var bgFlag = data[i].backcolor,
+                                fontFlag = data[i].fontcolor;
+                            var state;
+                            if (bgFlag == 1) {
+                                state = "passed"
+                            }
+                            if (fontFlag == "1") {
+                                state = "reject";
+                            } else if (fontFlag == "2") {
+                                state = "current";
+                            }
+                            nodeLists += '<li class="' + state + '"><p>' + data[i].stateName + ' ' + data[i].dealName + ' (' + data[i].auditStateName + ') ' + data[i].suggestion + '<p>' + (data[i].createTime || "-") + '</p></li>'
+                        }
+                        $('.audit-record-box ul').empty().append(nodeLists);
+                    }
+                })
+
+
+
+                GLOBAL.ajax('audit/id/query', {
+                    id: id
+                }, function(e) {
+                    var data = e.items;
+                    if (data) {
+                        if (data.auditType == 1 || data.auditType == 2) {
+                            $(".psigh,.pdeliver").show();
+                        } else {
+                            $(".punpass").hide();
+                        }
+                        if (data.auditState == 1 || data.auditState == 3) { //审核通过，隐藏
+                            $('#buttom2').show();
+                            $('#buttom1').hide();
+                        }
+                    }
+                });
+            }
+        });
+    })
+
+    GLOBAL.initSelect();
+
+    $("#pass").click(function() {
+        var suggestion = $("#suggestion").val();
+        var url = $(this).data("url");
+        GLOBAL.ajax(url, {
+            auditId: id,
+            projectItemId: poId,
+            suggestion: suggestion || ""
+        }, function(e) {
+            if (e.success) {
+                MOBILE.msg("已审核通过！", function() {
+                    window.location.href = "audit_list_new.html";
+                });
+            } else {
+                MOBILE.msg(e.msg);
+            }
+        });
+    })
+
+    $("#sigh").click(function() {
+        var url = $(this).data("url");
+        var sighId = $("#sighId").val();
+        if (sighId) {
+            MOBILE.confirm('确定加签吗？', function() {
+                GLOBAL.ajax(url, {
+                    auditId: id,
+                    pauditorId: sighId
+                }, function(e) {
+                    if (e.success) {
+                        MOBILE.msg("加签成功！", function() {
+                            window.location.href = "audit_list_new.html";
+                        });
+                    } else {
+                        MOBILE.msg(e.msg);
+                    }
+                });
+            });
+        } else {
+            MOBILE.msg("请选择！");
+            $("#sighId").focus();
+        }
+    })
+
+    $("#deliver").click(function() {
+        var url = $(this).data("url");
+        var deliverId = $("#deliverId").val();
+        if (deliverId) {
+            MOBILE.confirm('确定转交吗？', function() {
+                GLOBAL.ajax(url, {
+                    auditId: id,
+                    pauditorId: deliverId
+                }, function(e) {
+                    if (e.success) {
+                        MOBILE.msg("转交成功！", function() {
+                            window.location.href = "audit_list_new.html";
+                        });
+                    } else {
+                        MOBILE.msg(e.msg);
+                    }
+                });
+            });
+        } else {
+            MOBILE.msg("请选择！");
+            $("#deliverId").focus();
+        }
+    })
+    $("#unpass").click(function() {
+        var suggestion = $("#suggestion").val();
+        if (!suggestion) {
+            MOBILE.msg("请输入审核意见");
+            return;
+        }
+        var url = $(this).data("url");
+        GLOBAL.ajax(url, {
+            auditId: id,
+            projectItemId: poId,
+            suggestion: suggestion
+        }, function(e) {
+            if (e.success) {
+                MOBILE.msg("审核未通过！", function() {
+                    window.location.href = "audit_list_new.html";
+                });
+            } else {
+                MOBILE.msg(e.msg);
+            }
+        });
+    })
+
+    $(".attachment-down").click(function() {
+        var ids = GLOBAL.selectIds($("#js_dataFileTable"));
+        if (ids) {
+            var url = GLOBAL.host + $(this).data("url") + "?ids=" + ids;
+            window.open(url);
+        }
+    })
+
+    $(".js-back").click(function() {
+        if (flag) {
+            location.href = "myApplying.html";
+        } else {
+            window.location.href = "audit_list_new.html";;
+        }
+    })
+    </script>
+</body>
+
+</html>

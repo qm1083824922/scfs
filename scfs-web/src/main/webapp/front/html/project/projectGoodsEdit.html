@@ -1,0 +1,251 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>项目</li>
+    <li class="active">商品信息编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectBaseInfoEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectVEdit.html">供应商信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectCEdit.html">客户信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectWEdit.html">仓库信息</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectGoodsEdit.html">商品信息</a></li>                
+               	  <li role="presentation"  ><a class="tab-item" data-url="html/project/projectUserEdit.html">用户信息</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="project/goods/query">
+                          
+                </table>  
+                <table id="js_dataTable1" data-url="project/distributeGoods/query">
+                	
+                </table>            
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-danger btn-sm" data-url="project/goods/deleteAll" data-permissionUrl="/project/goods/deleteAll" id="multDel">批量作废</button> 
+              <button type="button" class="btn btn-primary btn-sm" data-url="html/project/projectGoodsEditDevide.html" data-permissionUrl="/project/goods/dividAll" id="devide">分配</button> 
+              <button type="button" data-url="html/project/projectSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+
+    /*数据表格*/
+    var tabCols = [
+       {
+           field: 'checkItem',
+           checkbox: true,
+       }, {  
+	       title: '序号',
+	       field: 'columnsNumber',  
+	       width: 10
+       }, {
+           title: '编号',
+           field: 'number',
+           width: 100,
+           align: 'center'
+       }, {
+           title: '名称',
+           field: 'name',
+           width: 120,
+           align: 'center'
+       }, {
+           title: '型号',
+           field: 'type',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '条码',
+           field: 'barCode',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '规格',
+           field: 'specification',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '单位',
+           field: 'unit',
+           width: 50,
+           align: 'center'
+       }, {
+           title: '采购指导价',
+           field: 'purCurrencyTypeValue',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '销售指导价',
+           field: 'saleCurrencyTypeValue',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '分配人',
+           field: 'creator',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '分配日',
+           field: 'createAt',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '作废人',
+           field: 'deleter',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '作废日',
+           field: 'deleteAt',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '状态',
+           field: 'status',
+           width: 70,
+           align: 'center'
+       }
+   ];
+    
+    /*数据表格*/
+    var tabCols1 = [
+       {
+           field: 'checkItem',
+           checkbox: true,
+       }, {  
+	       title: '序号',
+	       field: 'columnsNumber',  
+	       width: 10
+       }, {
+           title: '编号',
+           field: 'number',
+           width: 100,
+           align: 'center'
+       }, {
+           title: '名称',
+           field: 'name',
+           width: 120,
+           align: 'center'
+       }, {
+	     title: '事业部',
+	     field: 'departmentName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '供应商',
+	     field: 'supplierName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '质押比例',
+	     field: 'pledge',
+	     width: 80,
+	     align: 'center'
+	 }, {
+           title: '型号',
+           field: 'type',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '条码',
+           field: 'barCode',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '规格',
+           field: 'specification',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '单位',
+           field: 'unit',
+           width: 50,
+           align: 'center'
+       }, {
+           title: '采购指导价',
+           field: 'purchasePriceValue',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '销售指导价',
+           field: 'salePriceValue',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '分配人',
+           field: 'creator',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '分配日',
+           field: 'creatorAt',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '状态',
+           field: 'statusName',
+           width: 70,
+           align: 'center'
+       }
+   ];
+
+    options.initPage = function(){
+        console.log(options.param.id);
+        var bizType = options.param.bizType;
+        if(bizType==6 || bizType==7){
+        	GLOBAL.initTable($('#js_dataTable1'), tabCols1, {projectId: options.param.id});
+        }else{
+        	GLOBAL.initTable($('#js_dataTable'), tabCols, {projectId: options.param.id});
+        }
+    };
+
+    $("#devide").click(function() {
+      var url = $(this).data("url");
+      GLOBAL.go(url);
+    })
+
+    $("#multDel").click(function() {
+    	var bizType = options.param.bizType;
+    	var id;
+        if(bizType==6 || bizType==7){
+        	id = GLOBAL.selectIds($('#js_dataTable1'))
+        }else{
+        	id = GLOBAL.selectIds($('#js_dataTable'))
+        }
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					if(bizType==6 || bizType==7){
+    						$('#js_dataTable1').bootstrapTable('refresh', {query: {projectId: options.param.id}});
+    			        }else{
+    			        	$('#js_dataTable').bootstrapTable('refresh', {query: {projectId: options.param.id}});
+    			        }
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+    
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    GLOBAL.goBack();
+
+</script>

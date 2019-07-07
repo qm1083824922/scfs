@@ -1,0 +1,137 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>商品</li>
+	    <li class="active">浏览商品</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="goods/detail">
+            <div class="box-body">  
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>编号：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="number" name="number"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>名称：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="name" name="name"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>品牌：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="brand" name="brand"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>型号：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="type" name="type"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>条码：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="barCode" name="barCode"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>规格：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="specification" name="specification"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>税收分类：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="taxClassification" name="taxClassification"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>国内税率：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="taxRate" name="taxRate"></label>
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>单位：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="unit" name="unit"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>高：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="volume" name="volume"></label>cm
+                       </td>
+                    </tr> 
+                       <tr>
+                      <td class="text-right"><b>长：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="grow" name="grow"></label>cm
+                       </td>
+                    </tr> 
+                       <tr>
+                      <td class="text-right"><b>宽：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="broad" name=broad></label>cm
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>毛重：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="grossWeight" name="grossWeight"></label>kg
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>净重：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="netWeight" name="netWeight"></label>kg
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>采购指导价：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="purchasePrice" ></label>
+                            <label class="js-initform" id="purCurrencyTypeValue" ></label>
+                        	
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>销售指导价：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="salePrice"></label>
+                        	<label class="js-initform" id="saleCurrencyTypeValue" ></label>
+                        	
+                       </td>
+                    </tr>  
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center"> 
+              <button type="button"  data-url="html/baseinfo/goods/goodsSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function() {
+  console.log("scan: "+options.param.id);
+	GLOBAL.getEditData($("#form1"), options.param.id);
+
+	$("#js-back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}   
+</script>

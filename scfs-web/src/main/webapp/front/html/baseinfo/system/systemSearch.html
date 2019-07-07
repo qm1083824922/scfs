@@ -1,0 +1,191 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+   		<li>基础信息</li>
+		<li class="active">系统配置</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<table class="table table-bordered table-hover no-margin">
+					<tr>
+	                    <td width="180" class="text-right"><b>系统配置：</b></td>
+	                    <td class="text-left">
+	                      	<button type="button" data-permissionUrl="/common/cache/refresh" class="btn btn-danger btn-sm" id="update">更新系统配置</button>
+	                      	<button type="button" data-permissionUrl="/common/cache/gsa/refresh" class="btn btn-danger btn-sm" id="gsaUpdate">刷新账期宝缓存</button>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td width="180" class="text-right"><b>统计报表：</b></td>
+	                    <td class="text-left">
+	                    	报表类型：<select class="js-select" data-url="REPORT_TYPE" id="reportType" name="reportType"></select>
+	                    	起止期号：<input type="text" class="period_datePicker" id="startIssue" value="" name="startIssue"/> -
+                            	   <input type="text" class="period_datePicker" id="endIssue" value="" name="endIssue"/> 
+	                    	<input type="checkbox" id="forceExec" name="forceExec">是否强制生成
+	                    	<input type="checkbox" id="isCurrentMonth" name="isCurrentMonth">统计至本月当前时间
+	                      	<button type="button" data-permissionUrl="/reportRecord/exec" class="btn btn-danger btn-sm" id="execReportRecord">重新生成报表</button>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td width="180" class="text-right"><b>按项目过滤查询数据：</b></td>
+	                    <td class="text-left">
+	                    	项目：<select class="js-select" data-url="PROJECT" id="projectSelected"></select><br> 
+	                    	<div style="padding:10px"><span id="reportList"></span></div>              		
+	                    	<button type="button" class="btn btn-danger btn-sm" id="filterProject">确定</button>
+	                    </td>                    
+	                </tr>
+				</table>
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function(){
+	    $('.period_datePicker').datepicker({
+	        format: "yyyymm",
+	        minViewMode: 1,
+	        maxViewMode: 2,
+	        language: 'zh-CN',
+	        clearBtn: true
+	    });
+		 GLOBAL.ajax(GLOBAL.selectUrl + "PROJECT_REPORT_TYPE", null, function(data) {
+             var items = data.items;
+             if (items) {
+            	 var options = "";
+                 for (var k = 0; k < items.length; k++) {
+                     options += '<input name="reportTypeChecked" type="checkbox" value="' + items[k].code + '">' + items[k].value + '</>&nbsp';
+                 }
+                 $("#reportList").append(options);
+             }
+         });
+	}
+	
+	$("#reportType").change(function(){ 
+        var thisValue = $(this).val();
+		if (!thisValue) {
+			return;
+		}
+		if (thisValue == 3) {	//3-资金统计报表
+			$("#isCurrentMonth").attr("disabled", false);
+		} else {
+			$("#isCurrentMonth").attr("disabled", true);
+		}
+    });
+	
+	$("#isCurrentMonth").change(function(){ 
+        var thisValue = $(this).is(":checked");
+		if (thisValue) {
+			$("#forceExec").prop("checked", true);
+		} else {
+			$("#forceExec").removeAttr("checked");
+		}
+    });
+	
+	$("#update").click(function() {
+		layer.confirm('是否要更新系统配置吗？', {
+			btn : [ '确定', '取消' ]
+		//按钮
+		}, function() {
+			layer.load(3);
+			GLOBAL.ajax("common/cache/refresh", {
+			}, function(e) {
+				if (e.success) {
+					layer.msg("更新成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+			}, false, null, true);
+		});
+	})
+	
+	$("#gsaUpdate").click(function() {
+		layer.confirm('是否刷新账期宝缓存吗？', {
+			btn : [ '确定', '取消' ]
+		//按钮
+		}, function() {
+			layer.load(3);
+			GLOBAL.ajax("common/cache/gsa/refresh", {
+			}, function(e) {
+				if (e.success) {
+					layer.msg("更新成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+			}, false, null, true);
+		});
+	})
+	
+	$("#execReportRecord").click(function() {
+		layer.confirm('是否重新生成报表吗？', {
+			btn : [ '确定', '取消' ]
+		//按钮
+		}, function() {
+			layer.load(3);
+			GLOBAL.ajax("reportRecord/exec", {
+				reportType: $('#reportType').val(),
+				startIssue: $('#startIssue').val(),
+				endIssue: $('#endIssue').val(),
+				forceExec: $('#forceExec').is(":checked"),
+				currentMonth: $('#isCurrentMonth').is(":checked")
+			}, function(e) {
+				if (e.success) {
+					layer.msg("生成报表成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+			}, false, null, true);
+		});
+	})
+	
+	$("#projectSelected").change(function() {
+		var _self = $(this);
+		var projectId = _self.val();
+		GLOBAL.ajax("reportFilterProject/query", {projectId: projectId}, function(result) {
+	    	if (result && result.items && result.items.length > 0) {
+	        	var reportProjectList = result.items;
+	       		for (var j = 0; j < reportProjectList.length; j++) {
+	       			var reportType = reportProjectList[j].reportType;
+	           		$('input:checkbox[name=reportTypeChecked][value=' + reportType + ']').prop("checked", "checked");
+	       		}
+	       	} else {
+	       		$('input:checkbox[name=reportTypeChecked]').removeAttr("checked");
+	       	}
+	    });
+	});         
+	
+    $("#filterProject").click(function() {
+		var projectSelected = $("#projectSelected").val();
+		if (!projectSelected) {
+			layer.msg("请选择项目");
+			return;
+		}
+		var reportTypeCheckedList = [];
+	    $('input:checkbox[name=reportTypeChecked]:checked').each(function(i){
+	    	reportTypeCheckedList[i] = $(this).val();
+	    });
+
+	    var reportTypeList = "";
+	    if (reportTypeCheckedList.length != 0) {
+	    	reportTypeList = reportTypeCheckedList.join(",");
+	    }
+		
+		layer.confirm('报表过滤已选项目吗？', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			GLOBAL.ajax("reportFilterProject/add", {
+				projectId: projectSelected,
+				reportTypeList: reportTypeList
+			}, function(e) {
+				if (e.success) {
+					layer.msg("报表过滤项目设置成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+  	        });
+		});
+	})
+	
+	
+</script>

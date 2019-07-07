@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.AdvanceDao">
+
+	<resultMap type="com.scfs.domain.fi.entity.Advance" id="AdvanceResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="cust_id" property="custId" jdbcType="BIGINT" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="pre_rec_amount" property="preRecAmount"
+			jdbcType="DECIMAL" />
+		<result column="pre_rec_sum" property="preRecSum" jdbcType="DECIMAL" />
+		<result column="write_off_sum" property="writeOffSum" jdbcType="DECIMAL" />
+		<result column="writing_off_amount" property="writingOffAmount"
+			jdbcType="DECIMAL" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="advance_type" property="advanceType" jdbcType="TINYINT" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<!-- 分页数据 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fi.dto.req.AdvanceSearchReqDto"
+		resultMap="AdvanceResultMap">
+		SELECT
+		a.id,
+		a.cust_id,
+		a.busi_unit,
+		a.project_id,
+		a.pre_rec_amount,
+		a.pre_rec_sum,
+		a.write_off_sum,
+		a.writing_off_amount,
+		a.currency_type,
+		a.create_at,
+		a.creator,
+		a.creator_id,
+		a.update_at,
+		a.advance_type,
+		a.paid_amount
+		FROM
+		tb_fi_advance a JOIN
+		tb_base_user_project b on
+		a.project_id=b.project_id
+		where
+		b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="custId != null">
+			and a.cust_id=#{custId}
+		</if>
+		<if test="projectId != null">
+			and a.project_id = #{projectId}
+		</if>
+		<if test="busiUnit != null">
+			and a.busi_unit = #{busiUnit}
+		</if>
+		<if test="advanceType != null">
+			and a.advance_type = #{advanceType}
+		</if>
+		<if test="isNo != null and isNo==1">
+			and a.pre_rec_sum - paid_amount >0
+		</if>
+		<if test="currencyType != null">
+			and a.currency_type=#{currencyType}
+		</if>
+		order by a.id desc
+	</select>
+
+	<!-- 统计 -->
+	<select id="sumAdvance" parameterType="com.scfs.domain.fi.dto.req.AdvanceSearchReqDto"
+		resultMap="AdvanceResultMap">
+		SELECT
+		SUM(a.pre_rec_amount) pre_rec_amount,
+		SUM(a.paid_amount)
+		paid_amount,
+		a.currency_type
+		FROM
+		tb_fi_advance a
+		JOIN
+		tb_base_user_project
+		b
+		ON a.project_id = b.project_id
+		WHERE b.state = 1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="custId != null">
+			and a.cust_id=#{custId}
+		</if>
+		<if test="projectId != null">
+			and a.project_id = #{projectId}
+		</if>
+		<if test="busiUnit != null">
+			and a.busi_unit = #{busiUnit}
+		</if>
+		<if test="advanceType != null">
+			and a.advance_type = #{advanceType}
+		</if>
+		<if test="isNo != null and isNo==1">
+			and a.pre_rec_sum - paid_amount >0
+		</if>
+		<if test="currencyType != null">
+			and a.currency_type=#{currencyType}
+		</if>
+		order by a.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" parameterType="com.scfs.domain.fi.entity.Advance"
+		resultMap="AdvanceResultMap">
+		select
+		id,
+		cust_id,
+		busi_unit,
+		project_id,
+		pre_rec_amount,
+		pre_rec_sum,
+		write_off_sum,
+		writing_off_amount,
+		currency_type,
+		create_at,
+		creator,
+		creator_id,
+		update_at,
+		advance_type,
+		paid_amount
+		from
+		tb_fi_advance
+		where
+		1=1
+		<if test="custId != null">
+			and cust_id=#{custId}
+		</if>
+		<if test="projectId != null">
+			and project_id = #{projectId}
+		</if>
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="busiUnit != null">
+			and busi_unit = #{busiUnit}
+		</if>
+		<if test="advanceType != null">
+			and advance_type = #{advanceType}
+		</if>
+		<if test="paidAmount != null">
+			and paid_amount = #{paidAmount}
+		</if>
+		<if test="currencyType != null">
+			and currency_type = #{currencyType}
+		</if>
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.scfs.domain.fi.entity.Advance">
+		INSERT INTO tb_fi_advance(
+		cust_id,
+		busi_unit,
+		project_id,
+		pre_rec_amount,
+		pre_rec_sum,
+		write_off_sum,
+		writing_off_amount,
+		currency_type,
+		create_at,
+		creator,
+		creator_id,
+		update_at,
+		advance_type
+		)
+		VALUES
+		(
+		#{custId},
+		#{busiUnit},
+		#{projectId},
+		#{preRecAmount},
+		#{preRecSum},
+		#{writeOffSum},
+		#{writingOffAmount},
+		#{currencyType},
+		#{createAt},
+		#{creator},
+		#{creatorId},
+		#{updateAt},
+		#{advanceType}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.Advance">
+		UPDATE
+		tb_fi_advance
+		SET
+		id = #{id}
+		<if test=" custId != null">
+			,cust_id = #{custId}
+		</if>
+		<if test=" busiUnit != null">
+			,busi_unit = #{busiUnit}
+		</if>
+		<if test=" projectId != null">
+			,project_id = #{projectId}
+		</if>
+		<if test=" preRecAmount != null">
+			,pre_rec_amount = #{preRecAmount}
+		</if>
+		<if test=" preRecSum != null">
+			,pre_rec_sum = #{preRecSum}
+		</if>
+		<if test=" writeOffSum != null">
+			,write_off_sum = #{writeOffSum}
+		</if>
+		<if test=" writingOffAmount != null">
+			,writing_off_amount = #{writingOffAmount}
+		</if>
+		<if test=" currencyType != null">
+			,currency_type = #{currencyType}
+		</if>
+		<if test=" createAt != null">
+			,create_at = #{createAt}
+		</if>
+		<if test=" creator != null and creator != ''">
+			,creator = #{creator}
+		</if>
+		<if test=" creatorId != null">
+			,creator_id = #{creatorId}
+		</if>
+		<if test=" updateAt != null">
+			,update_at = #{updateAt}
+		</if>
+		<if test=" advanceType != null">
+			,advance_type = #{advanceType}
+		</if>
+		<if test="paidAmount != null">
+			, paid_amount = #{paidAmount}
+		</if>
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="AdvanceResultMap">
+		select
+		id,
+		cust_id,
+		busi_unit,
+		project_id,
+		pre_rec_amount,
+		pre_rec_sum,
+		write_off_sum,
+		writing_off_amount,
+		currency_type,
+		create_at,
+		creator,
+		creator_id,
+		update_at,
+		advance_type,
+		paid_amount
+		from
+		tb_fi_advance
+		where id=#{id}
+
+	</select>
+
+	<select id="queryPerAdvanceByProCId" parameterType="com.scfs.domain.fi.entity.Advance"
+		resultMap="AdvanceResultMap">
+		SELECT
+		id,
+		cust_id,
+		busi_unit,
+		project_id,
+		pre_rec_amount,
+		pre_rec_sum,
+		write_off_sum,
+		writing_off_amount,
+		currency_type,
+		create_at,
+		creator,
+		creator_id,
+		update_at,
+		advance_type,
+		paid_amount
+		FROM
+		tb_fi_advance
+		where
+		1=1
+		<if test="advanceType != null">
+			and advance_type=#{advanceType}
+		</if>
+		<if test="custId != null">
+			and cust_id=#{custId}
+		</if>
+		<if test="projectId != null">
+			and project_id = #{projectId}
+		</if>
+		<if test="currencyType != null">
+			and currency_type = #{currencyType}
+		</if>
+		ORDER BY pre_rec_sum DESC
+	</select>
+
+
+</mapper>

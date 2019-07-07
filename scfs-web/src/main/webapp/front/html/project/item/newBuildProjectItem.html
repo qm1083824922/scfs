@@ -1,0 +1,999 @@
+<style>
+.m5{
+	margin: 5px
+}
+#projectcheckdate1,#projectcheckdate2,#clientCheckDay1,#clientCheckDay2,#supplierCheckDay1,#supplierCheckDay2{display: none};
+</style>
+
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li>条款</li>
+            <li class="active">新建条款</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+      <div class="box no-margin"> 
+        <form class="form-horizontal form-inline" id="form1" data-url="projectItem/edit">
+          <div class="box-body">  
+                <table class="table table-bordered table-hover no-margin"> 
+                  <tr>
+                    <td width="200" class="text-right"><b>项目：<em class="text-star">*</em></b></td>  
+                     <td class="text-left">
+                      	<select class="form-control" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td width="200" class="text-right"><b>主客户：<em class="text-star">*</em></b></td>  
+                     <td class="text-left">
+                      	<select class="form-control" data-url="PROJECT_CS" id="customerId"  pid="projectId" name="customerId"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>业务类型：<em class="text-star">*</em></b></td> 
+                    <td class="text-left"> 
+                          <input type="text" class="form-control" id="businessType"  name="businessType" readOnly="readOnly" > 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>有效期：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                    	<input type="text" class="form-control js_datePicker" id="startDate"  name="startDate">
+                      -
+                      <input type="text" class="form-control js_datePicker" id="endDate"  name="endDate"> 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>额度总额：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                          <input type="text" class="form-control" id="totalAmount" name="totalAmount">
+                          <select class="form-control" data-url="DEFAULT_CURRENCY_TYPE" id="amountCurrency"  name="amountCurrency" disabled="disabled"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>单笔额度：</b></td> 
+                     <td class="text-left">
+                          <input type="text" class="form-control" id="singleAmount" name="singleAmount">
+                          <select class="form-control" data-url="DEFAULT_CURRENCY_TYPE" id="singleAmountCurrency"  name="singleAmountCurrency" disabled="disabled"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>结算类型：<em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service">
+                      	<select class="form-control" data-url="SETTLE_TYPE" id="isFundAccount"  name="isFundAccount"> </select> 	
+                     </td> 
+                  </tr>
+                  
+                  <tr>
+                    <td class="text-right"><b>付款周期：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<input type="text" class="form-control" id="payCycle" name="payCycle">
+                     </td> 
+                  </tr>
+                  
+                  <tr id = "paypalCalcType1">
+                     <td class="text-right"><b>结算计费方式：<em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service">
+                         <select class="form-control" data-url="PAYPAL_CALC_TYPE" id="paypalCalcType"  name="paypalCalcType" data-empty-option="true"> </select> 	
+                     </td> 
+                  </tr>
+                  <tr id = "paypalSegment1">
+                     <td class="text-right"><b >分段规则： <em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service"> 
+                        <div class="segment-input-box">
+							<div class="segment-input-item">
+								<input type="hidden" class="segment-id" id="segment-id"/>
+								<input type="number" min="0" class="form-control m5 segment-day" id="segment-day" placeholder="分段天数"/>
+								<span class="sign">-</span>
+								<input type="number" min="0" class="form-control m5 segment-fund-month-rate" id="segment-fund-month-rate" placeholder="服务费率"/>
+								<button type="button" class="btn btn-sm btn-primary btn-add-segment" style="width:30px">+</button>
+							</div>
+						</div>
+                     </td> 
+                  </tr>
+                  <tr id = "fundAccountPeriod1">
+                     <td class="text-right"><b >合作账期： <em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service"> 
+                        <input type="text" class="form-control" id="fundAccountPeriod" name="fundAccountPeriod">天
+                     </td> 
+                  </tr>
+                  <tr id = "fundMonthRate1">
+                     <td class="text-right"><b >日服务费率： <em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service"> 
+                      	<input type="text" class="form-control" id="fundMonthRate" name="fundMonthRate">
+                     </td> 
+                  </tr>
+                  <tr id = "dayPenalRate1">
+                     <td class="text-right"><b >日违约金费率： <em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service"> 
+                      	<input type="text" class="form-control" id="dayPenalRate" name="dayPenalRate">
+                     </td> 
+                  </tr>
+                  <tr id = "penalGracePeriod1">
+                     <td class="text-right"><b id= "penalGracePeriod1">违约宽限期： <em class="text-star">*</em></b></td> 
+                     <td class="text-left" id= "service"> 
+                      	<input type="text" class="form-control" id="penalGracePeriod" name="penalGracePeriod" >天  
+                     </td> 
+                  </tr>
+                   <tr id = "minSaleDay1">
+                     <td class="text-right"><b>最低消费天数：</b></td> 
+                     <td class="text-left">
+                          <input type="text" class="form-control" id="minSaleDay" name="minSaleDay">天
+                     </td>
+                  </tr>
+                  <tr id = "dayRules1">
+                     <td class="text-right"><b>天数规则：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                          <select class="form-control" data-url="DAY_RULES" id="dayRules"  name="dayRules"> </select> 
+                     </td>
+                  </tr>
+                  <tr id = "fixedpoints1">
+                     <td class="text-right"><b id="isregular" >是否固定点数： </b></td> 
+                     <td class="text-left" id= "service"> 
+                      	<select class="form-control" data-url="PROMPT_STATUS" id="fixedpoints"  name="fixedpoints" > </select> 
+                     </td> 
+                  </tr>
+                  <tr id="spreadfixedpoints1">
+                     <td class="text-right"><b id="priceregular" >价差固定点数： </b></td> 
+                     <td class="text-left" id= "service"> 
+                      	<input type="text" class="form-control" id="spreadfixedpoints" name="spreadfixedpoints" > 
+                     </td> 
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>计算操作费：<em class="text-star">*</em></b></td> 
+                    <td class="text-left"> 
+                      	<select class="form-control" data-url="CALCULATE_OPE_COST" id="isOperateAccount"  name="isOperateAccount"> </select> 
+                     </td>
+                  </tr>
+                   <tr id ="operateFeeRate1">
+                    <td class="text-right"><b >操作服务费率：</b></td> 
+                    <td class="text-left">  
+                      	<input type="text" class="form-control" id="operateFeeRate" name="operateFeeRate">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>客户项目结算方式：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                          <select class="form-control" data-url="PROJECT_ITEM_SETTLE_TYPE" id="settleType"  name="settleType"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>项目对账方式：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                          <select class="form-control" data-url="CHECK_TYPE" id="projectchecktype"  name="projectchecktype"> </select> 
+                     </td>
+                  </tr>
+                  <tr id="projectcheckdate1">
+                    <td class="text-right"><b>项目对账日期：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<input type="text" class="form-control" id="projectcheckdate"  name="projectcheckdate">号
+                     </td>
+                  </tr>
+                  <tr id="projectcheckdate2">
+                    <td class="text-right"><b>项目对账日期：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<select class="form-control" data-url="CHECK_WEEK" id="projectCheckWeek"  name="projectCheckWeek"> </select> 
+                     </td>
+                  </tr>
+                  <tr >
+                    <td class="text-right"><b>客户对账方式：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                    	<select class="form-control" data-url="CHECK_TYPE" id="clientchecktype"  name="clientchecktype"> </select> 
+                     </td>
+                  </tr>  
+                   <tr id="clientCheckDay1">
+                    <td class="text-right"><b>客户对账日期：<em class="text-star">*</em></b></td>
+                     <td class="text-left"> 
+                      	<input type="text" class="form-control" id="clientCheckDay"  name="clientCheckDay">号
+                     </td>
+                  </tr>
+                 <tr id="clientCheckDay2">
+                    <td class="text-right"><b>客户对账日期：<em class="text-star">*</em></b></td>
+                     <td class="text-left"> 
+                      	<select class="form-control" data-url="CHECK_WEEK" id="clientCheckWeek"  name="clientCheckWeek"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>供应商对账方式：<em class="text-star">*</em></b></td> 
+                    <td class="text-left"> 
+                      	<select class="form-control" data-url="CHECK_TYPE" id="supplierchecktype"  name="supplierchecktype"> </select> 
+                     </td>
+                  </tr>
+                  <tr id="supplierCheckDay1">
+                    <td class="text-right"><b>供应商对账日期：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                      	<input type="text" class="form-control" id="supplierCheckDay" name="supplierCheckDay">号
+                     </td>
+                  </tr>
+                  <tr id="supplierCheckDay2">
+                    <td class="text-right"><b>供应商对账日期：<em class="text-star">*</em></b></td>
+                     <td class="text-left"> 
+                      	<select class="form-control" data-url="CHECK_WEEK" id="supplierCheckWeek"  name="supplierCheckWeek"> </select> 
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>预收客户比例：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<input type="text" class="form-control" id="payRate" name="payRate">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>代理出口：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                          <select class="form-control" data-url="PROMPT_STATUS" id="isAgencyExport"  name="isAgencyExport"> </select> 
+                     </td>
+                  </tr>
+                  <tr id ="agencyExportRate1" >
+                    <td class="text-right"><b >代理出口费率：</b></td> 
+                     <td class="text-left"> 
+                      	<input type="text" class="form-control" id="agencyExportRate" name="agencyExportRate">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>代理进口：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                          <select class="form-control" data-url="PROMPT_STATUS" id="isagencyimport"  name="isagencyimport"> </select> 
+                     </td>
+                  </tr>
+                  <tr id ="agencyimportrate1" >
+                    <td class="text-right"> <b>代理进口费率：</b></td> 
+                    <td class="text-left"> 
+                      	<input type="text" class="form-control" id="agencyimportrate" name="agencyimportrate">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>结算汇率：<em class="text-star">*</em></b></td> 
+                    <td class="text-left" id="regular">
+                          <select class="form-control" data-url="SETTLE_RATE_TYPE" id="accountRateType"  name="accountRateType"> </select>
+                    </td> 
+                  </tr>
+                  <tr id="bankId1">
+                      <td class="text-right"><b>银行名称：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular">
+                        <select class="form-control" data-url="BANK_NAME" id="bankId"  name="bankId"> </select> 
+						</td> 
+                  </tr>
+                   <tr id="accountMethod1">
+                      <td class="text-right"><b>汇率价位：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular">
+                        <select class="form-control" data-url="ACCOUNT_METHOD" id="accountMethod"  name="accountMethod"  > </select> 
+						</td> 
+                  </tr>
+                  <tr id="accountRate1">
+                      <td class="text-right"><b>固定汇率：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular">
+                          <input type="text" class="form-control" id="accountRate" name="accountRate"  > 
+                          <select class="form-control" data-url="DEFAULT_CURRENCY_TYPE" id="paypalAmountCurrency"  name="paypalAmountCurrency"> </select>                        	
+						</td> 
+                  </tr>
+                  <tr>
+                      <td class="text-right"><b>签收标准：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular"> 
+                          <select class="form-control" data-url="SIGN_STANDARD" id="signStandard"  name="signStandard"> </select>                        	
+						</td> 
+                  </tr>
+                  <tr id="certificateName1" style="display: none;">
+                      <td class="text-right"><b>姓名：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular"> 
+                          <input type="text" class="form-control" id="certificateName" name="certificateName"  > 
+						</td> 
+                  </tr>
+                  <tr id="certificateId1" style="display: none;">
+                      <td class="text-right"><b>身份证号码：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular"> 
+                          <input type="text" class="form-control" id="certificateId" name="certificateId"  > 
+						</td> 
+                  </tr>
+                   <tr id = "officialSeal1" style="display: none;">
+                      <td class="text-right"><b>公章名：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular"> 
+                          <input type="text" class="form-control" id="officialSeal" name="officialSeal"  > 
+						</td> 
+                  </tr>
+                  <tr>
+                      <td class="text-right"><b>库龄时间：<em class="text-star">*</em></b></td> 
+                      <td class="text-left" id="regular"> 
+                          <input type="text" class="form-control" id="libraryAge" name="libraryAge" > 
+					  </td> 
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>付款审核方式：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                    	<select class="form-control payAuditType" id="payAuditType"  name="payAuditType"></select>
+                    </td> 
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td> 
+                    <td class="text-left">
+                      	<textarea rows="3" cols="60" class="form-control" id="remark" name="remark"></textarea>
+                     </td>
+                  </tr> 
+                </table>
+          </div>
+          <!-- /.box-body --> 
+          <div class="box-footer text-center">
+            <button type="submit" id="save" data-permissionUrl="/projectItem/add" data-url="html/project/item/projectItemSearch.html" class="btn btn-primary btn-sm">保存</button> 
+            <button type="button"  data-url="html/project/item/projectItemSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+          </div>
+          <!-- /.box-footer -->
+
+        </form>
+      </div>
+  </section>
+</div>
+<script>
+ 	var curr = 0;
+    options.initPage = function(){
+    		var isCopy = options.param.isCopy;
+			if (!isCopy) {
+				$("select").addClass("js-select");
+		        GLOBAL.initSelect();
+			}
+    	
+        	$("#paypalCalcType1").hide().find("#paypalCalcType").val(""); 
+        	$("#paypalSegment1").hide().find("input").val(""); 
+        	$("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");  
+  			$("#fundMonthRate1").hide().find("#fundMonthRate").val("");
+  			$("#dayPenalRate1").hide().find("#dayPenalRate").val("");
+  			$("#penalGracePeriod1").hide().find("#penalGracePeriod").val(""); 
+  			$("#fixedpoints1").hide().find("#fixedpoints").val("");  
+  			$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+ 	  	    $("#bankId1").hide().find("#bankId").val("");  
+			$("#accountRate1").hide().find("#accountRate").val(""); 
+ 			$("#agencyExportRate1").hide().find("#agencyExportRate").val("");
+			$("#agencyimportrate1").hide().find("#agencyimportrate").val("");
+			$("#operateFeeRate1").hide().find("#operateFeeRate").val("");  
+			$("#minSaleDay1").hide().find("#minSaleDay").val("");  
+			$("#dayRules1").hide().find("#dayRules").val(""); 
+  	    	$("#accountMethod1").hide().find("#accountMethod").val("");  
+
+        	$("#projectId").change(function(){ 
+        		 var id = $("#projectId").val(); 
+        		 if(id){
+        			 var data = {id : id}; 
+            		 GLOBAL.ajax("project/detail",data , function(e){  
+            			 if(e.items.bizType == 1){
+            				 $("#businessType").val("代理采购");   
+            			 } else if(e.items.bizType == 2){
+            				 $("#businessType").val("应收保理");  
+            			 } else if(e.items.bizType == 3){
+            				 $("#businessType").val("纯购销");  
+            			 } else if(e.items.bizType == 4){
+            				 $("#businessType").val("物流分包");  
+            			 } else if(e.items.bizType == 5){
+            				 $("#businessType").val("纯仓储");  
+            			 } else if(e.items.bizType == 6){
+            				 $("#businessType").val("融通质押");  
+            			 } else if(e.items.bizType == 7){
+            				 $("#businessType").val("铺货质押");  
+            			 }
+            			 $("#amountCurrency").val(e.items.amountUnit);
+            			 $("#singleAmountCurrency").val(e.items.amountUnit);
+            			 curr = e.items.amountUnit;
+                     });  
+        		  }else{
+        			  $("#businessType").val("");  
+        		  }
+        	 }); 
+        	$("#isFundAccount").change(function(){ 
+        		 var id = $("#isFundAccount").val(); 
+        		 if(id == 1){	  
+        			 $("#paypalCalcType1").show();  
+        			 $("#paypalSegment1").hide(); 
+        			 $("#fundAccountPeriod1").show();  
+	       			 $("#fundMonthRate1").show();  
+	       			 $("#dayPenalRate1").show();  
+	       			 $("#penalGracePeriod1").show(); 
+	       			 $("#minSaleDay1").show();
+	       			 $("#dayRules1").show();
+	       			 $("#fixedpoints1").hide().find("#fixedpoints").val("");  
+	       			 $("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+	       			 
+	       			 $("#paypalCalcType").rules("add", {  required: true });
+	       			 $("#fundAccountPeriod").rules("add", {  required: true });
+	       		     $("#fundMonthRate").rules("add", {  required: true });
+	       		     $("#dayPenalRate").rules("add", {  required: true });
+	       		     $("#penalGracePeriod").rules("add", {  required: true });
+        	     }else if(id == 2){ 
+         	    	 $("#paypalCalcType").rules("remove");  
+        	    	 $("#fundAccountPeriod").rules("remove");  
+       		   		 $("#fundMonthRate").rules("remove");  
+       				 $("#dayPenalRate").rules("remove");  
+       		         $("#penalGracePeriod").rules("remove");  
+       		     	 $("#fixedpoints").rules("add", {  required: true });  
+       		     	 
+       		     	 $("#paypalCalcType1").hide().find("#paypalCalcType").val("");  
+       		     	 $("#paypalSegment1").hide().find("input").val("");
+        	    	 $("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");  
+	       			 $("#fundMonthRate1").hide().find("#fundMonthRate").val("");
+	       			 $("#dayPenalRate1").hide().find("#dayPenalRate").val("");
+	       			 $("#penalGracePeriod1").hide().find("#penalGracePeriod").val(""); 
+	       			 $("#minSaleDay1").hide().find("#minSaleDay").val(""); 
+	       			 $("#dayRules1").hide().find("#dayRules").val(""); 
+	       			 $("#fixedpoints1").show();   
+        	     }else{
+        	    	 $("#paypalCalcType1").hide().find("#paypalCalcType").val(""); 
+        	    	 $("#paypalSegment1").hide().find("input").val("");
+        	    	 $("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");  
+	       			 $("#fundMonthRate1").hide().find("#fundMonthRate").val("");
+	       			 $("#dayPenalRate1").hide().find("#dayPenalRate").val("");
+	       			 $("#penalGracePeriod1").hide().find("#penalGracePeriod").val(""); 
+	       			 $("#fixedpoints1").hide().find("#fixedpoints").val("");  
+	       			 $("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+	       			 $("#minSaleDay1").hide().find("#minSaleDay").val(""); 
+	       			 $("#dayRules1").hide().find("#dayRules").val(""); 
+        	     }
+                 $("select").select2({language: "zh-CN"});
+       	    });
+        	$("#fixedpoints").change(function(){ 
+        		 var id = $("#fixedpoints").val(); 
+        		 if(id == 1){	  
+        			$("#spreadfixedpoints1").show(); 
+        			$("#spreadfixedpoints").rules("add", {  required: true });
+        	     }else if(id == 2){ 
+        	    	$("#spreadfixedpoints").rules("remove");  
+        	  		$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val(""); 
+        	     } else{
+         	    	$("#spreadfixedpoints").rules("remove");  
+         	  		$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val(""); 
+
+        	     }
+                 $("select").select2({language: "zh-CN"});
+       	    });
+        	$("#accountRateType").change(function(){ 
+       		 var id = $("#accountRateType").val(); 
+       		 if(id == 1){	
+        	     $("#accountRate").rules("remove");  
+     			 $("#bankId").rules("add", {  required: true });
+       			 $("#accountRate1").hide().find("#accountRate").val("");  
+       			 $("#bankId1").show();  
+       			 $("#accountMethod1").show(); 
+       			 $("#bankId").val('2');  
+       			 $("#accountMethod").val('2');  
+       	     }else if(id == 2){ 
+      	    	 $("#bankId").rules("remove");  
+       	    	 $("#bankId1").hide().find("#bankId").val("");  
+       	    	 $("#accountMethod1").hide().find("#accountMethod").val("");  
+       	 		 $("#accountRate1").show();	
+     			 $("#accountRate").rules("add", {  required: true });
+     			 $("#bankId").val('');  
+      			 $("#accountMethod").val('');
+       	     }else{ 
+        	     $("#accountRate").rules("remove");  
+       	    	 $("#bankId").rules("remove");  
+       	    	 $("#bankId1").hide().find("#bankId").val("");  
+       	    	 $("#accountMethod1").hide().find("#accountMethod").val("");  
+       			 $("#accountRate1").hide().find("#accountRate").val("");  
+       			 $("#bankId").val('');  
+      			 $("#accountMethod").val('');
+       	     }
+             $("select").select2({language: "zh-CN"});
+             $("#bankId").prop("disabled", true);
+   			 $("#accountMethod").prop("disabled", true);
+       	   });
+        	$("#isAgencyExport").change(function(){  
+        		if($("#isAgencyExport").val() == 0 || $("#isAgencyExport").val() == ""){  
+        			$("#agencyExportRate").rules("remove"); 
+        			$("#agencyExportRate1").hide().find("#agencyExportRate").val("");
+        	 	 }else if($("#isAgencyExport").val() == 1){ 
+        	 		$("#agencyExportRate1").show();
+        	 		$("#agencyExportRate").rules("add", {  required: true });
+        	 	 }
+                 $("select").select2({language: "zh-CN"});
+        	 });
+        	$("#isagencyimport").change(function(){ 
+        		if($("#isagencyimport").val() == 0 || $("#isagencyimport").val() == ""){  
+        			$("#agencyimportrate").rules("remove");   
+        			$("#agencyimportrate1").hide().find("#agencyimportrate").val("");
+        	 	 }else if($("#isagencyimport").val() == 1){ 
+        	 		$("#agencyimportrate1").show();
+        	 		$("#agencyimportrate").rules("add", {  required: true });  
+        	 	 }
+                $("select").select2({language: "zh-CN"});
+        	 });
+        	$("#bankId").change(function(){ 
+        		$("#accountMethod").val("");
+                $("select").select2({language: "zh-CN"});
+        	});
+        	$("#signStandard").change(function(){ 
+        		if($("#signStandard").val() === ""){ 
+        			$("#certificateName1").hide().find("#certificateName").val("");  
+        			$("#certificateId1").hide().find("#certificateId").val("");  
+        			$("#officialSeal1").hide().find("#officialSeal").val("");  
+        		}else if($("#signStandard").val() == 1){
+        			$("#certificateName1").hide().find("#certificateName").val("");  
+        			$("#certificateId1").hide().find("#certificateId").val("");  
+        			$("#officialSeal1").show();
+        		}else if($("#signStandard").val() == 2){
+        			$("#certificateName1").show(); 
+        			$("#certificateId1").show();
+        			$("#officialSeal1").show();
+        		}else if($("#signStandard").val() == 3){
+        			$("#certificateName1").hide().find("#certificateName").val("");  
+        			$("#certificateId1").hide().find("#certificateId").val("");  
+        			$("#officialSeal1").hide().find("#officialSeal").val("");
+        		}else if($("#signStandard").val() == 0){ 
+        			$("#certificateName1").show(); 
+        			$("#certificateId1").show();
+        			$("#officialSeal1").hide().find("#officialSeal").val("");  
+        		} 
+                $("select").select2({language: "zh-CN"});
+    	 	});
+        	$("#isOperateAccount").change(function(){ 
+        		if($("#isOperateAccount").val() == 1 || $("#isOperateAccount").val() == ""){ 
+        			$("#operateFeeRate").rules("remove"); 
+        			$("#operateFeeRate1").hide().find("#operateFeeRate").val("");  
+        	 	 }else{  
+        	 		$("#operateFeeRate1").show(); 
+        	 		$("#operateFeeRate").rules("add", {  required: true });
+        	 	 }
+                 $("select").select2({language: "zh-CN"});
+        	 });   
+        	$("#projectchecktype").change(function(){ 
+        		if($("#projectchecktype").val() == 1){  
+        			$("#projectcheckdate1").show(); 
+        			$("#projectcheckdate2").hide(); 
+        			$("#projectcheckdate2").hide().find("#projectCheckWeek").val("");  
+        	 	 }else if($("#projectchecktype").val() == 2){  
+        			$("#projectcheckdate2").show(); 
+        			$("#projectcheckdate1").hide(); 
+        			$("#projectcheckdate1").hide().find("#projectcheckdate").val("");  
+        	 	 }else{    
+        	 		$("#projectcheckdate1").hide().find("#projectcheckdate").val("");  
+        	 		$("#projectcheckdate2").hide().find("#projectCheckWeek").val("");  
+        	 	 }
+                 $("select").select2({language: "zh-CN"});
+        	 }); 
+        	$("#clientchecktype").change(function(){ 
+        		if($("#clientchecktype").val() == 1){  
+        			$("#clientCheckDay1").show(); 
+        			$("#clientCheckDay2").hide();
+        			$("#clientCheckDay2").hide().find("#clientCheckWeek").val("");
+        	 	 }else if($("#clientchecktype").val() == 2){  
+        			$("#clientCheckDay2").show(); 
+        			$("#clientCheckDay1").hide();
+        			$("#clientCheckDay1").hide().find("#clientCheckDay").val("");  
+        	 	 }else{    
+        	 		$("#clientCheckDay1").hide().find("#clientCheckDay").val("");  
+        	 		$("#clientCheckDay2").hide().find("#clientCheckWeek").val("");
+        	 	 }
+                 $("select").select2({language: "zh-CN"});
+        	 });
+        	$("#supplierchecktype").change(function(){ 
+        		if($("#supplierchecktype").val() == 1){  
+        			$("#supplierCheckDay1").show(); 
+        			$("#supplierCheckDay2").hide(); 
+        			$("#supplierCheckDay2").hide().find("#supplierCheckWeek").val("");  
+        	 	 }else if($("#supplierchecktype").val() == 2){  
+        			$("#supplierCheckDay2").show(); 
+        			$("#supplierCheckDay1").hide(); 
+        			$("#supplierCheckDay1").hide().find("#supplierCheckDay").val("");  
+        	 	 }else{    
+        	 		$("#supplierCheckDay1").hide().find("#supplierCheckDay").val("");  
+        	 		$("#supplierCheckDay2").hide().find("#supplierCheckWeek").val("");  
+        	 	 }
+                 $("select").select2({language: "zh-CN"});
+        	 });
+        	$("#paypalCalcType").change(function(){ 
+	       		 var value = $("#paypalCalcType").val(); 
+	       		 if(value == 1){	  
+	       			 $("#paypalSegment1").hide().find("input").val("");
+	       			 $("#fundAccountPeriod1").show();  
+	       			 $("#fundMonthRate1").show();  
+	       			 $("#dayPenalRate1").show();  
+	       			 $("#penalGracePeriod1").show(); 
+	       			 $("#minSaleDay1").show();
+	       			 $("#dayRules1").show();
+	       			 $("#fixedpoints1").hide().find("#fixedpoints").val("");  
+	       			 $("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+	       			 $("#fundAccountPeriod").rules("add", {  required: true });
+	       		     $("#fundMonthRate").rules("add", {  required: true });
+	       		     $("#dayPenalRate").rules("add", {  required: true });
+	       		     $("#penalGracePeriod").rules("add", {  required: true });
+	       		     $(".line-delete-segment").remove();
+	       	     }else if(value == 2){ 
+	       	    	 $("#paypalSegment1").show().find("input").val("");
+	       			 $("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");    
+	       			 $("#fundMonthRate1").hide().find("#fundMonthRate").val("");  
+	       			 $("#dayPenalRate1").show();  
+	       			 $("#penalGracePeriod1").show(); 
+	       			 $("#minSaleDay1").hide().find("#minSaleDay").val("");  
+	       			 $("#dayRules1").show();
+	       			 $("#fixedpoints1").hide().find("#fixedpoints").val("");  
+	       			 $("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+	       			 $("#fundAccountPeriod").rules("remove");
+	       		     $("#fundMonthRate").rules("remove");
+	       		     $("#dayPenalRate").rules("add", {  required: true });
+	       		     $("#penalGracePeriod").rules("add", {  required: true });
+	       		     
+	      		     $('.segment-input-box').empty();
+	     		   	 var segmentHtml = '<div class="segment-input-item">' 
+	    			 	+ '<input type="hidden" class="segment-id" id="segment-id" />'
+	    			 	+ '<input type="number" min="0" class="form-control m5 segment-day" id="segment-day" placeholder="分段天数"/>'
+	    			 	+ '<span class="sign">-</span>'
+	    			 	+ '<input type="number" min="0" class="form-control m5 segment-fund-month-rate" id="segment-fund-month-rate" placeholder="服务费率"/>'
+	    			 	+ '<button type="button" class="btn btn-sm btn-primary btn-add-segment" style="width:30px">+</button>'
+	    			 	+ '</div>';
+	    			 $('.segment-input-box').append(segmentHtml);
+	       	     }
+	             $("select").select2({language: "zh-CN"});
+      	    });
+        	
+        	//付款审核方式
+			var selectedOptions = "<option></option>";
+            GLOBAL.ajax("auditFlow/pay", {}, function(data){
+            	if (data) {
+            		for(var i = 0; i < data.length; i++){
+            	    	selectedOptions += '<option value="'+data[i].auditFlowNo+'">'+data[i].auditFlowName+'</option>';
+            	    }   
+            	    $(".payAuditType").empty().append(selectedOptions);
+            	} else {
+            		$(".payAuditType").empty();
+            	}
+            });
+        	
+        	if (isCopy) {
+ 	    	  	 $("select").removeClass("js-select");
+    	  		 $("input").addClass("js-initform");
+    	  		 $("select").addClass("js-initform");
+    	  		 $("textarea").addClass("js-initform");
+  	          	 var data = GLOBAL.getEditData($("#form1"), options.param.id); 
+  	        	 $("#singleAmountCurrency").val(data.amountCurrency);    
+  	        	 
+  	        	 if($("#isFundAccount").val() == 1){
+  	         	    $("#paypalCalcType1").show();
+  	         	    $("#paypalSegment1").hide(); 
+  	         		$("#fundAccountPeriod1").show();  
+  	         		$("#fundMonthRate1").show();  
+  	         		$("#dayPenalRate1").show();  
+  	         		$("#penalGracePeriod1").show(); 
+  	         		$("#minSaleDay1").show(); 
+  	       	    	$("#dayRules1").show(); 
+  	         		$("#fixedpoints1").hide().find("#fixedpoints").val("");  
+  	         		$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val(""); 
+  	         	 }else if($("#isFundAccount").val() == 2){  
+  	         		$("#paypalCalcType1").hide().find("#paypalCalcType").val("");  
+  	         		$("#paypalSegment1").hide().find("input").val("");
+  	         	    $("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");  
+  	         		$("#fundMonthRate1").hide().find("#fundMonthRate").val("");
+  	         		$("#dayPenalRate1").hide().find("#dayPenalRate").val("");
+  	         		$("#penalGracePeriod1").hide().find("#penalGracePeriod").val(""); 
+  	         	  	$("#minSaleDay1").hide().find("#minSaleDay").val(""); 
+  	         	  	$("#dayRules1").hide().find("#dayRules").val(""); 
+  	         		$("#fixedpoints1").show();  
+  	         		$("#spreadfixedpoints1").show(); 
+  	         	 }
+  	         	 
+  	       	 	if($("#paypalCalcType").val() == 1){	  
+  	       		 	$("#paypalSegment1").hide().find("input").val("");
+  	       		 	$("#fundAccountPeriod1").show();  
+  	       		 	$("#fundMonthRate1").show();  
+  	       		 	$("#dayPenalRate1").show();  
+  	       		 	$("#penalGracePeriod1").show(); 
+  	       		 	$("#minSaleDay1").show();
+  	       		 	$("#dayRules1").show();
+  	       		 	$("#fixedpoints1").hide().find("#fixedpoints").val("");  
+  	       		 	$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+  	       	     	$(".line-delete-segment").remove();
+  	            }else if($("#paypalCalcType").val() == 2){ 
+  	           	 	$("#paypalSegment1").show().find("input").val("");
+  	       		 	$("#fundAccountPeriod1").hide().find("#fundAccountPeriod").val("");    
+  	       		 	$("#fundMonthRate1").hide().find("#fundMonthRate").val("");  
+  	       		 	$("#dayPenalRate1").show();  
+  	       		 	$("#penalGracePeriod1").show(); 
+  	       		 	$("#minSaleDay1").hide().find("#minSaleDay").val("");  
+  	       		 	$("#dayRules1").show();
+  	       		 	$("#fixedpoints1").hide().find("#fixedpoints").val("");  
+  	       		 	$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val("");
+  	            }
+  	        	 
+	  	       	 if (data.isFundAccount == 1 && data.paypalCalcType == 2 && data.projectItemSegmentList) {
+	  	    		 if (data.projectItemSegmentList.length > 0) {
+		      		     $('.segment-input-box').empty();
+	  	    			 for (var i=0; i<data.projectItemSegmentList.length; i++) {
+	  	    				 var segmentData = data.projectItemSegmentList[i];
+	  	    				 var segmentHtml = '';
+	  	    				 if (i == 0) {
+	  	    	  				var segmentHtml = '<div class="segment-input-item">' 
+	  	    	  				 	+ '<input type="hidden" class="segment-id" id="segment-id" />'
+	  	    	  				 	+ '<input type="number" min="0" class="form-control m5 segment-day" id="segment-day" value=' + segmentData.segmentDay + ' placeholder="分段天数"/>'
+	  	    	  				 	+ '<span class="sign">-</span>'
+	  	    	  				 	+ '<input type="number" min="0" class="form-control m5 segment-fund-month-rate" id="segment-fund-month-rate" value=' + segmentData.segmentFundMonthRate + ' placeholder="服务费率"/>'
+	  	    	  				 	+ '<button type="button" class="btn btn-sm btn-primary btn-add-segment" style="width:30px">+</button>'
+	  	    	  				 	+ '</div>';
+	  	    	  				$('.segment-input-box').append(segmentHtml);
+	  	    				 } else {
+	  	    	  				var segmentHtml = '<div class="segment-input-item line-delete-segment">' 
+	  	     	  				 	+ '<input type="hidden" class="segment-id" id="segment-id" />'
+	  	    	  				 	+ '<input type="number" min="0" class="form-control m5 segment-day" id="segment-day" value=' + segmentData.segmentDay + ' placeholder="分段天数"/>'
+	  	     	  				 	+ '<span class="sign">-</span>'
+	  	    	  				 	+ '<input type="number" min="0" class="form-control m5 segment-fund-month-rate" id="segment-fund-month-rate" value=' + segmentData.segmentFundMonthRate + ' placeholder="服务费率"/>'
+	  	     	  				 	+ '<button type="button" class="btn btn-sm btn-danger btn-delete-segment" style="width:30px"> - </button>'
+	  	     	  				 	+ '</div>';
+	  	    	  				$('.segment-input-box').append(segmentHtml);
+	  	    				 }
+	  	    			 }		 
+	  	    		 }
+	  	    	 }
+	  	       	 
+	  	   		if($("#signStandard").val() == 0){	  
+	  	   	  		$("#certificateName1").show(); 
+	  	   			$("#certificateId1").show();
+	  	        }else if($("#signStandard").val() == 1){  
+	  	   			$("#officialSeal1").show();
+	  	        }else if($("#signStandard").val() == 2){  
+	  	           	$("#certificateName1").show(); 
+	  	   			$("#certificateId1").show(); 
+	  	   			$("#officialSeal1").show();
+	  	   	 	}
+	  	     	if($("#fixedpoints").val() == 1){	  
+	  	     		$("#spreadfixedpoints1").show();  
+	  	        }else{  
+	  	       		$("#spreadfixedpoints1").hide().find("#spreadfixedpoints").val(""); 
+	  	        }
+	  	     	if( $("#accountRateType").val() == 1){	
+	  	     		$("#accountRate1").hide().find("#accountRate").val("");  
+	  	     		$("#bankId1").show(); 
+	  	     		$("#accountMethod1").show(); 
+	  	   	 	}else if( $("#accountRateType").val() == 2){ 
+	  	   	    	$("#bankId1").hide().find("#bankId").val("");  
+	  	   	    	$("#accountMethod1").hide().find("#accountMethod").val("");  
+	  	   	 		$("#accountRate1").show();	   
+	  	   	 	}else{
+	  	   	    	$("#accountRate1").hide().find("#accountRate").val(""); 
+	  	   	    	$("#bankId1").hide().find("#bankId").val("");  
+	  	       		$("#accountMethod1").hide().find("#accountMethod").val("");  
+	  	   	 	}
+	  	     	if($("#isAgencyExport").val() == 0){  
+	  	     		$("#agencyExportRate1").hide().find("#agencyExportRate").val("");
+	  	     	}else if($("#isAgencyExport").val() == 1){ 
+	  	     	 	$("#agencyExportRate1").show(); 
+	  	     	}
+	  	     	if($("#isagencyimport").val() == 0){     
+	  	     		$("#agencyimportrate1").hide().find("#agencyimportrate").val("");
+	  	     	}else if($("#isagencyimport").val() == 1){ 
+	  	     	 	$("#agencyimportrate1").show(); 
+	  	     	}
+	  	     	if($("#isOperateAccount").val() == 1){  
+	  	     		$("#operateFeeRate1").hide().find("#operateFeeRate").val("");  
+	  	     	}else{   
+	  	     	 	$("#operateFeeRate1").show();  
+	  	     	}
+	  	     	if($("#projectchecktype").val() == 1){  
+	  	   			$("#projectcheckdate1").show();  
+	  	   			$("#projectcheckdate2").hide();  
+	  	   	 	}else if($("#projectchecktype").val() == 2){  
+	  	   			$("#projectcheckdate2").show();
+	  	   			$("#projectcheckdate1").hide();  
+	  	   	 	}else{   
+	  	    		$("#projectcheckdate1").hide().find("#projectcheckdate").val("");  
+	  	    		$("#projectcheckdate2").hide().find("#projectCheckWeek").val("");  
+	  	    	}
+	  	     	if($("#clientchecktype").val() == 1){  
+	  	   			$("#clientCheckDay1").show(); 
+	  	   			$("#clientCheckDay2").hide();  
+	  	   	 	}else if($("#clientchecktype").val() == 2){  
+	  	   		 	$("#clientCheckDay2").show();  
+	  	   		 	$("#clientCheckDay1").hide();  
+	  	   	 	}else{   
+	  	    		$("#clientCheckDay1").hide().find("#clientCheckDay").val("");  
+	  	    		$("#clientCheckDay2").hide().find("#clientCheckWeek").val("");  
+	  	    	}
+	  	     	if($("#supplierchecktype").val() == 1){  
+	  	   		 	$("#supplierCheckDay1").show();  
+	  	   		 	$("#supplierCheckDay2").hide();  
+	  	   	 	}else if($("#supplierchecktype").val() == 2){  
+	  	   		 	$("#supplierCheckDay2").show();  
+	  	   		 	$("#supplierCheckDay1").hide();  
+	  	   	 	}else{   
+	  	   		 	$("#supplierCheckDay1").hide().find("#supplierCheckDay").val("");  
+	  	   		 	$("#supplierCheckDay2").hide().find("#supplierCheckWeek").val("");  
+	  	   	 	}
+  	        }
+        	
+            $("#form1").validate({
+                rules: {
+                	projectId: {
+                      required: true
+                    },businessType: {
+                        required: true 
+                    },
+                    amountCurrency: {
+                        required: true 
+                    },
+                    totalAmount: {
+                        required: true,
+                        number: true 
+                    },
+                    endDate: {
+                        required: true
+                    },
+                    startDate: {
+                        required: true 
+                    }, 
+                    isOperateAccount: {
+                        required: true 
+                    },
+                    projectCheckType: {
+                        required: true 
+                    },
+                    projectCheckDate: {
+                        required: true
+                    },
+                    projectCheckWeek: {
+                        required: true
+                    },
+                    clientCheckType: {
+                        required: true 
+                    },
+                    clientCheckDay: {
+                        required: true 
+                    },
+                    clientCheckWeek: {
+                        required: true 
+                    },
+                    supplierCheckType: {
+                        required: true 
+                    },
+                    supplierCheckDay: {
+                        required: true 
+                    },
+                    supplierCheckWeek: {
+                        required: true 
+                    },
+                    payRate: {
+                        required: true,
+                        number: true 
+                    },
+                    isAgencyExport: {
+                        required: true 
+                    },
+                    isagencyimport: {
+                        required: true 
+                    },
+                    accountRateType: {
+                        required: true
+                    }, 
+                    isFundAccount: {
+                        required: true 
+                    }, 
+                    payCycle: {
+                        required: true,
+                        digits: true
+                    },
+                    projectchecktype: {
+                        required: true 
+                    },
+                    clientchecktype: {
+                        required: true
+                    },
+                    supplierchecktype:{
+                        required: true
+                    },
+                    isagencyimport: {
+                        required: true
+                    },
+                    projectcheckdate: {
+                        required: true
+                    } ,
+                    accountMethod: {
+                        required: true
+                    },
+                    signStandard:{
+                        required: true
+                    },
+                    certificateName: {
+                        required: true
+                    },
+                    certificateId: {
+                        required: true
+                    },
+                    officialSeal: {
+                        required: true
+                    },
+                    libraryAge:{
+                        required: true,
+                        number: true 
+                    },
+                    dayRules:{
+                        required: true
+                    },
+                    settleType:{
+                        required: true
+                    }, 
+                    customerId:{
+                        required: true
+                    }, 
+                    payAuditType:{
+                        required: true
+                    }
+                },
+                errorPlacement: function(error, element) { 
+                    // var top = element.offset().top + element.height(),
+                    //     left = element.offset().left + element.width();
+                    element.after(error);
+                    // error.css("position","absolute").css({
+                    //     top: top,
+                    //     left: left
+                    // });
+                },
+                submitHandler: function() {
+                  var data = $("#form1").serializeObject(); 
+                  var paypalCalcType = $("#paypalCalcType").val();
+                  
+                  if (paypalCalcType == 2) {
+                      var items = $(".segment-input-item");
+                      var itemArr = [];
+                     
+                      var count = 0;
+                      items.each(function(index, data){
+                    	  var segmentId = $(this).find("#segment-id").val();
+                    	  var segmentDay = $(this).find("#segment-day").val();
+                          var segmentFundMonthRate = $(this).find("#segment-fund-month-rate").val();
+                          if (segmentDay && segmentFundMonthRate) {
+                        	  itemArr.push({
+                                  "id": segmentId,
+                                  "segmentDay": segmentDay,
+                                  "segmentFundMonthRate": segmentFundMonthRate
+                              });
+                          }
+                          count++;
+                      });
+                      if (itemArr.length <= 0) {
+                    	  layer.msg("请至少录入一条完整的分段规则！");
+                    	  return;
+                      }
+                      if (count != itemArr.length) {
+                    	  layer.msg("请录入完整的分段规则！");
+                    	  return;
+                      }
+                      if (itemArr.length >=2) {
+                    	  for (var i=0; i < itemArr.length - 1; i++) {
+                        	  if (itemArr[i].segmentDay*1 >= itemArr[i+1].segmentDay*1) {
+                        		  layer.msg("请录入连续并递增的分段天数");
+                        		  return;
+                        	  }
+                          }
+                      }                
+                      data['projectItemSegmentList'] = itemArr;                     
+                  }
+                  data['bankId'] = $("#bankId").val(); 
+                  data['accountMethod'] = $("#accountMethod").val(); 
+                  GLOBAL.ajax("projectItem/add", JSON.stringify(data), function(e){
+                      layer.msg("保存成功！", {
+                          icon: 1,
+                          time: 1500
+                      },function(){ 
+                          options.param.id = e.items;
+                    	  options.param.cid = e.items;
+                    	  GLOBAL.go("html/project/item/projectItemEdit.html", options.param);
+                      })                     
+                  }, true, $("#save"));
+                  
+                }
+            });
+        }
+    
+    
+    $(".segment-input-box").on("click", ".btn-add-segment", function(){
+		var $parent = $(this).closest(".segment-input-item");
+		var $box = $parent.clone().addClass("line-delete-segment");
+		$box.find("input[type='text'], input[type='number'], input[type='hidden']").val("");
+		$box.find(".btn-add-segment").replaceWith('<button type="button" class="btn btn-sm btn-danger btn-delete-segment" style="width:30px"> - </button>');
+		$parent.parent().append($box);
+	});
+
+	$(".segment-input-box").on("click", ".btn-delete-segment", function(){
+		var $parent = $(this).closest(".segment-input-item");
+		$parent.remove();
+	});
+
+    $(".js_datePicker").datetimepicker();
+
+    $("#js-back").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+</script>

@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<div class="wrapper">
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+    		<li class="active">条款</li>
+        </ol>
+   </section>
+  <section class="product-wrap">
+      <div class="box no-margin">  
+          <div class="box-body">
+               <ul class="nav nav-tabs">
+              	<li role="presentation" ><a class="tab-item" data-url="html/project/item/projectItemScan.html">条款浏览</a></li>
+               	<li role="presentation" class="active"><a class="tab-item" data-url="html/project/item/attachmentScan.html">附件</a></li> 
+                </ul>	
+               <input class="form-control js-initform" type="hidden" id="id" name="id">
+               <table id="js_dataTable" data-url="/projectItemFile/query"></table>
+               <form class="form-horizontal form-inline" id="form1" data-url="projectItemFile/upload" enctype="multipart/form-data">
+                    <table class="table no-margin">
+                    	<tr>
+                       		<td></td>
+                       		<td class="text-left"><h5><b style="color: red">附件不能大于50M</b></h5></td>
+                       	</tr>
+                        <tr>
+                            <td width="180" class="text-right"><b>上传附件： </b></td>
+                            <td class="text-left">
+                                <span type="button" id="upload">导入文件</span>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer text-center">  
+             <button type="button" id="download"  data-permissionUrl="/projectItemFileList/download" class="btn btn-primary btn-sm">批量下载</button>             
+             <button type="button" id="back" data-url="html/project/item/projectItemSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+          </div>
+          <!-- /.box-footer --> 
+      </div>
+  </section>
+</div> 
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script src="../../../js/project/item/attachmentscan.js"></script> 

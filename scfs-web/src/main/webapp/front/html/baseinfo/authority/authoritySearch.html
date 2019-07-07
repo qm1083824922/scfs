@@ -1,0 +1,57 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">权限</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+            <div class="box">
+                <div class="box-header">
+                    <form method="post" action="###" class="form-inline" id="searchForm">
+                        <div class="form-group-sm">
+                            <div class="search-item">
+                                <label class="control-label">权限名：</label> 
+								<input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="search-item"> 
+                                <label class="control-label ml10">URL：</label>
+								<input type="text" class="form-control" id="url" name="url">
+                            </div>
+                            <div class="search-item"> 
+                                <label class="control-label ml10">状态：</label> 
+                         		<select class="form-control js-select" data-url="PERMISSIONSTS" id="state"  name="state"> </select>
+                            </div>
+                            <div class="search-item"> 
+                         		<label class="control-label">权限类型：</label>
+                         		<select class="form-control js-select" data-url="PERMISSIONTYPE" id="type"  name="type"> </select>
+                            </div>
+                            <div class="search-item">  
+                                <label class="control-label ml10">菜单级别：</label> 
+								<select class="form-control js-select" data-url="PERMISSIONMENULEVEL" id="menuLevel"  name="menuLevel"> </select> 
+                            </div>
+                            <div class="search-item"> 
+                                <label class="control-label ml10">所属一级菜单：</label> 
+									<select class="form-control js-select" data-url="first/menu/query" id="parentId"  name="parentId"> </select> 
+                            </div>
+                            <div class="search-item">              
+									<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button> 
+                                <button type="button" id="btnNew" data-url="html/baseinfo/authority/newBuildPermission.html" data-permissionUrl="/permission/add" class="btn btn-warning btn-sm ml10">新建</button> 
+                                <button type="button" id="btnImport" data-url="html/baseinfo/authority/authorityImport.html"  class="btn btn-warning btn-sm ml10">权限导入</button>    
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="js_dataTable" data-url="permission/query">
+                    </table>
+                </div>
+                <!-- .box-body -->
+            </div>
+    </section>
+</div>
+
+<script src="../../../js/baseinfo/authority/authorityMain.js"></script>

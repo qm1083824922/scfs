@@ -1,0 +1,58 @@
+<div class="wrapper">
+	 <section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+            <li>基础信息</li>
+            <li>推送人管理</li>
+            <li class="active">浏览</li>
+		</ol>
+  </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/send/sendManageScan.html">用户信息</a></li>
+	                  <li role="presentation"  class="active"><a class="tab-item" data-url="html/baseinfo/send/sendProjectScan.html">项目信息</a></li>
+                  </ul>
+					<table id="js_dataTable" data-url="sendProject/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/baseinfo/send/sendManageSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '项目',
+				field : 'projectName',
+				width : 80,
+				align : 'center'
+			},{
+		     	title: '创建人',
+		        field: 'creator',
+		        width: 80,
+		       align: 'center'
+		 	}, {
+			    title: '创建时间',
+			   field: 'createAt',
+			   width: 80,
+			    align: 'center'
+		   } ];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {senderId: options.param.id}, false, null);
+	};
+
+	GLOBAL.goBack();
+</script>

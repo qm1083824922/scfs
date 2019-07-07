@@ -1,0 +1,507 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>物流</li>
+            <li class="active">出库单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+	                            <label class="control-label ml10">经营单位：</label>
+	                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId"></select>
+	                    </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">     
+                            <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+                        </div>
+                        <div class="search-item">                                            
+                            <label class="control-label ml10">出库编号：</label>
+                            <input type="text" class="form-control" id="billNo" name="billNo">   
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">出库附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">            
+                        </div>
+                        <div class="search-item">   
+                         	  <label class="control-label">要求发货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartRequiredSend" value="" name="startRequiredSendDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndRequiredSend" value="" name="endRequiredSendDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">出库类型：</label>
+                            <select class="form-control js-select" data-url="BILL_OUT_STORE_TYPE" id="billType" name="billType"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">运输方式：</label>
+                            <select class="form-control js-select" data-url="BILL_OUT_STORE_TRANSFER_MODE" id="transferMode" name="transferMode"></select>
+                        </div>
+                        <div class="search-item"> 
+                            <label class="control-label">送货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartSend" value="" name="startSendDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndSend" value="" name="endSendDate"> 
+                        </div>
+                        <div class="search-item">                                                                                
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">       
+                        </div>
+                        <div class="search-item">                                        
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">                                         
+                        </div>
+                        <div class="search-item"> 
+                        	  <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">   
+                        </div>
+                        <div class="search-item">                                                                                           
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">    
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="BILL_OUT_STORE_STATUS" id="status" name="status"></select>
+                        </div>
+                        <div class="search-item">                                                                                           
+                            <label class="control-label ml10">销售单号：</label>
+                            <input class="form-control" id="billDeliveryNo" name="billDeliveryNo">    
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                        </div>
+                        <div class="search-item"> 
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button> 
+                        </div>
+                        <div class="search-item">
+
+                        	<div class="btn-group">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+                               	新建<span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/add" data-url="html/logistics/billOutStore/billOutStoreCreate.html" id="btnNew">调拨</a></li>
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/borrow/add" data-url="html/logistics/billOutStore/billOutStore4BorrowCreate.html" id="btnBorrow">借货</a></li>
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/return/add" data-url="html/logistics/billOutStore/billOutStore4ReturnCreate.html" id="btnReturn">还货</a></li>
+                              </ul>
+                            </div>  
+                        	
+                            <div class="btn-group  ml10">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+                               	导出 <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/excel/billOutStore.xls" id="btnExport">导出单据</a></li>
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/excel/billOutStoreDtl.xls" id="btnExportDtl">导出单据明细</a></li>
+                                <li><a href="javascript:" data-permissionUrl="/billOutStore/excel/billOutStorePickDtl.xls" id="btnExportPickDtl">导出单据拣货明细</a></li>
+                              </ul>
+                            </div> 
+                            
+                            <div class="btn-group">
+                               <button type="button" id="btnBatchSend" data-url="billOutStore/batch/send" 
+                            		 data-permissionUrl="/billOutStore/batch/send" class="btn btn-primary btn-sm ml10 mr20">批量送货</button>
+                            </div>     
+                            <div class="btn-group">
+                               <button type="button" id="btnBatchPrint" data-url="html/logistics/billOutStore/billOutStoreListPrint.html" 
+                            		 class="btn btn-primary btn-sm ml10 mr20">送货单打印</button>
+                            </div>                                
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="billOutStore/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+  	    var id = row.id;
+  	    layer.confirm('确定要删除吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	    	GLOBAL.ajax("billOutStore/delete", {ids: id}, function(){
+  	    		layer.msg("删除成功", {
+  	                icon: 1
+  	            })
+  	            $("#btnSearch").click();
+  	    	})
+  	    }, function() {});
+    },
+    'click .submit': function (e, value, row, index) {
+  		var id = row.id;
+  	    if(id){
+  	    	layer.confirm('确定要提交吗？', {
+  		        btn: ['确定', '取消'] //按钮
+  		    }, function() {
+  		         GLOBAL.ajax("billOutStore/submit", {id: id}, function(e) {
+  	                if (e.success) {
+  	                    layer.msg("提交成功！");
+  	                    $("#btnSearch").click();
+  	                } else {
+  	                    layer.msg(e.msg);
+  	                }
+  	            });
+  		    }, function() {});
+  	    }
+    },
+    'click .edit': function (e, value, row, index) {
+  		var id = row.id;
+  		options.param.id = id;
+        options.param.projectId = row.projectId;
+  		GLOBAL.go("html/logistics/billOutStore/billOutStoreEdit.html", options.param);
+    },
+    'click .scan': function (e, value, row, index) {
+    	var id = row.id;
+  		options.param.id = id;
+        options.param.projectId = row.projectId; 
+        options.param.billNo = row.billNo;
+        options.param.status = row.status;
+  		GLOBAL.go("html/logistics/billOutStore/billOutStoreScan.html", options.param);
+    },
+    'click .send': function (e, value, row, index) {
+  		var id = row.id;
+  	    if(id){
+  	    	layer.confirm('确定要送货吗？', {
+  		        btn: ['确定', '取消'] //按钮
+  		    }, function() {
+  		 	    GLOBAL.ajax("billOutStore/send", {id: id}, function(e) {
+  		        	if (e.success) {
+  		              	layer.msg("送货成功！");
+  		              	$("#btnSearch").click();
+  		            } else {
+  		                layer.msg(e.msg);
+  		            }
+  		        });
+  		    }, function() {});
+  	    }
+    },
+    'click .reject': function (e, value, row, index) {
+  		var id = row.id;
+  	    if(id){
+  	    	layer.confirm('确定要驳回吗？', {
+  		        btn: ['确定', '取消'] //按钮
+  		    }, function() {
+  		 	    GLOBAL.ajax("billOutStore/reject", {id: id}, function(e) {
+  		        	if (e.success) {
+  		              	layer.msg("驳回成功！");
+  		              	$("#btnSearch").click();
+  		            } else {
+  		                layer.msg(e.msg);
+  		            }
+  		        });
+  		    }, function() {});
+  	    }
+    },
+    'click .print': function(e, value, row, index){
+		if(row){
+			var id = row.id;
+	        options.param.projectId = row.projectId;
+			window.open("html/logistics/billOutStore/billOutStorePrint.html?id="+id);
+		}
+    },
+    'click .printPick': function(e, value, row, index){
+		if(row){
+			var id = row.id;
+	        options.param.projectId = row.projectId;
+			window.open("html/logistics/billOutStore/billOutStorePickPrint.html?id="+id);
+		}
+    }
+    
+};
+
+/*数据表格*/
+var tabCols = [
+	 {
+        field: 'checkItem',
+        checkbox: true
+   	 }, {  
+	     title: '序号',
+	     field: 'columnsNumber'  
+     }, {
+	     title: '出库编号',
+	     field: 'billNo',
+	     align: 'center'
+	 }, {
+	     title: '出库附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '出库类型',
+	     field: 'billTypeName',
+	     align: 'center'
+	 }, {
+	     title: '要求发货日期',
+	     field: 'requiredSendDate',
+	     align: 'center'
+	 }, {
+	     title: '送货日期',
+	     field: 'sendDate',
+	     align: 'center'
+	 }, {
+	     title: '销售单号',
+	     field: 'billDeliveryNo',
+	     align: 'center'
+	 }, {
+	     title: '采购退货单号',
+	     field: 'poReturnNo',
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'warehouseName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '发货数量',
+	     field: 'sendNum',
+	     align: 'center'
+	 }, {
+	     title: '拣货数量',
+	     field: 'pickupNum',
+	     align: 'center'
+	 }, {
+	     title: '发货金额',
+	     field: 'sendAmountStr',
+	     align: 'center'
+	 } , {
+	     title: '拣货金额',
+	     field: 'pickupAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+	     title: '运输方式',
+	     field: 'transferModeName',
+	     align: 'center'
+	 }, {
+	     title: '出库时间',
+	     field: 'deliverTime',
+	     align: 'center'
+	 }, {
+	     title: '出库人',
+	     field: 'deliverer',
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'statusName',
+	     align: 'center'
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents 
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+
+  	//还原查询条件及过滤后的数据
+  	GLOBAL.restoreQuery($('#js_dataTable')); 
+  
+	$("#js_form_datetimeStartRequiredSend,#js_form_datetimeEndRequiredSend,#js_form_datetimeStartSend,#js_form_datetimeEndSend").datetimepicker({format:"Y-m-d", timepicker:false});
+//  去除权限控制
+// 	var displayValue = $("#btnBatchSend").css("display");
+// 	if (displayValue == 'none') {
+// 		$('#js_dataTable').bootstrapTable('hideColumn', 'checkItem');
+// 	} else {
+// 		$('#js_dataTable').bootstrapTable('showColumn', 'checkItem');
+// 	}
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+$("#btnBorrow").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+$("#btnReturn").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+$("#btnBatchSend").click(function() {
+    var ids = GLOBAL.selectIds($('#js_dataTable'));
+  	var url = $(this).data("url");
+	if (ids) {
+  	    layer.confirm('确定要批量送货吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	  	    GLOBAL.ajax(url, {ids: ids}, function(e) {
+  	        	if (e.success) {
+  	            	layer.msg("批量送货成功！");
+  	                $('#js_dataTable').bootstrapTable('refresh');
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {});   
+	}
+})
+
+$("#btnBatchPrint").click(function(){
+    var data = $("#js_dataTable").bootstrapTable("getAllSelections");
+	if(data.length == 0){
+		layer.msg("请选择出库单");
+		return false;
+	}
+	 var row=data[0];// 取第一条数据
+	  var  checkType=true;
+	 for(var i=0; i<data.length;  i++){
+		  if(row.businessId  != data[i].businessId){
+			  layer.msg("出库单编号为"+data[i].billNo+"与当前选择的经营单位不一致");
+			  checkType=false;
+		  }
+		  if(row.projectId !=data[i].projectId){
+			  layer.msg("出库单编号为"+data[i].billNo+"与当前选择的项目不一致");
+			  checkType=false;
+		  }
+		  if(row.customerId  != data[i].customerId){
+			  layer.msg("出库单编号为"+data[i].billNo+"与当前选择的供应商不一致");
+			  checkType= false;
+		  }
+		  if(row.status != 5 ||　data[i].status !=5){
+			  layer.msg("出库单编号为"+data[i].billNo+"的出库状态有误");
+			  checkType= false;
+		  }
+	 }
+	 if(checkType == true){
+		var ids=[];
+			$("#js_dataTable tr").each(function() {
+				var cb = $(this).find("input[name='btSelectItem']");
+				if (cb.prop("checked")) {
+					var id = $(this).data("uniqueid");
+					ids.push(id);
+				}
+			});
+			if (ids.length == 0) {
+				layer.msg("请选择出库单");
+				return false;
+			}
+			options.param.ids = ids;
+			var url = $(this).data("url")+ "?ids=" + ids;
+		    window.open(url);  
+	 }
+});
+
+
+function getCondition() {
+	return "?" + $("#searchForm").serialize();
+	/**
+	return "?projectId=" + $("#projectId").val() 
+		+ "&warehouseId=" + $("#warehouseId").val()
+		+ "&customerId=" + $("#customerId").val()
+		+ "&billNo=" + $("#billNo").val()
+		+ "&affiliateNo=" + $("#affiliateNo").val()
+		+ "&startRequiredSendDate=" + $("#js_form_datetimeStartRequiredSend").val()
+		+ "&endRequiredSendDate=" + $("#js_form_datetimeEndRequiredSend").val()
+		+ "&startSendDate=" + $("#js_form_datetimeStartSend").val()
+		+ "&endSendDate=" + $("#js_form_datetimeEndSend").val()
+		+ "&goodsNumber=" + $("#goodsNumber").val()
+		+ "&goodsBarCode=" + $("#goodsBarCode").val()
+		+ "&goodsName=" + $("#goodsName").val()
+		+ "&goodsType=" + $("#goodsType").val()
+		+ "&billType=" + $("#billType").val()
+		+ "&transferMode=" + $("#transferMode").val()
+		+ "&status=" + $("#status").val()
+		+ "&billDeliveryNo=" + $("#billDeliveryNo").val();
+	**/
+}
+
+$("#btnExport").click(function() {
+    var count_url = "billOutStore/excel/billOutStore/count";
+    var data = $("#searchForm").serializeObject();
+	var url = "billOutStore/excel/billOutStore.xls";
+	url = url + getCondition();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$("#btnExportDtl").click(function() {
+    var count_url = "billOutStore/excel/billOutStoreDtl/count";
+    var data = $("#searchForm").serializeObject();
+	var url = "billOutStore/excel/billOutStoreDtl.xls";
+	url = url + getCondition();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$("#btnExportPickDtl").click(function() {
+    var count_url = "billOutStore/excel/billOutStorePickDtl/count";
+    var data = $("#searchForm").serializeObject();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	var url = "billOutStore/excel/billOutStorePickDtl.xls";
+        	url = url + getCondition();
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+</script>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsOutPoRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsOutPoRel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pms_out_id" jdbcType="INTEGER" property="pmsOutId" />
+		<result column="po_id" jdbcType="INTEGER" property="poId" />
+		<result column="po_line_id" jdbcType="INTEGER" property="poLineId" />
+		<result column="out_number" jdbcType="DECIMAL" property="outNumber" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pms_out_id, po_id, create_at, is_delete,
+		update_at,out_number,po_line_id
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_out_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_pms_out_po_rel
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertPmsOutPoRel" parameterType="com.scfs.domain.api.pms.entity.PmsOutPoRel">
+		insert into tb_pms_out_po_rel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="pmsOutId != null">
+				pms_out_id,
+			</if>
+			<if test="poId != null">
+				po_id,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="outNumber != null">
+				out_number,
+			</if>
+			<if test="poLineId != null">
+				po_line_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="pmsOutId != null">
+				#{pmsOutId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				#{poId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="outNumber != null">
+				IFNULL(#{outNumber,jdbcType=DECIMAL},0),
+			</if>
+			<if test="poLineId != null">
+				#{poLineId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.api.pms.entity.PmsOutPoRel">
+		update tb_pms_out_po_rel
+		<set>
+			<if test="pmsOutId != null">
+				pms_out_id = #{pmsOutId,jdbcType=INTEGER},
+			</if>
+			<if test="poId != null">
+				po_id = #{poId,jdbcType=INTEGER},
+			</if>
+			<if test="poLineId != null">
+				po_line_id = #{poLineId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.api.pms.entity.PmsOutPoRel">
+		update
+		tb_pms_out_po_rel
+		set pms_out_id = #{pmsOutId,jdbcType=INTEGER},
+		po_id =
+		#{poId,jdbcType=INTEGER},
+		po_line_id = #{poLineId,jdbcType=INTEGER},
+		create_at = #{createAt,jdbcType=TIMESTAMP},
+		is_delete =
+		#{isDelete,jdbcType=TINYINT},
+		update_at =
+		#{updateAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

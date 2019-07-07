@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.pay.PayPoolDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayPool">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="in_out" jdbcType="TINYINT" property="inOut" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="amount" jdbcType="DECIMAL" property="amount" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="creater_id" jdbcType="INTEGER" property="createrId" />
+		<result column="creater_at" jdbcType="TIMESTAMP" property="createrAt" />
+		<result column="creater" jdbcType="VARCHAR" property="creater" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="deleter_id" jdbcType="INTEGER" property="deleterId" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, business_unit_id, account_id, project_id, in_out, type,
+		bill_id,
+		bill_type, bill_no,
+		amount, currency_type, deleter, delete_at,
+		creater_id, creater_at, creater,
+		remark,
+		deleter_id, is_delete,
+		update_at
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_pool
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryAndLockById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_pool
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_pay_pool
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayPool"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pay_pool (id,
+		business_unit_id, account_id,
+		project_id, in_out, type,
+		bill_id,
+		bill_type, bill_no,
+		amount, currency_type, deleter,
+		delete_at,
+		creater_id, creater_at,
+		creater, remark, deleter_id, update_at)
+		values
+		(#{id,jdbcType=INTEGER}, #{businessUnitId,jdbcType=INTEGER},
+		#{accountId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{inOut,jdbcType=TINYINT}, #{type,jdbcType=TINYINT},
+		#{billId,jdbcType=INTEGER}, #{billType,jdbcType=TINYINT},
+		#{billNo,jdbcType=VARCHAR},
+		#{amount,jdbcType=DECIMAL},
+		#{currencyType,jdbcType=TINYINT}, #{deleter,jdbcType=VARCHAR},
+		#{deleteAt,jdbcType=TIMESTAMP}, #{createrId,jdbcType=INTEGER},
+		#{createrAt,jdbcType=TIMESTAMP},
+		#{creater,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}, #{deleterId,jdbcType=INTEGER},
+		#{updateAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayPool">
+		update tb_pay_pool
+		<set>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="accountId != null">
+				account_id = #{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="inOut != null">
+				in_out = #{inOut,jdbcType=TINYINT},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createrId != null">
+				creater_id = #{createrId,jdbcType=INTEGER},
+			</if>
+			<if test="createrAt != null">
+				creater_at = #{createrAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creater != null">
+				creater = #{creater,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="deleterId != null">
+				deleter_id = #{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

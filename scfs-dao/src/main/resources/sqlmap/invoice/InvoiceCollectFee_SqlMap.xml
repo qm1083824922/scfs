@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceCollectFeeDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceCollectFee">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="collect_id" property="collectId" jdbcType="INTEGER" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="in_rate_amount" property="inRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="ex_rate_amount" property="exRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="rate_amount" property="rateAmount" jdbcType="DECIMAL" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+
+
+	</resultMap>
+
+	<resultMap type="com.scfs.domain.invoice.entity.InvoiceCollectFee"
+		id="ModoleResultMap" extends="BaseResultMap">
+		<result column="fee_no" property="feeNo" jdbcType="VARCHAR" />
+		<result column="fee_type" property="feeType" jdbcType="TINYINT" />
+		<result column="pay_fee_spec" property="payFeeSpec" jdbcType="TINYINT" />
+		<result column="pay_date" property="payDate" jdbcType="DATE" />
+		<result column="accept_invoice_tax_rate" property="acceptInvoiceTaxRate"
+			jdbcType="DECIMAL" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="blance" property="blance" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		collect_id,
+		fee_id,
+		in_rate_amount,
+		ex_rate_amount,
+		tax_rate,
+		rate_amount,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectFeeReqDto"
+		resultMap="ModoleResultMap">
+		select
+		r.id,
+		r.collect_id,
+		r.fee_id,
+		r.in_rate_amount,
+		r.ex_rate_amount,
+		r.tax_rate,
+		r.rate_amount,
+		r.remark,
+		r.creator_id,
+		r.creator,
+		r.create_at,
+		r.is_delete,
+		f.fee_no,
+		f.fee_type,
+		f.pay_fee_spec,
+		f.pay_date,
+		f.accept_invoice_tax_rate,
+		f.pay_amount,
+		f.pay_amount-f.accept_invoice_amount blance
+		FROM tb_invoice_collect_fee
+		r
+		LEFT JOIN tb_fee f ON r.fee_id = f.id
+		where r.is_delete=0
+		<if test="collectId != null">
+			and r.collect_id = #{collectId}
+		</if>
+		order by r.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryInvoiceCollectFeeById" resultMap="ModoleResultMap"
+		parameterType="java.lang.Integer">
+		select
+		r.id,
+		r.collect_id,
+		r.fee_id,
+		r.in_rate_amount,
+		r.ex_rate_amount,
+		r.tax_rate,
+		r.rate_amount,
+		r.remark,
+		r.creator_id,
+		r.creator,
+		r.create_at,
+		r.is_delete,
+		f.fee_no,
+		f.fee_type,
+		f.pay_fee_spec,
+		f.pay_date,
+		f.accept_invoice_tax_rate,
+		f.pay_amount,
+		f.pay_amount-f.accept_invoice_amount blance
+		FROM
+		tb_invoice_collect_fee
+		r
+		LEFT JOIN tb_fee f ON r.fee_id = f.id
+		where
+		r.id =
+		#{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 获取编辑数据 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_fee
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceCollectFee"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoice_collect_fee
+		(
+		collect_id,
+		fee_id,
+		in_rate_amount,
+		ex_rate_amount,
+		tax_rate,
+		rate_amount,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{collectId,jdbcType=INTEGER},
+		#{feeId,jdbcType=INTEGER},
+		#{inRateAmount,jdbcType=DECIMAL},
+		#{exRateAmount,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{rateAmount,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceCollectFee">
+		update tb_invoice_collect_fee
+		<set>
+			id = #{id}
+			<if test="collectId != null">
+				,collect_id = #{collectId,jdbcType=INTEGER}
+			</if>
+			<if test="feeId != null">
+				, fee_id = #{feeId,jdbcType=INTEGER}
+			</if>
+			<if test="inRateAmount != null">
+				, in_rate_amount = #{inRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="exRateAmount != null">
+				, ex_rate_amount = #{exRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="taxRate != null">
+				, tax_rate = #{taxRate,jdbcType=DECIMAL}
+			</if>
+			<if test="rateAmount != null">
+				, rate_amount = #{rateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="remark = null and remark != ''">
+				, remark = #{remark,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryRateSumByInvoiceCollectId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.invoice.dto.resp.TaxRateSum">
+		select sum(rate_amount) as taxRateSum , tax_rate as taxRate
+		from tb_invoice_collect_fee
+		where collect_id = #{invoice_collect_id}
+		and is_delete = 0
+		group by tax_rate
+	</select>
+
+</mapper>

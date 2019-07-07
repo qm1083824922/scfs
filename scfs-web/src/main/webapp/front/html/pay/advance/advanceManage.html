@@ -1,0 +1,174 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">预收管理</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="custId" name="custId"></select>
+						</div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                         </div>
+                        <div class="search-item">   
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">预收类型：</label>
+                            <select class="form-control js-select" data-url="ADVANCE_TYPE" id="advanceType" name="advanceType"></select>
+						</div>
+                        <div class="search-item">	
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+							<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="advance/manager/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script >
+
+window.operateEvents = {
+      'click .modify': function(e, value, row, index){
+          options.param.id = row.id;
+          GLOBAL.go("html/pay/advance/advanceCheck.html");
+      }
+  };
+function operateFormatter(value, row, index) {
+	if (row.preRecAmount > 0) {
+	    return [
+	            '<a class="modify" href="javascript:void(0)">',
+	            '<span class="btn btn-primary btn-sm" data-permissionUrl="/advance/manager/edit">核销</span>',
+	            '</a>  '
+	        ].join('');
+	}else {
+		return '';
+	}
+}
+	/*数据表格*/
+	var tabCols = [
+		{
+			title : '项目',
+			field : 'projectName',
+			width : 80,
+			align : 'center'
+		},
+		{
+			title : '客户',
+			field : 'custName',
+			width : 210,
+			align : 'center'
+		},
+		{
+			title : '经营单位',
+			field : 'busiUnit',
+			width : 100,
+			align : 'center'
+		},
+		{
+			title : '预收类型',
+			field : 'advanceTypeName',
+			width : 70,
+			align : 'center'
+		},
+		{
+			title : '币种',
+			field : 'currencyTypeName',
+			width : 70,
+			align : 'center'
+		},
+		{
+			title : '可核销余额',
+			field : 'preRecAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '已付金额',
+			field : 'paidAmount',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},
+		{
+			title : '可付金额',
+			field : 'blance',
+			width : 70,
+			align : 'center',
+			formatter : function(value , row , index) {
+				return value==null ? "": value.toThounds();
+		    }
+		},{
+		     title: '创建人',
+		     field: 'creator',
+		     width: 80,
+		     align: 'center'
+		  }, {
+			 title: '创建时间',
+			 field: 'createAt',
+			 width: 80,
+			 align: 'center'
+		  },
+		{
+         title: '操作',
+           field: 'opertaList2',
+           width: 60,
+           align: 'center',
+           events: operateEvents,
+           formatter: operateFormatter
+		} ];
+		
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+		GLOBAL.tableRefresh($('#js_dataTable'), data);
+	})
+
+	options.initPage = function() {
+		var option = {
+				onLoadSuccess : function(data) {
+					if(data.options.totalStr != null){
+						$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+					}
+				},
+				onPostBody: function(){
+	                if($(".modify").length){
+	                    GLOBAL.permissionBtn($(".modify .btn"));
+	                }
+	            }
+			}
+		
+		GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+	   	//还原查询条件及过滤后的数据
+		GLOBAL.restoreQuery($('#js_dataTable')); 
+	};
+
+</script>

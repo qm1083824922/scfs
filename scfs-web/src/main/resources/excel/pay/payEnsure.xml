@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="payEnsureList" var="pay"
+			varType="com.scfs.domain.pay.dto.resq.PayOrderResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">pay.payNo</mapping>
+				<mapping row="2" col="1">pay.attachedNumbe</mapping>
+				<mapping row="2" col="2">pay.mergePayNo</mapping>
+				<mapping row="2" col="3">pay.busiUnit</mapping>
+				<mapping row="2" col="4">pay.projectName</mapping>
+				<mapping row="2" col="5">pay.payTypeName</mapping>
+				<mapping row="2" col="6">pay.currnecyTypeName</mapping>
+				<mapping row="2" col="7">pay.payWayName</mapping>
+				<mapping row="2" col="8">pay.payAmount</mapping>
+				<mapping row="2" col="9">pay.payeeName</mapping>
+				<mapping row="2" col="10">pay.subjectName</mapping>
+				<mapping row="2" col="11">pay.accountNo</mapping>
+				<mapping row="2" col="12">pay.requestPayTime</mapping>
+				<mapping row="2" col="13">pay.paymentAccountName</mapping>
+				<mapping row="2" col="14">pay.realPayAmount</mapping>
+				<mapping row="2" col="15">pay.bankCharge</mapping>
+				<mapping row="2" col="16">pay.confirmorAt</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

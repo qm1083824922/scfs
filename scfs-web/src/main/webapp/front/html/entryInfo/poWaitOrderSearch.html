@@ -1,0 +1,140 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>业务指标</li>
+            <li class="active">待到货PO单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <form method="post" action="###" class="form-inline" id="searchForm">
+                            <div class="form-group-sm">
+                            	<div class="search-item">
+		                        	<label class="control-label">所属部门：</label>
+		                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+		                        </div>
+		                        <div class="search-item">    
+	                            	<label class="control-label ml10">项目：</label>
+		                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+		                        </div>
+                                <div class="search-item">
+		                            <label class="control-label ml10">供应商：</label>
+		                            <select class="form-control js-select" data-url="SUPPLIER" id="js_supplier" name="supplierId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label ml10">客户：</label>
+		                            <select class="form-control js-select" data-url="CUSTOMER" id="js_customer" name="customerId"></select>
+		                        </div>
+		                        <div class="search-item">
+		                            <label class="control-label">单据日期：</label>
+		                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startOrderTime"> -
+		                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endOrderTime">
+		                        </div>
+                                <div class="search-item">	
+                                	<label class="control-label ml10">合计：</label>
+                            		<select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                                    <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                    <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                                    <button type="button" id="back" data-url="html/entry.html" class="btn btn-default btn-sm js-back">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="js_dataTable" data-url="poWaitOrder/query">
+                        </table>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{  
+			     title: '序号',
+			     field: 'columnsNumber',  
+			     width: 10
+            },{
+				title : '部门',
+				field : 'departmentName',
+				width : 100,
+				align : 'center'
+			},{
+			     title: '项目',
+			     field: 'projectName',
+			     width: 100,
+			     align: 'center'
+			}, {
+				 title: '供应商',
+				 field: 'supplierName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '客户',
+				 field: 'customerName',
+				 width: 80,
+				 align: 'center'
+		    }, {
+				 title: '仓库',
+				 field: 'warehouseName',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '单据编号',
+				 field: 'orderNo',
+				 width: 60,
+				 align: 'center'
+			}, {
+				 title: '单据日期',
+				 field: 'orderTime',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '未到货金额',
+				 field: 'poAmount',
+				 width: 100,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '汇率',
+				 field: 'cnyRate',
+				 width: 80,
+				 align: 'center'
+			}
+	 ];
+	
+	options.initPage = function() {
+		var option = {
+				onLoadSuccess : function(data) {
+					if(data.options.totalStr != null){
+						$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+					}
+				}
+			}
+		
+		GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+	   	//还原查询条件及过滤后的数据
+		//GLOBAL.restoreQuery($('#js_dataTable')); 
+	};
+	
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	});
+	 GLOBAL.goBack();
+</script>

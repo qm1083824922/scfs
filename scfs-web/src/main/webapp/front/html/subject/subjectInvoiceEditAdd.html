@@ -1,0 +1,100 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>基础信息</li>
+        <li>开票信息编辑</li>
+        <li class="active">添加</li>
+    </ol>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="subjectId" name="subjectId">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>纳税人识别号：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" style="width:350px" type="text" id="taxPayer" name="taxPayer" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>开户银行：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" style="width:350px" type="text" id="bankName" name="bankName" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>开户账号：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" style="width:350px" type="text" id="accountNo" name="accountNo" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>开票地址：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" style="width:350px" type="text" id="address" name="address" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>开票电话：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" style="width:350px" type="text" id="phoneNumber" name="phoneNumber" required>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-url="baseSubject/invoice/add" data-permissionUrl="/baseSubject/invoice/add" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" data-url="html/subject/subjectInvoiceEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    $("#subjectId").val(options.param.id);
+
+    $("#form1").validate({
+        rules: {
+            taxPayer: {
+                required: true
+            },
+            bankName: {
+                required: true
+            },
+            accountNo: {
+                required: true
+            },
+            address: {
+                required: true
+            },
+            phoneNumber: {
+                required: true
+            }
+        },
+        submitHandler: function() {
+            var data = $("#form1").serialize();
+            GLOBAL.ajax("baseSubject/invoice/add", data, function(e) {
+                if (e.success) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        GLOBAL.go("html/subject/subjectInvoiceEdit.html");
+                    })
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        }
+    });
+
+};
+
+GLOBAL.goBack(function() {
+    options.param.id = options.param.cid;
+});
+</script>

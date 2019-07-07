@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectItemDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.project.entity.ProjectItem">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="item_no" jdbcType="VARCHAR" property="itemNo" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="start_date" jdbcType="DATE" property="startDate" />
+		<result column="end_date" jdbcType="DATE" property="endDate" />
+		<result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+		<result column="amount_currency" jdbcType="TINYINT" property="amountCurrency" />
+		<result column="is_fund_account" jdbcType="TINYINT" property="isFundAccount" />
+		<result column="fund_account_period" jdbcType="INTEGER"
+			property="fundAccountPeriod" />
+		<result column="fund_month_rate" jdbcType="DECIMAL" property="fundMonthRate" />
+		<result column="day_penal_rate" jdbcType="DECIMAL" property="dayPenalRate" />
+		<result column="penal_grace_period" jdbcType="INTEGER"
+			property="penalGracePeriod" />
+		<result column="is_operate_account" jdbcType="TINYINT"
+			property="isOperateAccount" />
+		<result column="operate_fee_type" jdbcType="TINYINT" property="operateFeeType" />
+		<result column="operate_fee_rate" jdbcType="DECIMAL" property="operateFeeRate" />
+		<result column="client_check_day" jdbcType="TINYINT" property="clientCheckDay" />
+		<result column="supplier_check_day" jdbcType="TINYINT"
+			property="supplierCheckDay" />
+		<result column="pay_currency" jdbcType="TINYINT" property="payCurrency" />
+		<result column="receive_currency" jdbcType="TINYINT" property="receiveCurrency" />
+		<result column="pay_rate" jdbcType="DECIMAL" property="payRate" />
+		<result column="is_agency_export" jdbcType="TINYINT" property="isAgencyExport" />
+		<result column="agency_export_rate" jdbcType="DECIMAL"
+			property="agencyExportRate" />
+		<result column="account_rate_type" jdbcType="TINYINT" property="accountRateType" />
+		<result column="account_rate" jdbcType="DECIMAL" property="accountRate" />
+		<result column="paypal_account" jdbcType="VARCHAR" property="paypalAccount" />
+		<result column="paypal_account_type" jdbcType="TINYINT"
+			property="paypalAccountType" />
+		<result column="paypal_days" jdbcType="INTEGER" property="paypalDays" />
+		<result column="paypal_fixday_type" jdbcType="TINYINT"
+			property="paypalFixdayType" />
+		<result column="paypal_fixday" jdbcType="INTEGER" property="paypalFixday" />
+		<result column="paypal_amount" jdbcType="DECIMAL" property="paypalAmount" />
+		<result column="paypal_amount_currency" jdbcType="TINYINT"
+			property="paypalAmountCurrency" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="contacts" jdbcType="VARCHAR" property="contacts" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="fax" jdbcType="VARCHAR" property="fax" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="client_address" jdbcType="VARCHAR" property="clientAddress" />
+		<result column="client_contacts" jdbcType="VARCHAR" property="clientContacts" />
+		<result column="client_phone" jdbcType="VARCHAR" property="clientPhone" />
+		<result column="client_fax" jdbcType="VARCHAR" property="clientFax" />
+		<result column="client_email" jdbcType="VARCHAR" property="clientEmail" />
+		<result column="supplier_address" jdbcType="VARCHAR" property="supplierAddress" />
+		<result column="supplier_contacts" jdbcType="VARCHAR" property="supplierContacts" />
+		<result column="supplier_phone" jdbcType="VARCHAR" property="supplierPhone" />
+		<result column="supplier_fax" jdbcType="VARCHAR" property="supplierFax" />
+		<result column="supplier_email" jdbcType="VARCHAR" property="supplierEmail" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="operate_rate" jdbcType="DECIMAL" property="operaterate" />
+		<result column="project_check_date" jdbcType="TINYINT"
+			property="projectcheckdate" />
+		<result column="agency_import_rate" jdbcType="DECIMAL"
+			property="agencyimportrate" />
+		<result column="is_agency_import" jdbcType="TINYINT" property="isagencyimport" />
+		<result column="file" jdbcType="TINYINT" property="file" />
+		<result column="fixed_points" jdbcType="TINYINT" property="fixedpoints" />
+		<result column="spread_fixed_points" jdbcType="DECIMAL"
+			property="spreadfixedpoints" />
+		<result column="business_type" jdbcType="VARCHAR" property="businessType" />
+		<result column="project_check_type" jdbcType="TINYINT"
+			property="projectchecktype" />
+		<result column="client_check_type" jdbcType="TINYINT" property="clientchecktype" />
+		<result column="supplier_check_type" jdbcType="TINYINT"
+			property="supplierchecktype" />
+		<result column="bank_id" jdbcType="TINYINT" property="bankId" />
+		<result column="account_method" jdbcType="TINYINT" property="accountMethod" />
+		<result column="min_sale_day" jdbcType="INTEGER" property="minSaleDay" />
+		<result column="sign_standard" jdbcType="TINYINT" property="signStandard" />
+		<result column="certificate_id" jdbcType="VARCHAR" property="certificateId" />
+		<result column="certificate_name" jdbcType="VARCHAR" property="certificateName" />
+		<result column="official_seal" jdbcType="VARCHAR" property="officialSeal" />
+		<result column="single_amount" jdbcType="DECIMAL" property="singleAmount" />
+		<result column="library_age" jdbcType="INTEGER" property="libraryAge" />
+		<result column="day_rules" jdbcType="INTEGER" property="dayRules" />
+		<result column="settle_type" jdbcType="INTEGER" property="settleType" />
+		<result column="paypal_calc_type" jdbcType="INTEGER" property="paypalCalcType" />
+
+		<result column="client_check_week" jdbcType="TINYINT" property="clientCheckWeek" />
+		<result column="supplier_check_week" jdbcType="TINYINT"
+			property="supplierCheckWeek" />
+		<result column="project_check_week" jdbcType="TINYINT"
+			property="projectCheckWeek" />
+		<result column="pay_audit_type" jdbcType="VARCHAR" property="payAuditType" />
+
+		<result column="pay_cycle" jdbcType="TINYINT" property="payCycle" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		item.id, item.item_no, item.project_id,
+		item.business_unit_id,
+		item.start_date, item.end_date,
+		item.customer_id,
+		item.total_amount, item.amount_currency,
+		item.is_fund_account, item.fund_account_period,
+		item.fund_month_rate,
+		item.day_penal_rate, item.penal_grace_period, item.is_operate_account,
+		item.operate_fee_type, item.operate_fee_rate,
+		item.client_check_day,
+		item.supplier_check_day, item.pay_currency, item.receive_currency,
+		item.pay_rate, item.is_agency_export,
+		item.agency_export_rate,
+		item.account_rate_type, item.account_rate, item.paypal_account,
+		item.paypal_account_type,
+		item.paypal_days, item.paypal_fixday_type,
+		item.paypal_fixday, item.paypal_amount,
+		item.paypal_amount_currency,
+		item.address, item.contacts, item.phone, item.fax, item.email,
+		item.client_address,
+		item.client_contacts, item.client_phone,
+		item.client_fax, item.client_email, item.supplier_address,
+		item.supplier_contacts,
+		item.supplier_phone, item.supplier_fax,
+		item.supplier_email, item.remark, item.creator, item.deleter,
+		item.create_at,
+		item.update_at, item.delete_at, item.status,
+		item.is_delete, item.business_type, item.operate_rate,
+		item.project_check_date,
+		item.agency_import_rate, item.account_method,
+		item.is_agency_import, item.file,
+		item.fixed_points,item.spread_fixed_points,item.project_check_type,item.client_check_type,item.supplier_check_type,item.bank_id,
+		item.min_sale_day,item.official_seal,item.certificate_name,item.certificate_id,item.sign_standard,item.single_amount,library_age,item.day_rules,item.settle_type,
+		item.paypal_calc_type,item.client_check_week,item.supplier_check_week,item.project_check_week,
+		item.pay_audit_type,item.pay_cycle
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item item
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryProjectItemResultsByMutCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSearchReqDto">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from tb_project_item item inner join tb_base_user_project tbup on
+		item.project_id = tbup.project_id
+		<where>
+			item.is_delete = 0 AND
+			tbup.user_id = #{userId} AND tbup.state = 1
+			<if test="projectId != null">
+				AND item.project_id =#{projectId}
+			</if>
+			<if test="status != null">
+				AND item.status != #{status}
+			</if>
+		</where>
+	</select>
+	<select id="queryAllProjectItem" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_project_item item
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                item.update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryProjectItemResultsByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSearchReqDto">
+		select DISTINCT
+		<include refid="Base_Column_List" />
+		from tb_project_item item inner join tb_base_user_project userPro on
+		item.project_id=userPro.project_id
+		<where>
+			item.is_delete = 0 AND
+			userPro.state = 1
+			<if test="userId != null">
+				AND userPro.user_id =#{userId}
+			</if>
+			<if test="projectId != null">
+				AND item.project_id =#{projectId}
+			</if>
+			<if test="businessUnitId != null">
+				AND item.business_unit_id =#{businessUnitId}
+			</if>
+			<if test="itemNo != null">
+				AND item.item_No like CONCAT('%',#{itemNo},'%')
+			</if>
+			<if test="status != null">
+				AND item.status = #{status}
+			</if>
+			<if test="scheduleFlag!=null and scheduleFlag==1">
+				AND (item.status = 5 OR item.status = 6)
+			</if>
+		</where>
+		order by item.create_at desc
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_project_item
+	</select>
+	<select id="sumPoTitle" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSearchReqDto">
+		select SUM(item.total_amount) total_amount ,item.amount_currency
+		from
+		tb_project_item item inner join tb_base_user_project userPro on
+		item.project_id=userPro.project_id
+		<where>
+			item.is_delete = 0 AND
+			userPro.state = 1 AND
+			userPro.user_id =#{userId}
+			<if test="projectId != null">
+				AND item.project_id =#{projectId}
+			</if>
+			<if test="businessUnitId != null">
+				AND item.business_unit_id =#{businessUnitId}
+			</if>
+			<if test="itemNo != null">
+				AND item.item_No like CONCAT('%',#{itemNo},'%')
+			</if>
+			<if test="status != null">
+				AND item.status = #{status}
+			</if>
+		</where>
+		GROUP BY item.amount_currency
+	</select>
+	<select id="queryProjectItemByProjectId" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item item WHERE item.is_delete = 0 AND item.project_id
+		=#{projectId} AND item.status = #{status}
+		order by item.create_at desc
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectItem"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="itemNo != null">
+				item_no,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id,
+			</if>
+			<if test="startDate != null">
+				start_date,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="amountCurrency != null">
+				amount_currency,
+			</if>
+			<if test="isFundAccount != null">
+				is_fund_account,
+			</if>
+			<if test="fundAccountPeriod != null">
+				fund_account_period,
+			</if>
+			<if test="fundMonthRate != null">
+				fund_month_rate,
+			</if>
+			<if test="dayPenalRate != null">
+				day_penal_rate,
+			</if>
+			<if test="penalGracePeriod != null">
+				penal_grace_period,
+			</if>
+			<if test="isOperateAccount != null">
+				is_operate_account,
+			</if>
+			<if test="operateFeeType != null">
+				operate_fee_type,
+			</if>
+			<if test="operateFeeRate != null">
+				operate_fee_rate,
+			</if>
+			<if test="clientCheckDay != null">
+				client_check_day,
+			</if>
+			<if test="supplierCheckDay != null">
+				supplier_check_day,
+			</if>
+			<if test="payCurrency != null">
+				pay_currency,
+			</if>
+			<if test="receiveCurrency != null">
+				receive_currency,
+			</if>
+			<if test="payRate != null">
+				pay_rate,
+			</if>
+			<if test="isAgencyExport != null">
+				is_agency_export,
+			</if>
+			<if test="agencyExportRate != null">
+				agency_export_rate,
+			</if>
+			<if test="accountRateType != null">
+				account_rate_type,
+			</if>
+			<if test="accountRate != null">
+				account_rate,
+			</if>
+			<if test="paypalAccount != null">
+				paypal_account,
+			</if>
+			<if test="paypalAccountType != null">
+				paypal_account_type,
+			</if>
+			<if test="paypalDays != null">
+				paypal_days,
+			</if>
+			<if test="paypalFixdayType != null">
+				paypal_fixday_type,
+			</if>
+			<if test="paypalFixday != null">
+				paypal_fixday,
+			</if>
+			<if test="paypalAmount != null">
+				paypal_amount,
+			</if>
+			<if test="paypalAmountCurrency != null">
+				paypal_amount_currency,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="contacts != null">
+				contacts,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="fax != null">
+				fax,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="clientAddress != null">
+				client_address,
+			</if>
+			<if test="clientContacts != null">
+				client_contacts,
+			</if>
+			<if test="clientPhone != null">
+				client_phone,
+			</if>
+			<if test="clientFax != null">
+				client_fax,
+			</if>
+			<if test="clientEmail != null">
+				client_email,
+			</if>
+			<if test="supplierAddress != null">
+				supplier_address,
+			</if>
+			<if test="supplierContacts != null">
+				supplier_contacts,
+			</if>
+			<if test="supplierPhone != null">
+				supplier_phone,
+			</if>
+			<if test="supplierFax != null">
+				supplier_fax,
+			</if>
+			<if test="supplierEmail != null">
+				supplier_email,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="deleter != null">
+				deleter,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="deleteAt != null">
+				delete_at,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="businessType != null">
+				business_type,
+			</if>
+			<if test="operaterate != null">
+				operate_rate,
+			</if>
+			<if test="projectcheckdate != null">
+				project_check_date,
+			</if>
+			<if test="agencyimportrate != null">
+				agency_import_rate,
+			</if>
+			<if test="isagencyimport != null">
+				is_agency_import,
+			</if>
+			<if test="file != null">
+				file,
+			</if>
+			<if test="fixedpoints != null">
+				fixed_points,
+			</if>
+			<if test="spreadfixedpoints != null">
+				spread_fixed_points,
+			</if>
+			<if test="projectchecktype != null">
+				project_check_type,
+			</if>
+			<if test="clientchecktype != null">
+				client_check_type,
+			</if>
+			<if test="supplierchecktype != null">
+				supplier_check_type,
+			</if>
+			<if test="bankId != null">
+				bank_id,
+			</if>
+			<if test="accountMethod != null">
+				account_method,
+			</if>
+			<if test="minSaleDay != null">
+				min_sale_day,
+			</if>
+			<if test="signStandard != null">
+				sign_standard,
+			</if>
+			<if test="certificateId != null">
+				certificate_id,
+			</if>
+			<if test="certificateName != null">
+				certificate_name,
+			</if>
+			<if test="officialSeal != null">
+				official_seal,
+			</if>
+			<if test="singleAmount != null">
+				single_amount,
+			</if>
+			<if test="libraryAge != null">
+				library_age,
+			</if>
+			<if test="dayRules != null">
+				day_rules,
+			</if>
+			<if test="settleType != null">
+				settle_type,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="paypalCalcType != null">
+				paypal_calc_type,
+			</if>
+			<if test="clientCheckWeek != null">
+				client_check_week,
+			</if>
+			<if test="supplierCheckWeek != null">
+				supplier_check_week,
+			</if>
+			<if test="projectCheckWeek != null">
+				project_check_week,
+			</if>
+			<if test="payAuditType != null">
+				pay_audit_type,
+			</if>
+			<if test="payCycle != null">
+				pay_cycle,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="itemNo != null">
+				#{itemNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				#{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="startDate != null">
+				#{startDate,jdbcType=DATE},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=DATE},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="amountCurrency != null">
+				#{amountCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="isFundAccount != null">
+				#{isFundAccount,jdbcType=TINYINT},
+			</if>
+			<if test="fundAccountPeriod != null">
+				#{fundAccountPeriod,jdbcType=INTEGER},
+			</if>
+			<if test="fundMonthRate != null">
+				#{fundMonthRate,jdbcType=DECIMAL},
+			</if>
+			<if test="dayPenalRate != null">
+				#{dayPenalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="penalGracePeriod != null">
+				#{penalGracePeriod,jdbcType=INTEGER},
+			</if>
+			<if test="isOperateAccount != null">
+				#{isOperateAccount,jdbcType=TINYINT},
+			</if>
+			<if test="operateFeeType != null">
+				#{operateFeeType,jdbcType=TINYINT},
+			</if>
+			<if test="operateFeeRate != null">
+				#{operateFeeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="clientCheckDay != null">
+				#{clientCheckDay,jdbcType=TINYINT},
+			</if>
+			<if test="supplierCheckDay != null">
+				#{supplierCheckDay,jdbcType=TINYINT},
+			</if>
+			<if test="payCurrency != null">
+				#{payCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="receiveCurrency != null">
+				#{receiveCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="payRate != null">
+				#{payRate,jdbcType=DECIMAL},
+			</if>
+			<if test="isAgencyExport != null">
+				#{isAgencyExport,jdbcType=TINYINT},
+			</if>
+			<if test="agencyExportRate != null">
+				#{agencyExportRate,jdbcType=DECIMAL},
+			</if>
+			<if test="accountRateType != null">
+				#{accountRateType,jdbcType=TINYINT},
+			</if>
+			<if test="accountRate != null">
+				#{accountRate,jdbcType=DECIMAL},
+			</if>
+			<if test="paypalAccount != null">
+				#{paypalAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="paypalAccountType != null">
+				#{paypalAccountType,jdbcType=TINYINT},
+			</if>
+			<if test="paypalDays != null">
+				#{paypalDays,jdbcType=INTEGER},
+			</if>
+			<if test="paypalFixdayType != null">
+				#{paypalFixdayType,jdbcType=TINYINT},
+			</if>
+			<if test="paypalFixday != null">
+				#{paypalFixday,jdbcType=INTEGER},
+			</if>
+			<if test="paypalAmount != null">
+				#{paypalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="paypalAmountCurrency != null">
+				#{paypalAmountCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="contacts != null">
+				#{contacts,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="fax != null">
+				#{fax,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="clientAddress != null">
+				#{clientAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="clientContacts != null">
+				#{clientContacts,jdbcType=VARCHAR},
+			</if>
+			<if test="clientPhone != null">
+				#{clientPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="clientFax != null">
+				#{clientFax,jdbcType=VARCHAR},
+			</if>
+			<if test="clientEmail != null">
+				#{clientEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierAddress != null">
+				#{supplierAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierContacts != null">
+				#{supplierContacts,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierPhone != null">
+				#{supplierPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierFax != null">
+				#{supplierFax,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierEmail != null">
+				#{supplierEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter != null">
+				#{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				#{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="businessType != null">
+				#{businessType,jdbcType=VARCHAR},
+			</if>
+			<if test="operaterate != null">
+				#{operaterate,jdbcType=DECIMAL},
+			</if>
+			<if test="projectcheckdate != null">
+				#{projectcheckdate,jdbcType=TINYINT},
+			</if>
+			<if test="agencyimportrate != null">
+				#{agencyimportrate,jdbcType=DECIMAL},
+			</if>
+			<if test="isagencyimport != null">
+				#{isagencyimport,jdbcType=TINYINT},
+			</if>
+			<if test="file != null">
+				#{file,jdbcType=TINYINT},
+			</if>
+			<if test="fixedpoints != null">
+				#{fixedpoints,jdbcType=TINYINT},
+			</if>
+			<if test="spreadfixedpoints != null">
+				#{spreadfixedpoints,jdbcType=DECIMAL},
+			</if>
+			<if test="projectchecktype != null">
+				#{projectchecktype,jdbcType=TINYINT},
+			</if>
+			<if test="clientchecktype != null">
+				#{clientchecktype,jdbcType=TINYINT},
+			</if>
+			<if test="supplierchecktype != null">
+				#{supplierchecktype,jdbcType=TINYINT},
+			</if>
+			<if test="bankId != null">
+				#{bankId,jdbcType=TINYINT},
+			</if>
+			<if test="accountMethod != null">
+				#{accountMethod,jdbcType=TINYINT},
+			</if>
+			<if test="minSaleDay != null">
+				#{minSaleDay,jdbcType=INTEGER},
+			</if>
+			<if test="signStandard != null">
+				#{signStandard,jdbcType=INTEGER},
+			</if>
+			<if test="certificateId != null">
+				#{certificateId,jdbcType=VARCHAR},
+			</if>
+			<if test="certificateName != null">
+				#{certificateName,jdbcType=VARCHAR},
+			</if>
+			<if test="officialSeal != null">
+				#{officialSeal,jdbcType=VARCHAR},
+			</if>
+			<if test="singleAmount != null">
+				#{singleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="libraryAge != null">
+				#{libraryAge,jdbcType=INTEGER},
+			</if>
+			<if test="dayRules != null">
+				#{dayRules,jdbcType=INTEGER},
+			</if>
+			<if test="settleType != null">
+				#{settleType,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="paypalCalcType != null">
+				#{paypalCalcType,jdbcType=INTEGER},
+			</if>
+			<if test="clientCheckWeek != null">
+				#{clientCheckWeek,jdbcType=INTEGER},
+			</if>
+			<if test="supplierCheckWeek != null">
+				#{supplierCheckWeek,jdbcType=INTEGER},
+			</if>
+			<if test="projectCheckWeek != null">
+				#{projectCheckWeek,jdbcType=INTEGER},
+			</if>
+			<if test="payAuditType != null">
+				#{payAuditType,jdbcType=VARCHAR},
+			</if>
+			<if test="payCycle != null">
+				#{payCycle,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateStatusById" parameterType="com.scfs.domain.project.entity.ProjectItem">
+		update tb_project_item
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectItem">
+		update tb_project_item
+		<set>
+			<if test="itemNo != null">
+				item_no = #{itemNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="startDate != null">
+				start_date = #{startDate,jdbcType=DATE},
+			</if>
+			<if test="endDate != null">
+				end_date = #{endDate,jdbcType=DATE},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="amountCurrency != null">
+				amount_currency = #{amountCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="isFundAccount != null">
+				is_fund_account = #{isFundAccount,jdbcType=TINYINT},
+			</if>
+			fund_account_period = #{fundAccountPeriod,jdbcType=INTEGER},
+			fund_month_rate = #{fundMonthRate,jdbcType=DECIMAL},
+			day_penal_rate =
+			#{dayPenalRate,jdbcType=DECIMAL},
+			penal_grace_period =
+			#{penalGracePeriod,jdbcType=INTEGER},
+			min_sale_day =
+			IFNULL(#{minSaleDay, jdbcType=INTEGER}, 0),
+			fixed_points =
+			#{fixedpoints,jdbcType=TINYINT},
+			spread_fixed_points =
+			IFNULL(#{spreadfixedpoints, jdbcType=DECIMAL}, 0),
+			day_rules =
+			#{dayRules,jdbcType=INTEGER},
+			<if test="isOperateAccount != null">
+				is_operate_account =
+				#{isOperateAccount,jdbcType=TINYINT},
+			</if>
+			<if test="operateFeeType != null">
+				operate_fee_type = #{operateFeeType,jdbcType=TINYINT},
+			</if>
+			<if test="operateFeeRate != null">
+				operate_fee_rate = #{operateFeeRate,jdbcType=DECIMAL},
+			</if>
+			client_check_day = #{clientCheckDay},
+			client_check_week =
+			#{clientCheckWeek},
+			supplier_check_day = #{supplierCheckDay},
+			supplier_check_week = #{supplierCheckWeek},
+			<if test="payCurrency != null">
+				pay_currency = #{payCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="receiveCurrency != null">
+				receive_currency = #{receiveCurrency,jdbcType=TINYINT},
+			</if>
+			<if test="payRate != null">
+				pay_rate = #{payRate,jdbcType=DECIMAL},
+			</if>
+			<if test="isAgencyExport != null">
+				is_agency_export = #{isAgencyExport,jdbcType=TINYINT},
+			</if>
+			agency_export_rate = #{agencyExportRate,jdbcType=DECIMAL},
+			<if test="accountRateType != null">
+				account_rate_type = #{accountRateType,jdbcType=TINYINT},
+			</if>
+			account_rate = #{accountRate,jdbcType=DECIMAL},
+			<if test="paypalAccount != null">
+				paypal_account = #{paypalAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="paypalAccountType != null">
+				paypal_account_type =
+				#{paypalAccountType,jdbcType=TINYINT},
+			</if>
+			<if test="paypalDays != null">
+				paypal_days = #{paypalDays,jdbcType=INTEGER},
+			</if>
+			<if test="paypalFixdayType != null">
+				paypal_fixday_type =
+				#{paypalFixdayType,jdbcType=TINYINT},
+			</if>
+			<if test="paypalFixday != null">
+				paypal_fixday = #{paypalFixday,jdbcType=INTEGER},
+			</if>
+			<if test="paypalAmount != null">
+				paypal_amount = #{paypalAmount,jdbcType=DECIMAL},
+			</if>
+			paypal_amount_currency = #{paypalAmountCurrency,jdbcType=TINYINT},
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="contacts != null">
+				contacts = #{contacts,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="fax != null">
+				fax = #{fax,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="clientAddress != null">
+				client_address = #{clientAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="clientContacts != null">
+				client_contacts = #{clientContacts,jdbcType=VARCHAR},
+			</if>
+			<if test="clientPhone != null">
+				client_phone = #{clientPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="clientFax != null">
+				client_fax = #{clientFax,jdbcType=VARCHAR},
+			</if>
+			<if test="clientEmail != null">
+				client_email = #{clientEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierAddress != null">
+				supplier_address = #{supplierAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierContacts != null">
+				supplier_contacts = #{supplierContacts,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierPhone != null">
+				supplier_phone = #{supplierPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierFax != null">
+				supplier_fax = #{supplierFax,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierEmail != null">
+				supplier_email = #{supplierEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="businessType != null">
+				business_type = #{businessType,jdbcType=VARCHAR},
+			</if>
+			operate_rate = IFNULL(#{operaterate, jdbcType=DECIMAL}, 0),
+			project_check_date = #{projectcheckdate,jdbcType=TINYINT},
+			project_check_week = #{projectCheckWeek,jdbcType=TINYINT},
+			agency_import_rate = #{agencyimportrate,jdbcType=DECIMAL},
+			<if test="isagencyimport != null">
+				is_agency_import = #{isagencyimport,jdbcType=TINYINT},
+			</if>
+			<if test="file != null">
+				file = #{file,jdbcType=TINYINT},
+			</if>
+
+			<if test="projectchecktype != null">
+				project_check_type =
+				#{projectchecktype,jdbcType=TINYINT},
+			</if>
+			<if test="clientchecktype != null">
+				client_check_type = #{clientchecktype,jdbcType=TINYINT},
+			</if>
+			<if test="supplierchecktype != null">
+				supplier_check_type =
+				#{supplierchecktype,jdbcType=TINYINT},
+			</if>
+			bank_id = #{bankId,jdbcType=TINYINT},
+			account_method =
+			#{accountMethod,jdbcType=TINYINT},
+			<if test="signStandard != null">
+				sign_standard = #{signStandard,jdbcType=INTEGER},
+			</if>
+			certificate_id =#{certificateId,jdbcType=VARCHAR},
+			certificate_name=
+			#{certificateName,jdbcType=VARCHAR},
+			official_seal=
+			#{officialSeal,jdbcType=VARCHAR},
+			<if test="singleAmount != null">
+				single_amount = #{singleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="libraryAge != null">
+				library_age = #{libraryAge,jdbcType=INTEGER},
+			</if>
+			<if test="settleType != null">
+				settle_type = #{settleType,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="paypalCalcType != null">
+				paypal_calc_type = #{paypalCalcType,jdbcType=INTEGER},
+			</if>
+			<if test="payAuditType != null">
+				pay_audit_type = #{payAuditType,jdbcType=VARCHAR},
+			</if>
+			<if test="payCycle != null">
+				pay_cycle = #{payCycle,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteById" parameterType="com.scfs.domain.base.entity.BaseProject">
+		delete from
+		tb_project_item
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

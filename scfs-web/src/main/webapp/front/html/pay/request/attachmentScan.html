@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+
+<div class="wrapper">
+    <section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>请款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a class="tab-item"data-url="html/pay/request/fundBaseInfoScan.html">基础信息</a></li>
+					<li role="presentation" class="li-po"><a class="tab-item" data-url="html/pay/request/fundOrderScan.html">订单信息</a></li>
+					<li role="presentation" class="li-fee"><a class="tab-item" data-url="html/pay/request/fundFeeScan.html">费用信息</a></li>
+					<li role="presentation" class="li-refund"><a class="tab-item" data-url="html/pay/request/fundRefundScan.html">退款信息</a></li>
+					<li role="presentation" class="li-advance"><a class="tab-item" data-url="html/pay/request/fundAdvanceScan.html">预收单信息</a></li>
+					<li role="presentation" class="li-deduction-fee"><a class="tab-item" data-url="html/pay/request/fundDeductionFeeScan.html">抵扣费用信息</a></li>
+                    <li role="presentation" class="li-attachment active"><a class="tab-item" data-url="html/pay/request/attachmentScan.html">附件</a></li>
+                    <li role="presentation" class="li-voucher"><a class="tab-item" data-url="html/pay/request/fundVoucherScan.html">付款凭证</a></li>
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                <table id="js_dataTable" data-url="/payOrderFile/query"></table>
+                <form class="form-horizontal form-inline" id="form1" data-url="payOrderFile/upload" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <table class="table table-bordered table-hover no-margin">
+                        	<tr>
+                        		<td></td>
+                        		<td class="text-left"><h5><b style="color: red">附件不能大于50M</b></h5></td>
+                        	</tr>
+                            <tr>
+                                <td width="180" class="text-right"><b>上传附件： </b></td>
+                                <td class="text-left">
+                                    <span type="button" id="upload">导入文件</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <button type="button" id="download" data-permissionUrl="/payOrderFileList/download" class="btn btn-primary btn-sm">批量下载</button>
+                <button type="button" data-url="html/pay/request/fundSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </section>
+</div>
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script src="../../js/pay/payCommon.js"></script>
+<script>
+window.operateEvents = {
+    'click .download': function(e, value, row, index) {
+        var url = GLOBAL.host + "payOrderFile/downLoad?fileId=" + row.id;
+        GLOBAL.preview({type: row.type, url: url});
+    },
+
+};
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="download" href="javascript:void(0)">',
+        '<span class="btn btn-primary btn-sm">下载</span>',
+        '</a>  '
+    ].join('');
+}
+/*数据表格*/
+var tabCols = [{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '文件名称',
+    field: 'name',
+    width: 92,
+    align: 'center'
+}, {
+    title: '文件类型',
+    field: 'type',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传时间',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'operta',
+    width: 100,
+    align: 'center',
+    events: operateEvents,
+    formatter: operateFormatter
+}];
+
+options.initPage = function() {
+	var payType = options.param.payType;
+	var stateInt = options.param.stateInt;
+	showTab(payType, stateInt);
+    var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols, {
+        busId: options.param.id
+    });
+}
+
+$("#back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+$("#upload").upload({
+    url: GLOBAL.host + "payOrderFile/upload",
+    param: {
+        busId: options.param.id,
+        busType: 8
+    },
+    success: function() {
+        GLOBAL.tableRefresh($('#js_dataTable'), {
+            busId: options.param.id
+        });
+    }
+});
+$("#download").click(function() {
+    var ids = GLOBAL.selectIds($('#js_dataTable'));
+    if (ids) {
+        var url = GLOBAL.host + "payOrderFileList/downLoad?ids=" + ids;
+        window.open(url);
+    }
+
+});
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+GLOBAL.goBack();
+</script>

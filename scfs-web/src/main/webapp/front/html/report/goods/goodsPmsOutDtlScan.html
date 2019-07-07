@@ -1,0 +1,66 @@
+<div class="wrapper">
+   <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>报表 </li>
+            <li>入库明细</li>
+            <li class="active">出库明细浏览</li>
+        </ol>
+    </section>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <table id="js_dataTable" data-url="goods/report/pmsout/query"></table> 
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '销售数量',
+        field: "wmsOutStockin",
+       width: 100,
+       align: 'center'
+    }, {
+        title: '销售单价',
+        field: 'purchasePrice',
+        width: 100,
+        align: 'center',
+    	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    },{
+        title: '销售金额',
+        field: "salesAmount",
+        width: 100,
+        align: 'center',
+    	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    },{
+        title: '销售日期',
+        field: "salesDate",
+        width: 100,
+        align: 'center'
+    }
+    ];
+    options.initPage = function(){
+    	var orderNo= options.param.orderNo;
+    	var projectId= options.param.projectId;
+        var goodsCode= options.param.goodsCode;
+        var supplierId= options.param.supplierId;
+        var customerId= options.param.customerId;
+        var startCheckDate= options.param.startCheckDate;
+        var endCheckDate= options.param.endCheckDate;
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {orderNo: orderNo,projectId: projectId,goodsCode: goodsCode,supplierId: supplierId,customerId: customerId,startCheckDate: startCheckDate,endCheckDate: endCheckDate});
+    };
+    GLOBAL.goBack();
+</script>

@@ -1,0 +1,261 @@
+<style>
+.nav>li.one,
+.nav>li.two,
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票申请</li>
+            <li class="active">浏览</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="invoiceService/detail">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/makeinvoice/invoiceScan.html">基本信息</a></li>
+                        <li class="one" role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/saleInfoScan.html">销售信息</a></li>
+                        <li class="two" role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/feeInfoScan.html">费用信息</a></li>
+                        <li role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/invoiceInfoScan.html">发票信息</a></li>
+                        <li role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/attachmentScan.html">附件</a></li>
+                        <li class="state" role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/invoiceVoucherScan.html">开票凭证浏览</a></li>
+                    </ul>
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>项目：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectName"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>客户：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="customerName"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>票据类型：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="invoiceTypeName"> </label>
+                            </td>
+                        </tr>
+                        <tr id="isElecInvoice1">
+                            <td class="text-right"><b>电子普通发票：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isElecInvoiceValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="baseInvoiceId1">
+                            <td class="text-right"><b>开票信息    ：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="baseInvoiceId"> </label>
+                            </td>
+                        </tr>
+                        <tr id="identifyNumber1">
+                            <td class="text-right"><b>纳税人识别号    ： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="identifyNumber"> </label>
+                            </td>
+                        </tr>
+                        <tr id="bankDeposite1">
+                            <td class="text-right"><b>开户银行    ： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="bankDeposite"> </label>
+                            </td>
+                        </tr>
+                        <tr id="accountOpen1">
+                            <td class="text-right"><b>开户帐号    ： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="accountOpen"> </label>
+                            </td>
+                        </tr>
+                        <tr id="billAddress1">
+                            <td class="text-right"><b>开票地址    ： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="billAddress"> </label>
+                            </td>
+                        </tr>
+                        <tr id="billMobile1">
+                            <td class="text-right"><b>开票电话    ： </b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="billMobile"> </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>单据类别：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="billTypeName"> </label>
+                            </td>
+                        </tr>
+                        <tr id="billDetail1">
+                            <td class="text-right"><b>开票明细：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="feeTypeName"> </label>
+                            </td>
+                        </tr>
+                        <tr id="billRate1">
+                            <td class="text-right"><b>开票税率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="invoiceTaxRateValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="taxCateNo1">
+                            <td class="text-right"><b>税收分类编码：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="taxCateNo"> </label>
+                            </td>
+                        </tr>
+                        <tr id="isGoodsMerge1">
+                            <td class="text-right"><b>同品合并：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isGoodsMergeValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="isDisplayDiscount1">
+                            <td class="text-right"><b>显示折扣：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="isDisplayDiscountValue"> </label>
+                            </td>
+                        </tr>
+                        <tr id="discount1">
+                            <td class="text-right"><b>固定折扣率：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="discount"> </label>%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>票据备注：</b></td>
+                            <td class="text-left">
+                                <textarea class="form-control js-initform" id="invoiceRemark" cols="50" rows="5" name="invoiceRemark" readonly="readonly"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>单据备注：</b></td>
+                            <td class="text-left">
+                                <textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark" readonly="readonly"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="/invoice/auditflow/audit/query"></table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="button" data-url="html/invoice/makeinvoice/invoiceSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+  var tabCols = [{
+          title: '序号',
+          field: 'columnsNumber',
+          width: '5%'
+      }, {
+          title: '流程节点',
+          field: "stateName",
+          width: '15%'
+      }, {
+          title: '处理人',
+          field: "dealName",
+          width: '15%'
+      }, {
+          title: '处理意见',
+          field: "suggestion",
+          width: '25%'
+      }, {
+          title: '开始时间',
+          field: "createTime",
+          width: '15%'
+      }, {
+          title: "处理时间",
+          field: "dealTime",
+          width: '15%'
+      }, {
+          title: "处理状态",
+          field: "auditStateName",
+          width: '10%'
+      }];
+
+    options.initPage = function() {
+    	var status = options.param.status;
+    	if(status==5){
+			$(".nav>li.state").show();	
+		}
+        var tabId = options.param.billType;
+        var tabArr = ["one", "two"];
+        $(".nav>li." + tabArr[tabId - 1]).show();
+        var editData = GLOBAL.getEditData($("#form1"), options.param.id);
+        var opt = "<option value=''>请选择</option>";
+        if (editData.baseInvoiceId) {
+            GLOBAL.ajax("baseSubject/invoiceById/query", {
+                id: editData.baseInvoiceId
+            }, function(e) {
+                if (e.items) {
+                    $("#identifyNumber").html(e.items.taxPayer);
+                    $("#bankDeposite").html(e.items.bankName);
+                    $("#accountOpen").html(e.items.accountNo);
+                    $("#billAddress").html(e.items.address);
+                    $("#billMobile").html(e.items.phoneNumber);
+                    $("#baseInvoiceId").html(e.items.taxPayer);
+                }
+            });
+        } else {
+            $("#baseInvoiceId1").hide();
+            $("#identifyNumber1").hide();
+            $("#bankDeposite1").hide();
+            $("#accountOpen1").hide();
+            $("#billAddress1").hide();
+            $("#billMobile1").hide();
+        }
+        if ($("#invoiceTypeName").html() == "增值税专票") {
+            $("#isElecInvoice1").hide();
+        } else if ($("#invoiceTypeName").html() == "增值税普票") {
+            $("#isElecInvoice1").show();
+        }
+        if ($("#billTypeName").html() == "货物") {
+            $("#billDetail1").hide().find("#billDetail").val("");
+            $("#billRate1").hide().find("#billRate").val("");
+            $("#taxCateNo1").hide().find("#taxCateNo").val("");
+            $("#isGoodsMerge1").show();
+            $("#isDisplayDiscount1").show();
+            $("#discount1").show();
+        } else if ($("#billTypeName").html() == "费用") {
+            $("#billDetail1").show();
+            $("#billRate1").show();
+            $("#taxCateNo1").show();
+            $("#isGoodsMerge1").hide().find("#isGoodsMerge").val("");
+            $("#isDisplayDiscount1").hide().find("#isDisplayDiscount").val("");
+            $("#discount1").hide().find("#discount").val("");
+        }
+
+        GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+            InvoiceApplyId: options.param.id
+        }, null, {
+            pagination: false
+        });
+
+
+
+        $(".tab-item").click(function() {
+            var url = $(this).data("url");
+            GLOBAL.go(url);
+        });
+
+        $("#js-back").click(function() {
+            var url = $(this).data("url");
+            GLOBAL.go(url);
+        });
+    }
+</script>

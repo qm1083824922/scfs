@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.finance.CopeManageDtlDao">
+	<sql id="CopeManageDtl_Column_List">
+		id,
+		cope_id,
+		bill_id,
+		voucher_line_id,
+		project_id,
+		customer_id,
+		busi_unit_id,
+		cope_dtl_type,
+		currnecy_type,
+		bill_number,
+		bill_date,
+		bill_amount,
+		cope_amount,
+		paid_amount,
+		unpaid_amount,
+		create_at,
+		creator_id,
+		update_at
+	</sql>
+	<resultMap id="CopeManageDtlResultMap"
+		type="com.scfs.domain.finance.cope.entity.CopeManageDtl">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="cope_id" property="copeId" jdbcType="INTEGER" />
+		<result column="bill_id" property="billId" jdbcType="INTEGER" />
+		<result column="voucher_line_id" property="voucherLineId"
+			jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="busi_unit_id" property="busiUnitId" jdbcType="INTEGER" />
+		<result column="cope_dtl_type" property="copeDtlType" jdbcType="TINYINT" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="bill_number" property="billNumber" jdbcType="VARCHAR" />
+		<result column="bill_date" property="billDate" jdbcType="TIMESTAMP" />
+		<result column="bill_amount" property="billAmount" jdbcType="DECIMAL" />
+		<result column="cope_amount" property="copeAmount" jdbcType="DECIMAL" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="unpaid_amount" property="unpaidAmount"
+			jdbcType="DECIMAL" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryResultsByCon" resultMap="CopeManageDtlResultMap"
+		parameterType="com.scfs.domain.finance.cope.dto.req.CopeManageReqDto">
+		select
+		<include refid="CopeManageDtl_Column_List" />
+		from tb_cope_manage_dtl
+		where 1=1
+		<if test="copeId != null">
+			AND cope_id=#{copeId}
+		</if>
+		<if test="projectId != null">
+			AND project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND customer_id=#{customerId}
+		</if>
+		<if test="busiUnitId != null">
+			AND busi_unit_id=#{busiUnitId}
+		</if>
+		<if test="currnecyType != null">
+			AND currnecy_type=#{currnecyType}
+		</if>
+		<if test="startCopeTime != null">
+			AND bill_date &gt;=#{startCopeTime}
+		</if>
+		<if test="endCopeTime != null">
+			AND bill_date &lt;=#{endCopeTime}
+		</if>
+		<if test="billNumber != null">
+			AND bill_number like CONCAT('%',#{billNumber},'%')
+		</if>
+		order by id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="CopeManageDtlResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="CopeManageDtl_Column_List" />
+		from tb_cope_manage_dtl
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.finance.cope.entity.CopeManageDtl"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_cope_manage_dtl(
+		cope_id,
+		bill_id,
+		voucher_line_id,
+		project_id,
+		customer_id,
+		busi_unit_id,
+		cope_dtl_type,
+		currnecy_type,
+		bill_number,
+		bill_date,
+		bill_amount,
+		cope_amount,
+		paid_amount,
+		unpaid_amount,
+		create_at,
+		creator_id
+		)
+		VALUES
+		(
+		#{copeId,jdbcType=INTEGER},
+		#{billId,jdbcType=INTEGER},
+		#{voucherLineId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{busiUnitId,jdbcType=INTEGER},
+		#{copeDtlType,jdbcType=TINYINT},
+		#{currnecyType,jdbcType=TINYINT},
+		#{billNumber,jdbcType=VARCHAR},
+		#{billDate,jdbcType=TIMESTAMP},
+		#{billAmount,jdbcType=DECIMAL},
+		#{copeAmount,jdbcType=DECIMAL},
+		#{paidAmount,jdbcType=DECIMAL},
+		#{unpaidAmount,jdbcType=DECIMAL},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.finance.cope.entity.CopeManageDtl">
+		update tb_cope_manage_dtl
+		<set>
+			id = #{id}
+			<if test="copeId != null">
+				, cope_id=#{copeId,jdbcType=INTEGER}
+			</if>
+			<if test="billId != null">
+				, bill_id=#{billId,jdbcType=INTEGER}
+			</if>
+			<if test="voucherLineId != null">
+				, voucher_line_id=#{voucherLineId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				, project_id=#{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null">
+				, customer_id=#{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="busiUnitId != null">
+				,busi_unit_id =#{busiUnitId,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null">
+				,cope_dtl_type =#{copeDtlType,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null">
+				,currnecy_type =#{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test="billNumber != null">
+				,bill_number =#{billNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="billDate !=null">
+				,bill_date=#{billDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="billAmount != null">
+				,bill_amount =#{billAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="copeAmount != null">
+				,cope_amount =#{copeAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="paidAmount != null">
+				,paid_amount =#{paidAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="unpaidAmount != null">
+				,unpaid_amount =#{unpaidAmount,jdbcType=DECIMAL}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="queryResultByProject" resultMap="CopeManageDtlResultMap"
+		parameterType="com.scfs.domain.finance.cope.dto.req.CopeManageReqDto">
+		select
+		<include refid="CopeManageDtl_Column_List" />
+		from tb_cope_manage_dtl
+		where unpaid_amount&gt;0
+		<if test="projectId != null">
+			and project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			and customer_id=#{customerId}
+		</if>
+		<if test="busiUnitId != null">
+			and busi_unit_id=#{busiUnitId}
+		</if>
+		<if test="currnecyType != null">
+			and currnecy_type=#{currnecyType}
+		</if>
+		order by create_at desc
+	</select>
+	<select id="queryCopeByBillId" resultMap="CopeManageDtlResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="CopeManageDtl_Column_List" />
+		from tb_cope_manage_dtl
+		where bill_id = #{billId,jdbcType=INTEGER}
+	</select>
+</mapper>

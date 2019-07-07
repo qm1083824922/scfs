@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.AuditAgingReportDao">
+	<sql id="auditAging_report_condition">
+		<if test="startArrivedDate!=null and startArrivedDate!=''">
+			AND (DATE_FORMAT(ta.create_at, '%Y-%m-%d') &gt;=
+			#{startArrivedDate})
+		</if>
+		<if test="endArrivedDate!=null and endArrivedDate!=''">
+			AND (DATE_FORMAT(ta.create_at, '%Y-%m-%d') &lt;=
+			#{endArrivedDate})
+		</if>
+		<if test="billNo!=null and billNo!=''">
+			AND ta.po_no like CONCAT('%',#{billNo},'%')
+		</if>
+		<if test="billType!=null and billType!=''">
+			AND ta.po_type = #{billType}
+		</if>
+		<if test="auditNodeState!=null">
+			AND ta.state = #{auditNodeState}
+		</if>
+		<if test="auditorId!=null">
+			AND ta.auditor_id = #{auditorId}
+		</if>
+	</sql>
+
+	<sql id="auditAging_report_sql">
+		select ta.id, ta.po_no as billNo,
+		ta.po_type as billType,
+		'' as payNo,
+		ta.create_at as arrivedDate,
+		ta.auditor_pass_at as auditPassDate,
+		ta.auditor_id as auditorId
+		from tb_audit ta
+		where 1=1
+		and ta.audit_state
+		not in (0)
+		and ta.is_delete = 0
+		and ta.state in (25, 30, 35, 40)
+		and
+		po_type not in (14,26,10)
+		<include refid="auditAging_report_condition" />
+		union all
+		SELECT ta.id, ta.po_no AS billNo,
+		ta.po_type AS billType,
+		tpo.pay_no AS payNo,
+		ta.create_at AS arrivedDate,
+		ta.auditor_pass_at AS
+		auditPassDate,
+		ta.auditor_id AS auditorId
+		FROM tb_audit ta
+		INNER JOIN
+		tb_merge_pay_order tmpo
+		ON tmpo.id = ta.po_id
+		INNER JOIN
+		tb_merge_pay_order_rel tmpor
+		ON tmpor.merge_pay_id = tmpo.id
+		INNER JOIN
+		tb_pay_order tpo
+		ON tpo.id = tmpor.pay_id
+		WHERE 1=1
+		AND ta.audit_state
+		NOT IN (0)
+		AND ta.is_delete = 0
+		AND ta.state IN (25, 30, 35, 40)
+		AND
+		ta.po_type = 14
+		AND tpo.is_delete = 0
+		<include refid="auditAging_report_condition" />
+		UNION ALL
+		SELECT ta.id, ta.po_no AS billNo,
+		ta.po_type AS billType,
+		tpo.bill_no AS payNo,
+		ta.create_at AS arrivedDate,
+		ta.auditor_pass_at AS
+		auditPassDate,
+		ta.auditor_id AS auditorId
+		FROM tb_audit ta
+		INNER JOIN (
+		SELECT tpo.id,tpo.bill_no FROM(
+		SELECT ovs.id,t.order_no AS bill_no
+		FROM tb_invoice_collect_overseas ovs
+		INNER JOIN
+		tb_invoice_collect_overseas_po co ON
+		ovs.id=co.collect_overseas_id
+		LEFT
+		JOIN tb_purchase_order_line p ON co.po_line_id = p.id
+		LEFT JOIN
+		tb_purchase_order_title t ON p.po_id = t.id
+		WHERE co.is_delete = 0
+		AND
+		ovs.bill_type=1
+		UNION ALL
+		SELECT ovs.id,fe.fee_no AS bill_no FROM
+		tb_invoice_collect_overseas ovs
+		INNER JOIN
+		tb_invoice_collect_overseas_fee ov
+		LEFT JOIN tb_fee fe ON
+		ov.fee_id=fe.id
+		WHERE ov.is_delete=0
+		AND ovs.bill_type=2
+		)tpo
+		) tpo ON
+		ta.po_id = tpo.id
+		WHERE 1=1
+		AND ta.audit_state NOT IN (0)
+		AND
+		ta.is_delete = 0
+		AND ta.state IN (25, 30, 35, 40)
+		AND ta.po_type = 26
+		<include refid="auditAging_report_condition" />
+		GROUP BY tpo.bill_no
+		UNION ALL
+		SELECT ta.id, ta.po_no AS billNo,
+		ta.po_type AS billType,
+		tpo.bill_no AS payNo,
+		ta.create_at AS
+		arrivedDate,
+		ta.auditor_pass_at AS auditPassDate,
+		ta.auditor_id AS
+		auditorId
+		FROM tb_audit ta
+		INNER JOIN (
+		SELECT tpo.id,tpo.bill_no FROM (
+		SELECT app.id,invo.invoice_code AS bill_no FROM tb_invoice_apply app
+		INNER JOIN tb_invoice invo ON invo.invoice_apply_id=app.id
+		)tpo
+		) tpo ON
+		ta.po_id = tpo.id
+		WHERE 1=1
+		AND ta.audit_state NOT IN (0)
+		AND
+		ta.is_delete = 0
+		AND ta.state IN (25, 30, 35, 40)
+		AND ta.po_type = 10
+		<include refid="auditAging_report_condition" />
+	</sql>
+
+	<select id="queryAuditAgingReportResultsByCon" parameterType="com.scfs.domain.report.req.AuditAgingReportReqDto"
+		resultType="com.scfs.domain.report.entity.AuditAgingReport">
+		select * from (
+		<include refid="auditAging_report_sql" />
+		) auditAging_report
+	</select>
+
+	<select id="queryAuditAgingReportCountByCon" parameterType="com.scfs.domain.report.req.AuditAgingReportReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="auditAging_report_sql" />
+		) auditAging_report
+	</select>
+
+
+</mapper>

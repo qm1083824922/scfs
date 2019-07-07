@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BasePermissionGroupDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.base.entity.BasePermissionGroup">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name,state, creator, deleter, create_at, update_at,
+		delete_at,
+		is_delete
+	</sql>
+	<sql id="permissionGroupByper">
+		tbpg.id, tbpg.name,tbpg.state, tbpg.creator,tbpg.deleter,
+		tbpg.create_at,
+		tbpg.update_at, tbpg.delete_at, tbpg.is_delete
+	</sql>
+	<select id="queryAndLockById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		from tb_base_permission_group
+		WHERE id=#{id,jdbcType=BIGINT} FOR UPDATE
+	</select>
+
+	<select id="queryPermissionsList" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionGroupReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_permission_group
+		<where>
+			is_delete = 0
+			<if test="name != null and name != ''">
+				AND name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="state != null">
+				AND state= #{state,jdbcType=TINYINT}
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	<select id="queryPermissionsListByPer" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionReqDto">
+		select
+		<include refid="permissionGroupByper" />
+		from tb_base_permission_group tbpg inner join
+		tb_base_permission_relation tbpr on tbpg.id = tbpr.permission_group_id
+		<where>
+			tbpg.is_delete = 0 AND
+			tbpr.is_delete = 0
+			<if test="id != null ">
+				AND tbpr.permission_id = #{id,jdbcType=BIGINT}
+			</if>
+		</where>
+		ORDER BY tbpg.id DESC
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BasePermissionGroup"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_base_permission_group (id, name,state, creator,
+		deleter, create_at,
+		update_at,
+		delete_at)
+		values (#{id,jdbcType=BIGINT},
+		#{name,jdbcType=VARCHAR},#{state,jdbcType=BIGINT},
+		#{creator,jdbcType=VARCHAR},
+		#{deleter,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+		#{deleteAt,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="update" parameterType="com.scfs.domain.base.entity.BasePermissionGroup">
+		update tb_base_permission_group
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=BIGINT},
+			</if>
+			<if test="state != null">
+				state= #{state,jdbcType=TINYINT},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter  != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!--根据角色ID查询此角色下已分配的权限组 -->
+	<select id="queryPermissionGroupByRoleId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT rpg.id,
+		pg.name,pg.state,rpg.is_delete,rpg.creator,rpg.create_at,rpg.deleter,rpg.delete_at
+		FROM tb_base_role_permission_group rpg INNER JOIN
+		tb_base_permission_group pg on rpg.permission_group_id=pg.id
+		WHERE
+		rpg.role_id=#{roleId}
+		ORDER BY rpg.is_delete,rpg.id DESC
+	</select>
+
+	<!--根据角色ID查询此角色下未分配的权限组 -->
+	<select id="queryPermissionGroupNotInRoleId"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionGroupReqDto"
+		resultMap="BaseResultMap">
+		SELECT DISTINCT pg.id, pg.name,pg.state,pg.is_delete
+		FROM
+		tb_base_permission_group pg
+		WHERE pg.is_delete=0 AND pg.state=1
+		AND
+		pg.id NOT IN(SELECT permission_group_id from
+		tb_base_role_permission_group rpg where rpg.role_id=#{roleId} AND
+		rpg.is_delete=0)
+		<if test="name != null">
+			AND pg.name like CONCAT('%',#{name},'%')
+		</if>
+		ORDER BY pg.id DESC
+	</select>
+
+	<select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT DISTINCT id, name,state, is_delete
+		FROM tb_base_permission_group
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_permission_group
+
+	</select>
+</mapper>

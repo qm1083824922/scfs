@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseRolePermissionGroupDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.base.entity.BaseRolePermissionGroup">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="roleId" jdbcType="BIGINT" />
+		<result column="permission_group_id" property="permissionGroupId"
+			jdbcType="BIGINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, role_id, permission_group_id, creator, deleter,
+		create_at, update_at,
+		delete_at, is_delete
+	</sql>
+
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseRolePermissionGroup">
+		insert into
+		tb_base_role_permission_group (id, role_id,
+		permission_group_id,
+		creator, deleter, create_at,
+		update_at, delete_at, is_delete
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT},
+		#{permissionGroupId,jdbcType=BIGINT},
+		#{creator,jdbcType=VARCHAR},
+		#{deleter,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!--<insert id="batchInsert" parameterType="java.util.List"> -->
+	<!--insert into tb_base_role_permission_group (role_id, permission_group_id, -->
+	<!--creator, deleter, create_at,update_at, delete_at, is_delete) -->
+	<!--<foreach collection ="list" item="rp" index= "index" separator =","> -->
+	<!--values (#{rp.roleId,jdbcType=BIGINT}, #{rp.permissionGroupId,jdbcType=BIGINT}, -->
+	<!--#{rp.creator,jdbcType=VARCHAR}, #{rp.deleter,jdbcType=VARCHAR}, #{rp.createAt,jdbcType=TIMESTAMP}, -->
+	<!--#{rp.updateAt,jdbcType=TIMESTAMP}, #{rp.deleteAt,jdbcType=TIMESTAMP}, 
+		#{rp.isDelete,jdbcType=TINYINT}) -->
+	<!--</foreach> -->
+	<!--</insert> -->
+
+
+	<select id="queryRolePermissionGroup" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.entity.BaseRolePermissionGroup">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_role_permission_group
+		WHERE
+		is_delete=0 AND
+		permission_group_id = #{permissionGroupId,jdbcType=BIGINT} AND
+		role_id
+		= #{roleId,jdbcType=BIGINT}
+
+	</select>
+
+	<update id="invalidRolePermissionGroup" parameterType="com.scfs.domain.base.entity.BaseRolePermissionGroup">
+		update
+		tb_base_role_permission_group
+		set
+		is_delete =
+		#{isDelete},deleter=#{deleter},delete_at=#{deleteAt}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryRolePermissionGroupById" parameterType="Integer"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_role_permission_group
+		WHERE id = #{id}
+	</select>
+	<!--<update id="batchUpdate" parameterType="java.util.List"> -->
+	<!--<foreach collection="list" item="rp" index="index" open="" close="" 
+		separator=";"> -->
+	<!--update tb_base_role_permission_group -->
+	<!--<set> -->
+	<!--is_delete = #{rp.isDelete},deleter=#{rp.deleter},delete_at=#{rp.deleteAt} -->
+	<!--</set> -->
+	<!--<where> -->
+	<!--id = ${rp.id} -->
+	<!--</where> -->
+	<!--</foreach> -->
+	<!--</update> -->
+	<select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		DISTINCT role_id, permission_group_id, is_delete
+		FROM
+		tb_base_role_permission_group
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_role_permission_group
+	</select>
+</mapper>

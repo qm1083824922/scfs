@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="poLineList" var="poLine"
+			varType="com.scfs.domain.po.excel.PurchaseOrderLineExcel">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">poLine.goodsNo</mapping>
+				<mapping row="2" col="1">poLine.goodsNum</mapping>
+				<mapping row="2" col="2">poLine.goodsPrice</mapping>
+				<mapping row="2" col="3">poLine.discountAmount</mapping>
+				<mapping row="2" col="4">poLine.batchNum</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

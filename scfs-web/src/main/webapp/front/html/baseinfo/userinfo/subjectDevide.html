@@ -1,0 +1,155 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>用户</li>
+             <li class="active">分配仓库信息</li>
+        </ol>
+    </section
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">编号：</label>
+                            <input type="text" name="subjectNo" id="subjectNo" class="form-control">
+                        </div> 
+                        <div class="search-item">   
+                            <label class="control-label">简称：</label>
+                            <input type="text" name="abbreviation" id="abbreviation" class="form-control">
+                        </div> 
+                        <div class="search-item">      
+                            <label class="control-label">中文全称：</label>
+                            <input type="text" name="chineseName" class="form-control">
+                        </div> 
+                        <div class="search-item">  
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+				<table id="js_dataTable" data-url="user/subject/notAssigned/query">
+				</table>
+			</div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <button type="button" id="multDevide" class="btn btn-primary btn-sm" data-url="user/subject/dividAll" data-permissionUrl="/user/subject/dividAll">批量分配</button>
+                <button type="button" data-url="html/baseinfo/userinfo/subjectEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+
+
+
+
+/*数据表格*/
+var tabCols = [ {
+	field : 'checkItem',
+	checkbox : true,
+	width : '5'
+},
+{
+	title : '序号',
+	field : 'columnsNumber',
+	width : '5'
+}, {
+	title : '未分配仓库',
+	field : 'chineseName',
+	width : 120,
+	align : 'center'
+}, {
+	title : '仓管操作',
+	field : 'opertaList2',
+	width : 70,
+	align : 'center',
+	formatter : function(value, row, index) {
+		return '<select class="form-control js-select operater" id="operater" width="20px" name="operater"><option value="0" selected="selected">不可操作</option><option value="1">可操作</option></select>';
+	}
+}];
+
+options.initPage = function() {
+	var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		userId : options.param.id
+	});
+};
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+
+	$.extend(data, {
+		userId : options.param.id
+	});
+
+    var opt = $('#js_dataTable').bootstrapTable('getOptions');
+    $('#js_dataTable').bootstrapTable('refreshOptions', opt);
+
+	$('#js_dataTable').bootstrapTable('refresh', {
+		query : data
+	});
+})
+
+$("#multDevide").click(function(){
+	var dtlArr = [];
+	var isValid = true;
+	var selectedRows = $('#js_dataTable').bootstrapTable( 'getSelections');
+	if (selectedRows.length == 0) {
+		layer.msg("请选择");
+		isValid = false;
+	} else {
+		for (var i = 0; i < selectedRows.length; i++) {
+			var id = selectedRows[i].id;
+			var $operater = $(
+					'#js_dataTable tbody tr[data-uniqueid="' + id
+							+ '"]').find(".operater");
+			var operater = $operater.val();
+			dtlArr.push({
+				"subjectId" : id,
+				"operater" : operater
+			});
+		}
+	}
+    
+    /* var userSubjectList = {
+    	userId:options.param.id,
+        ids: idss
+    }; */
+
+    var url = $(this).data("url");
+    
+    if(isValid){
+    	var saveData = {
+   	    	 userSubjectList : dtlArr,
+   	    	 userId:options.param.id
+   		};
+    	var setContentType = true;
+   	    GLOBAL.ajax(url, JSON.stringify(saveData),function(e) {
+           if (e.success) {
+           		layer.msg("分配成功！", {
+	                   icon: 1,
+	                   time:1500,
+	                 }, function(){
+	                	 GLOBAL.go("html/baseinfo/userinfo/subjectEdit.html");
+	            });
+           } else {
+        	   layer.msg(e.msg, {
+					icon : 5,
+					time : 1500,
+				});
+           }
+       }, setContentType,$("#multDevide"));
+    }
+    
+})
+
+ GLOBAL.goBack(function(){
+	    options.param.id=options.param.cid;
+	    options.param.cid=options.param.cid;
+ });
+
+</script>

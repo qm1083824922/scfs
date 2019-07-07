@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.base.entity.AuditFlowDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.base.entity.AuditFlow">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="audit_flow_no" jdbcType="VARCHAR" property="auditFlowNo" />
+		<result column="audit_flow_type" jdbcType="TINYINT" property="auditFlowType" />
+		<result column="audit_flow_name" jdbcType="VARCHAR" property="auditFlowName" />
+		<result column="law_audit" jdbcType="VARCHAR" property="lawAudit" />
+		<result column="biz_audit" jdbcType="VARCHAR" property="bizAudit" />
+		<result column="career_audit" jdbcType="VARCHAR" property="careerAudit" />
+		<result column="purchase_audit" jdbcType="VARCHAR" property="purchaseAudit" />
+		<result column="supply_chain_group_audit" jdbcType="VARCHAR"
+			property="supplyChainGroupAudit" />
+		<result column="supply_chain_service_audit" jdbcType="VARCHAR"
+			property="supplyChainServiceAudit" />
+		<result column="goods_risk_audit" jdbcType="VARCHAR" property="goodsRiskAudit" />
+		<result column="busi_audit" jdbcType="VARCHAR" property="busiAudit" />
+		<result column="finance_audit" jdbcType="VARCHAR" property="financeAudit" />
+		<result column="finance2_audit" jdbcType="VARCHAR" property="finance2Audit" />
+		<result column="risk_special_audit" jdbcType="VARCHAR"
+			property="riskSpecialAudit" />
+		<result column="risk_audit" jdbcType="VARCHAR" property="riskAudit" />
+		<result column="dept_manage_audit" jdbcType="VARCHAR" property="deptManageAudit" />
+		<result column="boss_audit" jdbcType="VARCHAR" property="bossAudit" />
+		<result column="is_first_risk" jdbcType="TINYINT" property="isFirstRisk" />
+		<result column="is_first_law" jdbcType="TINYINT" property="isFirstLaw" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, audit_flow_no, audit_flow_type, audit_flow_name,
+		law_audit,
+		biz_audit, career_audit,
+		purchase_audit,
+		supply_chain_group_audit, supply_chain_service_audit,
+		goods_risk_audit, busi_audit,
+		finance_audit, finance2_audit,
+		risk_special_audit, risk_audit, dept_manage_audit,
+		boss_audit,
+		is_first_risk, is_first_law, is_delete, create_at,
+		update_at
+	</sql>
+
+	<sql id="condition">
+		<if test="auditFlowNo!=null and auditFlowNo!=''">
+			AND audit_flow_no like CONCAT('%',#{auditFlowNo},'%')
+		</if>
+		<if test="auditFlowType!=null">
+			AND audit_flow_type = #{auditFlowType}
+		</if>
+		<if test="auditFlowName!=null and auditFlowName!=''">
+			AND audit_flow_name like CONCAT('%',#{auditFlowName},'%')
+		</if>
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.base.dto.req.AuditFlowReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where 1=1
+		AND is_delete = 0
+		<include refid="condition" />
+	</select>
+
+	<select id="queryAuditFlowByType" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where 1=1
+		AND is_delete = 0
+		AND audit_flow_type =
+		#{auditFlowType,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryAuditFlowByTypeAndNo" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where 1=1
+		AND is_delete = 0
+		AND audit_flow_type =
+		#{auditFlowType,jdbcType=INTEGER}
+		AND audit_flow_no =
+		#{auditFlowNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryAuditFlowByNo" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where 1=1
+		AND audit_flow_no =
+		#{auditFlowNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryAuditFlow4Pay" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_audit_flow
+		where 1=1
+		AND is_delete = 0
+		AND audit_flow_type = 5
+	</select>
+
+	<select id="queryCountByType" resultType="java.lang.Integer">
+		select count(1)
+		from
+		tb_audit_flow
+		where 1=1
+		AND is_delete = 0
+		AND audit_flow_type =
+		#{auditFlowType,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.AuditFlow"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_audit_flow
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="auditFlowNo != null">
+				audit_flow_no,
+			</if>
+			<if test="auditFlowType != null">
+				audit_flow_type,
+			</if>
+			<if test="auditFlowName != null">
+				audit_flow_name,
+			</if>
+			<if test="lawAudit != null">
+				law_audit,
+			</if>
+			<if test="bizAudit != null">
+				biz_audit,
+			</if>
+			<if test="careerAudit != null">
+				career_audit,
+			</if>
+			<if test="purchaseAudit != null">
+				purchase_audit,
+			</if>
+			<if test="supplyChainGroupAudit != null">
+				supply_chain_group_audit,
+			</if>
+			<if test="supplyChainServiceAudit != null">
+				supply_chain_service_audit,
+			</if>
+			<if test="goodsRiskAudit != null">
+				goods_risk_audit,
+			</if>
+			<if test="busiAudit != null">
+				busi_audit,
+			</if>
+			<if test="financeAudit != null">
+				finance_audit,
+			</if>
+			<if test="finance2Audit != null">
+				finance2_audit,
+			</if>
+			<if test="riskSpecialAudit != null">
+				risk_special_audit,
+			</if>
+			<if test="riskAudit != null">
+				risk_audit,
+			</if>
+			<if test="deptManageAudit != null">
+				dept_manage_audit,
+			</if>
+			<if test="bossAudit != null">
+				boss_audit,
+			</if>
+			<if test="isFirstRisk != null">
+				is_first_risk,
+			</if>
+			<if test="isFirstLaw != null">
+				is_first_law,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="auditFlowNo != null">
+				#{auditFlowNo,jdbcType=VARCHAR},
+			</if>
+			<if test="auditFlowType != null">
+				#{auditFlowType,jdbcType=TINYINT},
+			</if>
+			<if test="auditFlowName != null">
+				#{auditFlowName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawAudit != null">
+				#{lawAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="bizAudit != null">
+				#{bizAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="careerAudit != null">
+				#{careerAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="purchaseAudit != null">
+				#{purchaseAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyChainGroupAudit != null">
+				#{supplyChainGroupAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyChainServiceAudit != null">
+				#{supplyChainServiceAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsRiskAudit != null">
+				#{goodsRiskAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="busiAudit != null">
+				#{busiAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="financeAudit != null">
+				#{financeAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="finance2Audit != null">
+				#{finance2Audit,jdbcType=VARCHAR},
+			</if>
+			<if test="riskSpecialAudit != null">
+				#{riskSpecialAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="riskAudit != null">
+				#{riskAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="deptManageAudit != null">
+				#{deptManageAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="bossAudit != null">
+				#{bossAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="isFirstRisk != null">
+				#{isFirstRisk,jdbcType=TINYINT},
+			</if>
+			<if test="isFirstLaw != null">
+				#{isFirstLaw,jdbcType=TINYINT},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.AuditFlow">
+		update tb_audit_flow
+		<set>
+			<if test="auditFlowNo != null">
+				audit_flow_no = #{auditFlowNo,jdbcType=VARCHAR},
+			</if>
+			<if test="auditFlowType != null">
+				audit_flow_type = #{auditFlowType,jdbcType=TINYINT},
+			</if>
+			<if test="auditFlowName != null">
+				audit_flow_name = #{auditFlowName,jdbcType=VARCHAR},
+			</if>
+			<if test="lawAudit != null">
+				law_audit = #{lawAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="bizAudit != null">
+				biz_audit = #{bizAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="careerAudit != null">
+				career_audit = #{careerAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="purchaseAudit != null">
+				purchase_audit = #{purchaseAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyChainGroupAudit != null">
+				supply_chain_group_audit =
+				#{supplyChainGroupAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyChainServiceAudit != null">
+				supply_chain_service_audit =
+				#{supplyChainServiceAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsRiskAudit != null">
+				goods_risk_audit = #{goodsRiskAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="busiAudit != null">
+				busi_audit = #{busiAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="financeAudit != null">
+				finance_audit = #{financeAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="finance2Audit != null">
+				finance2_audit = #{finance2Audit,jdbcType=VARCHAR},
+			</if>
+			<if test="riskSpecialAudit != null">
+				risk_special_audit =
+				#{riskSpecialAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="riskAudit != null">
+				risk_audit = #{riskAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="deptManageAudit != null">
+				dept_manage_audit = #{deptManageAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="bossAudit != null">
+				boss_audit = #{bossAudit,jdbcType=VARCHAR},
+			</if>
+			<if test="isFirstRisk != null">
+				is_first_risk = #{isFirstRisk,jdbcType=TINYINT},
+			</if>
+			<if test="isFirstLaw != null">
+				is_first_law = #{isFirstLaw,jdbcType=TINYINT},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

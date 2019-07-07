@@ -1,0 +1,114 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">地址信息浏览</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectBaseInfoScan.html">基础信息</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/subject/subjectAddressScan.html">地址信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAccountScan.html">帐号信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectInvoiceScan.html">开票信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectUserInfoScan.html">用户信息</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="baseSubject/address/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [
+	{  
+	    title: '序号',
+	    field: 'columnsNumber',  
+	    width: 10
+	}, {
+         title: '地址类型',
+         field: 'addressTypeName',
+         width: 60,
+         align: 'center'
+     }, {
+         title: '国家',
+         field: 'nationName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '省',
+         field: 'provinceName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '市',
+         field: 'cityName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '县',
+         field: 'countyName',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '地址',
+         field: 'addressDetail',
+         width: 150,
+         align: 'center'
+     }, {
+         title: '联系人',
+         field: 'contactPerson',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '手机',
+         field: 'mobilePhone',
+         width: 80,
+         align: 'center'
+     }, {
+         title: '电话',
+         field: 'telephone',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '传真',
+         field: 'fax',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '备注',
+         field: 'note',
+         width: 70,
+         align: 'center'
+     }, {
+         title: '状态',
+         field: 'stateLabel',
+         width: 50,
+         align: 'center'
+     }];
+
+    options.initPage = function(){
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+      };
+
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url, options.param);
+    })
+    
+    GLOBAL.goBack();
+
+
+</script>

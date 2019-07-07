@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.AccountBookLineRelDao">
+	<resultMap id="relResultMap" type="com.scfs.domain.fi.entity.AccountBookLineRel">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="account_book_id" property="accountBookId"
+			jdbcType="VARCHAR" />
+		<result column="account_book_name" property="accountBookName"
+			jdbcType="VARCHAR" />
+		<result column="busi_unit" property="busiUnit" jdbcType="INTEGER" />
+		<result column="account_line_id" property="accountLineId"
+			jdbcType="VARCHAR" />
+		<result column="account_line_name" property="accountLineName"
+			jdbcType="VARCHAR" />
+		<result column="account_line_no" property="accountLineNo"
+			jdbcType="VARCHAR" />
+		<result column="account_line_type" property="accountLineType"
+			jdbcType="VARCHAR" />
+		<result column="debit_or_credit" property="debitOrCredit"
+			jdbcType="VARCHAR" />
+		<result column="account_line_level" property="accountLineLevel"
+			jdbcType="VARCHAR" />
+		<result column="need_project" property="needProject" jdbcType="INTEGER" />
+		<result column="need_supplier" property="needSupplier"
+			jdbcType="INTEGER" />
+		<result column="need_cust" property="needCust" jdbcType="INTEGER" />
+		<result column="need_account" property="needAccount" jdbcType="INTEGER" />
+		<result column="need_user" property="needUser" jdbcType="INTEGER" />
+		<result column="need_tax_rate" property="needTaxRate" jdbcType="INTEGER" />
+		<result column="need_inner_busi_unit" property="needInnerBusiUnit"
+			jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="deleter_id" property="deleterId" jdbcType="INTEGER" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.AccountBookLineRel">
+		insert into
+		tb_fi_account_book_line_rel (
+		account_book_id,
+		account_line_id,
+		state,
+		creator,
+		creator_id
+		)
+		values(
+		#{accountBookId},
+		#{accountLineId},
+		#{state},
+		#{creator},
+		#{creatorId}
+		)
+	</insert>
+	<sql id="rel_column_list">
+		id,account_book_id,account_line_id,state,creator,creator_id,create_at,deleter,deleter_id,delete_at
+	</sql>
+	<select id="queryResultsByBookId"
+		parameterType="com.scfs.domain.fi.dto.req.AcctBookLineRelSearchReqDto"
+		resultMap="relResultMap">
+		select a.id , a.account_book_id , b.account_book_name , b.busi_unit ,
+		a.account_line_id , c.account_line_no , c.account_line_name,
+		c.account_line_type, c.account_line_level , c.debit_or_credit ,
+		c.need_project, c.need_supplier , c.need_cust , c.need_account ,
+		c.need_user, c.need_tax_rate , c.need_inner_busi_unit , a.state ,
+		a.creator , a.creator_id , a.create_at , a.deleter , a.deleter_id ,
+		a.delete_at
+		from tb_fi_account_book_line_rel a , tb_fi_account_book b ,
+		tb_fi_account_line c
+		where a.account_book_id = b.id and
+		a.account_line_id = c.id and a.account_book_id = #{accountBookId}
+		<if test="state != null">
+			and a.state = #{state}
+		</if>
+		<if test="isLast != null">
+			and c.is_last = #{isLast}
+		</if>
+		order by id desc
+
+	</select>
+
+	<select id="queryCountByCon" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(1) from tb_fi_account_book_line_rel
+		where
+		account_book_id = #{accountBookId} and account_line_id =
+		#{accountLineId} and state = #{state}
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="relResultMap">
+		select
+		<include refid="rel_column_list" />
+		from tb_fi_account_book_line_rel
+		where id=#{id} for update
+	</select>
+
+	<update id="deleteById" parameterType="com.scfs.domain.fi.entity.AccountBookLineRel">
+		update
+		tb_fi_account_book_line_rel
+		set deleter = #{deleter} , deleter_id =
+		#{deleterId} , delete_at =
+		#{deleteAt} , state = #{state}
+		where id =
+		#{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="collectApproveList" var="collect"
+			varType="com.scfs.domain.invoice.dto.resp.InvoiceCollectOverseasResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">collect.id</mapping>
+				<mapping row="2" col="1">collect.applyNo</mapping>
+				<mapping row="2" col="2">collect.projectName</mapping>
+				<mapping row="2" col="3">collect.businessUnitName</mapping>
+				<mapping row="2" col="4">collect.supplierName</mapping>
+				<mapping row="2" col="5">collect.billTypeName</mapping>
+				<mapping row="2" col="6">collect.invoiceNo</mapping>
+				<mapping row="2" col="7">collect.invoiceDate</mapping>
+				<mapping row="2" col="8">collect.invoiceAmount</mapping>
+				<mapping row="2" col="9">collect.remark</mapping>
+				<mapping row="2" col="10">collect.invoiceRemark</mapping>
+				<mapping row="2" col="11">collect.approveDate</mapping>
+				<mapping row="2" col="12">collect.approveRemark</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

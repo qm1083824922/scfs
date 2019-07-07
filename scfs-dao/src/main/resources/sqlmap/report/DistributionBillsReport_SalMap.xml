@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.report.DistributionBillsReportDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.report.entity.DistributionBillsReport">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="pay_id" property="payId" jdbcType="BIGINT" />
+		<result column="po_id" property="poId" jdbcType="BIGINT" />
+		<result column="line_id" property="lineId" jdbcType="BIGINT" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="delivery_id" property="deliveryId" jdbcType="BIGINT" />
+		<result column="delivery_dtl_id" property="deliveryDtlId"
+			jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="business_unit_id" property="businessUnitId"
+			jdbcType="BIGINT" />
+		<result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="append_no" property="appendNo" jdbcType="VARCHAR" />
+		<result column="number" property="number" jdbcType="VARCHAR" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="currency_id" property="currencyId" jdbcType="BIGINT" />
+		<result column="batch_num" property="batchNum" jdbcType="VARCHAR" />
+		<result column="required_send_num" property="requiredSendNum"
+			jdbcType="DECIMAL" />
+		<result column="required_send_amount" property="requiredSendAmount"
+			jdbcType="DECIMAL" />
+		<result column="pledge" property="pledge" jdbcType="DECIMAL" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="budget_amount" property="budgetAmount"
+			jdbcType="DECIMAL" />
+		<result column="pay_create_time" property="payCreateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="occupy_day" property="occupyDay" jdbcType="BIGINT" />
+		<result column="discount_amount" property="discountAmount"
+			jdbcType="DECIMAL" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="retainage_amount" property="retainageAmount"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<!-- 获取信息 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.report.req.DistributionBillsReportReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		line.id,
+		pp.id AS pay_id,
+		po.id AS po_id,
+		line.id AS
+		line_id,
+		goods.id
+		AS goods_id,
+		bd.id AS delivery_id,
+		bdl.id AS
+		delivery_dtl_id,
+		po.project_id,
+		po.business_unit_id,
+		po.supplier_id,
+		po.order_no,
+		po.append_no,
+		goods.number,
+		line.goods_price,
+		po.currency_id,
+		line.batch_num,
+		bdl.required_send_num,
+		(IFNULL(bdl.required_send_num, 0)
+		* IFNULL(bdl.required_send_price, 0)) AS required_send_amount,
+		goods.pledge,
+		line.pay_time,
+		(IFNULL(line.pay_price, 0)*
+		IFNULL(line.goods_num, 0)) AS budget_amount,
+		pp.pay_create_time,
+		<![CDATA[
+		   (IF(DATEDIFF(pp.pay_create_time, line.pay_time) < 0, 0, DATEDIFF(pp.pay_create_time, line.pay_time)) 
+		   		+ (select tpi.pay_cycle from tb_project_item tpi where tpi.project_id = bd.project_id)) AS occupy_day,
+		 ]]>
+		IFNULL(line.discount_amount, 0) AS discount_amount,
+		IFNULL(line.paid_amount,0)-(IFNULL(line.pay_price,0)*IFNULL(line.goods_num,0))
+		AS pay_amount,
+		IFNULL(line.amount,0)-IFNULL(line.paid_amount,0) -
+		IFNULL(line.discount_amount,0) AS retainage_amount
+		FROM
+		tb_pms_pay pp
+		INNER JOIN tb_bill_delivery bd ON pp.pay_sn= bd.affiliate_no
+		INNER JOIN
+		tb_bill_delivery_dtl bdl ON bdl.bill_delivery_id=bd.id
+		INNER JOIN
+		tb_stl stl ON stl.id=bdl.stl_id
+		INNER JOIN tb_purchase_order_line line
+		ON line.id = stl.po_dtl_id
+		INNER JOIN tb_base_goods goods ON
+		goods.id=line.goods_id
+		INNER JOIN tb_purchase_order_title po ON
+		po.id=line.po_id
+		<if test="userId !=null">
+			INNER JOIN tb_base_user_project pro ON
+			po.project_id=pro.project_id
+		</if>
+		WHERE pp.flag=0
+		AND pp.deal_flag=3
+		<if test="userId != null">
+			AND pro.user_id=#{userId}
+			AND pro.state = 1
+		</if>
+		<if test="projectId !=null">
+			AND po.project_id=#{projectId}
+		</if>
+		<if test="supplierId !=null">
+			AND po.supplier_id=#{supplierId}
+		</if>
+		<if test="businessUnitId !=null">
+			AND po.business_unit_id=#{businessUnitId}
+		</if>
+		<if test="orderNo != null and orderNo !=''">
+			AND po.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="appendNo != null and appendNo !=''">
+			AND po.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="startOrderDate != null ">
+			<![CDATA[
+					AND line.pay_time >=#{startOrderDate}
+				]]>
+		</if>
+		<if test="endOrderDate != null ">
+			<![CDATA[
+					AND line.pay_time <=#{endOrderDate}
+				]]>
+		</if>
+		<if test="startPayCreateDate != null ">
+			<![CDATA[
+					AND pp.pay_create_time >=#{startPayCreateDate}
+				]]>
+		</if>
+		<if test="endPayCreateDate != null ">
+			<![CDATA[
+					AND pp.pay_create_time <=#{endPayCreateDate}
+				]]>
+		</if>
+		<if test="ids != null">
+			<foreach collection="ids" item="id" open="and line.id in ("
+				separator="," close=")">
+				${id}
+			</foreach>
+		</if>
+		GROUP BY line.id
+		order by pp.id desc
+	</select>
+
+	<!--获取信息 -->
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT
+		pp.id,
+		pp.id AS pay_id,
+		po.id AS po_id,
+		line.id AS
+		line_id,
+		goods.id
+		AS goods_id,
+		bd.id AS delivery_id,
+		bdl.id AS
+		delivery_dtl_id,
+		po.project_id,
+		po.business_unit_id,
+		po.supplier_id,
+		po.order_no,
+		po.append_no,
+		goods.number,
+		line.goods_price,
+		po.currency_id,
+		line.batch_num,
+		bdl.required_send_num,
+		(IFNULL(bdl.required_send_num, 0)
+		* IFNULL(bdl.required_send_price, 0)) AS required_send_amount,
+		goods.pledge,
+		line.pay_time,
+		(IFNULL(line.pay_price, 0)*
+		IFNULL(line.goods_num, 0)) AS budget_amount,
+		pp.pay_create_time,
+		<![CDATA[
+		   (IF(DATEDIFF(pp.pay_create_time,line.pay_time)<0,0,DATEDIFF(pp.pay_create_time,line.pay_time))+7) AS occupy_day,
+		 ]]>
+		IFNULL(line.discount_amount, 0) AS discount_amount,
+		IFNULL(line.paid_amount,0)-(IFNULL(line.pay_price,0)*IFNULL(line.goods_num,0))
+		AS pay_amount,
+		IFNULL(line.amount,0)-IFNULL(line.paid_amount,0) -
+		IFNULL(line.discount_amount,0) AS retainage_amount
+		FROM
+		tb_pms_pay pp
+		INNER JOIN tb_bill_delivery bd ON pp.pay_sn= bd.affiliate_no
+		INNER JOIN
+		tb_bill_delivery_dtl bdl ON bdl.bill_delivery_id=bd.id
+		INNER JOIN
+		tb_stl stl ON stl.id=bdl.stl_id
+		INNER JOIN tb_purchase_order_line line
+		ON line.id = stl.po_dtl_id
+		INNER JOIN tb_base_goods goods ON
+		goods.id=line.goods_id
+		INNER JOIN tb_purchase_order_title po ON
+		po.id=line.po_id
+		<if test="userId !=null">
+			INNER JOIN tb_base_user_project pro ON
+			po.project_id=pro.project_id
+		</if>
+		WHERE pp.flag=0
+		AND pp.deal_flag=3
+		<if test="userId != null">
+			AND pro.user_id=#{userId}
+			AND pro.state = 1
+		</if>
+		AND line.id=#{id}
+		GROUP BY line.id
+	</select>
+
+	<select id="queryOldPayDate" resultType="java.util.Date"
+		parameterType="java.lang.String">
+		select
+		pay_create_time
+		from tb_pms_pay
+		where flag=0
+		AND deal_flag=3
+		<![CDATA[
+               AND pay_create_time < #{payTime}
+        ]]>
+		ORDER BY pay_create_time DESC LIMIT 1
+	</select>
+
+	<!-- 铺货预算对账单 占用天数=结算日期-预付日期 尾款=销售金额-预付(付款单价*销售数量) -->
+	<select id="queryBudgetResultsByCon"
+		parameterType="com.scfs.domain.report.req.DistributionBillsReportReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		line.id AS id,
+		po.id AS po_id,
+		line.id AS line_id,
+		goods.id AS
+		goods_id,
+		po.project_id,
+		po.business_unit_id,
+		po.supplier_id,
+		po.order_no,
+		po.append_no,
+		goods.number,
+		line.goods_price,
+		po.currency_id,
+		line.batch_num,
+		SUM(popr.out_number) AS
+		required_send_num,
+		SUM((IFNULL(pso.purchase_price, 0) *
+		IFNULL(popr.out_number, 0))) AS
+		required_send_amount,
+		goods.pledge,
+		line.pay_time,
+		SUM((IFNULL(line.pay_price, 0)* IFNULL(popr.out_number,
+		0))) AS
+		budget_amount,
+		NOW() AS pay_create_time,
+		<if test="payCreateDate != null ">
+			<![CDATA[
+			  (IF(DATEDIFF(#{payCreateDate},line.pay_time)<0,0,DATEDIFF(#{payCreateDate},line.pay_time))) AS occupy_day,
+			]]>
+		</if>
+		SUM(IFNULL(line.discount_amount, 0)) AS discount_amount,
+		SUM((IFNULL(popr.out_number, 0) * IFNULL(pso.purchase_price, 0))
+		-(IFNULL(line.pay_price, 0)* IFNULL(popr.out_number, 0))) AS
+		retainage_amount
+		FROM tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel
+		popr ON popr.pms_out_id=pso.id
+		INNER JOIN tb_purchase_order_line line
+		ON popr.po_line_id=line.id
+		INNER JOIN tb_purchase_order_title po ON
+		line.po_id=po.id
+		INNER JOIN tb_base_goods goods ON
+		line.goods_id=goods.id
+		<if test="userId !=null">
+			INNER JOIN tb_base_user_project pro ON
+			po.project_id=pro.project_id
+		</if>
+		WHERE pso.flag=0
+		AND pso.deal_flag=3
+		AND po.order_type=2
+		AND
+		line.pay_time IS NOT NULL
+		<if test="userId != null">
+			AND pro.user_id=#{userId}
+			AND pro.state = 1
+		</if>
+		<if test="projectId !=null">
+			AND po.project_id=#{projectId}
+		</if>
+		<if test="supplierId !=null">
+			AND po.supplier_id=#{supplierId}
+		</if>
+		<if test="businessUnitId !=null">
+			AND po.business_unit_id=#{businessUnitId}
+		</if>
+		<if test="orderNo != null and orderNo !=''">
+			AND po.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="appendNo != null and appendNo !=''">
+			AND po.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="startOrderDate != null ">
+			<![CDATA[
+					AND line.pay_time >=#{startOrderDate}
+				]]>
+		</if>
+		<if test="endOrderDate != null ">
+			<![CDATA[
+					AND line.pay_time <=#{endOrderDate}
+				]]>
+		</if>
+		<if test="startPayCreateDate != null ">
+			<![CDATA[
+					AND pso.sales_date >=#{startPayCreateDate}
+				]]>
+		</if>
+		<if test="endPayCreateDate != null ">
+			<![CDATA[
+					AND pso.sales_date <=#{endPayCreateDate}
+				]]>
+		</if>
+		<if test="ids != null">
+			<foreach collection="ids" item="id" open="and line.id in ("
+				separator="," close=")">
+				${id}
+			</foreach>
+		</if>
+		<if test="orderNos != null">
+			<foreach collection="orderNos" item="orderNo" open="and po.order_no in ("
+				separator="," close=")">'${orderNo}'</foreach>
+		</if>
+		GROUP BY
+		po.order_no,goods.number,line.goods_price,po.currency_id,goods.pledge,line.pay_time
+		ORDER BY pso.id DESC
+	</select>
+
+</mapper>

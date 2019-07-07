@@ -1,0 +1,331 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+	        <li>采购</li>
+	        <li>采购退货单</li>
+	        <li>退货单明细编辑</li>
+	        <li class="active">新增</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单编号：</label>
+                            <input type="text" class="form-control" id="orderNo" name="orderNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单附属编号：</label>
+                            <input type="text" class="form-control" id="appendNo" name="appendNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">入库编号：</label>
+                            <input type="text" class="form-control" id="billInStoreNo" name="billInStoreNo">     
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">入库附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">  
+                        </div>
+                        <div class="search-item">
+                         	<label class="control-label">收货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartReceive" name="startReceiveDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndReceive" name="endReceiveDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">入库日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartAccept" name="startAcceptTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndAccept" name="endAcceptTime">           
+                        </div>
+                        <div class="search-item">                                        
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">  
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">    
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label ml10">库存状态：</label>
+                            <select class="form-control js-select" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                        	<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button> 
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                              	
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="poReturn/billInStoreLine/undivide/query">
+                </table>
+                <b><span class="total_sum"></span></b>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+      			<button type="button" data-permissionUrl="/poReturn/line/add" class="btn btn-primary btn-sm" id="batchAdd">选择库存</button> 
+      			<button type="button" data-url="html/purchaseReturn/poReturnDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button> 
+    		</div>
+    		<!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+
+<script>
+
+function sendNumFormatter(value, row, index) {
+    return "<input class='form-control'    name ='returnNum' style='text-align:center;color:red' value = "+ row.availableNum +"> </input>";
+}
+
+function sendPriceFormatter(value, row, index) {
+    return "<input class='form-control'  name='returnPrice' style='text-align:center;color:red' value= "+ row.costPrice + "></input>";
+}
+
+/*数据表格*/
+var tabCols = [
+	{
+         field: 'checkItem',
+         checkbox: true,
+    }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '商品编号',
+	     field: 'goodsNumber',
+	     align: 'center'
+	 }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+	     title: '商品名称',
+	     field: 'goodsName',
+	     align: 'center'
+	 }, {
+	     title: '商品型号',
+	     field: 'goodsType',
+	     align: 'center'
+	 }, {
+	     title: '订单编号',
+	     field: 'orderNo',
+	     align: 'center'
+	 }, {
+	     title: '订单附属编号',
+	     field: 'appendNo',
+	     align: 'center'
+	 }, {
+	     title: '入库编号',
+	     field: 'billInStoreNo',
+	     align: 'center'
+	 }, {
+	     title: '入库附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '收货日期',
+	     field: 'receiveDate',
+	     align: 'center'
+	 }, {
+	     title: '入库日期',
+	     field: 'acceptTime',
+	     align: 'center'
+	 }, {
+	     title: '批次',
+	     field: 'batchNo',
+	     align: 'center'
+	 }, {
+	     title: '库存状态',
+	     field: 'goodsStatusName',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+         title: '成本单价',
+         field: 'costPriceStr',
+         align: 'center'
+     }, {
+         title: '库存数量',
+         field: 'storeNum',
+         align: 'center'
+     }, {
+         title: '可用库存数量',
+         field: 'availableNum',
+         align: 'center'
+     }, {
+         title: '退货数量',
+         field: 'returnNum',
+         align: 'center',
+         formatter: sendNumFormatter
+     }, {
+         title: '退货单价',
+         field: 'returnPrice',
+         align: 'center',
+         formatter: sendPriceFormatter
+     }
+];
+
+options.initPage = function(){
+	var params = {
+  		id : options.param.id,
+ 	    querySource :5		
+	};
+	GLOBAL.initTable($('#js_dataTable'), tabCols, params, null, {
+		pagination: false,
+		onCheck: function(row, $element){
+			checkCurrency();
+			sum();
+        },
+        onUncheck:function(row, $element){
+            sum();
+        },
+        onCheckAll: function(){
+        	checkCurrency();
+            sum();
+        },
+        onUncheckAll: function(){
+            sum();
+        },
+        onLoadSuccess: function(data) {
+        	sum();
+        }
+	});
+	$('#js_dataTable').on("input", ".returnNum", function(){
+        sum();
+    });
+	$('#js_dataTable').on("input", ".returnPrice", function(){
+        sum();
+    });
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+function checkCurrency() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+	var currCurrencyType = null;
+	if (selectedRows.length > 0) {
+	  	for(var i= 0; i < selectedRows.length; i++){
+	        var currencyType = selectedRows[i].currencyType;
+	        if (currCurrencyType == null) {
+	            currCurrencyType = currencyType;
+	        }
+	        if (currCurrencyType != currencyType) {
+	    		layer.msg("所选库存币种不相同，请重新选择");
+	    		$('#js_dataTable').bootstrapTable('uncheckAll');
+	    		return;
+	        }
+	  	}
+	}
+}
+
+function sum(){
+    var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+  	var totalSendNum = 0;
+  	var totalSendAmount = 0;
+  	for(var i= 0; i < selectedRows.length; i++){
+        var id = selectedRows[i].id;
+      	var returnNum = $('#js_dataTable tr[data-uniqueid='+id+']').find("input[name='returnNum']").val().replace(/,/g, "");
+      	var returnPrice = $('#js_dataTable tr[data-uniqueid='+id+']').find("input[name='returnPrice']").val().replace(/,/g, "");
+      	var sendAmount = 0;
+      	if(returnNum){
+      		totalSendNum += parseFloat(returnNum);
+      	}
+      	if(returnNum && returnPrice) {
+          	sendAmount = returnNum * returnPrice;
+          	totalSendAmount += parseFloat(sendAmount);
+      	}
+  	}
+  	totalSendNum = totalSendNum.toFixed(2);
+  	totalSendAmount = totalSendAmount.toFixed(2);
+  	$(".total_sum").text("合计：退货数量：" + totalSendNum + "；退货金额：" + totalSendAmount);
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	$.extend(data, {
+  		id : options.param.id,
+ 	    querySource : 5
+	});
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#batchAdd").click(function() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    if (idsLen == 0) {
+      	layer.msg("请选择！");
+      	return;
+    }
+    var rows = [];
+    for (var i = 0; i < idsLen; i++) {
+    	var row = new Object();
+    	var id = selectedRows[i].id;
+    	row.id = id;    	
+    	var returnNum = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find("input[name='returnNum']").val();
+    	var returnPrice = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find("input[name='returnPrice']").val();
+
+    	if (!returnNum) {
+    		layer.msg("退货数量必填且正确，请重新输入");
+    		return;
+    	}
+    	if (returnNum <= 0) {
+    		layer.msg("退货数量不能为负数和零，请重新输入");
+    		return;
+    	}
+    	if (!returnPrice) {
+    		layer.msg("退货单价必填且正确，请重新输入");
+    		return;
+    	}
+    	if (returnPrice < 0) {
+    		layer.msg("退货单价不能为负数，请重新输入");
+    		return;
+    	}
+    	var availableNum = selectedRows[i].availableNum;
+  	  	if (availableNum) {
+  	  		availableNum = availableNum.replace(/,/g, "");
+  	  	}
+    	if (returnNum*1 > availableNum*1) {
+    		layer.msg("退货数量大于可用库存数量，请重新输入");
+    		return;
+    	}
+    	row.returnNum = returnNum.replace(/,/g, "");
+    	row.returnPrice = returnPrice.replace(/,/g, "");
+    	rows.push(row);
+    }
+    add(rows);
+})
+
+function add(rows) {
+	var params = {
+		poId: options.param.id,
+		purchaseReturnDtl: rows
+	}
+	GLOBAL.ajax("poReturn/line/add", JSON.stringify(params), function(e){
+        if (e.success) {
+       		layer.msg("选择库存成功", {
+               icon: 1
+         	});
+         	$("#btnSearch").click();
+        } else {
+           layer.msg(e.msg);
+        } 		
+  	}, true)
+}
+
+GLOBAL.goBack();
+
+</script>

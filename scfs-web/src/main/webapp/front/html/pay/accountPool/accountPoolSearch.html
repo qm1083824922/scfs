@@ -1,0 +1,110 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">资金池</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="accountPool">
+                    <div class="form-group-sm">
+                        <div class="search-item"> 
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="accountPool/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+
+window.operateEvents = {
+	      'click .scan': function(e, value, row, index){
+	  		options.param.accountId = row.accountId;
+	  		options.param.busiUnit = row.busiUnit;
+	  		options.param.currencyType = row.currencyType;
+	  		options.param.id=row.id;
+	  		GLOBAL.go("html/pay/accountPool/accountPoolScan.html");
+	      },
+};
+options.initPage = function() {
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+}
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '经营单位',
+	     field: 'busiUnitName',
+	     width: 100,
+	     align: 'center'
+	 },  {
+	     title: '账号',
+	     field: 'accountNo',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '可用资金',
+	     field: 'availableAmount',
+	     width: 100,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '账户余额',
+	     field: 'accountBalanceAmount',
+	     width: 100,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 },{
+	     title: '待回资金',
+	     field: 'profitAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         width: 160,
+         align: 'center',
+         events: operateEvents,
+	 }
+];
+$("#btnSearch").click(function() {
+	var data = $("#accountPool").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+	GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+</script>

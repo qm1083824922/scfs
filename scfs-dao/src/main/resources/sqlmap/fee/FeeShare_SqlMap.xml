@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fee.FeeShareDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fee.entity.FeeShare">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="manage_id" property="manageId" jdbcType="INTEGER" />
+		<result column="user_id" property="shareUserId" jdbcType="INTEGER" />
+		<result column="cust_id" property="shareCustId" jdbcType="INTEGER" />
+		<result column="project_id" property="shareProjectId" jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="share_date" property="shareDate" jdbcType="TIMESTAMP" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		manage_id,
+		project_id,
+		user_id,
+		cust_id,
+		amount,
+		create_at,
+		creator_id,
+		creator,
+		is_delete,
+		share_date
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fee.dto.req.FeeShareReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_fee_share where is_delete=0 and manage_id=#{manageId}
+		order by
+		id desc
+	</select>
+
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fee_share
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fee.entity.FeeManage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fee_share(
+		manage_id,
+		user_id,
+		project_id,
+		cust_id,
+		amount,
+		create_at,
+		creator_id,
+		creator,
+		share_date
+		)
+		values
+		(
+		#{manageId,jdbcType=INTEGER},
+		#{shareUserId,jdbcType=INTEGER},
+		#{shareProjectId,jdbcType=INTEGER},
+		#{shareCustId,jdbcType=INTEGER},
+		#{amount,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{shareDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.BaseEntity">
+		update tb_fee_share
+		<set>
+			id = #{id}
+			<if test="shareUserId != null">
+				,user_id = #{shareUserId,jdbcType=INTEGER}
+			</if>
+			<if test="shareProjectId != null">
+				,project_id = #{shareProjectId,jdbcType=INTEGER}
+			</if>
+			<if test="shareCustId != null ">
+				,cust_id = #{shareCustId,jdbcType=INTEGER}
+			</if>
+			<if test="manageId != null">
+				,manage_id = #{manageId,jdbcType=INTEGER}
+			</if>
+			<if test="amount != null and amount != ''">
+				,amount = #{amount,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="shareDate != null">
+				,share_date = #{shareDate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 通过分摊日期查询（人工费用/管理费用）信息 -->
+	<select id="queryResultsByManageId" parameterType="com.scfs.domain.fee.dto.req.FeeShareReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_fee_share where is_delete=0
+		<if test="manageId!=null">
+			and manage_id=#{manageId}
+		</if>
+
+		order by
+		id desc
+	</select>
+</mapper>

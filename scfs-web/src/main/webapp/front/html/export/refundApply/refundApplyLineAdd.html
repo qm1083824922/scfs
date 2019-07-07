@@ -1,0 +1,156 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>出口</li>
+		<li>退税明细</li>
+		<li class="active">添加</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form method="post" action="###" class="form-inline"
+				id="searchForm">
+				<div class="form-group-sm">
+					<p>
+						<label class="control-label ml10">报关附属编号：</label> 
+						<input type="text" class="form-control" id="affiliateNo" name="affiliateNo">
+						
+						<label class="control-label ml10">报关编号：</label> 
+						<input type="text" class="form-control" id="applyNo" name="applyNo">
+						
+						<label class="control-label">报关日期：</label>
+						<input type="text" class="form-control js_datePicker" id="startCustomsDate" value="" name="startCustomsDate">- 
+						<input type="text" class="form-control js_datePicker"  id="endCustomsDate" value="" name="endCustomsDate">
+
+						<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+					</p>
+				</div>
+			</form>
+			<form class="form-horizontal form-inline" id="poOrderDtlEditAddForm" data-url="payPoRela/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="refundApplyId" name="id">
+					<table id="js_dataTable" data-url="refundApplyLine/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-url="refundApplyLine/add" data-permissionUrl="/refundApplyLine/add">保存</button>
+					<button type="button" data-url="html/export/refundApply/refundApplyLineEdit.html" class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{
+		title : '报关编号',
+		field : 'applyNo',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '报关附属编号',
+		field : 'affiliateNo',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '报关时间',
+		field : 'customsDate',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '退税数量',
+		field : 'customsNum',
+		width : 70,
+		align : 'center'
+	},
+	{
+		title : '退税含税金额',
+		field : 'customsAmount',
+		width : 210,
+		align : 'center'
+	},
+	{
+		title : '税率',
+		field : 'taxRate',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '可退税额',
+		field : 'customsTaxAmount',
+		width : 80,
+		align : 'center'
+	}];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+			id : options.param.id
+		});
+	};
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			id : options.param.id
+		});
+		$('#js_dataTable').bootstrapTable('refresh', {
+			query : data
+		});
+	})
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+
+				var selectedRows = $('#js_dataTable').bootstrapTable(
+						'getSelections');
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						dtlArr.push({
+							"customsApplyId" : id
+						});
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+							refundList : dtlArr,
+						refundApplyId : options.param.id
+					};
+					var setContentType = true;
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								GLOBAL.go("html/export/refundApply/refundApplyLineEdit.html");
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, setContentType,$("#save"));
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

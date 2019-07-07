@@ -1,0 +1,83 @@
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票确认</li>
+            <li class="active">确认</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="">
+            <div class="box-body">  
+            	<div class="row">
+					<div class="col-md-6">
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      	<td width="180" class="text-right"><b>发票号：</b></td> 
+                        <td class="text-left">
+                           <input  type="text" class="form-control" id="invoiceCode"  name="invoiceCode" > 
+                        </td> 
+                    </tr>
+                  	<tr>
+                      	<td width="180" class="text-right"><b>开票日期：</b></td> 
+                        <td class="text-left"> 
+                         	<input type="text" class="form-control js_datePicker" id="invoiceDate"  name="invoiceDate"> 
+                        </td> 
+                    </tr>
+                    
+                  </table>
+                  </div>
+                </div>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-url="html/invoice/invoiceEnsure/invoiceEnsureSearch.html"  data-permissionUrl="/ensureInvoiceItem/update"class="btn btn-primary btn-sm">确认</button> 
+              <button type="button" id="js-back" data-url="html/invoice/invoiceEnsure/invoiceEnsureSearch.html"  class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>
+        </div>
+  </section>
+</div>
+<script> 
+options.initPage = function(){ 
+	 $("#form1").validate({
+		 rules: {
+			 invoiceCode: {
+               required: true
+             },
+             applyDate: {
+                 required: true 
+             } 
+         },
+	     submitHandler: function() {
+	          var data ={
+	        		 id:options.param.id,
+	         		 invoiceCode:$("#invoiceCode").val(),
+	         		 invoiceDate:$("#invoiceDate").val(), 
+	          };
+	          GLOBAL.ajax("ensureInvoiceItem/update",data, function(e){
+	        	  if (e.success) {
+	            	  layer.msg("确认成功！", {
+	                      icon: 1,
+	                      time: 1500
+	                  },function(){
+	                	  GLOBAL.go("html/invoice/invoiceEnsure/invoiceEnsureSearch.html");
+	                  })
+	              } else {
+	                  layer.msg(e.msg);
+	              }
+	          });
+	        }
+	    });
+  };
+  $("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    options.param.id=options.param.cid;
+	    GLOBAL.go(url, options.param);
+  })
+</script> 
+	 

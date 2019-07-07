@@ -1,0 +1,116 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>科目</li>
+		<li class="active">科目浏览</li>
+	</ol>
+	<?php include 'bread_crumbs.php' ?>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="accountLineForm">
+				<div class="box-body">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>科目编号：</b></td>
+							<td class="text-left"><label type="text"
+								id="accountLineNo" name="accountLineNo" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目级别：</b></td>
+							<td class="text-left"><label
+								 id="accountLineLevelName"
+								name="accountLineLevelName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目名称：</b></td>
+							<td class="text-left"><label 
+								name="accountLineName" id="accountLineName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>科目分类：</b></td>
+							<td class="text-left"><label 
+								id="accountLineTypeName" name="accountLineTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>末级科目：</b></td>
+							<td class="text-left"><label
+								 id="isLastLabel" name="isLastLabel"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>借贷：</b></td>
+							<td class="text-left"><label 
+								id="debitOrCreditName" name="debitOrCreditName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目辅助：</b></td>
+							<td class="text-left"><label 
+								id="needProjectStr" name="needProjectStr"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>供应商辅助：</b></td>
+							<td class="text-left"><label 
+								id="needSupplierStr" name="needSupplierStr"
+								></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>客户辅助：</b></td>
+							<td class="text-left"><label 
+								id="needCustStr" name="needCustStr" >
+							</label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>人员辅助：</b></td>
+							<td class="text-left"><label 
+								id="needUserStr" name="needUserStr" >
+							</label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>账号辅助：</b></td>
+							<td class="text-left"><label 
+								id="needAccountStr" name="needAccountStr" >
+							</label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>税率辅助：</b></td>
+							<td class="text-left"><label
+								 id="needTaxRateStr"
+								name="needTaxRateStr" > </label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>内部经营单位辅助：</b></td>
+							<td class="text-left"><label
+								 id="needInnerBusiUnitStr"
+								name="needInnerBusiUnitStr" > </label></td>
+						</tr>
+					</table>
+				</div>
+				<div class="box-footer text-center">
+					<button type="button" id="back" class="btn btn-default btn-sm"
+						data-url="html/fi/accountLine/accountLineSearch.html">
+						返回</a>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+options.initPage = function(){
+	var callback = function(reply) {
+		var data = reply.items;
+
+		for ( var i in data) {
+			var value = data[i];
+			$("#" + i).text(value);
+		}
+	}
+	GLOBAL.ajax("accountLine/detail", options.param, callback);
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}
+</script>

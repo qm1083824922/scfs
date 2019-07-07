@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseInvoiceDao">
+	<resultMap id="InvoiceResultMap" type="com.scfs.domain.base.entity.BaseInvoice">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="subject_id" property="subjectId" jdbcType="TINYINT" />
+		<result column="tax_payer" property="taxPayer" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<sql id="Invoice_column_list">
+		id, subject_id, tax_payer, bank_name, account_no, address,
+		phone_number, state, create_at, update_at
+	</sql>
+	<insert id="insertBaseInvoice" parameterType="com.scfs.domain.base.subject.dto.req.AddInvoiceDto">
+		INSERT INTO
+		tb_base_invoice(
+		subject_id,
+		tax_payer,
+		bank_name,
+		account_no,
+		address,
+		phone_number,
+		state,
+		creator)
+		VALUES (#{subjectId , jdbcType=TINYINT},
+		#{taxPayer},
+		#{bankName},
+		#{accountNo},
+		#{address},
+		#{phoneNumber},
+		#{state , jdbcType=TINYINT},
+		#{creator})
+	</insert>
+
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.base.entity.BaseInvoice">
+		select
+		<include refid="Invoice_column_list" />
+		from tb_base_invoice
+		where id = #{id} for update
+	</select>
+
+	<select id="queryInvoiceBySubjectId"
+		parameterType="com.scfs.domain.base.subject.dto.req.QueryInvoiceReqDto"
+		resultMap="InvoiceResultMap">
+		select
+		<include refid="Invoice_column_list" />
+		from tb_base_invoice
+		where subject_id = #{id}
+		order by id desc
+	</select>
+	<select id="queryInvoiceById" parameterType="java.lang.Integer"
+		resultMap="InvoiceResultMap">
+		select
+		<include refid="Invoice_column_list" />
+		from tb_base_invoice
+		where id = #{id}
+	</select>
+	<select id="queryAllInvoice" resultMap="InvoiceResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Invoice_column_list" />
+		from tb_base_invoice
+		<where>
+			<if test="updateAt != null">
+				<![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_invoice
+	</select>
+
+	<update id="updateBaseInvoiceById" parameterType="com.scfs.domain.base.entity.BaseInvoice">
+		update tb_base_invoice
+		<set>
+			<if test="taxPayer != null">
+				tax_payer=#{taxPayer},
+			</if>
+			<if test="accountNo != null">
+				account_no=#{accountNo},
+			</if>
+			<if test="bankName != null">
+				bank_name=#{bankName},
+			</if>
+			<if test="address != null">
+				address=#{address},
+			</if>
+			<if test="phoneNumber != null">
+				phone_number=#{phoneNumber},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="invalidInvoiceById" parameterType="com.scfs.domain.base.entity.BaseInvoice">
+		update
+		tb_base_invoice
+		set state=#{state} , deleter=#{deleter} ,
+		delete_at=#{deleteAt}
+		where
+		id=#{id}
+	</update>
+
+</mapper>

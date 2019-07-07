@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fee.FeeRecPayDao">
+	<resultMap type="com.scfs.domain.fee.entity.FeeRecPay" id="feeRecPayResult">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="rec_fee_id" property="recFeeId" jdbcType="BIGINT" />
+		<id column="pay_fee_id" property="payFeeId" jdbcType="BIGINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		rec_fee_id,
+		pay_fee_id,
+		is_delete,
+		creator_id,
+		creator,
+		create_at,
+		update_at
+	</sql>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fee.entity.FeeRecPay"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_fee_rec_pay (
+		rec_fee_id,
+		pay_fee_id
+		)
+		VALUES
+		(
+		#{recFeeId,jdbcType=BIGINT},
+		#{payFeeId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.fee.entity.FeeRecPay">
+		update tb_fee_rec_pay
+		<set>
+			id = #{id}
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryByRecId" resultMap="feeRecPayResult"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fee_rec_pay where rec_fee_id= #{recFeeId,jdbcType=TINYINT}
+		and
+		is_delete=0
+	</select>
+</mapper>

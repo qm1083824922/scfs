@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.ReceiptPoolDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.ReceiptPool">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="count_fund_amount" jdbcType="DECIMAL" property="countFundAmount" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="used_fund_amount" jdbcType="DECIMAL" property="usedFundAmount" />
+		<result column="remain_fund_amount" jdbcType="DECIMAL"
+			property="remainFundAmount" />
+		<result column="remain_asset_amount" jdbcType="DECIMAL"
+			property="remainAssetAmount" />
+		<result column="advance_pay_amount" jdbcType="DECIMAL"
+			property="advancePayAmount" />
+		<result column="payment_amount" jdbcType="DECIMAL" property="paymentAmount" />
+		<result column="stl_amount" jdbcType="DECIMAL" property="stlAmount" />
+		<result column="rec_amount" jdbcType="DECIMAL" property="recAmount" />
+		<result column="count_fund_amount_cny" jdbcType="DECIMAL"
+			property="countFundAmountCny" />
+		<result column="used_fund_amount_cny" jdbcType="DECIMAL"
+			property="usedFundAmountCny" />
+		<result column="remain_fund_amount_cny" jdbcType="DECIMAL"
+			property="remainFundAmountCny" />
+		<result column="remain_asset_amount_cny" jdbcType="DECIMAL"
+			property="remainAssetAmountCny" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,count_fund_amount,business_unit_id,currency_type,used_fund_amount,
+		remain_fund_amount, remain_asset_amount, count_fund_amount_cny,
+		used_fund_amount_cny, remain_fund_amount_cny, remain_asset_amount_cny,
+		creator_id,creator, update_at, create_at,advance_pay_amount,
+		payment_amount,stl_amount,rec_amount
+	</sql>
+	<sql id="Query_Column_List">
+		po.id, po.count_fund_amount, po.business_unit_id,
+		po.currency_type,
+		po.used_fund_amount,
+		po.remain_fund_amount,
+		po.remain_asset_amount, po.count_fund_amount_cny,
+		po.used_fund_amount_cny, po.remain_fund_amount_cny,
+		po.remain_asset_amount_cny, po.creator_id,
+		po.creator,
+		po.update_at,po.create_at,po.advance_pay_amount,
+		po.payment_amount,po.stl_amount,po.rec_amount
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_receipt_pool
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_receipt_pool
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertSelective" parameterType="com.scfs.domain.fi.entity.ReceiptPool">
+		insert into tb_receipt_pool
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="countFundAmount != null">
+				count_fund_amount,
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="usedFundAmount != null">
+				used_fund_amount,
+			</if>
+			<if test="remainFundAmount != null">
+				remain_fund_amount,
+			</if>
+			<if test="remainAssetAmount != null">
+				remain_asset_amount,
+			</if>
+			<if test="countFundAmountCny != null">
+				count_fund_amount_cny,
+			</if>
+			<if test="usedFundAmountCny != null">
+				used_fund_amount_cny,
+			</if>
+			<if test="remainFundAmountCny != null">
+				remain_fund_amount_cny,
+			</if>
+			<if test="remainAssetAmountCny != null">
+				remain_asset_amount_cny,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="advancePayAmount != null">
+				advance_pay_amount,
+			</if>
+			<if test="paymentAmount != null">
+				payment_amount,
+			</if>
+			<if test="stlAmount != null">
+				stl_amount,
+			</if>
+			<if test="recAmount != null">
+				rec_amount,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="countFundAmount != null">
+				#{countFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="businessUnitId != null">
+				#{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="usedFundAmount != null">
+				#{usedFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmount != null">
+				#{remainFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmount != null">
+				#{remainAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="countFundAmountCny != null">
+				#{countFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="usedFundAmountCny != null">
+				#{usedFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmountCny != null">
+				#{remainFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmountCny != null">
+				#{remainAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="advancePayAmount != null">
+				#{advancePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="paymentAmount != null">
+				#{paymentAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="stlAmount != null">
+				#{stlAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="recAmount != null">
+				#{recAmount,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.fi.entity.ReceiptPool">
+		update tb_receipt_pool
+		<set>
+			<if test="countFundAmount != null">
+				count_fund_amount = #{countFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="usedFundAmount != null">
+				used_fund_amount = #{usedFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmount != null">
+				remain_fund_amount =
+				#{remainFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmount != null">
+				remain_asset_amount =
+				#{remainAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="countFundAmountCny != null">
+				count_fund_amount_cny =
+				#{countFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="usedFundAmountCny != null">
+				used_fund_amount_cny =
+				#{usedFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmountCny != null">
+				remain_fund_amount_cny =
+				#{remainFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmountCny != null">
+				remain_asset_amount_cny =
+				#{remainAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="advancePayAmount != null">
+				advance_pay_amount =
+				#{advancePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="paymentAmount != null">
+				payment_amount = #{paymentAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="stlAmount != null">
+				stl_amount = #{stlAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="recAmount != null">
+				rec_amount = #{recAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="quertReceiptPollResultByCon" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Query_Column_List" />
+		from tb_base_project pro inner join tb_base_user_project ba on
+		pro.id=ba.project_id inner join tb_receipt_pool po on
+		po.business_unit_id=pro.business_unit_id
+		<where>
+			ba.user_id=#{userId} AND
+			ba.state = 1
+			<if test="id != null">
+				AND po.id =#{id}
+			</if>
+			<if test="businessUnitId !=null">
+				AND po.business_unit_id =#{businessUnitId}
+			</if>
+		</where>
+		order by po.create_at desc
+	</select>
+
+	<select id="quertReceiptPoolResultByCon" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_receipt_pool
+		where 1=1
+		<if test="businessUnitId != null">
+			and business_unit_id =#{businessUnitId}
+		</if>
+		<if test="currencyType != null">
+			and currency_type =#{currencyType}
+		</if>
+		order by create_at desc
+	</select>
+
+	<!-- 获取经营主体资金额度 -->
+	<select id="queryReceiptPoolCount" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultType="com.scfs.domain.fi.entity.ReceiptPool">
+		SELECT SUM(IFNULL(count_fund_amount,0) *
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = p.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		) ) AS
+		count_fund_amount,
+		p.business_unit_id AS
+		business_unit_id
+		FROM tb_receipt_pool p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_subject s ON
+			p.business_unit_id=s.subject_id
+			WHERE s.subject_type=1
+			AND
+			s.user_id=#{userId}
+		</if>
+		GROUP BY p.business_unit_id
+	</select>
+
+	<!-- 获取所有资金额度（获取实时汇率转换） -->
+	<select id="sumCountFundAmount" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(IFNULL(count_fund_amount,0) *
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = p.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		) ) AS
+		count_fund_amount
+		FROM tb_receipt_pool p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_subject s ON
+			p.business_unit_id=s.subject_id
+			WHERE s.subject_type=1
+			AND
+			s.user_id=#{userId}
+		</if>
+	</select>
+
+	<!-- 获取统计信息 -->
+	<select id="sumReceiptPool" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultType="com.scfs.domain.fi.entity.ReceiptPool">
+		SELECT
+		SUM(IFNULL(p.count_fund_amount, 0)) AS count_fund_amount,
+		SUM(IFNULL(p.remain_fund_amount, 0)) AS remain_fund_amount,
+		SUM(IFNULL(p.remain_asset_amount, 0)) AS remain_asset_amount,
+		SUM(IFNULL(p.advance_pay_amount, 0)) AS advance_pay_amount,
+		SUM(IFNULL(p.payment_amount, 0)) AS payment_amount,
+		SUM(IFNULL(p.rec_amount, 0)) AS rec_amount,
+		SUM(IFNULL(p.stl_amount,
+		0)) AS stl_amount,
+		p.currency_type AS currency_type
+		FROM tb_receipt_pool
+		p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_subject s ON
+			p.business_unit_id=s.subject_id
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND s.subject_type=1
+			AND s.user_id=#{userId}
+		</if>
+		<if test="businessUnitId != null">
+			AND p.business_unit_id=#{businessUnitId}
+		</if>
+	</select>
+
+	<delete id="deleteAllReceiptPool">
+		delete from tb_receipt_pool
+	</delete>
+</mapper>

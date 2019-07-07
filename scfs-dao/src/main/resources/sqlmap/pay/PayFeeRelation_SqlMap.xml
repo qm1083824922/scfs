@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.PayFeeRelationDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayFeeRelation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="write_off_flag" property="writeOffFlag" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="queryResultMap"
+		type="com.scfs.domain.pay.entity.PayFeeRelationModel">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+
+		<result column="fee_no" property="feeNo" jdbcType="VARCHAR" />
+		<result column="fee_type" property="feeType" jdbcType="TINYINT" />
+		<result column="pay_date" property="payDate" jdbcType="VARCHAR" />
+		<result column="exp_payAmount" property="expPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="accept_invoice_amount" property="acceptInvoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="old_pay_amount" property="oldPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="pay_fee_type" property="payFeeType" jdbcType="TINYINT" />
+		<result column="write_off_flag" property="writeOffFlag" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		pay_id,
+		fee_id,
+		pay_amount,
+		creator,
+		creator_id,
+		create_at,
+		is_delete,
+		write_off_flag
+	</sql>
+
+	<select id="queryPayFeeById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_fee_relation
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayFeeRelation">
+		insert into
+		tb_pay_fee_relation (
+		pay_id,
+		fee_id,
+		pay_amount,
+		creator,
+		creator_id,
+		create_at,
+		write_off_flag
+		)
+		values
+		(
+		#{payId,jdbcType=INTEGER},
+		#{feeId,jdbcType=INTEGER},
+		#{payAmount,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		IFNULL(#{writeOffFlag,jdbcType=INTEGER},0)
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayFeeRelation">
+		update tb_pay_fee_relation
+		<set>
+			<if test="payId != null">
+				pay_id = #{payId,jdbcType=INTEGER},
+			</if>
+			<if test="feeId != null">
+				fee_id = #{feeId,jdbcType=INTEGER},
+			</if>
+			<if test="payAmount != null">
+				pay_amount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete!= null">
+				is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="writeOffFlag != null">
+				,write_off_flag = #{writeOffFlag,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询列表信息 -->
+	<sql id="Query_Column_List">
+		r.id,
+		r.pay_id,
+		r.fee_id,
+		r.pay_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.is_delete,
+		r.write_off_flag,
+		f.fee_no,
+		f.fee_type,
+		f.pay_date,
+		f.pay_amount AS exp_payAmount,
+		f.accept_invoice_amount,
+		f.paid_amount as
+		old_pay_amount,
+		f.pay_fee_type as pay_fee_type,
+		p.pay_no
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayFeeRelationReqDto"
+		resultMap="queryResultMap">
+		select
+		<include refid="Query_Column_List" />
+		FROM tb_pay_fee_relation r
+		LEFT JOIN tb_fee f
+		ON r.fee_id = f.id
+		LEFT
+		JOIN tb_pay_order p
+		ON r.pay_id =
+		p.id
+		WHERE
+		r.is_delete = 0
+		<if test="id != null">
+			and r.id = #{id}
+		</if>
+		<if test="payId != null">
+			and r.pay_id = #{payId}
+		</if>
+		<if test="feeId != null">
+			and r.fee_id = #{feeId}
+		</if>
+		<if test="feeId != null">
+			and r.fee_id = #{feeId}
+		</if>
+		<if test="writeOffFlag != null">
+			and r.write_off_flag = #{writeOffFlag}
+		</if>
+		<if test="payIds != null">
+			<foreach collection="payIds" item="payId" open="and r.pay_id in ("
+				separator="," close=")">
+				${payId}
+			</foreach>
+		</if>
+		order by r.id desc
+	</select>
+
+	<select id="queryGroupFeeByPayOrderId" parameterType="java.lang.Integer"
+		resultMap="queryResultMap">
+		select f.fee_type , f.currency_type , sum(r.pay_amount) as
+		pay_amount
+		from tb_pay_fee_relation r left join tb_fee f
+		on r.fee_id =
+		f.id
+		WHERE
+		r.is_delete = 0 and r.pay_id = #{payId}
+		group by f.fee_type ,
+		f.currency_type
+	</select>
+	<select id="queryPayFeeByPayID" parameterType="java.lang.Integer"
+		resultMap="queryResultMap">
+		select sum(re.pay_amount) as pay_amount,fee.currency_type
+		from tb_pay_fee_relation re inner join
+		tb_fee fee on re.fee_id=fee.id
+		where
+		fee.is_delete=0 and fee.pay_fee_type=1
+		and fee.state=3 and
+		re.is_delete=0 and re.pay_id=#{payId}
+		group by re.create_at desc
+	</select>
+</mapper>

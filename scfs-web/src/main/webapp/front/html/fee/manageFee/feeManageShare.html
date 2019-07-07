@@ -1,0 +1,141 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>费用管理</li>
+			<li class="active">分摊</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="fee/manage/detail">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+					</ul>
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>编号：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="feeManageNo" name="feeManageNo"></label>
+							</td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>部门：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="departmentName" name="departmentName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>管理费用金额：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="amount" name="amount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已分摊金额：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="shareAmount" name="shareAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可分摊金额：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="blanceAmount" name="blanceAmount"></label>
+							</td>
+						</tr>
+					</table>
+					
+					
+					<div class="mt15">
+							<h4 class="mb10" >分摊</h4>
+                        	<table id="js_share_dataTable" data-url="fee/share/query"></table>
+                    </div>
+				</div>
+				<!-- /.box-body -->
+				
+                <div class="box-footer text-center">
+                	<button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/fee/share/delete" id="multDel">批量删除</button>
+                	<button type="button" class="btn btn-primary btn-sm" data-url="html/fee/manageFee/feeManageShareCreate.html" data-permissionUrl="/fee/share/add" id="add">添加</button>
+					<button type="button" id="back" data-url="html/fee/manageFee/feeManageSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+			/*数据表格*/
+			var tabColsLog = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+				 width: '2%'
+			}, {
+			    title: '项目',
+			    field: "shareProjectName",
+			    width: '15%'
+			}, {
+			    title: '人员',
+			    field: "shareUserName",
+			    width: '15%'
+			}, {
+			    title: '客户',
+			    field: "shareCustName",
+			    width: '25%'
+			},  {
+			    title: '日期',
+			    field: "shareDate",
+			    width: '25%'
+			}, {
+			    title: '分摊金额',
+			    field: "amount",
+			    width: '15%'
+			}];
+		
+		
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		
+		GLOBAL.initTable($('#js_share_dataTable'), tabColsLog, {
+			manageId: options.param.id
+	    }, null, null);
+	}
+	
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_share_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("fee/share/delete", {
+					ids : ids,
+					manageId: options.param.id
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						GLOBAL.go("html/fee/manageFee/feeManageShare.html");
+						//$('#js_share_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+	
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+	
+	GLOBAL.goBack();
+</script>

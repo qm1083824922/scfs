@@ -1,0 +1,125 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>采购</li>
+            <li>代销订单</li>
+            <li class="active">浏览</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="distriOrder/detail">
+            <div class="box-body"> 
+                <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a class="tab-item" data-url="html/distribution/distributionScan.html">基础信息</a></li>
+                        <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/distribution/distriDtlScan.html">订单明细</a>  </li>
+                 </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                  <tr>
+                      <td width="180" class="text-right"><b>项目：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectName" name="projectName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应商：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="supplierName" name="supplierName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>客户：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="customerName" name="customerName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>币种：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="currencyName" name="currencyName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>附属编号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="appendNo" name="appendNo"></label>
+                      </td>
+                    </tr> 
+                     <tr>
+                      <td class="text-right"><b>订单日期：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="orderTime" name="orderTime"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>预计到货时间：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="perdictTime" name="perdictTime"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>收货仓库：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>仓库地址：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="wareAddrName" name="wareAddrName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收货数量：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id=orderTotalNum name="orderTotalNum"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收货金额：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="orderTotalAmount" name="orderTotalAmount"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收票数量：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="invoiceTotalNum" name="invoiceTotalNum"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收票金额：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="invoiceTotalAmount" name="invoiceTotalAmount"></label>
+                        </td>
+                    </tr>                  
+                    <tr>
+                      <td class="text-right"><b>备注：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remark" name="remark"></label>
+                      </td>
+                    </tr>
+                  </table> 
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/distribution/distributionSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+             </div>
+            <!-- /.box-footer -->
+          </form>
+        </div>
+  </section>
+</div> 
+<script>
+  options.initPage = function(){
+      GLOBAL.getEditData($("#form1"), options.param.id);
+  }
+  $("#print").click(function(){
+      //GLOBAL.PRINT.print($("#form1 table"));
+      window.open("html/purchase/poPrint.html?id="+options.param.id);
+  })
+  GLOBAL.goBack();
+</script>

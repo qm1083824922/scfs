@@ -1,0 +1,172 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>收票认证</li>
+            <li class="active">收票认证</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="invoiceCollect/edit">
+                <div class="box-body">
+               		<ul class="nav nav-tabs">
+                    	<li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/collect/approve/collectApproveEdit.html">收票认证</a></li>
+                  		<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/approve/collectApproveDtl.html">收票认证明细</a></li>
+                	</ul>
+                
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input class="form-control js-initform" type="hidden" id="id" name="id">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <td class="text-right"><b>申请编号：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="applyNo" name="applyNo"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="180" class="text-right"><b>项目：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="projectName" name="projectName"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>供应商：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="supplierName" name="supplierName"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>票据类型：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="invoiceTypeName" name="invoiceTypeName"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>单据类别：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>发票号：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="invoiceNo" name="invoiceNo"></label>
+                                    </td>
+                                </tr>
+                                <tr class="gearbest_title">
+                                    <td class="text-right"><b>发票日期：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="invoiceDate" name="invoiceDate"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>收票税率：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="invoiceTaxRateValue" name="invoiceTaxRateValue"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>票据备注：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="invoiceRemark" name="invoiceRemark"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>单据备注：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform" id="remark" name="remark"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td class="text-right"><b>发票金额：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform toThound" id="invoiceAmount" name="invoiceAmount"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td class="text-right"><b>已认证金额：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform toThound" id="approveAmount" name="approveAmount"></label>
+                                    </td>
+                                </tr>
+                                <td class="text-right"><b>未认证金额：</b></td>
+                                    <td class="text-left">
+                                        <label class="js-initform toThound" id="unApproveAmount" name="unApproveAmount"></label>
+                                    </td>
+                                </tr>
+                                <tr class="gearbest_title">
+                                    <td class="text-right"><b>认证日期：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <input type="text" class="form-control js-initform js_datePicker" id="currApproveDate" name="currApproveDate">
+                                    </td>
+                                </tr>
+                                <td class="text-right"><b>认证金额：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <input class="form-control js-initform" id="currApproveAmount" name="currApproveAmount"></input>
+                                    </td>
+                                </tr>
+                                <td class="text-right"><b>认证备注：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <textarea cols="50" class="form-control js-initform" id="currApproveRemark" name="currApproveRemark" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceCollect/approve/submit">保存</button>
+                    <button type="button" data-url="html/invoice/collect/approve/collectApprove.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+
+};
+$("#form1").validate({
+    rules: {
+    	currApproveDate: {
+            required: true
+        },
+        currApproveAmount: {
+            required: true
+        },
+        currApproveRemark: {
+            required: true
+        }
+    },
+    submitHandler: function() {
+  	    layer.confirm('认证之后不能修改，确定继续认证吗？', {
+ 	  		btn: ['确定', '取消'] //按钮
+  	    }, function() {
+          	var data = $("#form1").serialize();
+	        GLOBAL.ajax("invoiceCollect/approve/submit", data, function(e) {
+            	if (e.success) {
+                	layer.msg("保存成功！", {
+                    	icon: 1,
+                    	time: 1500
+                	}, function() {
+                    	GLOBAL.go("html/invoice/collect/approve/collectApprove.html");
+                	});
+            	} else {
+                	layer.msg(e.msg);
+            	}
+	        }, false, $("#save"));
+		}, function() {}); 
+    }
+});
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

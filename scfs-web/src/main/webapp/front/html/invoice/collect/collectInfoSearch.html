@@ -1,0 +1,65 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li class="active">收票</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label> 
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnit"  name="businessUnit"> </select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">项目：</label>
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+						</div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="BCS" id="supplierId"  name="supplierId"> </select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">申请编号：</label>
+                            <input type="text" class="form-control" id="applyNo" name="applyNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">发票编号：</label>
+                            <input type="text" class="form-control" id="invoiceNo" name="invoiceNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">票据类型：</label>
+                            <select class="form-control js-select" data-url="INVOICE_TYPE" id="invoiceType"  name="invoiceType"> </select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="DOCUMENT_TYPE" id="billType"  name="billType"> </select> 
+						</div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">状态：</label> 
+								<select class="form-control js-select" data-url="CONLLECT_STATE" id="state"  name="state"> </select>
+								<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/invoice/collect/collectInfoCreate.html" data-permissionUrl="/invoiceCollect/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <button type="button" id="btnExport" data-url="/collect/excel/collect.xls" data-permissionUrl="/collect/excel/collect.xls" class="btn btn-warning btn-sm ml10">导出excel</button>    
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="invoiceCollect/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/invoice/collect/invoiceSearch.js"></script>

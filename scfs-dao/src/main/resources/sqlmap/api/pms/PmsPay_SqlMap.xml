@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsPayDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsPay">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pms_series_id" jdbcType="INTEGER" property="pmsSeriesId" />
+		<result column="pay_sn" jdbcType="VARCHAR" property="pay_sn" />
+		<result column="provider_sn" jdbcType="VARCHAR" property="provider_sn" />
+		<result column="currency_type" jdbcType="VARCHAR" property="currency_type" />
+		<result column="pay_create_time" jdbcType="TIMESTAMP" property="pay_create_time" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="unique_number" jdbcType="VARCHAR" property="unique_number" />
+		<result column="deduction_money" jdbcType="DECIMAL" property="deduction_money" />
+		<result column="flag" jdbcType="TINYINT" property="flag" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
+		<result column="deal_flag" jdbcType="TINYINT" property="dealFlag" />
+		<result column="deal_msg" jdbcType="VARCHAR" property="dealMsg" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		pms_series_id,
+		pay_sn,
+		provider_sn,
+		currency_type,
+		pay_create_time,
+		status,
+		unique_number,
+		deduction_money,
+		flag,
+		msg,
+		deal_flag,
+		deal_msg,
+		create_at,
+		update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<!-- 通过流水号获取驳回数据 -->
+	<select id="queryEntityByParam" parameterType="com.scfs.domain.api.pms.entity.PmsPay"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay
+		where unique_number = #{unique_number} and
+		status=#{status}
+	</select>
+
+	<!-- 获取所有未处理待付款信息 -->
+	<select id="queryPmsPayWaitDao" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_pms_pay
+		WHERE flag=0 AND deal_flag = 1 and status=0
+		group by
+		unique_number
+		order by
+		pay_create_time
+	</select>
+
+	<select id="queryPmsPayWaitGroupDao" parameterType="com.scfs.domain.api.pms.entity.PmsPay"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_pms_pay
+		WHERE flag=0 AND pay_sn=#{pay_sn} AND
+		status=0 and
+		deal_flag=3
+		order by
+		deal_flag desc
+	</select>
+
+	<!-- 获取所有未处理驳回信息 -->
+	<select id="queryPmsPayRebutDao" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_pms_pay p
+		WHERE flag=0 and deal_flag = 1 and status=1
+	</select>
+
+	<!-- 获取流水号分组数据 -->
+	<select id="queryPmsPayGroupDao" parameterType="com.scfs.domain.api.pms.entity.PmsPay"
+		resultMap="BaseResultMap">
+		SELECT
+		p.id,
+		p.pms_series_id,
+		p.pay_sn,
+		p.provider_sn,
+		p.currency_type,
+		p.pay_create_time,
+		p.status,
+		p.unique_number,
+		p.deduction_money,
+		p.flag,
+		p.msg,
+		p.deal_flag,
+		p.deal_msg,
+		p.create_at,
+		p.update_at
+		FROM
+		tb_pms_pay p
+		WHERE p.flag=0
+		and
+		p.unique_number=#{unique_number}
+		ORDER BY p.status
+	</select>
+
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_pms_pay
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsPay"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pms_pay (
+		pms_series_id,
+		pay_sn,
+		provider_sn,
+		currency_type,
+		pay_create_time,
+		status,
+		unique_number,
+		deduction_money,
+		flag,
+		msg,
+		deal_flag,
+		deal_msg,
+		create_at,
+		update_at)
+		values
+		(
+		#{pmsSeriesId,jdbcType=INTEGER},
+		#{pay_sn,jdbcType=VARCHAR},
+		#{provider_sn,jdbcType=VARCHAR},
+		#{currency_type,jdbcType=VARCHAR},
+		#{pay_create_time,jdbcType=TIMESTAMP},
+		#{status,jdbcType=TINYINT},
+		#{unique_number,jdbcType=VARCHAR},
+		#{deduction_money,jdbcType=DECIMAL},
+		#{flag,jdbcType=TINYINT},
+		#{msg,jdbcType=VARCHAR},
+		#{dealFlag,jdbcType=TINYINT},
+		#{dealMsg,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.entity.PmsPay">
+		update tb_pms_pay
+		<set>
+			<if test="pmsSeriesId != null">
+				pms_series_id = #{pmsSeriesId,jdbcType=INTEGER},
+			</if>
+			<if test="pay_sn != null and pay_sn !=''">
+				pay_sn = #{pay_sn,jdbcType=VARCHAR},
+			</if>
+			<if test="provider_sn != null and provider_sn !=''">
+				provider_sn = #{provider_sn,jdbcType=VARCHAR},
+			</if>
+			<if test="currency_type != null and currency_type !=''">
+				currency_type = #{currency_type,jdbcType=VARCHAR},
+			</if>
+			<if test="pay_create_time != null">
+				pay_create_time = #{pay_create_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="unique_number != null and unique_number !=''">
+				unique_number = #{unique_number,jdbcType=VARCHAR},
+			</if>
+			<if test="deduction_money != null">
+				deduction_money = #{deduction_money,jdbcType=DECIMAL},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=TINYINT},
+			</if>
+			<if test="msg != null and msg !=''">
+				msg = #{msg,jdbcType=VARCHAR},
+			</if>
+			<if test="dealFlag != null">
+				deal_flag = #{dealFlag,jdbcType=TINYINT},
+			</if>
+			<if test="dealMsg != null and dealMsg !=''">
+				deal_msg = #{dealMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryPayBySeries" resultType="com.scfs.domain.api.pms.model.PmsPayModel"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		pa.pay_sn paySn,pa.provider_sn
+		providerSn,pa.currency_type currencyType,
+		pa.deduction_money
+		deductionMoney,dt.purchase_sn purchaseSn,dt.sku
+		sku,
+		dt.pay_quantity
+		payQuantity,dt.deal_price dealPrice,dt.pms_pay_id
+		pmsSeriesId,
+		pa.msg
+		msg,pa.deal_flag dealFlag,pa.status
+		from tb_pms_pay pa inner join
+		tb_pms_pay_dtl dt
+		on
+		pa.id=dt.pms_pay_id
+		where
+		pa.pms_series_id=#{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryPayFailure" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay where pms_series_id=#{id,jdbcType=INTEGER}
+		and flag=0
+		and deal_flag=2
+	</select>
+	<!-- 通过参数获取数据 -->
+	<select id="queryPmsPayByParam" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.api.pms.entity.PmsPay">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_pms_pay
+		WHERE 1=1
+		<if test="pay_sn != null and pay_sn !=''">
+			and pay_sn =#{pay_sn}
+		</if>
+		<if test="provider_sn !=null and provider_sn !=''">
+			and provider_sn=#{provider_sn}
+		</if>
+		<if test="unique_number !=null and unique_number !=''">
+			and unique_number=#{unique_number}
+		</if>
+		<if test="status !=null">
+			and status=#{status}
+		</if>
+		<if test="flag !=null">
+			and flag=#{flag}
+		</if>
+		<if test="dealFlag !=null">
+			and deal_flag=#{dealFlag}
+		</if>
+		order by id desc
+	</select>
+	<select id="queryPayFailureByStatu" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay where pms_series_id=#{id,jdbcType=INTEGER}
+		and flag=0
+		and status=1
+		and deal_flag=2
+	</select>
+	<select id="queryPayFailureByStatuBy" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay where pms_series_id=#{id,jdbcType=INTEGER}
+		and flag=0
+		and status=0
+		and deal_flag=2
+	</select>
+</mapper>

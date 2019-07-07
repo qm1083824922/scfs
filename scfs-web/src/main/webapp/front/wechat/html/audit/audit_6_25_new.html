@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>瑞翰供应链</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet"></link>
+<link href="../../css/public.css" rel="stylesheet"></link>
+<link href="../../css/mobile.css" rel="stylesheet"></link>
+<link href="../../css/msg.css" rel="stylesheet"></link>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<h4 class="title mb10 ml5 mt5">
+			<strong>财务专员审核</strong>
+		</h4>
+		<form method="post" action="###" class="form-inline" id="voucherForm">
+			<input class="js-initform" type="hidden" id="id" name="id">
+			<p>
+				<span class="form-label">凭证编号</span> <span
+					class="form-value js-initform" id="voucherNo"></span>
+			</p>
+			<p>
+				<span class="form-label">帐套</span> <span
+					class="form-value js-initform" id="accountBookName"></span>
+			</p>
+			<p>
+				<span class="form-label">经营单位</span> <span
+					class="form-value js-initform" id="busiUnitName"></span>
+			</p>
+			<p>
+				<span class="form-label">日期</span> <span
+					class="form-value js-initform" id="voucherDate"></span>
+			</p>
+			<p>
+				<span class="form-label">凭证字</span> <span
+					class="form-value js-initform" id="voucherWordName"></span>
+			</p>
+			<p>
+				<span class="form-label">附单据数</span> <span
+					class="form-value js-initform" id="attachmentNumber"></span>
+			</p>
+			<p>
+				<span class="form-label">凭证摘要</span> <span
+					class="form-value js-initform" id="voucherSummary"></span>
+			</p>
+		</form>
+		<table class="table table-bordered table-hover no-margin"
+			id="js-lineTable">
+			<thead>
+				<th></th>
+				<th>摘要</th>
+				<th>科目</th>
+				<th>辅助项</th>
+				<th>借方金额</th>
+				<th>贷方金额</th>
+				<th>币种</th>
+				<th>本币借方金额</th>
+				<th>本币贷方金额</th>
+				<th>本币币种</th>
+			</thead>
+			<tbody id="js-lineTbody">
+			</tbody>
+		</table>
+		<!-- 审核记录 -->
+		<h4 class="title mb10 ml5 mt5 audit-record-title">
+			<strong>审核节点</strong>
+		</h4>
+		<div class="audit-record-box">
+			<ul></ul>
+		</div>
+		<div class="box-footer text-center mb10">
+			<div class="form-inline" id="buttom1">
+				<textarea class="form-control js-initform" id="suggestion" rows="3"
+					name="suggestion" placeholder="审核意见"></textarea>
+				<p class="mt20">
+					<button type="button" data-url="voucher/finance/pass/audit"
+						class="btn btn-primary btn-sm" id="pass">审核通过</button>
+					<button type="button" data-url="voucher/unpass/audit"
+						class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+					<button type="button" class="btn btn-default btn-sm js-back">返回</button>
+				</p>
+				<div class="row mt20 psigh" style="display: none">
+					<label class="control-label col-md-2">加签给:</label> <select
+						class="form-control col-md-8 js-select" data-url="USER"
+						id="sighId" name="sighId"></select>
+					<button type="button" data-url="voucher/sigh/audit"
+						class="btn btn-primary btn-sm col-md-2" id="sigh">加签</button>
+				</div>
+				<div class="row mt20 pdeliver" style="display: none">
+					<label class="control-label col-md-2">转交给:</label> <select
+						class="form-control col-md-8 js-select" data-url="USER"
+						id="deliverId" name="deliverId"></select>
+					<button type="button" data-url="voucher/deliver/audit"
+						class="btn btn-primary btn-sm col-md-2" id="deliver">转交</button>
+				</div>
+			</div>
+			<div class="form-inline" style="display: none" id="buttom2">
+				<p class="mt20">
+					<button type="button" class="btn btn-default btn-sm js-back">返回</button>
+				</p>
+			</div>
+		</div>
+		<script>
+        var id = GLOBAL.getParam("id");
+        var poId = GLOBAL.getParam("poId");
+        var flag = GLOBAL.getParam("flag");
+
+        if (flag) {
+            $('#buttom2').show();
+            $('#buttom1').hide();
+        }
+        $(function() {
+            GLOBAL.ajax("voucher/info/audit", {
+                poId: poId
+            }, function(e) {
+                if (e.success) {
+                    var voucherDetail = e.items;
+                    if (voucherDetail) {
+                        //1渲染凭证
+                        var voucherForm = $("#voucherForm");
+                        var voucher = voucherDetail.voucher;
+                        for (var i in voucher) {
+                            var value = voucher[i];
+                            voucherForm.find("#" + i).text(value);
+                        }
+                        //1渲染分录
+                        var voucherLines = voucherDetail.voucherLines;
+                        if (voucherLines != null && voucherLines.length > 0) {
+                            var html = [];
+                            var totalStandardDebitAmount = 0;
+    						var totalStandardCreditAmount = 0;
+                            for (var i = 0; i < voucherLines.length; i++) {
+                                var item = voucherLines[i];
+                                var assistDec = "";
+                                if (item.needProject == 1 && item.projectName) {
+                                    assistDec += "项目: " + item.projectName + "</br>";
+                                }
+                                if (item.needSupplier == 1 && item.supplierName) {
+                                    assistDec += "供应商: " + item.supplierName + "</br>";
+                                }
+                                if (item.needCust == 1 && item.custName) {
+                                    assistDec += "客户: " + item.custName + "</br>";
+                                }
+                                if (item.needAccount == 1 && item.accountNo) {
+                                    assistDec += "账号: " + item.accountNo + "</br>";
+                                }
+                                if (item.needUser == 1 && item.userName) {
+                                    assistDec += "用户: " + item.userName + "</br>";
+                                }
+                                if (item.needTaxRate == 1 && item.taxRate != null) {
+                                    assistDec += "税率: " + item.taxRate + "</br>";
+                                }
+                                html.push("<tr>");
+                                html.push("<td width='3%'>" + (i + 1) + "</td>");
+                                html.push("<td width='15%'><span name='voucherLineSummary'>" + item.voucherLineSummary + "</span></td>");
+                                html.push("<td width='15%'><span name='accountLineName'>" + item.accountLineName + "</span></td>");
+                                html.push("<td width='25%'> " + assistDec + "</td>");
+                                html.push("<td width='8%'><span name='debitAmount'>" + (item.debitAmount == null ? "" : item.debitAmount) + "</span></td>");
+                                html.push("<td width='8%'><span name='creditAmount'>" + (item.creditAmount == null ? "" : item.creditAmount) + "</span></td>");
+                                html.push("<td width='5%'><span name='currencyTypeName'>" + item.currencyTypeName + "</span></td>");
+                                html.push("<td width='8%'><span name='standardDebitAmount'>" + (item.standardDebitAmount==null?"":(item.standardDebitAmount).toThounds()) + "</span></td>");
+    							html.push("<td width='8%'><span name='standardCreditAmount'>" + (item.standardCreditAmount==null?"":(item.standardCreditAmount).toThounds()) + "</span></td>");
+    							html.push("<td width='5%'><span name='standardCoinName'>" + item.standardCoinName + "</span></td>");
+                                html.push("</tr>");
+                                
+                                totalStandardDebitAmount = totalStandardDebitAmount + item.standardDebitAmount*1;
+    							totalStandardCreditAmount = totalStandardCreditAmount + item.standardCreditAmount*1;
+                            }
+                            var html1 = [];
+                            html1.push("<tfoot><tr>");
+                            html1.push("<td></td>");
+                            html1.push("<td></td>");
+                            html1.push("<td></td>");
+                            html1.push("<td class='text-right'><strong>合计</strong></td>");
+                            html1.push("<td>" + voucher.debitAmount + "</td>");
+                            html1.push("<td>" + voucher.creditAmount + "</td>");
+                            html1.push("<td></td>");
+                            html1.push("<td>" + (totalStandardDebitAmount).toThounds() + "</td>");
+    						html1.push("<td>" + (totalStandardCreditAmount).toThounds() + "</td>");
+    						html1.push("<td></td>");
+                            html1.push("</tr></tfoot>");
+                            console.log($('#js-lineTable').find("#js-lineTbody"));
+                            $('#js-lineTable').find("tbody").html(html.join(''));
+                            $('#js-lineTable').append(html1.join(''));
+                        }
+                    }
+                } else {
+                    MOBILE.msg(e.msg);
+                }
+            });
+
+            //获取审核记录数据并在表格中展示
+            GLOBAL.ajax('voucher/auditflow/audit/query', {
+                projectItemId: poId
+            }, function(e) {
+                var data = e.items;
+                if (data) {
+                        var nodeLists = "";
+                        for (var i = 0; i < data.length; i++) {
+
+                            var bgFlag = data[i].backcolor,
+                                fontFlag = data[i].fontcolor;
+                            var state;
+                            if(bgFlag == 1){
+                                state = "passed"
+                            }
+                            if(fontFlag == "1"){
+                                state = "reject";
+                            }else if(fontFlag == "2"){
+                                state = "current";
+                            }
+                            nodeLists += '<li class="'+state+'"><p>' + data[i].stateName + ' ' + data[i].dealName + ' (' + data[i].auditStateName + ') ' + data[i].suggestion + '<p>' + (data[i].createTime || "-") + '</p></li>'
+                        }
+                        $('.audit-record-box ul').empty().append(nodeLists);
+                    }
+            })
+
+
+            GLOBAL.ajax('audit/id/query', {
+                id: id
+            }, function(e) {
+                var data = e.items;
+                if (data) {
+                    if (data.auditType == 1 || data.auditType == 2) {
+                        $(".psigh,.pdeliver").show();
+                    } else {
+                        $(".punpass").hide();
+                    }
+                    if (data.auditState == 1 || data.auditState == 3) { //审核通过，隐藏
+                        $('#buttom2').show();
+                        $('#buttom1').hide();
+                    }
+                }
+            });
+        })
+
+        GLOBAL.initSelect();
+
+        $("#pass").click(function() {
+            var suggestion = $("#suggestion").val();
+            var url = $(this).data("url");
+            GLOBAL.ajax(url, {
+                auditId: id,
+                projectItemId: poId,
+                suggestion: suggestion || ""
+            }, function(e) {
+                if (e.success) {
+                    MOBILE.msg("已审核通过！", function() {
+                        window.location.href = "audit_list_new.html";
+                    });
+                } else {
+                    MOBILE.msg(e.msg);
+                }
+            });
+        })
+
+        $("#sigh").click(function() {
+            var url = $(this).data("url");
+            var sighId = $("#sighId").val();
+            if (sighId) {
+                MOBILE.confirm('确定加签吗？', function() {
+                    GLOBAL.ajax(url, {
+                        auditId: id,
+                        pauditorId: sighId
+                    }, function(e) {
+                        if (e.success) {
+                            MOBILE.msg("加签成功！", function() {
+                                window.location.href = "audit_list_new.html";
+                            });
+                        } else {
+                            MOBILE.msg(e.msg);
+                        }
+                    });
+                });
+            } else {
+                MOBILE.msg("请选择！");
+                $("#sighId").focus();
+            }
+        })
+
+        $("#deliver").click(function() {
+            var url = $(this).data("url");
+            var deliverId = $("#deliverId").val();
+            if (deliverId) {
+                MOBILE.confirm('确定转交吗？', function() {
+                    GLOBAL.ajax(url, {
+                        auditId: id,
+                        pauditorId: deliverId
+                    }, function(e) {
+                        if (e.success) {
+                            MOBILE.msg("转交成功！", function() {
+                                window.location.href = "audit_list_new.html";
+                            });
+                        } else {
+                            MOBILE.msg(e.msg);
+                        }
+                    });
+                });
+            } else {
+                MOBILE.msg("请选择！");
+                $("#deliverId").focus();
+            }
+        })
+        $("#unpass").click(function() {
+            var suggestion = $("#suggestion").val();
+            if (!suggestion) {
+                MOBILE.msg("请输入审核意见");
+                return;
+            }
+            var url = $(this).data("url");
+            GLOBAL.ajax(url, {
+                auditId: id,
+                projectItemId: poId,
+                suggestion: suggestion
+            }, function(e) {
+                if (e.success) {
+                    MOBILE.msg("审核未通过！", function() {
+                        window.location.href = "audit_list_new.html";
+                    });
+                } else {
+                    MOBILE.msg(e.msg);
+                }
+            });
+        })
+
+        $(".js-back").click(function() {
+            if (flag) {
+                location.href = "myApplying.html";
+            } else {
+                window.location.href = "audit_list_new.html";;
+            }
+        })
+        </script>
+</body>
+
+</html>

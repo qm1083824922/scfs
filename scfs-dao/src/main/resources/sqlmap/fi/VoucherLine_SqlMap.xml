@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.VoucherLineDao">
+	<resultMap id="voucherLineResultMap" type="com.scfs.domain.fi.entity.VoucherLine">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="voucher_id" property="voucherId" jdbcType="INTEGER" />
+		<result column="busi_unit" property="busiUnit" jdbcType="INTEGER" />
+		<result column="account_line_id" property="accountLineId"
+			jdbcType="INTEGER" />
+		<result column="debit_or_credit" property="debitOrCredit"
+			jdbcType="INTEGER" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="INTEGER" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="cny_amount" property="cnyAmount" jdbcType="DECIMAL" />
+		<result column="exchange_rate" property="exchangeRate"
+			jdbcType="DECIMAL" />
+		<result column="standard_coin" property="standardCoin"
+			jdbcType="INTEGER" />
+		<result column="standard_amount" property="standardAmount"
+			jdbcType="DECIMAL" />
+		<result column="standard_rate" property="standardRate"
+			jdbcType="DECIMAL" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<result column="cust_id" property="custId" jdbcType="INTEGER" />
+		<result column="account_id" property="accountId" jdbcType="INTEGER" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="inner_busi_unit_id" property="innerBusiUnitId"
+			jdbcType="INTEGER" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="out_store_id" property="outStoreId" jdbcType="INTEGER" />
+		<result column="in_store_id" property="inStoreId" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="accept_invoice_id" property="acceptInvoiceId"
+			jdbcType="INTEGER" />
+		<result column="provide_invoice_id" property="provideInvoiceId"
+			jdbcType="INTEGER" />
+		<result column="receipt_id" property="receiptId" jdbcType="INTEGER" />
+		<result column="invoice_collect_approve_id" property="invoiceCollectApproveId"
+			jdbcType="INTEGER" />
+		<result column="bill_type" property="billType" jdbcType="INTEGER" />
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="bill_Date" property="billDate" jdbcType="DATE" />
+		<result column="voucher_line_summary" property="voucherLineSummary"
+			jdbcType="VARCHAR" />
+		<result column="amount_checked" property="amountChecked"
+			jdbcType="DECIMAL" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="DATE" />
+		<result column="update_at" property="updateAt" jdbcType="DATE" />
+		<result column="max_create_at" property="maxCreateAt" jdbcType="DATE" />
+		<result column="min_create_at" property="minCreateAt" jdbcType="DATE" />
+	</resultMap>
+	<sql id="voucher_line_column_list">
+		id,busi_unit,voucher_id,account_line_id,debit_or_credit,currency_type,amount,cny_amount,exchange_rate,
+		standard_coin, standard_amount, standard_rate, project_id,
+		supplier_id,cust_id,account_id,tax_rate,user_id,inner_busi_unit_id,voucher_line_summary,amount_checked,fee_id,out_store_id,in_store_id,
+		pay_id,accept_invoice_id,provide_invoice_id,receipt_id,invoice_collect_approve_id,bill_date,bill_no,bill_type,creator_id,creator,
+		create_at,update_at
+	</sql>
+	<sql id="alias_voucher_line_column_list">
+		vl.id,vl.busi_unit,vl.voucher_id,vl.account_line_id,vl.debit_or_credit,vl.currency_type,vl.amount,vl.cny_amount,vl.exchange_rate,
+		vl.standard_coin, vl.standard_amount, vl.standard_rate, vl.project_id,
+		vl.supplier_id,vl.cust_id,vl.account_id,vl.tax_rate,vl.inner_busi_unit_id,vl.voucher_line_summary,vl.amount_checked,vl.fee_id,vl.out_store_id,vl.in_store_id,
+		vl.pay_id,vl.accept_invoice_id,vl.provide_invoice_id,vl.receipt_id,vl.invoice_collect_approve_id,vl.bill_date,vl.bill_no,vl.bill_type,vl.creator_id,vl.creator,
+		vl.create_at,vl.update_at
+	</sql>
+	<sql id="alias_voucher_line_column_list_exculde_voucher_id">
+		vl.id,vl.busi_unit,vl.account_line_id,vl.debit_or_credit,vl.currency_type,vl.amount,vl.cny_amount,vl.exchange_rate,
+		vl.standard_coin, vl.standard_amount, vl.standard_rate, vl.project_id,
+		vl.supplier_id,vl.cust_id,vl.account_id,vl.tax_rate,vl.inner_busi_unit_id,vl.voucher_line_summary,vl.amount_checked,vl.fee_id,vl.out_store_id,vl.in_store_id,
+		vl.pay_id,vl.accept_invoice_id,vl.provide_invoice_id,vl.receipt_id,vl.invoice_collect_approve_id,vl.bill_date,vl.bill_no,vl.bill_type,vl.creator_id,vl.creator,
+		vl.create_at,vl.update_at
+	</sql>
+	<sql id="groupCondition">
+		<if test="statisticsDimension != null and statisticsDimension == 1">
+			vl.project_id, vl.currency_type
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 2">
+			vl.cust_id, vl.currency_type
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 3">
+			vl.project_id, vl.cust_id, vl.currency_type
+		</if>
+		<if test="statisticsDimension == null">
+			vl.project_id, vl.currency_type
+		</if>
+	</sql>
+	<sql id="selectCondition">
+		<if test="statisticsDimension != null and statisticsDimension == 1">
+			vl.project_id, vl.busi_unit,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 2">
+			vl.cust_id,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 3">
+			vl.project_id, vl.busi_unit, vl.cust_id,
+		</if>
+		<if test="statisticsDimension == null">
+			vl.project_id, vl.busi_unit,
+		</if>
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.VoucherLine"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fi_voucher_line(
+		busi_unit,
+		voucher_id,
+		account_line_id,
+		debit_or_credit,
+		currency_type,
+		amount,
+		cny_amount,
+		exchange_rate,
+		standard_coin,
+		standard_amount,
+		standard_rate,
+		project_id,
+		supplier_id,
+		cust_id,
+		account_id,
+		tax_rate,
+		user_id,
+		inner_busi_unit_id,
+		voucher_line_summary,
+		creator_id,
+		creator,
+		bill_type,
+		bill_no,
+		bill_date,
+		fee_id,
+		out_store_id,
+		in_store_id,
+		pay_id,
+		accept_invoice_id,
+		provide_invoice_id,
+		receipt_id,
+		invoice_collect_approve_id)
+		values(
+		#{busiUnit},
+		#{voucherId},
+		#{accountLineId},
+		#{debitOrCredit},
+		#{currencyType},
+		#{amount},
+		#{cnyAmount},
+		#{exchangeRate},
+		#{standardCoin},
+		#{standardAmount},
+		#{standardRate},
+		#{projectId},
+		#{supplierId},
+		#{custId},
+		#{accountId},
+		#{taxRate},
+		#{userId},
+		#{innerBusiUnitId},
+		#{voucherLineSummary},
+		#{creatorId},
+		#{creator},
+		#{billType},
+		#{billNo},
+		#{billDate},
+		#{feeId},
+		#{outStoreId},
+		#{inStoreId},
+		#{payId},
+		#{acceptInvoiceId},
+		#{provideInvoiceId},
+		#{receiptId},
+		#{invoiceCollectApproveId}
+		)
+	</insert>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="voucherLineResultMap">
+		select
+		<include refid="voucher_line_column_list" />
+		from tb_fi_voucher_line
+		where id = #{id} for update
+	</select>
+	<select id="queryEntityByIds" parameterType="com.scfs.domain.fi.dto.req.VoucherLineSearchReqDto"
+		resultMap="voucherLineResultMap">
+		select
+		<include refid="voucher_line_column_list" />
+		from tb_fi_voucher_line
+		<where>
+			<if test="ids != null">
+				<foreach collection="ids" item="id" open="id in ("
+					separator="," close=")">
+					${id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="queryResultsByVoucherId" parameterType="com.scfs.domain.fi.dto.req.VoucherReqDto"
+		resultMap="voucherLineResultMap">
+		select
+		<include refid="voucher_line_column_list" />
+		from tb_fi_voucher_line
+		where voucher_id = #{voucherId}
+		order by id
+	</select>
+	<select id="queryLineCountByVoucherId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(1) from tb_fi_voucher_line
+		where voucher_id =
+		#{voucherId}
+	</select>
+	<select id="queryGroupResultsByCon" parameterType="com.scfs.domain.fi.dto.req.VoucherLineSearchReqDto"
+		resultMap="voucherLineResultMap">
+		select tmp.* from ( select
+		<include refid="selectCondition" />
+		vl.currency_type , sum(vl.amount) as amount , sum(vl.amount_checked)
+		as amount_checked ,
+		max(vl.create_at) as max_create_at ,
+		min(vl.create_at) as min_create_at
+		from
+		tb_fi_voucher_line vl ,
+		tb_fi_account_line al ,tb_base_user_project
+		bup
+		where vl.account_line_id
+		= al.id and vl.amount != 0
+		and (al.account_line_no like '1159%' or
+		al.account_line_no like '1223%')
+		and bup.project_id = vl.project_id
+		<if test="voucherId != null">
+			and vl.voucher_id = #{voucherId}
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="searchType == 1">
+			and vl.amount_checked = 0
+		</if>
+		<if test="searchType == 2">
+				<![CDATA[
+					and vl.amount_checked != 0 and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="searchType == 3">
+			and vl.amount_checked = vl.amount
+		</if>
+		<if test="searchType == 4">
+				<![CDATA[
+					and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and  vl.bill_date is not null and vl.bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and vl.bill_date <= #{endBillDate}
+				]]>
+		</if>
+		group by
+		<include refid="groupCondition" />
+		UNION ALL
+		select
+		<include refid="selectCondition" />
+		vl.currency_type , sum(vl.amount) as amount , sum(vl.amount_checked)
+		as amount_checked ,
+		max(vl.create_at) as max_create_at ,
+		min(vl.create_at) as min_create_at
+		from
+		tb_fi_voucher_line vl ,
+		tb_fi_account_line al ,tb_base_user_project
+		bup
+		where vl.account_line_id
+		= al.id and vl.amount != 0
+		and (al.account_line_no like '1221%' or
+		al.account_line_no like '1122%')
+		and bup.project_id = vl.project_id
+		<if test="voucherId != null">
+			and vl.voucher_id = #{voucherId}
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="searchType == 1">
+			and vl.amount_checked = 0
+		</if>
+		<if test="searchType == 2">
+				<![CDATA[
+					and vl.amount_checked != 0 and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="searchType == 3">
+			and vl.amount_checked = vl.amount
+		</if>
+		<if test="searchType == 4">
+				<![CDATA[
+					and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and  vl.bill_date is not null and vl.bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and vl.bill_date <= #{endBillDate}
+				]]>
+		</if>
+		group by
+		<include refid="groupCondition" />
+		)tmp
+	</select>
+
+	<select id="queryTotalGroupResultsByCon" parameterType="com.scfs.domain.fi.dto.req.VoucherLineSearchReqDto"
+		resultMap="voucherLineResultMap">
+		select tmp.* from(select vl.currency_type , sum(vl.amount) as amount ,
+		sum(vl.amount_checked) as amount_checked
+		from tb_fi_voucher_line vl ,
+		tb_fi_account_line al ,tb_base_user_project
+		bup
+		where vl.account_line_id
+		= al.id and vl.amount != 0
+		and (al.account_line_no like '1159%' or
+		al.account_line_no like '1223%')
+		and bup.project_id = vl.project_id
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and  vl.bill_date is not null and vl.bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and vl.bill_date <= #{endBillDate}
+				]]>
+		</if>
+		group by vl.currency_type
+
+		UNION ALL
+
+		select vl.currency_type ,
+		sum(vl.amount) as amount , sum(vl.amount_checked)
+		as amount_checked
+		from tb_fi_voucher_line vl , tb_fi_account_line al
+		,tb_base_user_project
+		bup
+		where vl.account_line_id = al.id and vl.amount
+		!= 0
+		and (al.account_line_no like '1221%' or al.account_line_no like
+		'1122%')
+		and bup.project_id = vl.project_id
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and  vl.bill_date is not null and vl.bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and vl.bill_date <= #{endBillDate}
+				]]>
+		</if>
+		group by vl.currency_type)tmp
+	</select>
+
+	<select id="queryLineResultsByCon" parameterType="com.scfs.domain.fi.dto.req.VoucherLineSearchReqDto"
+		resultMap="voucherLineResultMap">
+		select tmp.* from(select
+		<include refid="alias_voucher_line_column_list" />
+		from tb_fi_voucher_line vl , tb_fi_account_line al
+		,tb_base_user_project bup
+		where vl.account_line_id = al.id and
+		vl.amount != 0 and (al.account_line_no like '1159%' or
+		al.account_line_no like '1223%')
+		and bup.project_id = vl.project_id
+		<if test="searchType == 1">
+			and vl.amount_checked = 0
+		</if>
+		<if test="searchType == 2">
+				<![CDATA[
+					and vl.amount_checked != 0 and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="searchType == 3">
+			and vl.amount_checked = vl.amount
+		</if>
+		<if test="searchType == 4">
+				<![CDATA[
+					and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="voucherId != null">
+			and vl.voucher_id = #{voucherId}
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and bill_date <= #{endBillDate}
+				]]>
+		</if>
+
+		UNION ALL
+
+		select
+		<include refid="alias_voucher_line_column_list" />
+		from tb_fi_voucher_line vl , tb_fi_account_line al
+		,tb_base_user_project bup
+		where vl.account_line_id = al.id and
+		vl.amount != 0 and (al.account_line_no like '1221%' or
+		al.account_line_no like '1122%')
+		and bup.project_id = vl.project_id
+		<if test="searchType == 1">
+			and vl.amount_checked = 0
+		</if>
+		<if test="searchType == 2">
+				<![CDATA[
+					and vl.amount_checked != 0 and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="searchType == 3">
+			and vl.amount_checked = vl.amount
+		</if>
+		<if test="searchType == 4">
+				<![CDATA[
+					and ABS(vl.amount_checked) < ABS(vl.amount)
+				]]>
+		</if>
+		<if test="userId != null">
+			and bup.user_id = #{userId}
+			and bup.state = 1
+		</if>
+		<if test="voucherId != null">
+			and vl.voucher_id = #{voucherId}
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and vl.cust_id = #{custId}
+		</if>
+		<if test="busiUnit != null">
+			and vl.busi_unit = #{busiUnit}
+		</if>
+		<if test="currencyType != null">
+			and vl.currency_type = #{currencyType}
+		</if>
+		<if test="debitOrCredit != null">
+			and vl.debit_or_credit = #{debitOrCredit}
+		</if>
+		<if test="billNo != null and billNo != ''">
+			and vl.bill_no like CONCAT('%' , #{billNo} , '%')
+		</if>
+		<if test="startBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and bill_date >= #{startBillDate}
+				]]>
+		</if>
+		<if test="endBillDate != null">
+				<![CDATA[
+					and vl.bill_date is not null and bill_date <= #{endBillDate}
+				]]>
+		</if>
+		)tmp
+	</select>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.VoucherLine">
+		update tb_fi_voucher_line
+		<set>
+			<if test="accountLineId != null">
+				account_line_id = #{accountLineId},
+			</if>
+			<if test="debitOrCredit != null">
+				debit_or_credit = #{debitOrCredit},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType},
+			</if>
+			<if test="amount != null">
+				amount = #{amount},
+			</if>
+			<if test="cnyAmount != null">
+				cny_amount = #{cnyAmount},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate},
+			</if>
+			<if test="standardCoin != null">
+				standard_coin = #{standardCoin},
+			</if>
+			<if test="standardAmount != null">
+				standard_amount = #{standardAmount},
+			</if>
+			<if test="standardRate != null">
+				standard_rate = #{standardRate},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId},
+			</if>
+			<if test="custId != null">
+				cust_id = #{custId},
+			</if>
+			<if test="accountId != null">
+				account_id = #{accountId},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="innerBusiUnitId != null">
+				inner_busi_unit_id = #{innerBusiUnitId},
+			</if>
+			<if test="voucherLineSummary !=null">
+				voucher_line_summary = #{voucherLineSummary},
+			</if>
+			<if test="amountChecked !=null">
+				amount_checked = #{amountChecked},
+			</if>
+			<if test="billDate !=null">
+				bill_date = #{billDate}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_fi_voucher_line
+		where id=#{id}
+	</delete>
+
+	<sql id="queryLineResultsByVoucherCon_sql">
+		select
+		@group_row:=CASE WHEN @voucher_id=vl.voucher_id THEN
+		@group_row+1 ELSE 1 END AS
+		lineNumber,
+		@voucher_id:=vl.voucher_id AS
+		voucher_id,
+		<include refid="alias_voucher_line_column_list_exculde_voucher_id" />
+		,voucher.account_book_id accountBookId
+		,voucher.voucher_date
+		voucherDate
+		,voucher.voucher_no voucherNo
+		,voucher.create_at
+		voucherCreateAt
+		from tb_fi_voucher_line vl
+		left join tb_fi_voucher
+		voucher
+		on vl.voucher_id = voucher.id
+		where
+		voucher.is_delete = 0
+		<if test="accountBookId != null">
+			and voucher.account_book_id = #{accountBookId}
+		</if>
+		<if test="voucherWord != null">
+			and voucher.voucher_word = #{voucherWord}
+		</if>
+		<if test="busiUnit != null">
+			and voucher.busi_unit = #{busiUnit}
+		</if>
+		<if test="voucherNo != null">
+			and voucher.voucher_no like CONCAT('%' , #{voucherNo} ,
+			'%')
+		</if>
+		<if test="state != null">
+			and voucher.state = #{state}
+		</if>
+		<if test="billType != null">
+			and voucher.bill_type = #{billType}
+		</if>
+		<if test="billNo != null">
+			and voucher.bill_no = #{billNo}
+		</if>
+		<if test="voucherSummary != null">
+			and voucher.voucher_summary like CONCAT('%' ,
+			#{voucherSummary} , '%')
+		</if>
+		<if test="startVoucherDate != null">
+  			<![CDATA[
+				and voucher.voucher_date >= #{startVoucherDate}
+			]]>
+		</if>
+		<if test="endVoucherDate != null">
+  			<![CDATA[
+				and voucher.voucher_date <= #{endVoucherDate}
+			]]>
+		</if>
+		<if test="projectId != null">
+			and vl.project_id = #{projectId}
+		</if>
+		<!-- 不能调整顺序 -->
+		ORDER BY vl.voucher_id, vl.account_line_id ASC
+	</sql>
+
+	<select id="queryLineResultsByVoucherCon" parameterType="com.scfs.domain.fi.dto.req.VoucherSearchReqDto"
+		resultType="com.scfs.domain.fi.entity.VoucherLineModel">
+		<include refid="queryLineResultsByVoucherCon_sql" />
+	</select>
+
+	<select id="queryLineCountByVoucherCon" parameterType="com.scfs.domain.fi.dto.req.VoucherSearchReqDto"
+		resultType="java.lang.Integer">
+		select count(1) from (
+		<include refid="queryLineResultsByVoucherCon_sql" />
+		) tmp
+	</select>
+
+	<select id="queryVoucherLineByBillOutStore" parameterType="com.scfs.domain.fi.dto.req.VoucherLineSearchReqDto"
+		resultMap="voucherLineResultMap">
+		select
+		<include refid="alias_voucher_line_column_list" />
+		from tb_fi_voucher_line vl , tb_fi_account_line al
+		where
+		vl.account_line_id = al.id
+		and vl.bill_no = #{billNo}
+		and vl.voucher_id
+		= #{voucherId}
+		and vl.tax_rate
+		= #{taxRate}
+		and vl.debit_or_credit =
+		#{debitOrCredit}
+		and
+		al.account_line_no = #{accountLineNo}
+	</select>
+
+	<select id="querySumByVoucherId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.fi.entity.Voucher">
+		select
+		sum(s.debitAmount) as debitAmount, sum(creditAmount)
+		as creditAmount
+		from
+		(select
+		sum(vl.amount) as debitAmount,
+		0 as
+		creditAmount
+		from
+		tb_fi_voucher_line vl
+		where vl.voucher_id =
+		#{voucherId}
+		and vl.debit_or_credit = 1
+		and vl.is_delete = 0
+		union
+		all
+		select
+		0 as debitAmount,
+		sum(vl.amount) as creditAmount
+		from
+		tb_fi_voucher_line vl
+		where vl.voucher_id = #{voucherId}
+		and
+		vl.debit_or_credit = 2
+		and vl.is_delete = 0) s
+	</select>
+
+	<!-- 获取费用凭证明细 -->
+	<select id="queryLineResultsByFeeId" parameterType="java.lang.Integer"
+		resultMap="voucherLineResultMap">
+		select
+		<include refid="alias_voucher_line_column_list" />
+		from tb_fi_voucher_line vl
+		inner join tb_fi_voucher vot on
+		vl.voucher_id = vot.id
+		INNER JOIN
+		tb_fi_account_line account ON
+		vl.account_line_id=account.id
+		where
+		vot.fee_id=#{feeId}
+		AND
+		account.account_line_no like '2202%'
+	</select>
+</mapper>

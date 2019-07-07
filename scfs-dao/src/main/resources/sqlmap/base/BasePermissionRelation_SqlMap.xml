@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BasePermissionRelationDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.base.entity.BasePermissionRelation">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="permission_group_id" property="permissionGroupId"
+			jdbcType="BIGINT" />
+		<result column="permission_id" property="permissionId"
+			jdbcType="BIGINT" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, permission_group_id, permission_id, deleter, creator,
+		create_at,
+		update_at, delete_at,
+		is_delete
+	</sql>
+	<select id="queryPermissionRelation" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.entity.BasePermissionRelation">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_permission_relation
+		where permission_group_id =
+		#{permissionGroupId} AND permission_id =
+		#{permissionId} AND
+		is_delete=#{isDelete}
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BasePermissionRelation">
+		insert into
+		tb_base_permission_relation (id, permission_group_id,
+		permission_id,
+		deleter, creator, create_at,
+		update_at, delete_at
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{permissionGroupId,jdbcType=BIGINT},
+		#{permissionId,jdbcType=BIGINT},
+		#{deleter,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP}, #{deleteAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="invalidPermissionRelationById" parameterType="com.scfs.domain.base.entity.BasePermissionRelation">
+		update
+		tb_base_permission_relation
+		set
+		is_delete =
+		#{isDelete},deleter=#{deleter},delete_at=#{deleteAt}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<select id="queryPermissionRelationByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.entity.BasePermissionRelation">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_permission_relation
+		where is_delete = 0
+		<if test="permissionId != null">
+			AND permission_id =#{permissionId}
+		</if>
+		<if test="permissionGroupId != null">
+			AND permission_group_id =#{permissionGroupId}
+		</if>
+	</select>
+
+	<select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		DISTINCT permission_group_id, permission_id, is_delete
+		FROM
+		tb_base_permission_relation
+		<where>
+			<if test="updateAt != null">
+        <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_permission_relation
+	</select>
+
+</mapper>

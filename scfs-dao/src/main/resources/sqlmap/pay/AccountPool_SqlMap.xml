@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.AccountPoolDao">
+	<resultMap type="com.scfs.domain.pay.entity.AccountPool" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="account_id" property="accountId" jdbcType="BIGINT" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="BIGINT" />
+		<result column="available_amount" property="availableAmount"
+			jdbcType="DECIMAL" />
+		<result column="account_balance_amount" property="accountBalanceAmount"
+			jdbcType="DECIMAL" />
+		<result column="profit_amount" property="profitAmount"
+			jdbcType="DECIMAL" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		busi_unit,
+		account_id,
+		currency_type,
+		available_amount,
+		account_balance_amount,
+		profit_amount,
+		creator_id,
+		creator,
+		update_at,
+		create_at
+	</sql>
+
+	<!-- 获取数据 -->
+	<select id="queryAccountPoolResults" parameterType="com.scfs.domain.pay.dto.req.AccountPoolReqDto"
+		resultMap="BaseResultMap">
+		select
+		p.id,
+		p.busi_unit,
+		p.account_id,
+		p.currency_type,
+		p.available_amount,
+		p.account_balance_amount,
+		p.profit_amount,
+		p.creator_id,
+		p.creator,
+		p.update_at
+		from tb_account_pool p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_subject s ON
+			p.busi_unit=s.subject_id
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND s.user_id=#{userId}
+		</if>
+		<if test="busiUnit != null">
+			AND p.busi_unit=#{busiUnit}
+		</if>
+		<if test="accountId != null">
+			AND p.account_id=#{accountId}
+		</if>
+		<if test="currencyType != null">
+			AND p.currency_type=#{currencyType}
+		</if>
+		order by id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_account_pool
+		where id=#{id}
+	</select>
+
+	<select id="queryEntityByParam" parameterType="com.scfs.domain.pay.dto.req.AccountPoolReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_account_pool
+		where 1=1
+		<if test="busiUnit != null">
+			AND busi_unit=#{busiUnit}
+		</if>
+		<if test="accountId != null">
+			AND account_id=#{accountId}
+		</if>
+		<if test="currencyType != null">
+			AND currency_type=#{currencyType}
+		</if>
+		group by busi_unit,account_id,currency_type
+	</select>
+
+	<!-- 删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_account_pool
+		WHERE id = #{id}
+	</delete>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.AccountPool"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_account_pool
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="busiUnit !=null">
+				busi_unit,
+			</if>
+			<if test="accountId !=null">
+				account_id,
+			</if>
+			<if test="currencyType !=null">
+				currency_type,
+			</if>
+			<if test="availableAmount !=null">
+				available_amount,
+			</if>
+			<if test="accountBalanceAmount !=null">
+				account_balance_amount,
+			</if>
+			<if test="profitAmount !=null">
+				profit_amount,
+			</if>
+			<if test="creatorId !=null">
+				creator_id,
+			</if>
+			<if test="creator !=null">
+				creator,
+			</if>
+			<if test="createAt !=null">
+				create_at
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="busiUnit !=null">
+				#{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="accountId !=null">
+				#{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType !=null">
+				#{currencyType,jdbcType=INTEGER},
+			</if>
+			<if test="availableAmount !=null">
+				#{availableAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="accountBalanceAmount !=null">
+				#{accountBalanceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitAmount !=null">
+				#{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId !=null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator !=null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt !=null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="com.scfs.domain.pay.entity.AccountPool">
+		UPDATE
+		tb_account_pool
+		<set>
+			<if test="busiUnit !=null">
+				busi_unit = #{busiUnit},
+			</if>
+			<if test="accountId !=null">
+				account_id = #{accountId},
+			</if>
+			<if test="currencyType !=null">
+				currency_type = #{currencyType},
+			</if>
+			<if test="availableAmount !=null">
+				available_amount = #{availableAmount},
+			</if>
+			<if test="accountBalanceAmount !=null">
+				account_balance_amount = #{accountBalanceAmount},
+			</if>
+			<if test="profitAmount !=null">
+				profit_amount = #{profitAmount},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 获取原始数据 -->
+	<select id="queryAccountPool" parameterType="com.scfs.domain.pay.dto.req.AccountPoolReqDto"
+		resultType="com.scfs.domain.pay.entity.AccountPool">
+		SELECT bank.id,bank.busi_unit AS busiUnit,bank.rec_account_no AS
+		accountId,bank.actual_currency_type AS
+		currencyType,SUM(IFNULL(bank.actual_receipt_amount,0)) AS
+		receiptAmount FROM
+		tb_fi_bank_receipt bank
+		INNER JOIN tb_base_account
+		account ON
+		bank.rec_account_no=account.id
+		WHERE bank.is_delete=0
+		AND
+		bank.state=3
+		AND
+		account.capital_account_type=2
+		AND receipt_type=5
+		<if test="busiUnit != null">
+			AND bank.busi_unit=#{busiUnit}
+		</if>
+		GROUP BY
+		bank.busi_unit,bank.rec_account_no,bank.currency_type
+	</select>
+
+	<!-- 获取付款单（订单和费用类型）实际付款金额,付款手续费 -->
+	<select id="queryAmount" parameterType="com.scfs.domain.pay.dto.req.PayOrderSearchReqDto"
+		resultType="com.scfs.domain.pay.entity.PayOrder">
+		SELECT id,busi_unit AS busiUnit,pay_type AS
+		payType,payment_account AS
+		paymentAccount,real_currency_type AS
+		realCurrencyType
+		,SUM(IFNULL(real_pay_amount,0)) AS
+		realPayAmount,SUM(IFNULL(bank_charge,0)) AS bankCharge FROM
+		tb_pay_order
+		WHERE pay_type IN(1,2)
+		AND is_delete=0
+		AND state=6
+		<if test="busiUnit != null">
+			AND busi_unit=#{busiUnit}
+		</if>
+		<if test="paymentAccount != null">
+			AND payment_account =#{paymentAccount}
+		</if>
+		<if test="realCurrencyType != null">
+			AND real_currency_type =#{realCurrencyType}
+		</if>
+	</select>
+
+	<!-- 获取类型水单金额 -->
+	<select id="queryReceiptAmount" parameterType="com.scfs.domain.pay.dto.req.AccountPoolReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(IFNULL(actual_receipt_amount,0)) FROM
+		tb_fi_bank_receipt
+		WHERE
+		is_delete=0
+		AND state=3
+		<if test="paramList !=null">
+			<foreach collection="paramList" item="recType" open="AND receipt_type in("
+				separator="," close=")">
+				${recType}
+			</foreach>
+		</if>
+		<if test="busiUnit != null">
+			AND busi_unit=#{busiUnit}
+		</if>
+		<if test="accountId != null">
+			AND
+			rec_account_no=#{accountId}
+		</if>
+		<if test="currencyType != null">
+			AND
+			actual_currency_type=#{currencyType}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,136 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>基础信息</li>
+        <li>地址信息编辑</li>
+        <li class="active">添加</li>
+    </ol>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="subjectId" name="subjectId">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>地址类型：</b></td>
+                            <td class="text-left">
+                                <select class="form-control js-select" data-url="ADDRESS_TYPE" id="addressType" name="addressType"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>国家：</b></td>
+                            <td class="text-left">
+                                <select class="form-control js-select" data-url="NATIOIN_DICT_REGION" id="nationId" name="nationId"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>省：</b></td>
+                            <td class="text-left">
+                                <select class="form-control js-select" data-url="DICT_REGION_MAP" pid="nationId" id="provinceId" name="provinceId"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>市：</b></td>
+                            <td class="text-left">
+                                <select class="form-control js-select" data-url="DICT_REGION_MAP" pid="provinceId" id="cityId" name="cityId"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>县：</b></td>
+                            <td class="text-left">
+                                <select class="form-control js-select" data-url="DICT_REGION_MAP" pid="cityId" id="countyId" name="countyId"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>地址：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="addressDetail" name="addressDetail">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>联系人：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="contactPerson" name="contactPerson">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>手机：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="mobilePhone" name="mobilePhone">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>电话：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="telephone" name="telephone">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>传真：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="fax" name="fax">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>备注：</b></td>
+                            <td class="text-left">
+                                <input class="form-control" type="text" id="note" name="note">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-url="baseSubject/address/add" data-permissionUrl="/baseSubject/address/add" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" data-url="html/subject/subjectAddressEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    $("#subjectId").val(options.param.id);
+
+    $("#form1").validate({
+        rules: {
+            addressType: {
+                required: true
+            },
+            nationId: {
+                required: true
+            },
+            addressDetail: {
+                required: true
+            },
+            contactPerson: {
+                required: true
+            },
+            mobilePhone: {
+                required: true
+            }
+        },
+        submitHandler: function() {
+            var data = $("#form1").serialize();
+            GLOBAL.ajax("baseSubject/address/add", data, function(e) {
+                if (e.success) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        GLOBAL.go("html/subject/subjectAddressEdit.html");
+                    })
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        }
+    });
+
+};
+
+GLOBAL.goBack(function() {
+    options.param.id = options.param.cid;
+});
+</script>

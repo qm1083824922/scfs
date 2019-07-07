@@ -1,0 +1,300 @@
+<link rel="stylesheet" href="css/bootstrap-table-fixed-columns.css">
+
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>报表</li>
+            <li class="active">库存报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select> 
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId" ></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">统计维度：</label>
+                            <select class="form-control js-select"  data-url="INVOICING_TYPE" id="statisticsDimensionType" name="statisticsDimensionType" data-empty-option=true>
+							</select>
+                        </div>
+                        <div class="search-item">	
+							<label class="control-label ml10">事业部：</label> 
+							<input type="text" class="form-control js-tree js-initform" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">业务员：</label> 
+							<select class="form-control js-select" data-url="DEPARTMENT_USER" pid="departmentId" id="bizManagerId" name="bizManagerId" ></select>
+						</div>
+						<div class="search-item">
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">     
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="button" id="btnExport" data-permissionUrl="/stock/report/excel/stockReport.xls" data-url="stock/report/excel/stockReport.xls" class="btn btn-warning btn-sm ml20">导出</button>
+                            <button type="reset" id="resetEmpty" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+			<div class="box-body">
+				<table id="js_dataTable" data-url="stock/report/query">
+
+				</table>
+			</div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+		'click .scan': function(e, value, row, index){
+			var searchType = $(this).attr("searchtype");
+			var data = $("#searchForm").serializeObject();
+			if (data.statisticsDimensionType == 1) {
+				if (row.projectId == null) {
+					layer.msg("统计维度为项目，项目id不能为空");
+					return false;
+				}else {
+					data.projectId = row.projectId;
+				}
+			}
+			if (data.statisticsDimensionType == 2) {
+				if (row.warehouseId == null) {
+					layer.msg("统计维度为仓库，项目id不能为空");
+					return false;
+				}else{
+					data.warehouseId = row.warehouseId;
+				}
+			}
+			if (data.statisticsDimensionType == 3) {
+				if (row.projectId == null || row.warehouseId == null) {
+					layer.msg("统计维度为项目和仓库，项目id和仓库id不能为空");
+					return false;
+				}else {
+					data.projectId = row.projectId;
+					data.warehouseId = row.warehouseId;
+				}
+			}
+			var open_url = "projectId=" + (typeof(data.projectId)=='undefined'?'':data.projectId) 
+							+ "&businessUnitId=" + (typeof(data.businessUnitId)=='undefined'?'':data.businessUnitId) + "&warehouseId=" +(typeof(data.warehouseId)=='undefined'?'':data.warehouseId)  
+							+ "&departmentId=" + (typeof(data.departmentId)=='undefined'?'':data.departmentId) + "&bizManagerId=" + (typeof(data.bizManagerId)=='undefined'?'':data.bizManagerId) 
+							+ "&currencyType=" + row.currencyType+"&sumStore="+value;
+			window.open("html/report/stock/stockReportGoods.html?" + open_url);
+	    }	
+};
+/* 数据表格 */
+var tabCols = [ {
+	title : '序号',
+	field : 'columnsNumber',
+	width : '2%'
+}, {
+	title : '部门',
+	field : 'departmentName',
+	align : 'center'
+}, {
+	title : '业务员',
+	field : 'bizManagerName',
+	align : 'center'
+},{
+	title : '项目',
+	field : 'projectName',
+	align : 'center'
+},{
+	title : '经营单位',
+	field : 'businessUnitName',
+	align : 'center'
+}, {
+	title : '仓库',
+	field : 'warehouseName',
+	align : 'center'
+}, {
+	title : '币种',
+	field : 'currencyTypeName',
+	align : 'center'
+}, {
+	title : '总库存',
+	field : 'sumStore',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return "<a href='javascript:void(0);' class='scan' >" + value.toThounds() + "</a>";
+	},
+	events: operateEvents
+}, {
+	title : '锁定库存',
+	field : 'sumLock',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}, {
+	title : '未锁定库存',
+	field : 'sumNotLock',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}, {
+	title : '总数量',
+	field : 'sumNum',
+	align : 'center'
+}, {
+	title : '锁定数量',
+	field : 'sumLockNum',
+	align : 'center'
+}, {
+	title : '未锁定数量',
+	field : 'sumNotLockNum',
+	align : 'center'
+}, {
+	title : '超期库存',
+	field : 'expireAmount',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+},{
+	title : '临期0-7天金额',
+	field : 'adventAmount',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}, {
+	title : '超期1-7天金额',
+	field : 'expireAmount1',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+},{
+	title : '超期8-15天金额',
+	field : 'expireAmount2',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+},{
+	title : '超期15天以上金额',
+	field : 'expireAmount3',
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}];
+
+options.initPage = function() {
+	var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+		$("#warehouseId").val("");
+		$("#warehouseId").attr("disabled","disabled");
+		var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols, null, null , option);
+
+		$(".js_datePicker").datetimepicker({
+	        format:'Y-m-d',
+	    });
+		
+		$("#statisticsDimensionType").change(function(){
+	        var thisValue = $(this).val();
+	        if (thisValue == 1) {	//1-项目
+				$("#projectId").val("");
+				$("#projectId").removeAttr("disabled");
+				$("#businessUnitId").val("");
+				$("#businessUnitId").removeAttr("disabled");
+				$("#bizManagerId").val("");
+				$("#bizManagerId").removeAttr("disabled");
+				$("#departmentName").val("");
+				$("#departmentName").removeAttr("disabled","disabled");
+				$("#departmentId").val("");
+				$("#departmentId").removeAttr("disabled","disabled"); 
+				$("#warehouseId").val("");
+				$("#warehouseId").attr("disabled","disabled");
+	        } else if (thisValue == 2) {	//2-客户
+				$("#projectId").val("");
+				$("#projectId").attr("disabled","disabled");
+				$("#businessUnitId").val("");
+				$("#businessUnitId").attr("disabled","disabled");
+				$("#bizManagerId").val("");
+				$("#bizManagerId").attr("disabled","disabled");
+				$("#departmentName").val("");
+				$("#departmentName").attr("disabled","disabled");
+				$("#departmentId").val("");
+				$("#departmentId").attr("disabled","disabled");  
+				$("#warehouseId").val("");
+				$("#warehouseId").removeAttr("disabled","disabled");
+	        } else {	//3-项目+客户
+				$("#projectId").val("");
+				$("#projectId").removeAttr("disabled");
+				$("#businessUnitId").val("");
+				$("#businessUnitId").removeAttr("disabled");
+				$("#bizManagerId").val("");
+				$("#bizManagerId").removeAttr("disabled");
+				$("#departmentName").val("");
+				$("#departmentName").removeAttr("disabled");
+				$("#departmentId").val("");
+				$("#departmentId").removeAttr("disabled");
+				$("#warehouseId").val("");
+				$("#warehouseId").removeAttr("disabled");
+	        }
+	    });
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+	GLOBAL.tableRefresh($('#js_dataTable'), data);
+});
+
+$("#departmentName").change(function() {
+	$("#bizManagerId").empty();
+	GLOBAL.ajax("common/selected/query?key=DEPARTMENT_USER&pId=" + $("#departmentId").val(), null, function(data) {
+        if (data) {
+            var option = "<option value=''>请选择</option>";
+            var items = data.items;
+            if (items) {
+                for (var k = 0; k < items.length; k++) {
+                	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                }
+                $("#bizManagerId").append(option);
+            }
+        }
+    })
+    $('select').select2({language: "zh-CN"});
+});
+
+$("#btnExport").click(function() {
+    var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+});
+
+$("#resetEmpty").click(function() {
+	$("#departmentId").val("");
+});
+
+</script>

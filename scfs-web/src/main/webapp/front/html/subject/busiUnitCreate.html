@@ -1,0 +1,172 @@
+
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>客户</li>
+          <li class="active">新建经营单位</li>
+      </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="form1">
+            <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+              <table class="table table-bordered table-hover no-margin">
+                  <tr>
+                     <td class="text-right" width="180"><b>简称：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="abbreviation" name="abbreviation">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>中文全称：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="chineseName" name="chineseName">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>英文全称：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="englishName" name="englishName">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>注册地：</b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="regPlace" name="regPlace">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>注册号：</b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="regNo" name="regNo">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>注册电话：</b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="regPhone" name="regPhone">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>办公地址：</b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control" id="officeAddress" name="officeAddress">
+                     </td>
+                  </tr>
+				<tr >
+					<td width="180" class="text-right"><b>开票限额：<em  class="text-star">*</em></b></td>
+					<td class="text-left"><select class="form-control js-select" data-url="PROVIDE_INVOICE_QUOTA"  id="invoiceQuotaType" name="invoiceQuotaType"></select></td>
+				</tr>
+			 <tr>
+                     <td class="text-right"><b>财务主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="financeManagerId" name="financeManagerId"></select>
+                     </td>
+                  </tr>
+           <tr>
+                     <td class="text-right"><b>部门主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" data-url="USER" id="departmentManagerId" name="departmentManagerId"></select>
+                     </td>
+                  </tr>
+				<tr>
+                     <td class="text-right"><b>客户类型：</b></td>
+                     <td class="text-left">
+                       <input type="checkbox" checked="checked" onclick="javascript:return false;" value="1" name="subjectType"> 经营单位&nbsp;&nbsp;&nbsp;&nbsp;
+                       <input type="checkbox"  value="4" name="subjectType"> 供应商&nbsp;&nbsp;&nbsp;&nbsp;
+                       <input type="checkbox"  value="8" name="subjectType"> 客户
+                     </td>
+                  </tr>
+              </table>
+              </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-url="baseSubject/busiUnit/add" data-permissionUrl="/baseSubject/busiUnit/add" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" id="js-back" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+	var options = {
+	    param: {
+	      id: 0,
+	      cid:0,
+	    },
+		initPage: function(){
+	        $("#form1").validate({
+	            rules: {
+	            	abbreviation: {
+	                  	required: true
+	                },
+	                chineseName: {
+	                    required: true
+	                },
+	                englishName: {
+	                    required: true
+	                },
+	                invoiceQuotaType: {
+	                    required: true
+	                }
+	            },
+	            submitHandler: function() {
+	              var subjectType = 0 ;
+	              $("input[name=subjectType]:checked").each(function() {
+	            	 subjectType += parseInt($(this).val()) ;
+	              });
+	              if (subjectType == 0) {
+	            	  layer.alert("请选择至少一个客户类型");
+	            	  return false;
+	              }
+	              var data = {};
+	              $("#form1 input[type=text]").each(function(){
+	            	  data[$(this).attr("name")] = $(this).val();
+	              });
+	              data.subjectType = subjectType ;
+	              data.invoiceQuotaType=$("#invoiceQuotaType").val();
+	              data.financeManagerId=$("#financeManagerId").val();
+	              data.departmentManagerId=$("#departmentManagerId").val();
+	              GLOBAL.ajax("baseSubject/busiUnit/add",data, function(e){
+	            	  console.log(e);
+                      layer.msg("保存成功！", {
+                          icon: 1,
+                          time: 1500
+                      },function(){
+                          options.param.id = e.items;
+                    	  options.param.cid = e.items;
+                    	  GLOBAL.go("html/subject/subjectBaseInfoEdit.html", options.param);
+                      })
+                  });
+	            }
+	        });
+	    	  var selectedOptions = "";
+	  	      GLOBAL.ajax("common/selected/query?key=USER", {}, function(data){
+	  	    	  if (data.items) {
+	  	    		  selectedOptions = "<option></option>";
+	  	    		  data = data.items;
+	  	    		  for(var i = 0; i < data.length; i++){
+	  	    	    	  selectedOptions += '<option value="'+data[i].code+'">'+data[i].value+'</option>';
+	  	    	      }   
+		    	      $("#financeManagerId").empty().append(selectedOptions);
+		    	      $("#departmentManagerId").empty().append(selectedOptions);
+	  	    	  } else {
+	  	    		$("#financeManagerId").empty();
+	  	    		$("#departmentManagerId").empty();
+	  	    	  }
+	  	      });
+	    }
+	};
+
+	GLOBAL.goBack();
+    
+</script>

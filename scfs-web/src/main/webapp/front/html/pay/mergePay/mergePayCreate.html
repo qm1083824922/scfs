@@ -1,0 +1,81 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li>合并付款</li>
+            <li class="active">新增</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">               
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" data-empty-option="true"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">收款单位：</label>
+                            <select class="form-control js-select" data-url="PROJECT_CS" pid="projectId" id="payee" name="payee" data-empty-option="true"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款编号：</label>
+                            <input style="width:300px;" type="text" class="form-control" id="payNo" name="payNo" placeholder="多个付款编号之间用,隔开">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款类型：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_TYPE" id="payType" name="payType"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">付款方式：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_WAY" id="payWay" name="payWay"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">支付类型：</label>
+                            <select class="form-control js-select" data-url="PAY_WAY_TYPE" id="payWayTypeEq" name="payWayTypeEq"></select>
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">要求付款日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startRequestTime" value="" name="startRequestTime"> -
+                            <input type="text" class="form-control js_datePicker" id="endRequestTime" value="" name="endRequestTime">
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="mergePayOrder/all/divid">
+                </table>
+            </div>
+            <form method="post" action="###" class="form-inline" id="mergeForm" >
+				<div class="form-group-sm">
+					<div>
+						<label class="control-label ml10">付款总额：</label> 
+						<input class="form-control ml10" readonly="readonly" id="payAmount"/>
+						<label class="control-label ml10">要求付款日期：</label> 
+						<input class="form-control js_datePicker" id="requestPayTime" name="requestPayTime" />
+						<label class="control-label">备注：</label>
+                        <input type="text" style="width:800px;" class="form-control" id="remark" name="remark" />
+					</div>
+					<div class="box-footer text-center">
+                        <button type="submit" class="btn btn-danger btn-sm" id="merge">合并</button>
+                        <button type="button" id="back" data-url="html/pay/mergePay/mergePaySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                    </div>
+				</div>
+			</form>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/pay/mergePayCreate.js"></script>

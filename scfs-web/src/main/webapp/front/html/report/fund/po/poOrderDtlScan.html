@@ -1,0 +1,142 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>采购</li>
+        <li class="active">订单明细浏览</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation"><a class="tab-item"
+                                                   data-url="poBaseInfoScan.html">基础信息</a></li>
+                        <li role="presentation" class="active"><a class="tab-item" id="orderDtlLink"
+                                                                  data-url="poOrderDtlScan.html">订单明细</a>
+                        </li>
+                        <li role="presentation"><a class="tab-item" data-url="attachmentScan.html">附件</a></li>                                
+                    </ul>
+                    <table id="js_dataTable" data-url="po/line/query"> </table>
+                </div>
+                <!-- /.box-body -->
+
+<!--                 <div class="box-footer text-center"> -->
+<!--                     <button type="button" data-url="html/purchase/poSearch.html" -->
+<!--                             class="btn btn-default btn-sm js-back">返回 -->
+<!--                     </button> -->
+<!--                 </div> -->
+                <!-- /.box-footer -->
+
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '商品编号',
+        field: "goodsNo"
+    }, {
+        title: '商品条码',
+        field: "goodsBarCode"
+    }, {
+        title: '名称',
+        field: "goodsName"
+    }, {
+        title: '型号',
+        field: "goodsType"
+    }, {
+        title: '规格',
+        field: 'specification',
+        width: 100,
+        align: 'center'
+    },{
+        title: '数量',
+        field: "goodsNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '单价',
+        field: "goodsPrice",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '折后单价',
+        field: "discountPrice",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '订单金额',
+        field: "goodsAmount",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '订单抵扣金额',
+        field: "deductionMoney",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '订单折扣金额',
+        field: "discountAmount",
+        align: 'right',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '币种',
+        field: "currencyName"
+    }, {
+        title: '收货数量',
+        field: "arrivalNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '收货金额',
+        field: "arrivalAmount",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '收票数量',
+        field: "invoiceTotalNum",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '收票金额',
+        field: "invoiceTotalAmount",
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: "批次",
+        field: "batchNum"
+    }
+    ];
+    options.initPage = function () {
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, null,{
+            onLoadSuccess: function(data){
+                    if(data.options.totalStr != null){
+                        $('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>"+data.options.totalStr+"</b></td></tr>");
+                    }
+            }
+        });
+
+    }
+
+    GLOBAL.goBack();
+</script>

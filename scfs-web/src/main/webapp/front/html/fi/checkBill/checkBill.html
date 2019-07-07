@@ -1,0 +1,65 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>对账管理</li>
+			<li class="active">对账</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="post" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<p>
+							<label class="control-label ml10">单据编号：</label> 
+							<input class="form-control" id="billNo" name="billNo" />
+							<label class="control-label">单据日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startBillDate">-
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endBillDate">
+							<button type="button" id="btnSearch"
+								class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="button" id="merge"
+								class="btn btn-danger btn-sm" data-permissionUrl="/rec/detail/merge">合并</button>
+							<button type="button" 
+								data-url="html/fi/checkBill/checkBillSearch.html"
+								class="btn btn-default btn-sm ml20 js-back">返回</button>
+						</p>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="form-group-sm"><label style="font-size: 16px;font-weight:bold">待对账列表</label></div>
+				<table id="js_dataTable1" data-url="voucherLine/check/query">
+				</table>
+			</div>
+			<form method="post" action="###" class="form-inline" id="checkForm" >
+				<div class="form-group-sm">
+					<div style="height:20px;">
+						<span style="color:red;font-weight:bold;float:right;margin-right:60px;" id="checkSum" name="checkSum" ></span>
+						<label style="float:right;" class="control-label ml10">合计：</label> 
+					</div>
+					<div>
+						<label class="control-label ml10">对账日期：</label> 
+						<input class="form-control js_datePicker" id="checkDate" name="checkDate" />
+						<label class="control-label ml10">应收到期日期：</label> 
+						<input class="form-control js_datePicker" id="expireDate" name="expireDate" />
+						<label class="control-label ml10">备注：</label>
+                        <input type="text" style="width:800px;" class="form-control" id="checkNote" name="checkNote" />
+                        <button type="button" class="btn btn-danger btn-sm" 
+								id="save" data-permissionUrl="/rec/detail/add">对账</button>
+					</div>
+				</div>
+			</form>
+			<div class="box-body" style="margin-top:60px;">
+				<div class="form-group-sm"><label style="font-size: 16px;font-weight:bold">应收未收列表</label></div>
+				<table id="js_dataTable2" data-url="unFinished/Receive/query">
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
+<script type='text/javascript'
+	src="../js/fi/checkBill/checkBill.js"></script>

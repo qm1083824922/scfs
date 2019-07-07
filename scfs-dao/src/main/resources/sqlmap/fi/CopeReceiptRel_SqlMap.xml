@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.CopeReceiptRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.CopeReceiptRel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="cope_dtl_id" jdbcType="INTEGER" property="copeDtlId" />
+		<result column="receipt_id" jdbcType="INTEGER" property="receiptId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="busi_unit_id" jdbcType="INTEGER" property="busiUnitId" />
+		<result column="currnecy_type" jdbcType="TINYINT" property="currnecyType" />
+		<result column="write_off_amount" jdbcType="DECIMAL" property="writeOffAmount" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		rel.id,
+		rel.cope_dtl_id,
+		rel.receipt_id,
+		rel.project_id,
+		rel.customer_id,
+		rel.busi_unit_id,
+		rel.currnecy_type,
+		rel.write_off_amount,
+		rel.is_delete,
+		rel.creator,
+		rel.creator_id,
+		rel.create_at,
+		rel.update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_cope_receipt_rel rel
+		where rel.id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_fi_cope_receipt_rel
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.CopeReceiptRel">
+		insert into tb_fi_cope_receipt_rel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="copeDtlId != null">
+				cope_dtl_id,
+			</if>
+			<if test="receiptId != null">
+				receipt_id,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="busiUnitId != null">
+				busi_unit_id,
+			</if>
+			<if test="currnecyType != null">
+				currnecy_type,
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="copeDtlId != null">
+				#{copeDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptId != null">
+				#{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnitId != null">
+				#{busiUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="currnecyType != null">
+				#{currnecyType,jdbcType=TINYINT},
+			</if>
+			<if test="writeOffAmount != null">
+				#{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.CopeReceiptRel">
+		update tb_fi_cope_receipt_rel
+		<set>
+			<if test="copeDtlId != null">
+				cope_dtl_id = #{copeDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptId != null">
+				receipt_id = #{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnitId != null">
+				busi_unit_id = #{busiUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="currnecyType != null">
+				currnecy_type = #{currnecyType,jdbcType=TINYINT},
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount = #{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.fi.dto.req.CopeReceiptRelReqDto">
+		select
+		<include refid="Base_Column_List" />
+		FROM tb_fi_cope_receipt_rel rel
+		<if test="copeId != null">
+			inner join tb_cope_manage_dtl dtl on
+			rel.cope_dtl_id=dtl.id
+		</if>
+		WHERE rel.is_delete=0
+		<if test="receiptId !=null">
+			and rel.receipt_id=#{receiptId}
+		</if>
+		<if test="copeDtlID != null">
+			and rel.cope_dtl_id=#{copeDtlID}
+		</if>
+		<if test="projectId !=null">
+			and rel.project_id=#{projectId}
+		</if>
+		<if test="customerId !=null">
+			and rel.customer_id=#{customerId}
+		</if>
+		<if test="busiUnitId !=null">
+			and rel.busi_unit_id=#{busiUnitId}
+		</if>
+		<if test="currnecyType !=null">
+			and rel.currnecy_type=#{currnecyType}
+		</if>
+		<if test="copeId != null">
+			and dtl.cope_id=#{copeId}
+		</if>
+		order by rel.create_at desc
+	</select>
+
+	<select id="queryPayRateBy" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select pay.pay_rate from
+		tb_fi_cope_receipt_rel cop INNER
+		JOIN tb_fi_bank_receipt rec
+		ON rec.id=cop.receipt_id
+		INNER JOIN
+		tb_pay_order pay
+		ON pay.pay_no=rec.bank_receipt_no
+		where rec.state=3 and
+		rec.is_delete=0
+		and rec.receipt_type=9
+		and pay.is_delete=0 and
+		pay.is_delete=0
+		and cop.cope_dtl_id= #{copeId,jdbcType=TINYINT}
+	</select>
+
+
+</mapper>

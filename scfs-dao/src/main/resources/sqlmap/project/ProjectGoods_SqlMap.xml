@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.project.ProjectGoodsDao">
+
+	<resultMap id="ProjectGoodsMap" type="com.scfs.domain.project.entity.ProjectGoods">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="pledge" property="pledge" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<resultMap id="GoodsMap" type="com.scfs.domain.base.entity.BaseGoods">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="detail_column_list">
+		id,project_id,goods_id,creator,create_at,deleter,delete_at,status,is_delete
+	</sql>
+	<sql id="flag_column_list">
+		tpg.id,tpg.project_id,tpg.goods_id,tpg.creator,tpg.create_at,tpg.deleter,tpg.delete_at,tpg.status,tpg.is_delete,tbg.pledge
+	</sql>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectGoods">
+		update tb_project_goods
+		<set>
+			<if test="deleter != null">deleter=#{deleter,jdbcType=VARCHAR},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="status != null">status=#{status,jdbcType=TINYINT},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="queryProjectGoodsResultsByProjectId" resultMap="ProjectGoodsMap"
+		parameterType="int">
+		select
+		<include refid="detail_column_list" />
+		from tb_project_goods where project_id = #{projectId} order by id desc
+	</select>
+
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="ProjectGoodsMap">
+		select
+		<include refid="detail_column_list" />
+		from tb_project_goods where id=#{id} for update
+	</select>
+	<select id="queryByProjectIdAndGoodsNo" resultMap="ProjectGoodsMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectGoodsSearchReqDto">
+		select
+		<include refid="flag_column_list" />
+		from tb_project_goods tpg inner join tb_base_goods tbg on
+		tpg.goods_id
+		= tbg.id
+		<where>
+			tpg.is_delete = 0 AND
+			tbg.good_type = 1 AND
+			tbg.is_delete = 0 AND
+			tpg.status = 1 AND
+			tbg.status = 2
+			<if test="number != null">
+				AND tbg.number = #{number}
+			</if>
+			<if test="projectId != null">
+				AND tpg.project_id = #{projectId}
+			</if>
+		</where>
+	</select>
+	<select id="queryAllProGoods" resultMap="ProjectGoodsMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="detail_column_list" />
+		from tb_project_goods
+		<where>
+			<if test="updateAt != null">
+				<![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_project_goods
+	</select>
+
+	<select id="queryGoodsToProjectByCon" resultMap="GoodsMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectGoodsSearchReqDto">
+		SELECT goods.id FROM tb_base_goods goods
+		WHERE goods.is_delete=0 AND
+		goods.STATUS=2 AND goods.id NOT in (select goods_id from
+		tb_project_goods where project_id = #{projectId} and is_delete=0)
+		<if test="number != null">
+			and goods.number like CONCAT('%',#{number},'%')
+		</if>
+		<if test="name != null">
+			and goods.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="type != null">
+			and goods.type like CONCAT('%',#{type},'%')
+		</if>
+		<if test="specification != null">
+			and goods.specification like
+			CONCAT('%',#{specification},'%')
+		</if>
+		<if test="barCode != null">
+			and goods.bar_Code like CONCAT('%',#{barCode},'%')
+		</if>
+		ORDER BY
+		goods.id desc
+	</select>
+
+	<select id="queryEntityByProjectAndGoods" parameterType="java.lang.Integer"
+		resultMap="ProjectGoodsMap">
+		select
+		<include refid="detail_column_list" />
+		from tb_project_goods
+		where is_delete = 0 and project_id = #{projectId}
+		and goods_id = #{goodsId}
+	</select>
+
+
+	<select id="queryResultGoodsBySku" resultMap="ProjectGoodsMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectGoodsSearchReqDto">
+		select
+		<include refid="flag_column_list" />
+		from tb_project_goods tpg inner join tb_base_goods tbg on
+		tpg.goods_id
+		= tbg.id
+		<where>
+			tpg.is_delete = 0 AND
+			tbg.good_type = 1 AND
+			tbg.is_delete = 0 AND
+			tpg.status = 1 AND
+			tbg.status in (2,3)
+			<if test="number != null">
+				AND tbg.number = #{number}
+			</if>
+			<if test="projectId != null">
+				AND tpg.project_id = #{projectId}
+			</if>
+		</where>
+	</select>
+
+</mapper>

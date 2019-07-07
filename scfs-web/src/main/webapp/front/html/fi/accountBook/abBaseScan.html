@@ -1,0 +1,61 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>帐套</li>
+		<li class="active">基本信息浏览</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="html/fi/accountBook/abBaseScan.html">基础信息</a></li>
+						<li role="presentation"><a class="tab-item"
+							data-url="html/fi/accountBook/abLineScan.html">科目明细</a></li>
+					</ul>
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>经营单位：</b></td>
+							<td class="text-left"><span id="busiUnitName"
+								name="busiUnitName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>财务编号：</b></td>
+							<td class="text-left"><span id="fiNo" name="fiNo"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>帐套名称：</b></td>
+							<td class="text-left"><span id="accountBookName"
+								name="accountBookName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>是否国内：</b></td>
+							<td class="text-left"><span
+								id="homeName" name="homeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>财务主管：</b></td>
+							<td class="text-left"><span
+								id="auditor" name="auditor"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>本位币：</b></td>
+							<td class="text-left"><span
+								id="standardCoinName" name="standardCoinName"></span></td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/fi/accountBook/accountBookSearch.html"
+						class="btn btn-default btn-sm">返回</button>
+				</div>
+				<!-- /.box-footer -->
+				</form>
+		</div>
+	</section>
+</div>
+<script src="../js/fi/accountBook/abBaseScan.js"></script>

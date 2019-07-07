@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.ReceiptOutStoreRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.ReceiptOutStoreRel">
+		<id column="id" jdbcType="TINYINT" property="id" />
+		<result column="bill_out_id" jdbcType="TINYINT" property="billOutId" />
+		<result column="bank_receipt_id" jdbcType="TINYINT" property="bankReceiptId" />
+		<result column="busi_unit" jdbcType="TINYINT" property="busiUnit" />
+		<result column="project_id" jdbcType="TINYINT" property="projectId" />
+		<result column="customer_id" jdbcType="TINYINT" property="customerId" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="received_amount" jdbcType="DECIMAL" property="receivedAmount" />
+		<result column="write_off_amount" jdbcType="DECIMAL" property="writeOffAmount" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_out_id, bank_receipt_id, busi_unit, project_id,
+		customer_id,
+		currency_type,
+		update_at, is_delete, received_amount,
+		write_off_amount, create_at,bill_type
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_receipt_out_rel
+		where id = #{id,jdbcType=TINYINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_fi_receipt_out_rel
+		where id = #{id,jdbcType=TINYINT}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.ReceiptOutStoreRel">
+		insert into
+		tb_fi_receipt_out_rel (id,bill_out_id,bank_receipt_id,
+		busi_unit,
+		project_id, customer_id,
+		currency_type, update_at, is_delete,
+		received_amount, write_off_amount, create_at,bill_type
+		)
+		values
+		(#{id,jdbcType=TINYINT}, #{billOutId,jdbcType=TINYINT},
+		#{bankReceiptId,jdbcType=TINYINT},
+		#{busiUnit,jdbcType=TINYINT},
+		#{projectId,jdbcType=TINYINT}, #{customerId,jdbcType=TINYINT},
+		#{currencyType,jdbcType=TINYINT}, #{updateAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT},
+		#{receivedAmount,jdbcType=DECIMAL},
+		#{writeOffAmount,jdbcType=DECIMAL}, #{createAt,jdbcType=TIMESTAMP},
+		#{billType,jdbcType=TINYINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.scfs.domain.fi.entity.ReceiptOutStoreRel">
+		insert into tb_fi_receipt_out_rel
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="billOutId != null">
+				bill_out_id,
+			</if>
+			<if test="bankReceiptId != null">
+				bank_receipt_id,
+			</if>
+			<if test="busiUnit != null">
+				busi_unit,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="receivedAmount != null">
+				received_amount,
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="billType != null">
+				bill_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=TINYINT},
+			</if>
+			<if test="billOutId != null">
+				#{billOutId,jdbcType=TINYINT},
+			</if>
+			<if test="bankReceiptId != null">
+				#{bankReceiptId,jdbcType=TINYINT},
+			</if>
+			<if test="busiUnit != null">
+				#{busiUnit,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=TINYINT},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=TINYINT},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="receivedAmount != null">
+				#{receivedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="writeOffAmount != null">
+				#{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.fi.entity.ReceiptOutStoreRel">
+		update tb_fi_receipt_out_rel
+		<set>
+			<if test="billOutId != null">
+				bill_out_id = #{billOutId,jdbcType=TINYINT},
+			</if>
+			<if test="bankReceiptId != null">
+				bank_receipt_id = #{bankReceiptId,jdbcType=TINYINT},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=TINYINT},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=TINYINT},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="receivedAmount != null">
+				received_amount = #{receivedAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount = #{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=TINYINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.fi.entity.ReceiptOutStoreRel">
+		update
+		tb_fi_receipt_out_rel
+		set bill_out_id = #{billOutId,jdbcType=TINYINT},
+		bank_receipt_id = #{bankReceiptId,jdbcType=TINYINT},
+		busi_unit =
+		#{busiUnit,jdbcType=TINYINT},
+		project_id =
+		#{projectId,jdbcType=TINYINT},
+		customer_id =
+		#{customerId,jdbcType=TINYINT},
+		currency_type =
+		#{currencyType,jdbcType=TINYINT},
+		update_at =
+		#{updateAt,jdbcType=TIMESTAMP},
+		is_delete =
+		#{isDelete,jdbcType=TINYINT},
+		received_amount =
+		#{receivedAmount,jdbcType=DECIMAL},
+		write_off_amount =
+		#{writeOffAmount,jdbcType=DECIMAL},
+		create_at =
+		#{createAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=TINYINT}
+	</update>
+	<!-- -->
+	<select id="queryResultsByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.fi.dto.req.ReceiptOutRelReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_receipt_out_rel
+		where is_delete=0
+		<if test="receiptId != null">
+			and bank_receipt_id = #{receiptId}
+		</if>
+		order by create_at desc
+	</select>
+	<update id="updateRecOutByCon" parameterType="java.lang.Integer">
+		update
+		tb_fi_receipt_out_rel
+		set is_delete=1
+		where id=#{id}
+	</update>
+</mapper>

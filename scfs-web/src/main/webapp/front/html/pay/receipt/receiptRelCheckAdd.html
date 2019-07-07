@@ -1,0 +1,207 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>水单</li>
+			<li>应收核销</li>
+			<li class="active">添加</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline"
+				id="receiptRelCheckAddForm" data-url="payPoRela/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="receiptId" name="id">
+					<table id="js_dataTable" data-url="recReceiptRel/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/recReceiptRel/add" data-url="recReceiptRel/add">保存</button>
+					<button type="button" data-url="html/pay/receipt/receiptRelCheck.html"class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			}, {
+		           title: '项目',
+		           field: 'projectName',
+		           width: 80,
+		           align: 'center'
+		       }, {
+		           title: '客户',
+		           field: 'custName',
+		           width: 210,
+		           align: 'center'
+		       }, {
+		           title: '经营单位',
+		           field: 'busiUnitName',
+		           width: 100,
+		           align: 'center'
+		       },{
+		           title: '币种',
+		           field: 'currencyTypeName',
+		           width: 70,
+		           align: 'center'
+		       },{
+		           title: '应收日期',
+		           field: 'expireDate',
+		           width: 70,
+		           align: 'center'
+		       },{
+		           title: '应收金额',
+		           field: 'amountReceivable',
+		           width: 70,
+		           align: 'center',
+			       	formatter : function(value , row , index) {
+			    		return value==null ? "": value.toThounds();
+			        }
+		       },{
+		           title: '已收金额',
+		           field: 'amountReceived',
+		           width: 70,
+		           align: 'center',
+			       	formatter : function(value , row , index) {
+			    		return value==null ? "": value.toThounds();
+			        }
+		       },{
+		           title: '可核销金额 ',
+		           field: 'blance',
+		           width: 70,
+		           align: 'center',
+			       	formatter : function(value , row , index) {
+			    		return value==null ? "": value.toThounds();
+			        }
+		       },
+				{
+					title : '金额',
+					field : 'opertaList2',
+					width : 70,
+					align : 'center',
+					formatter : function(value, row, index) {
+						return '<input type="text"class="form-control receipt-price" value="'+row.blance+'">';
+					}
+				} ];
+	var balance = 0;
+	options.initPage = function() {
+		console.log(options.param.id);
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			receiptId : options.param.id
+		}, null, {
+			onLoadSuccess : function(data) {
+				balance = data.options.totalAmount;
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>选中总额：<span class='select-sum'>0</span> &nbsp;&nbsp;&nbsp;余额: <span class='select-result'>"+data.options.totalAmount.toThounds()+"</span></td></tr>");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		});
+		$('#js_dataTable').on("input", ".receipt-price", function(){
+			getSelectData();
+	    });
+	};
+	
+	function getSelectData(){
+		var total = 0;
+		$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+			var value = $(this).closest("tr").find(".receipt-price").val();
+			if(value){
+				total = total + parseFloat(value);
+			}
+		})
+		$("#js_dataTable .select-sum").text(total.toThounds());
+		$("#js_dataTable .select-result").text((balance - total).toThounds());
+	}
+
+	$("#save").click(function() {
+		var saveUrl = $(this).data("url");
+		var dtlArr = [];
+		var isValid = true;
+		
+		
+		var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+		if (selectedRows.length == 0) {
+			layer.msg("请选择");
+			isValid = false;
+		}else{
+			var currencyType = selectedRows[0].currencyType;
+			for (var i = 0; i < selectedRows.length; i++) {
+				var currCurrencyType = selectedRows[i].currencyType;
+		        var id = selectedRows[i].id;
+		        var blance = selectedRows[i].blance;
+		        var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+		        var $receiptPrice = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find(".receipt-price");
+		       	var orderPrice = $receiptPrice.val();
+		       	if(orderPrice == ""){
+		       		layer.msg("不能为空");
+		       		$receiptPrice.focus();
+		       		isValid = false;
+		       	}
+		       	if(!pattern.test(orderPrice)){
+		       		layer.msg("请输入正确格式");
+		       		$receiptPrice.focus();
+		       		isValid = false;
+		       	}
+		       	if(currencyType != currCurrencyType){
+		       		layer.msg("请选择币种一致的应收记录");
+		       		isValid = false;
+		       	}
+		       	if(orderPrice > blance){
+		       		layer.msg("余额不足");
+		       		$receiptPrice.focus();
+		       		isValid = false;
+		       	}else{
+		       		dtlArr.push({
+						"recId" : id,
+						"writeOffAmount" : orderPrice
+					});
+		       	}
+		    }
+		}
+		
+		if (isValid) {
+			var saveData = {
+				relList : dtlArr,
+				receiptId : options.param.id
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						GLOBAL.go("html/pay/receipt/receiptRelCheck.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType,$("#save"));
+		}
+	});
+
+	GLOBAL.goBack();
+</script>

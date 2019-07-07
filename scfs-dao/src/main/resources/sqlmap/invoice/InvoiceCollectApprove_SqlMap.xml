@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.invoice.InvoiceCollectApproveDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceCollectApprove">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="invoice_collect_id" jdbcType="INTEGER"
+			property="invoiceCollectId" />
+		<result column="approve_date" jdbcType="TIMESTAMP" property="approveDate" />
+		<result column="approve_amount" jdbcType="DECIMAL" property="approveAmount" />
+		<result column="approve_remark" jdbcType="VARCHAR" property="approveRemark" />
+		<result column="approver_id" jdbcType="INTEGER" property="approverId" />
+		<result column="approver" jdbcType="VARCHAR" property="approver" />
+		<result column="approver_at" jdbcType="TIMESTAMP" property="approverAt" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invoice_collect_id, approve_date, approve_amount,
+		approve_remark,
+		approver_id, approver, approver_at, creator_id,
+		creator, create_at, update_at, is_delete
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_approve
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_approve
+		where id = #{id,jdbcType=INTEGER} for
+		update
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_invoice_collect_approve
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.scfs.domain.invoice.entity.InvoiceCollectApprove"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_invoice_collect_approve
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="invoiceCollectId != null">
+				invoice_collect_id,
+			</if>
+			<if test="approveDate != null">
+				approve_date,
+			</if>
+			<if test="approveAmount != null">
+				approve_amount,
+			</if>
+			<if test="approveRemark != null">
+				approve_remark,
+			</if>
+			<if test="approverId != null">
+				approver_id,
+			</if>
+			<if test="approver != null">
+				approver,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceCollectId != null">
+				#{invoiceCollectId,jdbcType=INTEGER},
+			</if>
+			<if test="approveDate != null">
+				#{approveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="approveAmount != null">
+				#{approveAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="approveRemark != null">
+				#{approveRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="approverId != null">
+				#{approverId,jdbcType=INTEGER},
+			</if>
+			<if test="approver != null">
+				#{approver,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById"
+		parameterType="com.scfs.domain.invoice.entity.InvoiceCollectApprove">
+		update tb_invoice_collect_approve
+		<set>
+			<if test="invoiceCollectId != null">
+				invoice_collect_id =
+				#{invoiceCollectId,jdbcType=INTEGER},
+			</if>
+			<if test="approveDate != null">
+				approve_date = #{approveDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="approveAmount != null">
+				approve_amount = #{approveAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="approveRemark != null">
+				approve_remark = #{approveRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="approverId != null">
+				approver_id = #{approverId,jdbcType=INTEGER},
+			</if>
+			<if test="approver != null">
+				approver = #{approver,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectApproveSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_approve
+		where is_delete = 0
+		<if test="invoiceCollectId != null">
+			AND invoice_collect_id = #{invoiceCollectId}
+		</if>
+		order by id
+	</select>
+
+</mapper>

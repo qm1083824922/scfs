@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.PerformanceReportDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.report.entity.PerformanceReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="report_record_id" jdbcType="INTEGER" property="reportRecordId" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="biz_manager_id" jdbcType="INTEGER" property="bizManagerId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="biz_type" jdbcType="TINYINT" property="bizType" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="product_no" jdbcType="VARCHAR" property="productNo" />
+		<result column="num" jdbcType="DECIMAL" property="num" />
+		<result column="place_date" jdbcType="DATE" property="placeDate" />
+		<result column="statistics_date" jdbcType="DATE" property="statisticsDate" />
+		<result column="sale_amount" jdbcType="DECIMAL" property="saleAmount" />
+		<result column="service_amount" jdbcType="DECIMAL" property="serviceAmount" />
+		<result column="composite_tax_amount" jdbcType="DECIMAL"
+			property="compositeTaxAmount" />
+		<result column="purchase_cost" jdbcType="DECIMAL" property="purchaseCost" />
+		<result column="fund_cost" jdbcType="DECIMAL" property="fundCost" />
+		<result column="warehouse_amount" jdbcType="DECIMAL" property="warehouseAmount" />
+		<result column="market_amount" jdbcType="DECIMAL" property="marketAmount" />
+		<result column="finance_amount" jdbcType="DECIMAL" property="financeAmount" />
+		<result column="manage_amount" jdbcType="DECIMAL" property="manageAmount" />
+		<result column="manual_amount" jdbcType="DECIMAL" property="manualAmount" />
+		<result column="profit_amount" jdbcType="DECIMAL" property="profitAmount" />
+		<result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+		<result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, report_record_id, issue, bill_id, project_id,
+		department_id,
+		customer_id, biz_manager_id,
+		warehouse_id,
+		business_unit_id, biz_type, bill_type, order_no, bill_no, product_no,
+		num, place_date, statistics_date, sale_amount, service_amount,
+		composite_tax_amount,
+		purchase_cost, fund_cost, warehouse_amount,
+		market_amount, finance_amount,
+		manage_amount,
+		manual_amount,
+		profit_amount, profit_rate, tax_rate, currency_type, exchange_rate,
+		creator_id,
+		creator
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_performance_report
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_performance_report
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.PerformanceReport"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_performance_report
+		(id, report_record_id, issue, bill_id,
+		project_id, department_id,
+		customer_id,
+		biz_manager_id, warehouse_id, business_unit_id,
+		biz_type,
+		bill_type, order_no,
+		bill_no, product_no, num,
+		place_date,
+		statistics_date, sale_amount,
+		service_amount, composite_tax_amount,
+		purchase_cost,
+		fund_cost, warehouse_amount, market_amount,
+		finance_amount, manage_amount, manual_amount,
+		profit_amount,
+		profit_rate, tax_rate, currency_type,
+		exchange_rate, creator_id,
+		creator)
+		values (#{id,jdbcType=INTEGER},
+		#{reportRecordId,jdbcType=INTEGER},
+		#{issue,jdbcType=VARCHAR},
+		#{billId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{departmentId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{bizManagerId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER},
+		#{businessUnitId,jdbcType=INTEGER},
+		#{bizType,jdbcType=TINYINT},
+		#{billType,jdbcType=TINYINT},
+		#{orderNo,jdbcType=VARCHAR},
+		#{billNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR},
+		#{num,jdbcType=DECIMAL},
+		#{placeDate,jdbcType=DATE},
+		#{statisticsDate,jdbcType=DATE},
+		#{saleAmount,jdbcType=DECIMAL},
+		#{serviceAmount,jdbcType=DECIMAL},
+		#{compositeTaxAmount,jdbcType=DECIMAL},
+		#{purchaseCost,jdbcType=DECIMAL},
+		#{fundCost,jdbcType=DECIMAL},
+		#{warehouseAmount,jdbcType=DECIMAL},
+		#{marketAmount,jdbcType=DECIMAL},
+		#{financeAmount,jdbcType=DECIMAL}, #{manageAmount,jdbcType=DECIMAL},
+		#{manualAmount,jdbcType=DECIMAL},
+		#{profitAmount,jdbcType=DECIMAL},
+		#{profitRate,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{currencyType,jdbcType=TINYINT},
+		#{exchangeRate,jdbcType=DECIMAL},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.PerformanceReport">
+		update tb_performance_report
+		<set>
+			<if test="reportRecordId != null">
+				report_record_id = #{reportRecordId,jdbcType=INTEGER},
+			</if>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentId != null">
+				department_id = #{departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="bizManagerId != null">
+				biz_manager_id = #{bizManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="bizType != null">
+				biz_type = #{bizType,jdbcType=TINYINT},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="productNo != null">
+				product_no = #{productNo,jdbcType=VARCHAR},
+			</if>
+			<if test="num != null">
+				num = #{num,jdbcType=DECIMAL},
+			</if>
+			<if test="placeDate != null">
+				place_date = #{placeDate,jdbcType=DATE},
+			</if>
+			<if test="statisticsDate != null">
+				statistics_date = #{statisticsDate,jdbcType=DATE},
+			</if>
+			<if test="saleAmount != null">
+				sale_amount = #{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="serviceAmount != null">
+				service_amount = #{serviceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="compositeTaxAmount != null">
+				composite_tax_amount =
+				#{compositeTaxAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="purchaseCost != null">
+				purchase_cost = #{purchaseCost,jdbcType=DECIMAL},
+			</if>
+			<if test="fundCost != null">
+				fund_cost = #{fundCost,jdbcType=DECIMAL},
+			</if>
+			<if test="warehouseAmount != null">
+				warehouse_amount = #{warehouseAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="marketAmount != null">
+				market_amount = #{marketAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="financeAmount != null">
+				finance_amount = #{financeAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="manageAmount != null">
+				manage_amount = #{manageAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="manualAmount != null">
+				manual_amount = #{manualAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitAmount != null">
+				profit_amount = #{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitRate != null">
+				profit_rate = #{profitRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryPerformanceReportCount" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_performance_report
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null">
+			AND issue = #{issue,jdbcType=VARCHAR}
+		</if>
+		<if test="reportRecordId != null">
+			AND report_record_id = #{reportRecordId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<delete id="deletePerformanceReport" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto">
+		delete from tb_performance_report
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null">
+			AND issue = #{issue,jdbcType=VARCHAR}
+		</if>
+		<if test="reportRecordId != null">
+			AND report_record_id = #{reportRecordId,jdbcType=INTEGER}
+		</if>
+	</delete>
+
+	<sql id="performance_report_sql">
+		<if
+			test="startIssue!=null and startIssue!='' and endIssue!=null and endIssue!=''">
+			SELECT
+			*,
+			(IFNULL(saleAmount, 0) + IFNULL(serviceAmount, 0) -
+			IFNULL(compositeTaxAmount, 0) -
+			IFNULL(purchaseCost, 0)
+			-
+			IFNULL(fundCost, 0) - IFNULL(warehouseAmount, 0) -
+			IFNULL(marketAmount, 0) - IFNULL(financeAmount, 0)
+			-
+			IFNULL(manageAmount, 0) - IFNULL(manualAmount, 0)) AS profitAmount
+			FROM (
+			SELECT
+			1 as dataSource,
+			id,
+			id AS billId,
+			projectId,
+			remark,
+			warehouseId,
+			bizManagerId,
+			departmentId,
+			customerId,
+			bizType,
+			orderNo,
+			billNo,
+			billType,
+			productNo,
+			taxRate,
+			isHome,
+			ROUND(num, 2) num,
+			ROUND(IF(billType = 2, IF(subjectPayAmount &lt; 0,
+			-1*subjectPayAmount, 0),
+			serviceAmount)*exchangeRate, 2) AS
+			serviceAmount,
+			ROUND(saleAmount*exchangeRate, 2) AS saleAmount,
+			ROUND(recAmount*exchangeRate, 2) AS recAmount,
+			ROUND(payAmount*exchangeRate, 2) AS payAmount,
+			ROUND(diffAmount*exchangeRate, 2) AS diffAmount,
+			ROUND(compositeTaxAmount*exchangeRate, 2) AS compositeTaxAmount,
+			ROUND(purchaseCost*exchangeRate, 2) AS purchaseCost,
+			ROUND(fundCost*exchangeRate, 2) AS fundCost,
+			placeDate,
+			statisticsDate,
+			currencyType,
+			currencyEnName,
+			payOrderAmount,
+			receiptAmount,
+			curBalance,
+			exchangeRate,
+			feeOneName,
+			CASE
+			WHEN billType =
+			1 OR billType = 3 OR billType = 4
+			THEN 0
+			WHEN (billType = 2) AND
+			(feeOneName = 7 OR feeOneName = 10 OR feeOneName
+			= 11) AND
+			subjectPayAmount &gt; 0
+			THEN ROUND(subjectPayAmount*exchangeRate, 2)
+			WHEN (billType = 6) AND (feeOneName = 7 OR feeOneName = 10 OR
+			feeOneName
+			= 11)
+			THEN ROUND(subjectPayAmount*exchangeRate, 2)
+			END AS
+			warehouseAmount,
+			CASE
+			WHEN billType = 1 OR billType = 3 OR billType = 4
+			THEN 0
+			WHEN (billType = 2) AND (feeOneName = 8 OR feeOneName = 9 ) AND
+			subjectPayAmount &gt; 0
+			THEN ROUND(subjectPayAmount*exchangeRate, 2)
+			WHEN (billType = 6) AND (feeOneName = 8 OR feeOneName = 9 )
+			THEN
+			ROUND(subjectPayAmount*exchangeRate, 2)
+			END AS marketAmount,
+			CASE
+			WHEN
+			billType = 1 OR billType = 3 OR billType = 4
+			THEN 0
+			WHEN (billType = 2)
+			AND (feeOneName = 14) AND subjectPayAmount &gt; 0
+			THEN
+			ROUND(subjectPayAmount*exchangeRate, 2)
+			WHEN (billType = 6) AND
+			(feeOneName = 14)
+			THEN ROUND(subjectPayAmount*exchangeRate, 2)
+			END AS
+			financeAmount,
+			CASE
+			WHEN billType = 1 OR billType = 3 OR billType = 4
+			THEN 0
+			WHEN (billType = 2) AND (feeOneName = 12 OR feeOneName = 15 OR
+			feeOneName
+			= 16) AND subjectPayAmount &gt; 0
+			THEN
+			ROUND(subjectPayAmount*exchangeRate, 2)
+			WHEN (billType = 6) AND
+			(feeOneName = 12 OR feeOneName = 15 OR feeOneName
+			= 16)
+			THEN
+			ROUND(subjectPayAmount*exchangeRate, 2)
+			END AS manageAmount,
+			CASE
+			WHEN
+			billType = 1 OR billType = 3 OR billType = 4
+			THEN 0
+			WHEN (billType = 2)
+			AND (feeOneName = 13) AND subjectPayAmount &gt; 0
+			THEN
+			ROUND(subjectPayAmount*exchangeRate, 2)
+			WHEN (billType = 6) AND
+			(feeOneName = 13)
+			THEN ROUND(subjectPayAmount*exchangeRate, 2)
+			END AS
+			manualAmount,
+			subjectPayAmount,
+			subjectAmount,
+			0 AS profitRate,
+			businessUnitId
+			FROM (
+			SELECT id,
+			projectId,
+			remark,
+			warehouseId,
+			bizManagerId,
+			departmentId,
+			customerId,
+			bizType,
+			orderNo,
+			billNo,
+			billType,
+			productNo,
+			taxRate,
+			isHome,
+			num,
+			CASE
+			WHEN billType = 1
+			THEN
+			recAmount
+			WHEN billType = 2 OR billType = 3 OR
+			billType = 4
+			THEN 0
+			END AS
+			serviceAmount,
+			saleAmount,
+			recAmount,
+			payAmount,
+			diffAmount,
+			CASE
+			WHEN
+			billType = 1
+			THEN ROUND(recAmount/(1+taxRate) * taxRate, 2)
+			WHEN
+			billType = 2
+			THEN 0
+			WHEN billType = 3 AND diffAmount &gt; 0
+			THEN
+			ROUND(diffAmount/(1+taxRate) * taxRate, 2)
+			WHEN billType = 3 AND
+			diffAmount &lt; 0
+			THEN 0
+			WHEN billType = 4
+			THEN
+			ROUND(saleAmount/(1+taxRate) * taxRate, 2)
+			END AS compositeTaxAmount,
+			IF(billType = 3, purchaseCost,
+			purchaseCost/(1+taxRate)) AS
+			purchaseCost,
+			fundCost,
+			placeDate,
+			statisticsDate,
+			currencyType,
+			currencyEnName,
+			payOrderAmount,
+			receiptAmount,
+			curBalance,
+			(SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+			 WHERE tcer.bank = '2' 
+			 AND tcer.currency = '1' 
+			 AND tcer.foreign_currency = result.currencyType
+			 AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(result.statisticsDate, '%Y-%m-%d')
+			) exchangeRate,
+			(SELECT
+			tfs.fee_one_name FROM tb_fee_spec tfs WHERE tfs.id =
+			result.productNo) feeOneName,
+			payAmount/(1+taxRate) AS
+			subjectPayAmount,
+			-1*diffAmount/(1+taxRate) AS subjectAmount,
+			businessUnitId
+			FROM (
+			SELECT distinct
+			tf.id,
+			tf.project_id AS projectId,
+			tf.rec_note AS remark,
+			null AS warehouseId,
+			tbp.biz_special_id AS
+			bizManagerId,
+			tbp.department_id AS departmentId,
+			CASE
+			WHEN tf.fee_type =
+			1
+			THEN (SELECT tbs.id FROM tb_base_subject tbs WHERE tbs.id =
+			tf.cust_payer
+			AND tbs.subject_type &amp; 1 = 1)
+			WHEN tf.fee_type = 2
+			THEN (SELECT tbs.id FROM tb_base_subject tbs WHERE tbs.id =
+			tf.cust_receiver AND tbs.subject_type &amp; 1 = 1)
+			WHEN tf.fee_type =
+			3 AND IFNULL(tf.rec_amount, 0) &gt;
+			IFNULL(tf.pay_amount, 0)
+			THEN
+			(SELECT tbs.id FROM tb_base_subject tbs WHERE tbs.id = tf.cust_payer
+			AND tbs.subject_type &amp; 1 = 1)
+			WHEN tf.fee_type = 3 AND
+			IFNULL(tf.rec_amount, 0) &lt;
+			IFNULL(tf.pay_amount, 0)
+			THEN (SELECT
+			tbs.id FROM tb_base_subject tbs WHERE tbs.id =
+			tf.cust_receiver AND
+			tbs.subject_type &amp; 1 = 1)
+			END AS customerId,
+			tbp.biz_type AS
+			bizType,
+			tf.fee_no orderNo,
+			tf.fee_no billNo,
+			CASE
+			tf.fee_type
+			WHEN 1
+			THEN
+			1
+			WHEN 2
+			THEN 2
+			WHEN 3
+			THEN 3
+			END AS billType,
+			CASE
+			WHEN tf.fee_type = 1
+			THEN tf.rec_fee_spec
+			WHEN tf.fee_type = 2
+			THEN tf.pay_fee_spec
+			WHEN
+			tf.fee_type = 3 AND IFNULL(tf.rec_amount, 0) &gt;=
+			IFNULL(tf.pay_amount, 0)
+			THEN tf.rec_fee_spec
+			WHEN tf.fee_type = 3 AND
+			IFNULL(tf.rec_amount, 0) &lt;
+			IFNULL(tf.pay_amount, 0)
+			THEN
+			tf.pay_fee_spec
+			END AS productNo,
+			CASE
+			WHEN tf.fee_type = 1
+			THEN
+			IFNULL(tf.provide_invoice_tax_rate, 0)
+			WHEN tf.fee_type = 2
+			THEN
+			IFNULL(tf.accept_invoice_tax_rate, 0)
+			WHEN tf.fee_type = 3 AND
+			IFNULL(tf.rec_amount, 0) &gt;=
+			IFNULL(tf.pay_amount, 0)
+			THEN
+			IFNULL(tf.provide_invoice_tax_rate, 0)
+			WHEN tf.fee_type = 3 AND
+			IFNULL(tf.rec_amount, 0) &lt;
+			IFNULL(tf.pay_amount, 0)
+			THEN
+			IFNULL(tf.accept_invoice_tax_rate, 0)
+			END AS taxRate,
+			(SELECT
+			tfab.is_home FROM tb_fi_account_book tfab WHERE tfab.busi_unit =
+			tbp.business_unit_id LIMIT 0, 1) isHome,
+			0 AS num,
+			CASE
+			WHEN tf.fee_type
+			= 1 OR tf.fee_type = 2
+			THEN 0
+			WHEN tf.fee_type = 3
+			THEN
+			IFNULL(tf.rec_amount, 0)
+			END AS saleAmount,
+			IFNULL(tf.rec_amount, 0) AS
+			recAmount,
+			CASE
+			WHEN tf.fee_type = 1 OR tf.fee_type = 3
+			THEN
+			IFNULL(tf.pay_amount, 0)
+			WHEN tf.fee_type = 2
+			THEN
+			IFNULL(tf.paid_amount, 0)
+			END AS payAmount,
+			CASE
+			WHEN tf.fee_type = 1 OR
+			tf.fee_type = 2
+			THEN 0
+			WHEN tf.fee_type = 3
+			THEN IFNULL(tf.rec_amount,
+			0) - IFNULL(tf.pay_amount, 0)
+			END AS diffAmount,
+			CASE
+			WHEN tf.fee_type =
+			1 OR tf.fee_type = 2
+			THEN 0
+			WHEN tf.fee_type = 3
+			THEN
+			IFNULL(tf.pay_amount, 0)
+			END AS purchaseCost,
+			0 AS fundCost,
+			tf.create_at AS placeDate,
+			CASE
+			WHEN tf.fee_type = 1 OR tf.fee_type = 3
+			THEN (SELECT MAX(tfbr.receipt_date) FROM tb_fi_bank_receipt tfbr
+			INNER JOIN tb_fi_rec_receipt_rel tfrrr
+			ON tfrrr.receipt_id = tfbr.id
+			INNER JOIN tb_fi_rec_line tfrl
+			ON tfrl.rec_id = tfrrr.rec_id
+			WHERE
+			tf.id = tfrl.fee_id AND tfrl.bill_type = 1)
+			WHEN tf.fee_type = 2 AND
+			(SELECT MAX(tpo.confirmor_at) FROM tb_pay_order
+			tpo
+			INNER JOIN
+			tb_pay_fee_relation tpfe
+			ON tpo.id = tpfe.pay_id
+			WHERE tpfe.fee_id =
+			tf.id AND tpo.pay_type=2
+			) IS NOT NULL
+			THEN (SELECT
+			MAX(tpo.confirmor_at) FROM tb_pay_order tpo
+			INNER JOIN
+			tb_pay_fee_relation tpfe
+			ON tpo.id = tpfe.pay_id
+			WHERE tpfe.fee_id =
+			tf.id AND tpo.pay_type=2
+			)
+			WHEN tf.fee_type = 2 AND (SELECT
+			MAX(tpo.confirmor_at) FROM tb_pay_order
+			tpo
+			INNER JOIN
+			tb_pay_fee_relation tpfe
+			ON tpo.id = tpfe.pay_id
+			WHERE tpfe.fee_id =
+			tf.id AND tpo.pay_type=2
+			) IS NULL
+			THEN (SELECT MAX(tfbr.receipt_date)
+			FROM tb_fi_bank_receipt tfbr
+			INNER JOIN tb_fi_cope_receipt_rel tfcrr
+			ON tfcrr.receipt_id = tfbr.id
+			INNER JOIN tb_cope_manage_dtl tcmd
+			ON
+			tcmd.id = tfcrr.cope_dtl_id
+			WHERE tcmd.bill_id = tf.id
+			AND
+			tcmd.cope_dtl_type = 1
+			AND tfcrr.is_delete = 0)
+			END AS statisticsDate,
+			tf.currency_type AS currencyType,
+			CASE tf.currency_type
+			WHEN 1 THEN
+			'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS
+			currencyEnName,
+			0 AS payOrderAmount,
+			0 AS receiptAmount,
+			0 AS
+			curBalance,
+			tbp.business_unit_id as businessUnitId
+			FROM
+			tb_fee tf
+			<if test="userId!=null">
+				INNER JOIN tb_base_user_project tbup
+				ON tf.project_id =
+				tbup.project_id
+			</if>
+			INNER JOIN tb_base_project tbp
+			ON tf.project_id = tbp.id
+			WHERE tf.state
+			= 3
+			AND tf.is_delete = 0
+			<if test="userId!=null">
+				AND tbup.user_id = #{userId}
+				AND tbup.state = 1
+			</if>
+			<if test="projectId!=null and projectId!=''">
+				AND tf.project_id = #{projectId}
+			</if>
+			<if test="businessUnitId !=null and businessUnitId !=''">
+				AND tbp.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				AND tf.fee_no like CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="bizType!=null and bizType!=''">
+				AND tbp.biz_type = #{bizType}
+			</if>
+			<if test="bizManagerId!=null">
+				AND tbp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND tbp.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			AND (((tf.fee_type = 1 OR tf.fee_type = 3) AND tf.received_amount >=
+			IF(tf.currency_type=1, tf.rec_amount-300, IF(tf.currency_type=2,
+			tf.rec_amount-50, IF(tf.currency_type=3, tf.rec_amount-400,
+			tf.rec_amount))))
+			OR tf.fee_type = 2
+			)
+
+			UNION ALL
+
+			SELECT distinct
+			tfm.id,
+			tfm.project_id projectId,
+			tfm.remark remark,
+			null AS warehouseId,
+			tbp.biz_special_id AS bizManagerId,
+			tfm.department_id AS departmentId,
+			(SELECT tbs.id FROM tb_base_subject tbs WHERE tbs.id = tfm.cust_id
+			AND
+			tbs.subject_type &amp; 1 = 1) AS customerId,
+			tbp.biz_type AS
+			bizType,
+			tfm.fee_manage_no AS orderNo,
+			tfm.fee_manage_no AS billNo,
+			'6'
+			AS billType,
+			fee_spec_id AS productNo,
+			0 AS taxRate,
+			(SELECT
+			tfab.is_home FROM tb_fi_account_book tfab WHERE tfab.busi_unit =
+			tbp.business_unit_id LIMIT 0, 1) isHome,
+			0 AS num,
+			0 AS saleAmount,
+			0 AS
+			recAmount,
+			FROM_BASE64(IFNULL(tfm.amount, 0)) AS payAmount,
+			0 AS
+			diffAmount,
+			0 AS purchaseCost,
+			0 AS fundCost,
+			tfm.create_at AS
+			placeDate,
+			tfm.date AS statisticsDate,
+			tfm.currnecy_type AS
+			currencyType,
+			CASE tfm.currnecy_type
+			WHEN 1 THEN 'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS currencyEnName,
+			0 AS
+			payOrderAmount,
+			0 AS receiptAmount,
+			0 AS curBalance,
+			tbp.business_unit_id as businessUnitId
+			FROM
+			tb_fee_manage tfm
+			<if test="userId!=null and projectId !=null">
+				LEFT JOIN tb_base_user_project tbup
+				ON tfm.project_id =
+				tbup.project_id
+			</if>
+			LEFT JOIN tb_base_project tbp
+			ON tfm.project_id = tbp.id
+			WHERE
+			tfm.state = 2
+			AND tfm.is_delete = 0
+			<if test="userId!=null and projectId !=null">
+				AND tbup.user_id = #{userId}
+				AND tbup.state = 1
+			</if>
+			<if test="projectId!=null">
+				AND tfm.project_id = #{projectId}
+			</if>
+			<if test="businessUnitId !=null">
+				AND tbp.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+				AND DATE_FORMAT(tfm.date, '%Y-%m-%d') &gt;=
+				#{startStatisticsDate}
+			</if>
+			<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+				AND DATE_FORMAT(tfm.date, '%Y-%m-%d') &lt;=
+				#{endStatisticsDate}
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				AND tfm.fee_manage_no like CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="bizType!=null">
+				AND tbp.biz_type = #{bizType}
+			</if>
+			<if test="bizManagerId!=null">
+				AND tbp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND tfm.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			UNION ALL
+
+			SELECT
+			tbd.id,
+			tbd.project_id AS projectId,
+			tbd.remark AS
+			remark,
+			tbd.warehouse_id AS warehouseId,
+			tbp.biz_special_id AS
+			bizManagerId,
+			tbp.department_id AS departmentId,
+			(SELECT tbs.id FROM
+			tb_base_subject tbs WHERE tbs.id = tbd.customer_id AND
+			tbs.subject_type &amp; 1 = 1) customerId,
+			tbp.biz_type AS bizType,
+			tbd.bill_no orderNo,
+			(SELECT tbos.bill_no FROM tb_bill_out_store tbos
+			WHERE tbos.bill_delivery_id
+			= tbd.id AND tbos.is_delete = 0) billNo,
+			'4' AS billType,
+			tbdd.goods_id AS productNo,
+			IF((SELECT tfab.is_home
+			FROM tb_fi_account_book tfab WHERE tfab.busi_unit =
+			tbp.business_unit_id LIMIT 0, 1)=1, (SELECT tax_rate FROM
+			tb_base_goods tbg WHERE tbg.id = tbdd.goods_id), 0) taxRate,
+			(SELECT
+			tfab.is_home FROM tb_fi_account_book tfab WHERE tfab.busi_unit =
+			tbp.business_unit_id LIMIT 0, 1) isHome,
+			SUM(tbdd.required_send_num)
+			AS num,
+			SUM(tbdd.required_send_num * tbdd.required_send_price) AS
+			saleAmount,
+			0 AS recAmount,
+			0 AS payAmount,
+			0 AS diffAmount,
+			IFNULL(tbdd.required_send_num * tbdd.cost_price, 0) AS purchaseCost,
+			0 AS fundCost,
+			tbd.required_send_date AS placeDate,
+			tbd.whole_return_time AS statisticsDate,
+			tbd.currency_type AS
+			currencyType,
+			CASE tbd.currency_type
+			WHEN 1 THEN 'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS currencyEnName,
+			0 AS
+			payOrderAmount,
+			0 AS receiptAmount,
+			0 AS curBalance,
+			tbp.business_unit_id as businessUnitId
+			FROM
+			tb_bill_delivery_dtl tbdd
+			INNER JOIN tb_bill_delivery tbd
+			ON tbdd.bill_delivery_id = tbd.id
+			<if test="userId!=null">
+				INNER JOIN tb_base_user_project tbup
+				ON tbd.project_id =
+				tbup.project_id
+			</if>
+			INNER JOIN tb_base_project tbp
+			ON tbd.project_id = tbp.id
+			WHERE
+			tbd.status = 5
+			AND tbd.is_delete = 0
+			<if test="userId!=null">
+				AND tbup.user_id = #{userId}
+				AND tbup.state = 1
+			</if>
+			<if test="projectId!=null and projectId!=''">
+				AND tbd.project_id = #{projectId}
+			</if>
+			<if test="businessUnitId !=null and businessUnitId !=''">
+				AND tbp.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				AND tbd.bill_no like CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="bizType!=null and bizType!=''">
+				AND tbp.biz_type = #{bizType}
+			</if>
+			<if test="bizManagerId!=null">
+				AND tbp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND tbp.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			AND ((SELECT tbos.received_amount FROM tb_bill_out_store tbos WHERE
+			tbos.bill_delivery_id = tbd.id AND tbos.STATUS = 5 AND tbos.is_delete
+			= 0 AND tbos.received_amount != 0)
+			>= IF(tbd.currency_type=1,
+			tbd.required_send_amount-300,
+			IF(tbd.currency_type=2,
+			tbd.required_send_amount-50,
+			IF(tbd.currency_type=3,
+			tbd.required_send_amount-400,
+			tbd.required_send_amount))))
+			GROUP BY
+			tbdd.id
+
+			UNION ALL
+
+			SELECT distinct
+			trf.id,
+			trf.project_id AS projectId,
+			NULL AS remark,
+			NULL AS warehouseId,
+			NULL AS bizManagerId,
+			trf.department_id AS departmentId,
+			NULL AS customerId,
+			NULL AS bizType,
+			NULL AS orderNo,
+			NULL AS billNo,
+			'5' AS billType,
+			'资金成本' AS productNo,
+			NULL AS taxRate,
+			NULL AS isHome,
+			0 AS num,
+			0 AS saleAmount,
+			0 AS
+			recAmount,
+			0 AS payAmount,
+			0 AS diffAmount,
+			0 AS purchaseCost,
+			trf.fund_cost AS fundCost,
+			LAST_DAY(CONCAT(SUBSTRING(trf.issue, 1, 4),
+			SUBSTRING(trf.issue, 5, 2), '01')) AS placeDate,
+			LAST_DAY(CONCAT(SUBSTRING(trf.issue, 1, 4), SUBSTRING(trf.issue, 5,
+			2), '01')) AS statisticsDate,
+			trf.currency_type AS currencyType,
+			CASE
+			trf.currency_type
+			WHEN 1 THEN 'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS currencyEnName,
+			0 AS payOrderAmount,
+			0 AS
+			receiptAmount,
+			0 AS curBalance,
+			trf.busi_unit as businessUnitId
+			FROM
+			tb_report_fund trf
+			LEFT JOIN tb_base_account tba ON trf.account_id =
+			tba.id
+			<if test="userId!=null">
+				left join tb_base_user_project bup on trf.project_id =
+				bup.project_id
+			</if>
+			left join tb_base_project bp on trf.project_id = bp.id
+			WHERE 1=1
+			and
+			trf.project_id is not null
+			and tba.capital_account_type=1
+			<if test="userId!=null">
+				AND bup.user_id = #{userId}
+				AND bup.is_delete = 0
+			</if>
+			<if test="projectId">
+				AND trf.project_id = #{projectId}
+			</if>
+			<if test="businessUnitId">
+				AND trf.busi_unit = #{businessUnitId}
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND trf.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="startIssue!=null and startIssue!=''">
+				AND trf.issue &gt;= #{startIssue}
+			</if>
+			<if test="endIssue!=null and endIssue!=''">
+				AND trf.issue &lt;= #{endIssue}
+			</if>
+
+			UNION ALL
+
+			SELECT distinct
+			trf.id,
+			trf.project_id AS projectId,
+			NULL AS
+			remark,
+			NULL AS warehouseId,
+			NULL AS bizManagerId,
+			trf.department_id AS
+			departmentId,
+			NULL AS customerId,
+			NULL AS bizType,
+			NULL AS orderNo,
+			NULL
+			AS billNo,
+			'5' AS billType,
+			'资金成本' AS productNo,
+			NULL AS taxRate,
+			NULL AS
+			isHome,
+			0 AS num,
+			0 AS saleAmount,
+			0 AS recAmount,
+			0 AS payAmount,
+			0 AS
+			diffAmount,
+			0 AS purchaseCost,
+			trf.fund_cost AS fundCost,
+			LAST_DAY(CONCAT(SUBSTRING(trf.issue, 1, 4), SUBSTRING(trf.issue, 5,
+			2), '01')) AS placeDate,
+			LAST_DAY(CONCAT(SUBSTRING(trf.issue, 1, 4),
+			SUBSTRING(trf.issue, 5,
+			2), '01')) AS statisticsDate,
+			trf.currency_type AS currencyType,
+			CASE
+			trf.currency_type
+			WHEN 1 THEN
+			'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS
+			currencyEnName,
+			0 AS payOrderAmount,
+			0 AS receiptAmount,
+			0 AS
+			curBalance,
+			trf.busi_unit as businessUnitId
+			FROM tb_report_fund trf
+			<if test="userId!=null">
+				INNER JOIN tb_base_user_subject tbus
+				ON trf.busi_unit =
+				tbus.subject_id
+			</if>
+			WHERE 1=1
+			and trf.busi_unit != 0
+			<if test="userId!=null">
+				AND tbus.user_id = #{userId}
+				AND tbus.is_delete = 0
+			</if>
+			<if test="projectId">
+				AND trf.project_id = #{projectId}
+			</if>
+			<if test="businessUnitId">
+				AND trf.busi_unit = #{businessUnitId}
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND trf.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="startIssue!=null and startIssue!=''">
+				AND trf.issue &gt;= #{startIssue}
+			</if>
+			<if test="endIssue!=null and endIssue!=''">
+				AND trf.issue &lt;= #{endIssue}
+			</if>
+
+			) result
+			WHERE 1=1
+			AND result.statisticsDate IS NOT NULL
+			<if test="billType!=null and billType!=''">
+				AND result.billType = #{billType}
+			</if>
+			<if test="startIssue!=null and startIssue!=''">
+				AND DATE_FORMAT(result.statisticsDate, '%Y%m') &gt;=
+				#{startIssue}
+			</if>
+			<if test="endIssue!=null and endIssue!=''">
+				AND DATE_FORMAT(result.statisticsDate, '%Y%m') &lt;=
+				#{endIssue}
+			</if>
+			<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+				AND result.statisticsDate &gt;= #{startStatisticsDate}
+			</if>
+			<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+				AND result.statisticsDate &lt;= #{endStatisticsDate}
+			</if>
+			<if test="excludeFundCost==1">
+				AND result.billType != 5
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND (result.projectId IS NULL OR result.projectId not in("
+					separator="," close="))">
+					${pId}
+				</foreach>
+			</if>
+			) s
+			) report where report.billType is not null
+		</if>
+
+		<if
+			test="startIssue!=null and startIssue!='' and endIssue!=null and endIssue!='' and pastStartIssue!=null and pastStartIssue!='' and pastEndIssue!=null and pastEndIssue!=''">
+			UNION ALL
+		</if>
+
+		<if
+			test="pastStartIssue!=null and pastStartIssue!='' and pastEndIssue!=null and pastEndIssue!=''">
+			SELECT distinct
+			2 as dataSource,
+			tpr.id,
+			tpr.bill_id AS billId,
+			tpr.project_id AS projectId,
+			tpr.warehouse_id AS warehouseId,
+			tpr.biz_manager_id AS bizManagerId,
+			tpr.department_id AS departmentId,
+			tpr.customer_id AS customerId,
+			tpr.biz_type AS bizType,
+			tpr.order_no AS
+			orderNo,
+			tpr.bill_no AS billNo,
+			tpr.bill_type AS billType,
+			tpr.product_no AS productNo,
+			tpr.tax_rate AS taxRate,
+			NULL AS isHome,
+			tpr.num AS num,
+			tpr.service_amount AS serviceAmount,
+			tpr.sale_amount AS
+			saleAmount,
+			0 AS recAmount,
+			0 AS payAmount,
+			0 AS diffAmount,
+			tpr.composite_tax_amount AS compositeTaxAmount,
+			tpr.purchase_cost AS
+			purchaseCost,
+			tpr.fund_cost AS fundCost,
+			tpr.place_date AS placeDate,
+			tpr.statistics_date AS statisticsDate,
+			tpr.currency_type AS
+			currencyType,
+			CASE tpr.currency_type
+			WHEN 1 THEN 'CNY'
+			WHEN 2 THEN 'USD'
+			WHEN 3 THEN 'HKD'
+			WHEN 4 THEN 'EUR'
+			END AS currencyEnName,
+			0 AS
+			payOrderAmount,
+			0 AS receiptAmount,
+			0 AS curBalance,
+			tpr.exchange_rate
+			AS exchangeRate,
+			NULL AS feeOneName,
+			tpr.warehouse_amount AS
+			warehouseAmount,
+			tpr.market_amount AS marketAmount,
+			tpr.finance_amount
+			AS financeAmount,
+			tpr.manage_amount AS manageAmount,
+			tpr.manual_amount
+			AS manualAmount,
+			tpr.profit_amount AS profitAmount,
+			tpr.profit_rate AS
+			profitRate,
+			tpr.business_unit_id as businessUnitId
+			FROM
+			tb_performance_report tpr
+			<if test="userId and projectId !=null">
+				INNER JOIN tb_base_user_project bup
+				ON tpr.project_id =
+				bup.project_id
+			</if>
+			WHERE 1=1
+			<if test="userId and projectId !=null">
+				AND bup.user_id = #{userId}
+				AND bup.state = 1
+			</if>
+			<if test="projectId">
+				AND tpr.project_id = #{projectId}
+			</if>
+			<if test="billType!=null and billType!=''">
+				AND tpr.bill_type = #{billType}
+			</if>
+			<if test="bizManagerId">
+				AND tpr.biz_manager_id = #{bizManagerId}
+			</if>
+			<if test="businessUnitId">
+				AND tpr.business_unit_id = #{businessUnitId}
+			</if>
+			<if test="bizType!=null and bizType!=''">
+				AND tpr.biz_type = #{bizType}
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				AND tpr.order_no = #{orderNo}
+			</if>
+			<if test="excludeFundCost==1">
+				AND tpr.bill_type != 5
+			</if>
+			<if test="departmentId!=null">
+				<foreach collection="departmentId" item="dId"
+					open="AND tpr.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="pastStartIssue!=null and pastStartIssue!=''">
+				AND DATE_FORMAT(tpr.statistics_date, '%Y%m') &gt;=
+				#{pastStartIssue}
+			</if>
+			<if test="pastEndIssue!=null and pastEndIssue!=''">
+				AND DATE_FORMAT(tpr.statistics_date, '%Y%m') &lt;=
+				#{pastEndIssue}
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND (tpr.project_id IS NULL OR tpr.project_id not in("
+					separator="," close="))">
+					${pId}
+				</foreach>
+			</if>
+		</if>
+
+	</sql>
+
+	<select id="queryPerformanceReportResultsByCon" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto"
+		resultType="com.scfs.domain.report.entity.PerformanceReport">
+		select * from (
+		<include refid="performance_report_sql" />
+		) tmp order by tmp.projectId, tmp.bizType, tmp.billType,
+		tmp.statisticsDate
+	</select>
+
+	<select id="queryPerformanceReportCountByCon" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto"
+		resultType="java.lang.Integer">
+		select count(*) from (
+		<include refid="performance_report_sql" />
+		) tmp
+	</select>
+
+	<select id="querySumPerformanceReportByCon" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto"
+		resultType="com.scfs.domain.report.entity.PerformanceReportSum">
+		select SUM(num) num, SUM(saleAmount) saleAmount, SUM(serviceAmount)
+		serviceAmount, SUM(compositeTaxAmount) compositeTaxAmount,
+		SUM(purchaseCost) purchaseCost, SUM(fundCost) fundCost,
+		SUM(warehouseAmount) warehouseAmount,
+		SUM(marketAmount) marketAmount,
+		SUM(financeAmount) financeAmount, SUM(manageAmount)
+		manageAmount,
+		SUM(manualAmount) manualAmount, SUM(profitAmount) profitAmount,
+		currencyType
+		from (
+		<include refid="performance_report_sql" />
+		) tmp
+		group by tmp.currencyType
+	</select>
+
+	<select id="querySumPerformanceReportByCon4Store" parameterType="com.scfs.domain.report.req.PerformanceReportReqDto"
+		resultType="com.scfs.domain.report.entity.PerformanceReportSum">
+		select SUM(num) num, SUM(sale_amount) saleAmount, SUM(service_amount)
+		serviceAmount, SUM(composite_tax_amount) compositeTaxAmount,
+		SUM(purchase_cost) purchaseCost, SUM(fund_cost) fundCost,
+		SUM(warehouse_amount) warehouseAmount,
+		SUM(market_amount) marketAmount,
+		SUM(finance_amount) financeAmount, SUM(manage_amount)
+		manageAmount,
+		SUM(manual_amount) manualAmount, SUM(profit_amount) profitAmount,
+		currency_type
+		currencyType
+		from tb_performance_report tpr
+		<if test="userId and projectId !=null">
+			INNER JOIN tb_base_user_project bup
+			ON tpr.project_id =
+			bup.project_id
+		</if>
+		WHERE 1=1
+		<if test="userId and projectId !=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="projectId">
+			AND tpr.project_id = #{projectId}
+		</if>
+		<if test="billType!=null and billType!=''">
+			AND tpr.bill_type = #{billType}
+		</if>
+		<if test="bizManagerId">
+			AND tpr.biz_manager_id = #{bizManagerId}
+		</if>
+		<if test="businessUnitId">
+			AND tpr.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="bizType!=null and bizType!=''">
+			AND tpr.biz_type = #{bizType}
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			AND tpr.order_no = #{orderNo}
+		</if>
+		<if test="excludeFundCost==1">
+			AND tpr.bill_type != 5
+		</if>
+		<if test="departmentId!=null">
+			<foreach collection="departmentId" item="dId"
+				open="AND tpr.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="pastStartIssue!=null and pastStartIssue!=''">
+			AND DATE_FORMAT(tpr.statistics_date, '%Y%m') &gt;=
+			#{pastStartIssue}
+		</if>
+		<if test="pastEndIssue!=null and pastEndIssue!=''">
+			AND DATE_FORMAT(tpr.statistics_date, '%Y%m') &lt;=
+			#{pastEndIssue}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND (tpr.project_id IS NULL OR tpr.project_id not in("
+				separator="," close="))">
+				${pId}
+			</foreach>
+		</if>
+		group by tpr.currency_type
+	</select>
+
+</mapper>

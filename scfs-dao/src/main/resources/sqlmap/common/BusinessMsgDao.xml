@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.BusinessMsgDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.BusinessMsg">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="invoke_type" jdbcType="TINYINT" property="invokeType" />
+		<result column="flag" jdbcType="TINYINT" property="flag" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
+		<result column="try_num" jdbcType="TINYINT" property="tryNum" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_type, bill_no, invoke_type, flag, msg, try_num,
+		create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_business_msg
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryEntityByCondition" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_business_msg
+		where bill_type = #{billType}
+		and bill_no =
+		#{billNo}
+		and invoke_type = #{invokeType}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.BusinessMsg"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_business_msg
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="billType != null">
+				bill_type,
+			</if>
+			<if test="billNo != null">
+				bill_no,
+			</if>
+			<if test="invokeType != null">
+				invoke_type,
+			</if>
+			<if test="flag != null">
+				flag,
+			</if>
+			<if test="msg != null">
+				msg,
+			</if>
+			<if test="tryNum != null">
+				try_num,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="invokeType != null">
+				#{invokeType,jdbcType=TINYINT},
+			</if>
+			<if test="flag != null">
+				#{flag,jdbcType=TINYINT},
+			</if>
+			<if test="msg != null">
+				#{msg,jdbcType=VARCHAR},
+			</if>
+			<if test="tryNum != null">
+				#{tryNum,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.BusinessMsg">
+		update tb_business_msg
+		<set>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="invokeType != null">
+				invoke_type = #{invokeType,jdbcType=TINYINT},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=TINYINT},
+			</if>
+			<if test="msg != null">
+				msg = #{msg,jdbcType=VARCHAR},
+			</if>
+			<if test="tryNum != null">
+				try_num = #{tryNum,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

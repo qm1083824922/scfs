@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="billDeliveryDtlExcelList"
+			var="item" varType="com.scfs.domain.sale.entity.BillDeliveryDtlExcel">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">item.orderNo</mapping>
+				<mapping row="2" col="1">item.goodsNo</mapping>
+				<mapping row="2" col="2">item.requiredSendNum</mapping>
+				<mapping row="2" col="3">item.requiredSendPrice</mapping>
+				<mapping row="2" col="4">item.batchNo</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

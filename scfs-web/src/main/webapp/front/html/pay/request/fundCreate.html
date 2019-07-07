@@ -1,0 +1,389 @@
+<style>
+	.test-payer .form-control{
+		border-color: orange!important;
+	    color: #a94442!important;
+	    padding: 0 5px;
+	    display: inline-block;
+	}
+	.test-payer .error{
+	    display: inline-block;
+	}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>请款</li>
+			<li class="active">新建请款信息</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="payForm">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td class="text-right"><b>附属编号：<em
+											class="text-star">*</em></b></td>
+									<td class="text-left"><input type="text"
+										class="form-control" id="attachedNumbe" name="attachedNumbe">
+									</td>
+								</tr>
+								<tr id="payTypeTr">
+									<td width="180" class="text-right"><b>付款类型：<em
+											class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="PAY_ORDER_TYPE"
+										id="payType" name="payType"></select></td>
+								</tr>
+								<tr id="project-tr">
+									<td width="180" class="text-right"><b>项目：<em
+											class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="USER_PROJECT"
+										id="projectId" name="projectId"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>付款单位：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" 
+										id="payer" name="payer"></select>
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>付款方式：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="PAY_ORDER_WAY"
+										id="payWay" name="payWay"></select></td>
+								</tr>
+								
+								<tr>
+									<td class="text-right"><b>支付类型：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="PAY_WAY_TYPE"
+										id="payWayType" name="payWayType"></select></td>
+								</tr>
+
+								<tr id="openType-tr" style="display: none">
+									<td class="text-right"><b>开立类型：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input type="text"
+										class="form-control" id="openType" name="openType" />
+								</tr>
+
+								<tr>
+									<td width="180" class="text-right"><b>币种：<em
+											class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select"
+										data-url="DEFAULT_CURRENCY_TYPE" id="currnecyType"
+										name="currnecyType"></select></td>
+								</tr>
+
+								<tr id="payAmountTr">
+									<td class="text-right"><b>付款金额：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input type="text"
+										class="form-control" id="payAmount" name="payAmount">
+									</td>
+								</tr>
+								<tr id="payeetr">
+									<td class="text-right"><b>收款单位：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="PROJECT_CS"
+										id="payee" name="payee" pid="projectId"></select>
+									</td>
+								</tr>
+								<tr id="payee-tr" style="display: none">
+									<td class="text-right"><b>收款单位：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="BCS"
+										  id="paye" name="payee"></select></td>
+									</td>
+								</tr>
+								<tr id="payAccountIdTr">
+									<td class="text-right"><b>收款账户：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select class="form-control"
+										data-url="SUBJECT_ACCOUNT" id="payAccountId" pid="payee"
+										name="payAccountId"></select>
+									</td>
+								</tr>
+									<tr id="payAccountId-tr" style="display: none">
+									<td class="text-right"><b>收款账户：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select class="form-control"
+										data-url="SUBJECT_ACCOUNT" id="payAccount" pid="paye"
+										name="payAccountId"></select>
+									</td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>开户行</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="bankName" name="bankName"></label></td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>收款银行地址</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="bankAddress" name="bankAddress"></label></td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>收款账号开户人</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="subjectName" name="subjectName"></label></td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>收款银行账号</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="accountNo" name="accountNo"></label></td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>收款银行代码</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="bankCode" name="bankCode"></label></td>
+								</tr>
+								<tr class="hideByRequestPay">
+									<td class="text-right"><b>收款人电话</b></td>
+									<td class="text-left"><label class="js-initform"
+										id="phoneNumber" name="phoneNumber"></label></td>
+								</tr>
+
+								<tr class="gearbest_title">
+									<td class="text-right"><b>要求付款日期：<em
+											class="text-star">*</em></b></td>
+									<td class="text-left"><input type="text"
+										class="form-control js_datePicker" id="requestPayTime"
+										name="requestPayTime"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>付款备注：</b></td>
+									<td class="text-left"><textarea class="form-control"
+											id="remark" cols="50" rows="5" name="remark"></textarea></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="submit" id="save" data-url="payOrder/add"  data-permissionUrl="/payOrder/add"
+						class="btn btn-primary btn-sm">保存</button>
+					<button type="button" id="js-back"
+						data-url="html/pay/request/fundSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	
+	options.initPage = function() {
+		var options = "<option value=''>请选择</option>";
+	    GLOBAL.ajax("common/selected/query?key=BUSI_UNIT", null, function(data) {
+	        var items = data.items;
+	        if (items) {
+	            for (var k = 0; k < items.length; k++) {
+	                options += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+	            }
+	            $("#payer").append(options);
+	        }
+	    });
+	    
+	    $(".js_datePicker").datetimepicker({
+		    format:'Y-m-d',
+		});
+		
+		$(".hideByRequestPay").hide();
+
+		$("#payForm").validate(
+		{
+			rules : {
+				payType : {
+					required : true
+				},
+				projectId : {
+					required : true
+				},
+				payer : {
+					required : true
+				},
+				payWay : {
+					required : true
+				},
+				payWayType : {
+					required : true
+				},
+				openType : {
+					required : true,
+					digits : true
+				},
+				currnecyType : {
+					required : true
+				},
+				payAmount: {
+					required : true
+				},
+				payee : {
+					required : true
+				},
+				requestPayTime : {
+					required : true
+				},
+				payAccountId : {
+					required : true
+				},
+				attachedNumbe : {
+					required : true,
+					maxlength : 50
+				}
+			},
+			submitHandler : function() {
+				var data = $("#payForm").serialize();
+				var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+				var payAmount = $("#payAmount");
+				if (!pattern.test(payAmount.val())) {
+					layer.msg("请输入正确格式");
+					payAmount.focus();
+				} else {
+					GLOBAL.ajax("payOrder/add",data,function(e) {
+					layer.msg(
+						"保存成功！",
+						{
+							icon : 1,
+							time : 1500
+						},
+						function() {
+							options.param.id = e.items;
+							options.param.payType = $("#payType").val();
+							GLOBAL.go("html/pay/request/fundBaseInfoEdit.html",options.param);
+						})
+				}, false, $("#save"));
+			   }
+			}
+		});
+	};
+
+	$("#payAccountId").change(function() {
+		var value = $(this).val();
+		changeAmount(value);
+	});
+	$("#payAccount").change(function() {
+		var value = $(this).val();
+		changeAmount(value);
+	});
+	
+	function changeAmount(value){
+		if (value) {
+			GLOBAL.ajax("baseSubject/account/edit?id=" + value, null,
+					function(data) {
+						$("#bankAddress").text(data.items.bankAddress);
+						$("#subjectName").text(data.items.subjectName);
+						$("#accountNo").text(data.items.accountNo);
+						$("#bankCode").text(data.items.bankCode);
+						$("#phoneNumber").text(data.items.phoneNumber);
+						$("#bankName").text(data.items.bankName);
+					})
+			$(".hideByRequestPay").show();
+		} else {
+			$(".hideByRequestPay").hide();
+		}
+	}		
+
+	$("#projectId").change(
+			function() {
+				var businessid;
+				var thisValue = $(this).val();
+				var $payer = $("#payer");
+				if (thisValue) {
+					GLOBAL.ajax("common/selected/query?key=PROJECT_BUSI_UNIT&pId=" + thisValue, null, function(data) {
+		                var items = data.items;
+		                if (items) {
+		                    for (var k = 0; k < items.length; k++) {
+		                    	businessid =items[k].code;
+		                    } 
+		                }
+		            })
+				}
+				var options = "<option value=''>请选择</option>";
+		        GLOBAL.ajax("common/selected/query?key=BUSI_UNIT", null, function(data) {
+		            var items = data.items;
+		            if (items) {
+		                for (var k = 0; k < items.length; k++) {
+		                	if(businessid && businessid==items[k].code){
+		                		options += '<option value="' + items[k].code + '"selected >' + items[k].value + '</option>';
+		                	}else{
+		                		 options += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+		                	}
+		                }
+		                $payer.empty();
+		                $payer.append(options).change();
+		            }
+		        });
+			}
+	)
+	
+	$("#payer").change(
+		function() {
+			var businessid;
+			var value = $(this).val();
+			var projectId = $("#projectId").val();
+			if(value && projectId){
+				GLOBAL.ajax("common/selected/query?key=PROJECT_BUSI_UNIT&pId=" + projectId, null, function(data) {
+	                var items = data.items;
+	                if (items) {
+	                    for (var k = 0; k < items.length; k++) {
+	                    	businessid =items[k].code;
+	                    } 
+	                }
+	            })
+	            if(businessid != value){
+	            	$(this).parent().addClass("test-payer"); 
+	            	
+	            	$("#payerOne-error").length == 0 && $(this).after('<label id="payerOne-error" class="error" for="payer1">更换付款单位与项目经营单位不一致</label>');
+				}else{
+					$(this).parent().removeClass("test-payer");
+					$(this).parent().find('#payerOne-error').remove();
+				}
+			}
+		}		
+	)
+	//付款方式为承兑汇票,需要显示开立类型
+	$("#payWay").change(function() {
+		var value = $(this).val();
+		if (value == "2") {
+			$("#openType-tr").css("display", "");
+		} else {
+			$("#openType-tr").css("display", "none");
+			$("#openType").val("");
+		}
+		$("#openType").val("");
+	})
+	
+	//付款类型为货款或者费用时，不显示付款金额
+	$("#payType").change(function() {
+		var value = $(this).val();
+		if (value == "1" || value == "2" || value == "6") {
+			$("#payAmountTr").hide();
+			$("#payAmount").val('');
+		} else {
+			$("#payAmountTr").show();
+		}
+		if(value == "3"){
+			$("#project-tr").hide();
+			$("#payee-tr").show();
+			$("#payeetr").hide();
+			$("#payAccountIdTr").hide();
+			$("#payAccountId-tr").show();
+		}else{
+			$("#project-tr").show();
+			$("#payee-tr").hide();
+			$("#payeetr").show();
+			$("#payAccountIdTr").show();
+			$("#payAccountId-tr").hide();
+		}
+	});
+	GLOBAL.goBack();
+</script>

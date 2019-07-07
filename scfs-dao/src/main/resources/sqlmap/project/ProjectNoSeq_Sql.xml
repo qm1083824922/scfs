@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectNoSeqDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.project.entity.ProjectNoSeq">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_no_type" jdbcType="CHAR" property="projectNoType" />
+		<result column="seq_val" jdbcType="INTEGER" property="seqVal" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, project_no_type, seq_val, create_at, update_at
+	</sql>
+
+	<select id="getSeqByType" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_no_seq
+		where project_no_type =
+		#{projectNoType,jdbcType=VARCHAR} for update
+	</select>
+
+	<update id="updateSeqValByType" parameterType="com.scfs.domain.project.entity.ProjectNoSeq">
+		update
+		tb_project_no_seq set seq_val = #{seqVal}
+		where project_no_type =
+		#{projectNoType,jdbcType=VARCHAR}
+	</update>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_no_seq
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectNoSeq"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_no_seq
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="projectNoType != null">
+				project_no_type,
+			</if>
+			<if test="seqVal != null">
+				seq_val,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="projectNoType != null">
+				#{projectNoType,jdbcType=CHAR},
+			</if>
+			<if test="seqVal != null">
+				#{seqVal,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectNoSeq">
+		update tb_project_no_seq
+		<set>
+			<if test="projectNoType != null">
+				project_no_type = #{projectNoType,jdbcType=CHAR},
+			</if>
+			<if test="seqVal != null">
+				seq_val = #{seqVal,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

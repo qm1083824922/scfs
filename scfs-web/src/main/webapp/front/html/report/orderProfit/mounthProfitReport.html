@@ -1,0 +1,248 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">月结利润报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+          <div class="box">
+              <div class="box-header">
+                  <form method="post" action="###" class="form-inline" id="searchForm">
+                      <div class="form-group-sm">
+                          <div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                          </div>
+                          
+                          <div class="search-item">                                         
+                              <label class="control-label">月份：</label>
+                              <input type="text" class="form-control period_datePicker" id="startStatisticsDate"  value="" name="startStatisticsDate"> -
+                              <input type="text" class="form-control period_datePicker" id="endStatisticsDate" value="" name="endStatisticsDate">                                                    
+                          </div>
+                          
+                          <div class="search-item">    
+                            <label class="control-label ml10">项目类型：</label>
+                       		<select class="form-control js-select" data-url="PROJECT_BIZTYPE" id="bizType" name="bizType"></select>
+                          </div>
+                          
+                          <div class="search-item">
+                              <label class="control-label ml10">部门：</label>
+                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                          </div>
+                          
+                          <div class="search-item">
+                              <label class="control-label ml10">业务人员：</label>
+                              <select class="form-control js-select" data-url="DEPARTMENT_USER" id="bizSpecialId" name="bizSpecialId"></select>
+                          </div>
+                          
+                          <div class="search-item">
+                              <label class="control-label ml10">商务人员：</label>
+                              <select class="form-control js-select" data-url="DEPARTMENT_USER" id="businessManagerId" name="businessManagerId"></select>
+                          </div>
+                          
+                          <div class="search-item">
+                              <label class="control-label ml10">是否合计：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                              <button type="reset" id="btnClear" onclick="clearSearch();" class="btn btn-success btn-sm ml10 mr10">清空</button>
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnExport" data-permissionUrl="/mounthProfitReport/excel/mounthProfitReport.xls"  data-url="mounthProfitReport/excel/mounthProfitReport.xls" 
+                              	class="btn btn-warning btn-sm ml10">导出</button>                                 	
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <table id="js_dataTable" data-url="mounthProfitReport/query">
+                  </table>
+              </div>
+              <!-- .box-body -->
+          </div>
+    </section>
+</div>
+
+<script>
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+var time = new Date().Format("yyyyMM");
+document.getElementById("startStatisticsDate").value = time;
+document.getElementById("endStatisticsDate").value = time;
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '业务员',
+	     field: 'bizSpecialName',
+	     align: 'center'
+	 }, {
+	     title: '项目类别',
+	     field: 'bizTypeName',
+	     align: 'center'
+	 }, {
+	     title: '月份',
+	     field: 'issue',
+	     align: 'center'
+	 }, {
+	     title: '销售收入',
+	     field: 'saleAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '销售成本',
+	     field: 'purchaseCost',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '销售毛利',
+	     field: 'saleBlanceAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '资金成本',
+	     field: 'fundCost',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '经营运费',
+	     field: 'warehouseAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '管理费用',
+	     field: 'manageAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '业务利润',
+	     field: 'bizManagerAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '净利润',
+	     field: 'profitAmount',
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '销售毛利率',
+	     field: 'saleBlanceRate',
+	     align: 'center'
+	 }, {
+	     title: '业务毛利率',
+	     field: 'bizManagerRate',
+	     align: 'center'
+	 }, {
+	     title: '净利率',
+	     field: 'profitRate',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+    $('.period_datePicker').datepicker({
+        format: "yyyymm",
+        minViewMode: 1,
+        maxViewMode: 2,
+        language: 'zh-CN',
+        clearBtn: true
+    });
+    
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+	//$(".js_datePicker").datetimepicker({format:"Ym", timepicker:false});
+}
+
+$("#btnSearch").click(function() {
+	
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+
+$("#departmentName").change(function() {
+	$("#bizSpecialId").empty();
+	$("#businessManagerId").empty();
+	GLOBAL.ajax("common/selected/query?key=DEPARTMENT_USER&pId=" + $("#departmentId").val(), null, function(data) {
+        if (data) {
+            var option = "<option value=''>请选择</option>";
+            var items = data.items;
+            if (items) {
+                for (var k = 0; k < items.length; k++) {
+                	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                }
+                $("#bizSpecialId").append(option);
+                $("#businessManagerId").append(option);
+            }
+        }
+    })
+    $('select').select2({language: "zh-CN"});
+
+});
+
+
+$("#btnExport").click(function() {
+    var count_url = "mounthProfitReport/excel/mounthProfitReport/count";
+    var data = $("#searchForm").serializeObject();
+	var url = $(this).data("url");
+    url = url + "?" + $("#searchForm").serialize();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+</script>

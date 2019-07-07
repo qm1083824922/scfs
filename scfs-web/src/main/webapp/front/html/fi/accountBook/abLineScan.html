@@ -1,0 +1,35 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>帐套</li>
+		<li class="active">科目浏览</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item"
+							data-url="html/fi/accountBook/abBaseScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="html/fi/accountBook/abLineScan.html">科目明细</a></li>
+					</ul>
+					<div class="box-body">
+						<table id="js_dataTable" data-url="accountBook/line/rel/query">
+						</table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+
+					<button type="button" id="back" data-url="html/fi/accountBook/accountBookSearch.html"
+						class="btn btn-default btn-sm">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+<script src="../js/fi/accountBook/abLineScan.js"></script>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.po.PurchasePackPrintDao">
+	<resultMap id="PurchasePackPrintMap" type="com.scfs.domain.po.entity.PurchasePackPrint">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="po_line_id" property="poLineId" jdbcType="BIGINT" />
+		<result column="packages" property="packages" jdbcType="DECIMAL" />
+		<result column="net_weight" property="netWeight" jdbcType="DECIMAL" />
+		<result column="gross_weight" property="grossWeight" jdbcType="DECIMAL" />
+		<result column="volume" property="volume" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		po_line_id,
+		packages,
+		net_weight,
+		gross_weight,
+		volume,
+		create_at,
+		creator,
+		creator_id,
+		is_delete
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.po.entity.PurchasePackPrint"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_purchase_pack_print(
+		po_line_id,
+		packages,
+		net_weight,
+		gross_weight,
+		volume,
+		create_at,
+		creator,
+		creator_id,
+		is_delete
+		)
+		values(
+		#{poLineId,jdbcType=BIGINT},
+		#{packages,jdbcType=DECIMAL},
+		#{netWeight,jdbcType=DECIMAL},
+		#{grossWeight,jdbcType=DECIMAL},
+		#{volume,jdbcType=DECIMAL},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=BIGINT},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.scfs.domain.po.entity.PurchasePackPrint">
+		update tb_purchase_pack_print
+		<set>
+			<if test="poLineId != null">
+				po_line_id=#{poLineId},
+			</if>
+			<if test="packages != null">
+				packages=#{packages},
+			</if>
+			<if test="netWeight != null">
+				net_weight=#{netWeight},
+			</if>
+			<if test="grossWeight != null">
+				gross_weight=#{grossWeight},
+			</if>
+			<if test="volume != null">
+				volume=#{volume},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="PurchasePackPrintMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_purchase_pack_print
+		WHERE id=#{id}
+		for update
+	</select>
+
+	<!-- 通过采购单获取信息 -->
+	<select id="queryPoLineListByPoIds" resultType="com.scfs.domain.po.dto.resp.PurchasePackPrintResDto"
+		parameterType="java.util.List">
+		SELECT
+		ppp.id AS id,pol.id poLineId,
+		pot.order_no orderNo,
+		pot.order_time orderTime,
+		pol.po_id poId, pol.goods_id goodsId,
+		pol.goods_num packages,
+		tbg.number goodsNo,
+		tbg.name goodsName,
+		tbg.net_weight AS netWeight,
+		tbg.gross_weight AS grossWeight,
+		tbg.volume AS volume
+		FROM tb_purchase_order_line pol
+		INNER JOIN
+		tb_purchase_order_title pot ON
+		pol.po_id=pot.id
+		INNER JOIN tb_base_goods
+		tbg ON pol.goods_id = tbg.id
+		LEFT JOIN tb_purchase_pack_print ppp ON
+		ppp.po_line_id=pol.id
+		WHERE
+		pot.id IN
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+		AND
+		pol.is_delete=0
+		ORDER BY pot.id DESC
+	</select>
+
+	<!-- 通过销售单获取信息 -->
+	<select id="queryPoLineListBySaleIds" resultType="com.scfs.domain.po.dto.resp.PurchasePackPrintResDto"
+		parameterType="java.util.List">
+		SELECT
+		ppp.id AS id,pol.id poLineId,
+		pot.order_no orderNo,
+		pot.order_time orderTime,
+		pol.po_id poId, pol.goods_id goodsId,
+		pol.goods_num packages,
+		tbg.number goodsNo,
+		tbg.name goodsName,
+		tbg.net_weight AS netWeight,
+		tbg.gross_weight AS grossWeight,
+		tbg.volume AS volume
+		FROM tb_bill_delivery_dtl tbdd
+		INNER JOIN
+		tb_bill_delivery tbd ON tbdd.bill_delivery_id = tbd.id
+		INNER JOIN
+		tb_stl stl ON tbdd.stl_id=stl.id
+		INNER JOIN tb_purchase_order_line pol
+		ON stl.po_dtl_id=pol.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pol.po_id=pot.id
+		INNER JOIN tb_base_goods tbg ON pol.goods_id = tbg.id
+		LEFT JOIN tb_purchase_pack_print ppp ON ppp.po_line_id=pol.id
+		WHERE
+		tbdd.bill_delivery_id IN
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+		AND
+		pol.is_delete=0
+		ORDER BY pot.id DESC
+	</select>
+</mapper>

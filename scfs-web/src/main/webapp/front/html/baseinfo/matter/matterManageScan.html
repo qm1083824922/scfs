@@ -1,0 +1,219 @@
+<style>
+.nav>li.one, .nav>li.two{
+	display: none;
+}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>事项管理</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="matterManage/detail">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<ul class="nav nav-tabs">
+			                  <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/matter/matterManageScan.html">基础信息</a></li> 
+			                  <li role="presentation" class="one"><a class="tab-item" data-url="html/baseinfo/matter/matterServiceScan.html">服务需求</a></li>
+			                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/matter/attachmentScan.html">附件</a></li> 
+			                </ul>
+							<table class="table table-bordered table-hover no-margin">
+								  <tr>
+				                     <td class="text-right"><b>事项编号：</b></td>
+				                     <td class="text-left">
+				                     	 <label class=" js-initform" id="matterNo" name="matterNo">
+				                     </td>
+				                     <td class="text-right"><b>事项名称：</b></td>
+	                                 <td class="text-left">
+	                                    <label class=" js-initform" id="matterNameValue" name="matterNameValue">
+	                               	 </td>
+				                 </tr>
+				                 <tr width="280">
+				                     <td class="text-right" ><b>事项描述：</b></td>
+				                     <td class="text-left">
+				                     	 <label class=" js-initform" id="matterDescribe" name="matterDescribe">
+									 </td>
+									 <td class="text-right"><b>客户类型：</b></td>
+				                     <td class="text-left">
+				                     	<label class=" js-initform" id="matterTypeValue" name="matterTypeValue">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>所处阶段：</b></td>
+				                     <td class="text-left">
+				                     	<label class=" js-initform" id="stageValue" name="stageValue">
+				                     </td>
+				                     <td class="text-right showProject"><b>项目：</b></td>
+	                                 <td class="text-left showProject">
+	                                 	<label class=" js-initform" id="projectName" name="projectName">
+	                               	 </td>
+	                               	 
+	                               	 <td class="text-right showAbbreviate"><b>客户简称：</b></td>
+				                     <td class="text-left showAbbreviate">
+				                         <label class=" js-initform" id="customerAbbreviate" name="customerAbbreviate">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>客户名称：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="customerName" name="customerName">
+				                     </td>
+				                     <td class="text-right"><b>办公地址：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="officeAddress" name="officeAddress">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>香港公司全称：</b></td>
+				                     <td class="text-left">
+				                     		<label class="js-initform" id="hkCompany" name="hkCompany">
+				                     </td>
+				                     <td class="text-right"><b>注册地址：</b></td>
+	                                 <td class="text-left">
+	                                    <label class="js-initform" id="regAddress" name="regAddress">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>联系人：</b></td>
+				                     <td class="text-left">
+				                     	  <label class="js-initform" id="contacts" name="contacts">
+				                     </td>
+				                     <td class="text-right"><b>联系电话：</b></td>
+	                                 <td class="text-left">
+	                                     <label class="js-initform" id="contactsNumber" name="contactsNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>企业主营业务：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="enterpriseBus" name="enterpriseBus">
+				                     </td>
+				                     <td class="text-right"><b>铺货商品：</b></td>
+	                                 <td class="text-left">
+	                                 	  <label class="js-initform" id="disGoods" name="disGoods">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>业务审核人：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="bizManagerName" name="bizManagerName">
+				                     </td>
+				                     
+				                     <td class="text-right"><b>商务审核人：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="businessManagerName" name="businessManagerName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>部门主管审核人：</b></td>
+				                     <td class="text-left">
+				                     	 <label class="js-initform" id="departmentIdName" name="departmentIdName">
+				                     </td>
+				                     
+				                     <td class="text-right"><b>法务审核人：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="justiceName" name="justiceName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>财务主管审核人：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="financeManagerName" name="financeManagerName">
+				                     </td>
+				                     
+				                     <td class="text-right"><b>风控主管审核人：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="riskManagerName" name="riskManagerName">
+	                               	 </td>
+				                  </tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left">
+										<label class="js-initform" id="remark" name="remark">
+									</td>
+									<td class="text-right"><b>状态：</b></td>
+	                                 <td class="text-left">
+	                                 	  <label class="js-initform" id="stateValue" name="stateValue">
+	                               	 </td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="matterManage/auditflow/audit/query"></table>
+                    </div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/baseinfo/matter/matterManageSearch.html" class="btn btn-default btn-sm js-back showProject">返回</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMatterManage.html" class="btn btn-default btn-sm js-back showAbbreviate">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		/*数据表格*/
+		var tabColsLog = [{
+		    title: '序号',
+		    field: 'columnsNumber',
+		    width: '5%'
+		}, {
+		    title: '流程节点',
+		    field: "stateName",
+		    width: '15%'
+		}, {
+		    title: '处理人',
+		    field: "dealName",
+		    width: '15%'
+		}, {
+		    title: '处理意见',
+		    field: "suggestion",
+		    width: '25%'
+		}, {
+		    title: '开始时间',
+		    field: "createTime",
+		    width: '15%'
+		}, {
+		    title: "处理时间",
+		    field: "dealTime",
+		    width: '15%'
+		}, {
+		    title: "处理状态",
+		    field: "auditStateName",
+		    width: '10%'
+		}];
+		
+		var matterName = options.param.matterName;
+		if(matterName==1){
+	    	$(".nav>li.one").show();
+	    } 
+		var show = options.param.show;
+		if(show==1){
+			$(".showProject").show();	
+	    	$(".showAbbreviate").hide();		
+		}else{
+			$(".showAbbreviate").show();	
+	    	$(".showProject").hide();
+		}
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+	        projectItemId: options.param.id
+	    }, null, {
+	        pagination: false
+	    });
+	}
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,140 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">融资池</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="fundPool">
+                    <div class="form-group-sm">
+                        <div class="search-item"> 
+                            <label class="control-label ml10">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId"></select>
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="fundPool/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+
+window.operateEvents = {
+	      'click .scan': function(e, value, row, index){
+	  		options.param.businessUnitId = row.businessUnitId;
+	  		options.param.currencyType = row.currencyType;
+	  		options.param.id=row.id;
+	  		GLOBAL.go("html/pay/fundPool/fundPoolScan.html");
+	      },
+};
+options.initPage = function() {
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+}
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '经营单位',
+	     field: 'businessUnitName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '资金额度',
+	     field: 'countRecriptAmount',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '已使用资金额度',
+	     field: 'usedFundAmount',
+	     width: 120,
+	     align: 'center'
+	 },{
+	     title: '资金余额',
+	     field: 'remainFundAmount',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '预付款金额',
+	     field: 'advancePayAmount',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: ' 在途货款',
+	     field: 'paymentAmount',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '库存金额',
+	     field: 'stlAmount',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '应收金额',
+	     field: 'recAmount',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '资产总值',
+	     field: 'remainAssetAmount',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '资金额度（CNY）',
+	     field: 'countRecriptAmountCny',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '已使用资金额度（CNY）',
+	     field: 'usedFundAmountCny',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '资金余额（CNY）',
+	     field: 'remainFundAmountCny',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '资产总值（CNY）',
+	     field: 'remainAssetAmountCny',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '操作',
+         field: 'opertaList',
+         width: 160,
+         align: 'center',
+         events: operateEvents,
+	 }
+];
+$("#btnSearch").click(function() {
+	var data = $("#fundPool").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+	GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+</script>

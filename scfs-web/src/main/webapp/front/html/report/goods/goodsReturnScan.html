@@ -1,0 +1,109 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>报表</li>
+        <li class="active">退货明细</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                     <li role="presentation" ><a class="tab-item" data-url="html/report/goods/goodsDetailScan.html">基础信息</a></li>
+                     <li role="presentation" ><a class="tab-item"  data-url="html/report/goods/goodsPmsInScan.html">入库明细</a></li>
+                 	 <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsPmsOutScan.html">出库明细</a></li> 
+                 	  <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsPleaseScan.html">请款明细</a></li> 
+                 	  <li role="presentation" class="active"><a class="tab-item"  data-url="html/report/goods/goodsReturnScan.html">退货明细</a></li> 
+<!--                      <li role="presentation"><a class="tab-item"  data-url="html/report/goods/goodsStlScan.html">库存明细</a></li> -->
+                    </ul>
+                    <table id="js_dataTable" data-url="goods/report/pmsrt/query"> </table>
+                </div>
+
+                <div class="box-footer text-center">
+                   <button type="button" data-url="html/report/goods/goodsReportSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+                <!-- /.box-footer -->
+
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+
+window.operateEvents = {
+    	'click .returnScan': function(e, value, row, index){
+    			var open_url = "id=" + row.poId;
+    			open_url += "&poState=" + row.poState;
+    			window.open("/html/report/fund/po/poDetail.html?" + open_url);
+    },
+};
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '退货编号',
+        field: "returnOrder",
+        width: 100,
+        align: 'center',
+	     events: operateEvents,
+	     formatter: returnForwardFormatter
+    }, {
+        title: '退货附属编号',
+        field: "returnAppenNo",
+        width: 100,
+        align: 'center'
+    }, {
+        title: '单据类型',
+        field: "orderTypeName",
+        width: 100,
+        align: 'center'
+    }, {
+        title: '币种',
+        field: "currencyName",
+        width: 100,
+        align: 'center'
+    }, {
+        title: '退货数量',
+        field: 'returnNumber',
+        width: 100,
+        align: 'center'
+    },{
+        title: '退货金额',
+        field: "returnAmount",
+        width: 100,
+        align: 'center',
+     	formatter : function(value , row , index) {
+    		return  value.toThounds();
+    	}
+    },{
+        title: '退货日期',
+        field: "returnDate",
+        width: 100,
+        align: 'center'
+    }];
+    
+    function returnForwardFormatter(value, row, index) {
+    	if (!value) {
+    		value = "0";
+    		return value;
+    	} else {
+    	    return '<a class="returnScan">' + value + '</a>';
+    	}
+    }
+    
+    options.initPage = function () {
+        var projectId= options.param.projectId;
+        var goodsCode= options.param.goodsCode;
+        var supplierId= options.param.supplierId;
+        var customerId= options.param.customerId;
+        var startCheckDate= options.param.startCheckDate;
+        var endCheckDate= options.param.endCheckDate;
+         GLOBAL.initTable($('#js_dataTable'), tabCols, {projectId: projectId,goodsCode:goodsCode,supplierId:supplierId,
+         	startCheckDate:startCheckDate,endCheckDate:endCheckDate,customerId: customerId});
+    }
+
+    GLOBAL.goBack();
+</script>

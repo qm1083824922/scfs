@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.base.entity.BaseProjectDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.base.entity.BaseProject">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_no" jdbcType="VARCHAR" property="projectNo" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="full_name" jdbcType="VARCHAR" property="fullName" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+		<result column="amount_unit" jdbcType="INTEGER" property="amountUnit" />
+		<result column="biz_type" jdbcType="INTEGER" property="bizType" />
+		<result column="law_id" jdbcType="INTEGER" property="lawId" />
+		<result column="biz_manager_id" jdbcType="INTEGER" property="bizManagerId" />
+		<result column="business_manager_id" jdbcType="INTEGER"
+			property="businessManagerId" />
+		<result column="finance_manager_id" jdbcType="INTEGER"
+			property="financeManagerId" />
+		<result column="risk_manager_id" jdbcType="INTEGER" property="riskManagerId" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="industrial" property="industrial" jdbcType="TINYINT" />
+		<result column="project_no_type" property="projectNoType"
+			jdbcType="CHAR" />
+		<result column="finance_special_id" property="financeSpecialId"
+			jdbcType="INTEGER" />
+		<result column="department_id" property="departmentId"
+			jdbcType="BIGINT" />
+		<result column="risk_special_id" jdbcType="INTEGER" property="riskSpecialId" />
+		<result column="biz_special_id" jdbcType="INTEGER" property="bizSpecialId" />
+		<result column="department_manager_id" jdbcType="INTEGER" property="departmentManagerId" />
+		<result column="boss_id" jdbcType="INTEGER" property="bossId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, project_no, project_name, full_name, business_unit_id,
+		total_amount,
+		amount_unit,
+		biz_type, law_id, biz_manager_id,
+		business_manager_id, finance_manager_id,
+		risk_manager_id,
+		status,
+		creator, deleter, create_at, update_at, delete_at, is_delete,
+		industrial,
+		project_no_type, finance_special_id, department_id,
+		risk_special_id, biz_special_id, department_manager_id,
+		boss_id
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_project
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="lockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_project
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryProjectByProNo" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		select count(*)
+		from tb_base_project
+		<where>
+			is_delete = 0
+			<if test="projectNo != null and projectNo != ''">
+				AND project_No = #{projectNo}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryUserProjectResultsByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select
+		bp.id, project_no, project_name, full_name, business_unit_id,
+		total_amount,
+		amount_unit,
+		biz_type, law_id, biz_manager_id,
+		business_manager_id, finance_manager_id,
+		risk_manager_id,
+		status,
+		bp.creator, bp.deleter, bp.create_at, bp.update_at, bp.delete_at,
+		bp.is_delete,
+		industrial,project_no_type,finance_special_id,department_id,risk_special_id,biz_special_id,
+		department_manager_id, boss_id
+		from tb_base_project bp INNER JOIN tb_base_user_project bup on
+		bp.id=bup.project_id
+		<where>
+			bp.is_delete = 0 AND bup.user_id=#{userId} AND bup.is_delete=0 AND
+			bup.state =1
+			<if test="businessUnitId != null">
+				AND bp.business_unit_id =#{businessUnitId}
+			</if>
+			<if test="projectNo != null and projectNo != ''">
+				AND bp.project_No like CONCAT('%',#{projectNo},'%')
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND bp.project_Name like CONCAT('%',#{projectName},'%')
+			</if>
+			<if test="fullName != null and fullName != ''">
+				AND bp.full_name like CONCAT('%',#{fullName},'%')
+			</if>
+			<if test="bizType != null">
+				AND bp.biz_Type = #{bizType}
+			</if>
+			<if test="departmentId != null">
+				<foreach collection="departmentId" item="dId"
+					open="AND bp.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="status != null">
+				AND bp.status = #{status}
+			</if>
+			<if test="projectNoType != null and projectNoType != ''">
+				AND bp.project_no_type = #{projectNoType}
+			</if>
+			<if test="bizSpecialId != null">
+				AND bp.biz_special_id = #{bizSpecialId}
+			</if>
+			<if test="businessManagerId != null">
+				AND bp.business_manager_id = #{businessManagerId}
+			</if>
+		</where>
+		order by bp.create_at desc
+	</select>
+
+
+
+	<select id="queryProjectResultsByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_project
+		<where>
+			is_delete = 0
+			<if test="businessUnitId != null">
+				AND business_unit_id =#{businessUnitId}
+			</if>
+			<if test="projectNo != null and projectNo != ''">
+				AND project_No like CONCAT('%',#{projectNo},'%')
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND project_Name like CONCAT('%',#{projectName},'%')
+			</if>
+			<if test="fullName != null and fullName != ''">
+				AND full_name like CONCAT('%',#{fullName},'%')
+			</if>
+			<if test="bizType != null">
+				AND biz_Type = #{bizType}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="projectNoType != null and projectNoType != ''">
+				AND project_no_type = #{projectNoType}
+			</if>
+			<if test="departmentId != null">
+				<foreach collection="departmentId" item="dId"
+					open="AND department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="bizSpecialId != null">
+				AND biz_special_id = #{bizSpecialId}
+			</if>
+			<if test="businessManagerId != null">
+				AND business_manager_id =#{businessManagerId}
+			</if>
+		</where>
+		order by create_at desc
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseProject"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_base_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="projectNo != null">
+				project_no,
+			</if>
+			<if test="projectName != null">
+				project_name,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="amountUnit != null">
+				amount_unit,
+			</if>
+			<if test="bizType != null">
+				biz_type,
+			</if>
+			<if test="lawId != null">
+				law_id,
+			</if>
+			<if test="bizManagerId != null">
+				biz_manager_id,
+			</if>
+			<if test="businessManagerId != null">
+				business_manager_id,
+			</if>
+			<if test="financeManagerId != null">
+				finance_manager_id,
+			</if>
+			<if test="riskManagerId != null">
+				risk_manager_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="deleter != null">
+				deleter,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="deleteAt != null">
+				delete_at,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="industrial != null">
+				industrial,
+			</if>
+			<if test="projectNoType != null">
+				project_no_type,
+			</if>
+			<if test="financeSpecialId != null">
+				finance_special_id,
+			</if>
+			<if test="departmentId != null">
+				department_id,
+			</if>
+			<if test="riskSpecialId != null">
+				risk_special_id,
+			</if>
+			<if test="bizSpecialId != null">
+				biz_special_id,
+			</if>
+			<if test="departmentManagerId != null">
+				department_manager_id, 
+			</if>
+			<if test="bossId != null">
+				boss_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="projectNo != null">
+				#{projectNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null">
+				#{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="businessUnitId != null">
+				#{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="amountUnit != null">
+				#{amountUnit,jdbcType=INTEGER},
+			</if>
+			<if test="bizType != null">
+				#{bizType,jdbcType=VARCHAR},
+			</if>
+			<if test="lawId != null">
+				#{lawId,jdbcType=INTEGER},
+			</if>
+			<if test="bizManagerId != null">
+				#{bizManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessManagerId != null">
+				#{businessManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="financeManagerId != null">
+				#{financeManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="riskManagerId != null">
+				#{riskManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter != null">
+				#{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				#{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="industrial != null">
+				#{industrial,jdbcType=TINYINT},
+			</if>
+			<if test="projectNoType != null">
+				#{projectNoType,jdbcType=CHAR},
+			</if>
+			<if test="financeSpecialId != null">
+				#{financeSpecialId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentId != null">
+				#{departmentId,jdbcType=BIGINT},
+			</if>
+			<if test="riskSpecialId != null">
+				#{riskSpecialId,jdbcType=BIGINT},
+			</if>
+			<if test="bizSpecialId != null">
+				#{bizSpecialId,jdbcType=BIGINT},
+			</if>
+			<if test="departmentManagerId != null">
+				#{departmentManagerId,jdbcType=BIGINT},
+			</if>
+			<if test="bossId != null">
+				#{bossId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.BaseProject">
+		update tb_base_project
+		<set>
+			<if test="projectNo != null">
+				project_no = #{projectNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null">
+				project_name = #{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="amountUnit != null">
+				amount_unit = #{amountUnit,jdbcType=INTEGER},
+			</if>
+			<if test="bizType != null">
+				biz_type = #{bizType,jdbcType=VARCHAR},
+			</if>
+			<if test="lawId != null">
+				law_id = #{lawId,jdbcType=INTEGER},
+			</if>
+			<if test="bizManagerId != null">
+				biz_manager_id = #{bizManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessManagerId != null">
+				business_manager_id =
+				#{businessManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="financeManagerId != null">
+				finance_manager_id =
+				#{financeManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="riskManagerId != null">
+				risk_manager_id = #{riskManagerId,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="industrial != null">
+				industrial=#{industrial,jdbcType=TINYINT},
+			</if>
+			<if test="projectNoType != null">
+				project_no_type=#{projectNoType,jdbcType=CHAR},
+			</if>
+			<if test="financeSpecialId != null">
+				finance_special_id =
+				#{financeSpecialId,jdbcType=INTEGER},
+			</if>
+			<if test="departmentId != null">
+				department_id= #{departmentId,jdbcType=BIGINT},
+			</if>
+			<if test="riskSpecialId != null">
+				risk_special_id= #{riskSpecialId,jdbcType=BIGINT},
+			</if>
+			<if test="bizSpecialId != null">
+				biz_special_id = #{bizSpecialId,jdbcType=BIGINT},
+			</if>
+			<if test="departmentManagerId != null">
+				department_manager_id = #{departmentManagerId,jdbcType=BIGINT},
+			</if>
+			<if test="bossId != null">
+				boss_id = #{bossId,jdbcType=BIGINT},
+			</if>
+			update_at = now(),
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteById" parameterType="com.scfs.domain.base.entity.BaseProject">
+		delete from
+		tb_base_project
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<select id="queryAllProject" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_project
+		<where>
+			<if test="updateAt != null">
+        <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_project
+
+	</select>
+
+	<select id="queryUserProjectAssignedToUser" resultType="com.scfs.domain.base.entity.BaseUserProject"
+		parameterType="java.lang.Integer">
+		SELECT
+		userProject.id,
+		userProject.assigner,
+		userProject.assign_at,
+		userProject.creator,
+		userProject.create_at,
+		userProject.deleter,
+		userProject.delete_at,
+		userProject.is_delete,
+		userProject.state,
+		userProject.user_id,
+		userProject.project_id,
+		project.project_name,
+		project.business_unit_id,
+		project.status
+		FROM
+		tb_base_project project
+		LEFT JOIN tb_base_user_project userProject ON
+		project.id =
+		userProject.project_id
+		LEFT JOIN tb_base_user user ON
+		user.id = userProject.user_id
+		WHERE
+		user.id = #{userId,jdbcType=BIGINT}
+	</select>
+
+	<select id="queryProjectNotAssignedToUser" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.UserProjectReqDto">
+		SELECT
+		project.id,
+		project.project_name,
+		project.status,
+		project.business_unit_id
+		FROM
+		tb_base_project project
+		WHERE project.is_delete=0 AND project.status=2
+
+		<if test="projectName != null and projectName !=''">
+			AND project.project_name like
+			CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="projectNo != null and projectNo !=''">
+			AND project.project_no like CONCAT('%',#{projectNo},'%')
+		</if>
+		<if test="businessUnit != null">
+			AND project.business_unit_id=#{businessUnit}
+		</if>
+		AND project.id NOT IN(SELECT ur.project_id from tb_base_user_project
+		ur where ur.user_id=#{userId,jdbcType=BIGINT} AND ur.is_delete=0)
+	</select>
+
+	<select id="queryProjectByBusiUnit" resultMap="BaseResultMap">
+		select DISTINCT bp.id, bp.project_no, bp.project_name, bp.full_name,
+		bp.business_unit_id, bp.total_amount, bp.amount_unit,
+		bp.biz_type,
+		bp.law_id, bp.biz_manager_id, bp.business_manager_id,
+		bp.finance_manager_id, bp.risk_manager_id,
+		bp.status, bp.creator,
+		bp.deleter, bp.create_at, bp.update_at, bp.delete_at,
+		bp.is_delete,
+		bp.industrial,
+		bp.project_no_type, bp.finance_special_id,
+		bp.department_id, bp.biz_special_id,
+		bp.department_manager_id, bp.boss_id
+		from tb_base_project bp
+		INNER JOIN
+		tb_base_user_project bup on bp.id=bup.project_id
+		where bp.is_delete = 0
+		AND bup.user_id=#{userId} AND bup.is_delete=0 AND bup.state =1
+		and
+		bp.status = 2
+		<if test="busiUnitIdList != null">
+			<foreach collection="busiUnitIdList" item="busiUnitId"
+				open="AND bp.business_unit_id in(" separator="," close=")">
+				#{busiUnitId,jdbcType=INTEGER}
+			</foreach>
+		</if>
+	</select>
+
+
+
+	<!-- 获取总行数 -->
+
+	<select id="isOverasyncMaxLine" resultType="int"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select
+		count(*)
+		from tb_base_project
+		<where>
+			is_delete = 0
+			<if test="businessUnitId != null">
+				AND business_unit_id =#{businessUnitId}
+			</if>
+			<if test="projectNo != null and projectNo != ''">
+				AND project_No like CONCAT('%',#{projectNo},'%')
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND project_Name like CONCAT('%',#{projectName},'%')
+			</if>
+			<if test="fullName != null and fullName != ''">
+				AND full_name like CONCAT('%',#{fullName},'%')
+			</if>
+			<if test="bizType != null">
+				AND biz_Type = #{bizType}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+			<if test="projectNoType != null and projectNoType != ''">
+				AND project_no_type = #{projectNoType}
+			</if>
+			<if test="departmentId != null">
+				<foreach collection="departmentId" item="dId"
+					open="AND department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+
+	<select id="isOverasyncMaxUserLine" resultType="int"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSearchReqDto">
+		select
+		count(*)
+		from tb_base_project bp INNER JOIN tb_base_user_project
+		bup on
+		bp.id=bup.project_id
+		<where>
+			bp.is_delete = 0 AND bup.user_id=#{userId} AND bup.is_delete=0 AND
+			bup.state =1
+			<if test="businessUnitId != null">
+				AND bp.business_unit_id =#{businessUnitId}
+			</if>
+			<if test="projectNo != null and projectNo != ''">
+				AND bp.project_No like CONCAT('%',#{projectNo},'%')
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND bp.project_Name like CONCAT('%',#{projectName},'%')
+			</if>
+			<if test="fullName != null and fullName != ''">
+				AND bp.full_name like CONCAT('%',#{fullName},'%')
+			</if>
+			<if test="bizType != null">
+				AND bp.biz_Type = #{bizType}
+			</if>
+			<if test="departmentId != null">
+				<foreach collection="departmentId" item="dId"
+					open="AND bp.department_id in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="status != null">
+				AND bp.status = #{status}
+			</if>
+			<if test="projectNoType != null and projectNoType != ''">
+				AND bp.project_no_type = #{projectNoType}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryProjectByDepartmentId" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.project.dto.req.UserProjectReqDto">
+		SELECT
+		project.id, project.department_id
+		FROM tb_base_project project
+		WHERE project.is_delete=0
+
+		<if test="departmentId != null">
+			AND project.department_id =
+			#{departmentId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+</mapper>

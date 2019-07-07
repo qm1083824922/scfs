@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>待我请款的单据__瑞翰供应链</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet" />
+<link href="../../css/public.css" rel="stylesheet" />
+<link href="../../css/mobile.css" rel="stylesheet" />
+<link href="../../css/msg.css" rel="stylesheet" />
+<style>
+[data-dpr="1"] .audit-cash {
+	font-size: 24px;
+}
+
+[data-dpr="2"] .audit-cash {
+	font-size: 36px;
+}
+
+[data-dpr="3"] .audit-cash {
+	font-size: 48px;
+}
+
+[data-dpr="4"] .audit-cash {
+	font-size: 64px;
+}
+</style>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<div class="search-box">
+			<div class="keyword-box">
+				<i class="icon btn-search"></i> <input type="text"
+					class="inputKeyWrods" placeholder="请款单号">
+			</div>
+			<div class="btn-audit-box">
+				<button class="btn-batch-audit">批量提交</button>
+			</div>
+		</div>
+		<div class="audit-list-info">
+			<span>共<span class="total">0</span>条，当前选中<span
+				class="select-count">0</span>条
+			</span> <a href="javascript:;" class="select-all"></a>
+		</div>
+		<div class="audit-list" data-url="audit/entry1/query">
+			<ul></ul>
+		</div>
+		<img src="../../images/loading.gif" class="loading">
+	</div>
+
+	<script src="../../../js/lib/jquery-1.11.0.min.js"
+		type="text/javascript"></script>
+	<!--common js-->
+	<script src="../../js/common.js"></script>
+	<script>
+
+    $(function() {
+        var $listBox = $(".audit-list");
+        var url = $listBox.data("url");
+        var pageNumber = 0;
+        var rowIdx = 0;
+        var perPage = 15;
+
+        var winH = $(window).height();
+        var $box = $(".wrapper");
+        var $body = $("body");
+        var isLock = true;
+
+        //初始加载第一页数据
+        getData(pageNumber)
+
+        window.onscroll = function(){
+            var scrollTop = $body.scrollTop();
+            if(scrollTop + winH >= $box.height() - 20 && isLock){
+                isLock = false;
+                getData(pageNumber);
+            }
+        }
+
+        function getData(keywords){
+            $(".loading").show();
+            GLOBAL.ajax(url,{per_page: perPage, page: pageNumber,state:3}, function(e) {
+                var len = formatData(e);
+            });
+        }
+
+        function formatData(e){
+            $(".loading").hide();
+            if (e.success) {
+                var auditList = e.items;
+                if (auditList) {
+                    if(auditList.length){
+                        var tabStr = "";
+                        $(".total").text(auditList.length)
+                        for (var i = 0; i < auditList.length; i++) {
+                        	var poType = auditList[i].poType;
+                            var state = auditList[i].state;
+                            var id = auditList[i].id;
+                            var poId = auditList[i].poId;
+                            var poNo = auditList[i].poNo;
+                            var auditUrl="";
+                            console.log(poType);
+                            if(poType==5){
+                            	auditUrl = "audit_requestDetail.html?id="+poId+"&payNo="+poNo+"&auditId="+id;
+                            }else{
+                            	auditUrl = "audit_meregeRequestDetail.html?id="+poId+"&mergePayNo="+poNo+"&auditId="+id;
+                            }
+                            
+                            rowIdx++;
+                            
+                            if(!auditList[i].amount){
+                                auditList[i].amount=0;
+                            }
+                            tabStr += '<li><span class="checkbox-label"><input type="checkbox" class="checkbox-audit-item" value="'+poId+'" data-payNo="'+poNo+'" data-potpye="'+poType+'"></span><div class="detail-box" data-url="'+auditUrl+'"><p class="detail-item"><label class="detail-label">付款单：</label><span class="detail-value">' + auditList[i].poNo + '</span><span class="detail-date">' + auditList[i].createAt + '</span></p><p class="detail-item"><label class="detail-label">项目：</label><span class="detail-value">' + auditList[i].projectName + '</span></p><p class="detail-item"><label class="detail-label">申请：</label><span class="detail-value">' + auditList[i].proposer + '</span></p><p class="detail-item"><label class="detail-label">状态：</label><span class="detail-value">' + auditList[i].stateName + '</span></p><p class="detail-item"><label class="detail-label money"><img src="../../images/money.bmp" alt=""></label><span class="detail-value money-val">￥' + auditList[i].amount.toThounds() + '</span></p></div></li>';
+                        }
+                        $listBox.find("ul").empty().append(tabStr);
+                        pageNumber += perPage;
+                        isLock = true;
+                    }else{
+                        isLock = false;
+                    }
+                    return auditList.length;
+                }
+            }
+        }
+
+        $(".select-all").click(function(){
+            if($(this).hasClass("checked")){
+                $(".checkbox-label").removeClass("checked");
+                $(".checkbox-audit-item").prop("checked", false);
+                $(this).removeClass("checked");
+            }else{
+                $(".checkbox-label").addClass("checked");
+                $(".checkbox-audit-item").prop("checked", true);
+                 $(this).addClass("checked");
+            }
+            var total = $(".checkbox-audit-item:checked").length;
+            $(".select-count").text(total);
+        })
+
+        $listBox.on("click", ".checkbox-label", function(){
+            var opt = $(this).hasClass("checked") ? "removeClass" : "addClass";
+            $(this)[opt]("checked");
+            $(this).find("input[type='checkbox']").prop("checked", $(this).hasClass("checked"));
+            var total = $(".checkbox-audit-item:checked").length;
+            $(".select-count").text(total);
+            if(total === $(".checkbox-audit-item").length){
+                $(".select-all").addClass("checked")
+            }else{
+                $(".select-all").removeClass("checked")
+            }
+        })
+
+        $(".btn-search").click(function(){
+            var keywords = $(".inputKeyWrods").val();
+             $(".loading").show();
+            GLOBAL.ajax("audit/entry1/query", {poNo: keywords || "",state:3}, function(e){
+                var len = formatData(e);
+                if(len == 0){
+                    MOBILE.msg("暂无数据");
+                }
+            })
+        });
+
+        $(".btn-batch-audit").click(function(){
+            var $checked = $(".checkbox-audit-item:checked");
+            if($checked.length){
+                var ids = "", temp = [];
+                var idsMere = "", tempMere = [];
+                $checked.each(function(){
+                	var poType = $(this).data("potpye")
+                	if(poType==5){
+                		temp.push($(this).val());
+                	}else{
+                		tempMere.push($(this).val());
+                	}
+                });
+                console.log(temp);
+                console.log(tempMere);
+                var isReload = false;
+                if(temp.length>0){
+                	ids = temp.join(",");
+                	console.log(ids);
+                	MOBILE.confirm("确定要批量提交请款吗？", function(){
+	                    var url = "payOrder/batch/submit";
+	                    GLOBAL.ajax(url, {ids: ids}, function(e){
+	                    	isReload=true;
+	                    });
+                	}); 
+                }
+                if(tempMere.length>0){
+                	console.log(2);
+                	MOBILE.confirm("确定要批量提交请款吗？", function(){
+	                    var url = "mergePayOrder/batch/submit";
+	                    GLOBAL.ajax(url, {ids: idsMere}, function(e){
+	                    	isReload=true;
+	                    });
+                	});
+                }
+                if(isReload){
+                	location.reload();
+                }
+            }else{
+                MOBILE.msg("请先选择单据");
+            }
+        })
+
+        $(".audit-list").on("click", ".detail-box", function(){
+            var url = $(this).data("url");
+            location.href = url;
+        })
+    })
+
+    </script>
+</body>
+
+</html>

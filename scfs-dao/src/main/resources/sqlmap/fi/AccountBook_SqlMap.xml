@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.AccountBookDao">
+	<resultMap type="com.scfs.domain.fi.entity.AccountBook" id="accountBookResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="fi_no" property="fiNo" jdbcType="VARCHAR" />
+		<result column="account_book_name" property="accountBookName"
+			jdbcType="VARCHAR" />
+		<result column="account_book_no" property="accountBookNo"
+			jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="busi_unit" property="busiUnit" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+		<result column="is_home" property="isHome" jdbcType="INTEGER" />
+		<result column="auditor_id" property="auditorId" jdbcType="INTEGER" />
+		<result column="auditor" property="auditor" jdbcType="VARCHAR" />
+		<result column="standard_coin" property="standardCoin"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="account_book_column_list">
+		id , account_book_name , account_book_no , fi_no , state ,
+		busi_unit ,
+		creator, create_at , is_delete , is_home , auditor_id ,
+		auditor ,
+		standard_coin
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.AccountBook"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fi_account_book (
+		fi_no,
+		account_book_name,
+		account_book_no,
+		state,
+		busi_unit,
+		creator,
+		creator_id,
+		is_home,
+		auditor_id,
+		auditor,
+		standard_coin
+		)
+		values(
+		#{fiNo},
+		#{accountBookName},
+		#{accountBookNo},
+		#{state},
+		#{busiUnit},
+		#{creator},
+		#{creatorId},
+		#{isHome},
+		#{auditorId},
+		#{auditor},
+		#{standardCoin}
+		)
+	</insert>
+	<select id="queryResultsByCond" parameterType="com.scfs.domain.fi.dto.req.AccountBookSearchReqDto"
+		resultMap="accountBookResultMap">
+		select
+		<include refid="account_book_column_list" />
+		from tb_fi_account_book
+		where is_delete = 0
+		<if test="accountBookName != null and accountBookName != ''">
+			and account_book_name like CONCAT('%' , #{accountBookName}
+			, '%')
+		</if>
+		<if test="accountBookNo != null and accountBookNo != ''">
+			and account_book_no like CONCAT('%' , #{accountBookNo} ,
+			'%')
+		</if>
+		<if test="fiNo != null and fiNo != ''">
+			and fi_no like CONCAT('%' , #{fiNo} , '%')
+		</if>
+		<if test="state != null">
+			and state = #{state}
+		</if>
+		<if test="busiUnit != null">
+			and busi_unit = #{busiUnit}
+		</if>
+		order by id desc
+	</select>
+	<select id="queryAllAccountBook" resultMap="accountBookResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="account_book_column_list" />
+		from tb_fi_account_book
+		<where>
+			<if test="updateAt != null">
+				<![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_fi_account_book
+
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="accountBookResultMap">
+		select
+		<include refid="account_book_column_list" />
+		from tb_fi_account_book
+		where id=#{id} for update
+	</select>
+	<select id="queryEntityByBusiUnit" parameterType="java.lang.Integer"
+		resultMap="accountBookResultMap">
+		select
+		<include refid="account_book_column_list" />
+		from tb_fi_account_book
+		where is_delete = 0 and busi_unit=#{busiUnit}
+	</select>
+	<update id="lockById" parameterType="com.scfs.domain.fi.entity.AccountBook">
+		update tb_fi_account_book
+		set state = #{state} , locked_by = #{lockedBy} , locked_by_id =
+		#{lockedById} , lock_at = #{lockAt}
+		where id=#{id}
+	</update>
+	<update id="deleteById" parameterType="com.scfs.domain.fi.entity.AccountBook">
+		update tb_fi_account_book
+		set is_delete = #{isDelete} , deleter = #{deleter} , delete_at =
+		#{deleteAt} , deleter_id = #{deleterId}
+		where id=#{id}
+	</update>
+	<update id="submitById" parameterType="com.scfs.domain.fi.entity.AccountBook">
+		update tb_fi_account_book
+		set state = #{state}
+		where id=#{id}
+	</update>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.AccountBook">
+		update tb_fi_account_book
+		<set>
+			<if test="fiNo != null">
+				fi_no = #{fiNo},
+			</if>
+			<if test="accountBookName != null">
+				account_book_name = #{accountBookName},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit},
+			</if>
+			<if test="isHome != null">
+				is_home = #{isHome},
+			</if>
+			<if test="auditorId != null">
+				auditor_id = #{auditorId},
+			</if>
+			<if test="auditor != null">
+				auditor = #{auditor},
+			</if>
+			<if test="standardCoin != null">
+				standard_coin = #{standardCoin}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+</mapper>

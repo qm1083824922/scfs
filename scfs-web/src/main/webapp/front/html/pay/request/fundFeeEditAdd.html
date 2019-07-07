@@ -1,0 +1,234 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>资金</li>
+		<li>请款</li>
+		<li>费用明细编辑</li>
+		<li class="active">添加</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form method="post" action="###" class="form-inline"
+				id="searchForm">
+				<div class="form-group-sm">
+					<p>
+						<label class="control-label ml10">费用编号：</label> <input
+							type="text" class="form-control" id="feeNo" name="feeNo">
+						<label class="control-label ml10">费用类型：</label> <select
+							class="form-control js-select" data-url="FEE_TYPE" id="feeType"
+							name="feeType"></select> <label class="control-label">费用日期：</label>
+							
+						<input type="text" class="form-control js_datePicker"
+							id="startPayDate" value="" name="startPayDate">- <input
+							type="text" class="form-control js_datePicker"
+							id="endPayDate" value="" name="endPayDate">
+
+						<button type="button" id="btnSearch"
+							class="btn btn-primary btn-sm ml20">查询</button>
+					</p>
+				</div>
+			</form>
+
+			<form class="form-horizontal form-inline"
+				id="poOrderDtlEditAddForm" data-url="payPoRela/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="payId" name="id">
+					<table id="js_dataTable" data-url="payFeeRela/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/payFeeRela/add"
+						data-url="payFeeRela/add">保存</button>
+					<button type="button" data-url="html/pay/request/fundFeeEdit.html"
+						class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{
+		title : '费用编号',
+		field : 'feeNo',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '费用类型',
+		field : 'feeTypeName',
+		width : 210,
+		align : 'center'
+	},
+	{
+		title : '费用日期',
+		field : 'payDate',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '费用金额',
+		field : 'payAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	},
+	{
+		title : '已收票金额',
+		field : 'acceptInvoiceAmount',
+		width : 80,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	},
+	{
+		title : '已付款金额',
+		field : 'paidAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	},
+	{
+		title : '可付金额',
+		field : 'blanceFeeAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	}, {
+		title : '本次付款金额',
+		field : 'opertaList2',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<input type="text"class="form-control order-price" value=' + row.blanceFeeAmount + '>';
+		}
+	} ];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+			id : options.param.id
+		}, null, {
+			onLoadSuccess : function(data) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>选中总额：<span class='select-sum'>0</span></td></tr>");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			}, 
+		});
+		$('#js_dataTable').on("input", ".order-price", function(){
+			getSelectData();
+	    });
+	};
+	function getSelectData(){
+		var total = 0;
+		$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+			var value = $(this).closest("tr").find(".order-price").val();
+			if(value){
+				total = total + parseFloat(value);
+			}
+		})
+		$("#js_dataTable .select-sum").text(total.toThounds());
+		//$("#js_dataTable .select-result").text((balance - total).toThounds());
+	}
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			id : options.param.id
+		});
+		$('#js_dataTable').bootstrapTable('refresh', {
+			query : data
+		});
+	})
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+
+				var selectedRows = $('#js_dataTable').bootstrapTable(
+						'getSelections');
+				//alert(selectedRows.length);
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var pattern = /^(-)?\d+(.\d{1,2})?$/;
+						var $orderPrice = $(
+								'#js_dataTable tbody tr[data-uniqueid="' + id
+										+ '"]').find(".order-price");
+						var orderPrice = $orderPrice.val();
+						if (orderPrice == "") {
+							layer.msg("不能为空");
+							$orderPrice.focus();
+							isValid = false;
+						}
+						if (!pattern.test(orderPrice)) {
+							layer.msg("请输入正确格式");
+							$orderPrice.focus();
+							isValid = false;
+						} else { 
+							dtlArr.push({
+								"feeId" : id,
+								"payAmount" : orderPrice
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+						relList : dtlArr,
+						payId : options.param.id
+					};
+					var setContentType = true;
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								GLOBAL.go("html/pay/request/fundFeeEdit.html");
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, setContentType,$("#save"));
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

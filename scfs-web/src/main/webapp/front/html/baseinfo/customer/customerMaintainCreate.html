@@ -1,0 +1,163 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>客户维护管理</li>
+			<li class="active">新建</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								 <tr width="280">
+				                     <td class="text-right" ><b>客户简称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="abbreviation" name="abbreviation">
+				                     </td>
+				                     <td class="text-right"><b>来源渠道：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                    <select class="form-control js-select" data-url="SOURCE_CHANNEL" id="sourceChannel" name="sourceChannel"></select>
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>中文全称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="chineseName" name="chineseName">
+				                     </td>
+				                     <td class="text-right"><b>维护人：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   		<select class="form-control js-select" data-url="USER" id="guardian" name="guardian"></select>
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>英文全称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="englishName" name="englishName">
+				                     </td>
+				                     <td class="text-right"><b>联系人：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	<input type="text" class="form-control" id="contacts" name="contacts">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册地：</b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="regPlace" name="regPlace">
+				                     </td>
+				                     <td class="text-right"><b>联系电话：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	<input type="text" class="form-control" id="contactsNumber" name="contactsNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册号：</b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="regNo" name="regNo">
+				                     </td>
+				                     <td class="text-right"><b>其他联系方式：</b></td>
+	                                 <td class="text-left">
+	                                   	 <input type="text" class="form-control" id="contactsOtherNumber" name="contactsOtherNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册电话：</b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="regPhone" name="regPhone">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>办公地址：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                       <input type="text" class="form-control" id="officeAddress" name="officeAddress">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>客户类型：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                       <select class="form-control js-select" data-url="CUSTOMER_TYPE" id="customerType" name="customerType"></select>
+				                     </td>
+				                  </tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left" colspan="3">
+										<textarea class="form-control" id="remark" name="remark"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/customerMaintain/add">保存</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMaintainSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		$("#form1").validate({
+			rules : {
+				abbreviation : {
+					required : true,
+					maxlength : 50
+				},
+				sourceChannel : {
+					required : true
+				},
+				chineseName : {
+					required : true,
+					maxlength : 100
+				},
+				guardian : {
+					required : true
+				},
+				englishName : {
+					required : true,
+					maxlength : 100
+				},
+				contacts : {
+					required : true,
+					maxlength : 50
+				},
+				contactsNumber : {
+					required : true,
+					maxlength : 50
+				},
+				officeAddress : {
+					required : true,
+					maxlength : 500
+				},
+				customerType : {
+					required : true,
+				},
+				remark : {
+					maxlength : 200
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				GLOBAL.ajax("customerMaintain/add", data, function(e) {
+					if (e.success) {
+						layer.msg("新增成功！");
+						GLOBAL.go("html/baseinfo/customer/customerMaintainSearch.html");
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+	}
+	GLOBAL.goBack();
+</script>

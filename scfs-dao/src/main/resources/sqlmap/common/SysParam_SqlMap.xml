@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.SysParamDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.SysParam">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="param_name" jdbcType="VARCHAR" property="paramName" />
+		<result column="param_key" jdbcType="VARCHAR" property="paramKey" />
+		<result column="param_value" jdbcType="VARCHAR" property="paramValue" />
+		<result column="status" jdbcType="CHAR" property="status" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, param_name, param_key, param_value, status, remark,
+		create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_sys_param
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryEntityByParamKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_sys_param
+		where param_key = #{paramKey,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_sys_param
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.SysParam"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_sys_param
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="paramName != null">
+				param_name,
+			</if>
+			<if test="paramKey != null">
+				param_key,
+			</if>
+			<if test="paramValue != null">
+				param_value,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="paramName != null">
+				#{paramName,jdbcType=VARCHAR},
+			</if>
+			<if test="paramKey != null">
+				#{paramKey,jdbcType=VARCHAR},
+			</if>
+			<if test="paramValue != null">
+				#{paramValue,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.SysParam">
+		update tb_sys_param
+		<set>
+			<if test="paramName != null">
+				param_name = #{paramName,jdbcType=VARCHAR},
+			</if>
+			<if test="paramKey != null">
+				param_key = #{paramKey,jdbcType=VARCHAR},
+			</if>
+			<if test="paramValue != null">
+				param_value = #{paramValue,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

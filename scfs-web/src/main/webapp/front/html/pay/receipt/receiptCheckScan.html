@@ -1,0 +1,228 @@
+<style>
+	.diffAmount,.copeAccount,.copeWay,.payUnit_2{
+		display: none;
+	}
+</style>
+
+<div class="wrapper">
+  <section class="content-header my-content-header">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>资金</li>
+    <li>水单</li>
+    <li class="active">浏览</li>
+  </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="bankReceipt/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/pay/receipt/receiptCheckScan.html">基础信息</a></li>
+                  <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptRelCheckScan.html">应收核销</a></li>
+                   <li role="presentation" class="three"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptOutStoreCheckScan.html">核销</a></li>
+                  <li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptAdvanCheckScan.html">预收明细</a></li>
+               	  <li role="presentation" class="four"><a class="tab-item"data-url="html/pay/receipt/receiptCopeCheckScan.html">应付核销</a></li>
+			      <li role="presentation" class="five"><a class="tab-item"  data-url="html/pay/receipt/receiptPrepaidCheckScan.html">预付明细</a></li>
+                  <li role="presentation" ><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/attachmentScan.html">附件</a></li>
+                  <li role="presentation" class="state"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptVoucherScan.html">水单凭证</a></li>
+                </ul>
+                 <table class="table table-bordered table-hover no-margin">
+                 	<tr>
+						<td class="text-right"><b>水单编号：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="receiptNo" name="receiptNo"></label>
+                      	</td>
+					</tr>
+					<tr>
+						<td class="text-right"><b>水单类型：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="receiptTypeName" name="receiptTypeName"></label>
+                      	</td>
+					</tr>
+					
+					<tr>
+						<td class="text-right"><b>银行水单号：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="bankReceiptNo" name="bankReceiptNo"></label>
+                      	</td>
+					</tr>
+					
+	                <tr>
+							<td  class="text-right"><b>项目：</b></td>
+							<td class="text-left">
+                         		 <label class=" js-initform"  id="projectName" name="projectName"></label>
+                      		</td>
+					</tr>
+					
+					<tr>
+							<td width="180" class="text-right"><b>经营单位：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="busiUnitName"  name="busiUnitName" ></label></td>
+                      		</td>
+					</tr>
+					
+					<tr>
+							<td class="text-right"><b>客户：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="cusName" name="cusName" ></label></td>
+                      		</td>
+					</tr>
+					
+					<tr class="recAccount">
+                      <td class="text-right"><b>收款账户：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="recAccountNoName" name="recAccountNoName"></label>
+                      </td>
+                    </tr>
+                    <tr class="copeAccount">
+                      <td class="text-right"><b>付款账户：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="recAccountNoName" name="recAccountNoName"></label>
+                      </td>
+                    </tr>
+					
+					<tr class="gearbest_title">
+						<td class="text-right"><b>日期：</b></td>
+						<td class="text-left">
+							<label type="text" class=" js-initform" id="receiptDate" name="receiptDate"></label>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="text-right"><b>水单金额：</b></td>
+						<td class="text-left">
+								<label class="js-initform toThound" id="actualReceiptAmount" name="actualReceiptAmount"></label>
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="180" class="text-right"><b>水单币种：</b></td>
+						<td class="text-left">
+							<label class="js-initform" id="actualCurrencyTypeName" name="actualCurrencyTypeName"></label></td>
+					</tr>
+					
+					<tr>
+						<td class="text-right"><b>核销金额：</b></td>
+						<td class="text-left">
+								<label class="js-initform toThound" id="writeOffAmount" name="writeOffAmount"></label>
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="180" class="text-right"><b>核销币种：</b></td>
+						<td class="text-left">
+							<label class="js-initform" id="currencyTypeName" name="currencyTypeName"></label></td>
+					</tr>
+					
+					<tr>
+						<td class="text-right"><b>预收金额：</b></td>
+						<td class="text-left">
+								<label class="js-initform toThound" id="actualPreRecAmount" name="actualPreRecAmount"></label>
+						</td>
+					</tr>
+					
+					<tr class="diffAmount">
+						<td class="text-right"><b>手续费：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="actualDiffAmount" name="actualDiffAmount"></label>
+                      	</td>
+					</tr>
+					
+					<tr class="recWay">
+						<td class="text-right"><b>收款方式：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="receiptWayName" name="receiptWayName"></label>
+                         		 <input type="hidden" class="js-initform" id="receiptWay" name="receiptWay"/>
+                      	</td>
+					</tr>
+						<tr class="copeWay">
+						<td class="text-right"><b>付款方式：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="receiptWayName" name="receiptWayName"></label>
+                         		 <input type="hidden" class="js-initform" id="receiptWay" name="receiptWay"/>
+                      	</td>
+					</tr>
+					<tr id="openType-tr" style="display: none">
+						<td class="text-right"><b>开立类型：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="openType" name="openType"></label>
+                      	</td>
+					</tr>
+					<tr id="openDate-tr" style="display: none">
+						<td class="text-right"><b>开立日期：</b></td>
+						<td class="text-left">
+                         		 <label class="js-initform" id="openDate" name="openDate"></label>
+                      	</td>
+					</tr>
+					<tr class="payUnit_1">
+						<td class="text-right"><b>付款单位：</b></td>
+						<td class="text-left">
+								<label class="js-initform" id="payUnitName" name="payUnitName"></label>
+						</td>
+					</tr>
+					<tr class="payUnit_2">
+						<td class="text-right"><b>收款单位：</b></td>
+						<td class="text-left">
+								<label class="js-initform" id="payUnitName" name="payUnitName"></label>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-right"><b>摘要：</b></td>
+						<td class="text-left">
+								<label class="js-initform" id="summary" name="summary"></label>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<td class="text-right"><b>状态：</b></td>
+						<td class="text-left">
+								<label class="js-initform" id="stateName" name="stateName"></label>
+						</td>
+					</tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+             <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/pay/receipt/receiptSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ <script src="../../js/pay/receiptCommon.js"></script> 
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    var receiptWay = $("#receiptWay").val();
+    if(receiptWay == "2"){
+      $("#openType-tr").css("display","");
+      $("#openDate-tr").css("display","");
+    }
+    var tabId = options.param.type;
+    var state = options.param.state;
+	if(state==3){
+		$(".nav>li.state").show();	
+	}
+	 if(tabId == 1 || tabId == 2 || tabId == 3|| tabId==9 || tabId==10){
+	    	$(".diffAmount").show();
+	  }
+	if(tabId==9 || tabId==10 ){
+		$(".recAccount").hide();
+		$(".copeAccount").show();
+		$(".recWay").hide();
+		$(".copeWay").show();
+    	$(".nav>li.state").hide();
+    	$(".payUnit_1").hide();
+    	$(".payUnit_2").show();
+	}
+	showTab(tabId);
+};
+    
+GLOBAL.goBack();
+  
+</script>

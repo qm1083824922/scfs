@@ -1,0 +1,99 @@
+<link href="../../css/zTreeStyle/zTreeStyle.css" rel="stylesheet"></link>
+<style>
+.wrapper {
+    overflow: visible !important;
+}
+
+#menuContent {
+    border: 1px solid #ccc;
+    background: #fff;
+}
+</style>
+<div class="wrapper">
+   <section class="content-header my-content-header">
+	  <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>部门</li>
+	    <li class="active">新建部门</li>
+	  </ol>
+	</section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1">
+            <div class="box-body">  
+            	<div class="row">
+					<div class="col-md-6">
+                  <table class="table table-bordered table-hover no-margin">                    
+                   <tr> 
+                       <td width="180" class="text-right"><b>编号：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input   type="text" class="form-control" id="number" name="number">
+                       </td>
+                    </tr>
+                    <tr> 
+                       <td class="text-right"><b>名称：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control" id="name" name="name" >
+                       </td>
+                    </tr>  
+                    <tr>
+                      <td class="text-right"><b>上级部门：<em class="text-star">*</em></b></td>   
+                       <td class="text-left">
+                            <input type="text" class="form-control js-tree" id="parentName" name="parentName" data-id="parentId" data-url="common/department/tree">
+                       </td> 
+                    </tr>
+                  </table>
+                  </div>
+               </div>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/department/add" data-url="html/baseinfo/department/departmentSearch.html" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/baseinfo/department/departmentSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<div id="menuContent" class="menuContent" style="position:absolute;display:none;">
+    <ul id="departmentTree" class="ztree" style="margin-top:0;"></ul>
+</div>
+<script src="../../js/plugins/jquery.ztree.all-3.5.min.js"></script>
+<script>
+	options.initPage = function(){
+        	$("#form1").validate({
+                rules: {
+                	number: {
+                      required: true, 
+                    },
+                    name: {
+                        required: true 
+                    }, 
+                    parentName: {
+                        required: true 
+                    }
+            },
+            submitHandler: function() {
+              var data = $("#form1").serialize();
+              GLOBAL.ajax("department/add",data, function(e){
+                  layer.msg("保存成功！", {
+                      icon: 1,
+                      time: 1500
+                  },function(){  
+                	  GLOBAL.go("html/baseinfo/department/departmentSearch.html");
+                  });
+              },false, $("#save"));
+            }
+        });
+    }
+
+    $(".js_datePicker").datetimepicker();
+
+    $("#js-back").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+</script>

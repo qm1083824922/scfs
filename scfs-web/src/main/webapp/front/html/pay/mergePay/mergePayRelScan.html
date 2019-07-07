@@ -1,0 +1,97 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>合并付款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="mergePayOrder/detail">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/pay/mergePay/mergePayScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" data-url="html/pay/mergePay/mergePayRelScan.html">付款明细</a></li>
+					</ul>
+				</div>
+				<!-- /.box-body -->
+				<table id="js_dataTable" data-url="mergePayOrderRel/detail">
+	
+				</table>
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/pay/mergePay/mergePaySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+var tabCols = [
+	{
+		title : '序号',
+		field : 'columnsNumber',
+		width : 10
+	}, {
+		title : '付款编号',
+		field : 'payNo',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '附属编号',
+		field : 'attachedNumbe',
+		width : 92,
+		align : 'center'
+	}, {
+		title : '币种',
+		field : 'currencyTypeName',
+		width : 30,
+		align : 'center'
+	}, {
+		title : '付款金额',
+		field : 'payAmount',
+		width : 40,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return value == null ? "" : value.toThounds();
+		}
+	}, {
+		title : '要求付款日期',
+		field : 'requestPayTime',
+		width : 86,
+		align : 'center'
+	}, {
+		title : '预计内部打款日期',
+		field : 'innerPayDate',
+		width : 60,
+		align : 'center'
+	}, {
+		title : '备注',
+		field : 'remark',
+		width : 80,
+		align : 'center'
+	},{
+	     title: '状态',
+	     field: 'stateName',
+	     width: 88,
+	     align: 'center'
+	 } ];
+	options.initPage = function() {
+		var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			mergePayId : options.param.id
+		},null, option);
+	};
+	GLOBAL.goBack();
+</script>

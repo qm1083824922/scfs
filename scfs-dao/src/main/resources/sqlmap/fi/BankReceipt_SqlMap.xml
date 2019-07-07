@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.BankReceiptDao">
+	<resultMap type="com.scfs.domain.fi.entity.BankReceipt" id="bankReceiptResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="pid" property="pid" jdbcType="BIGINT" />
+		<result column="cust_id" property="custId" jdbcType="INTEGER" />
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="receipt_no" property="receiptNo" jdbcType="VARCHAR" />
+		<result column="receipt_note" property="receiptNote" jdbcType="VARCHAR" />
+		<result column="receipt_date" property="receiptDate" jdbcType="TIMESTAMP" />
+		<result column="bank_receipt_no" property="bankReceiptNo"
+			jdbcType="VARCHAR" />
+		<result column="bank_receipt_note" property="bankReceiptNote"
+			jdbcType="VARCHAR" />
+		<result column="rec_account_no" property="recAccountNo"
+			jdbcType="TINYINT" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="receipt_amount" property="receiptAmount"
+			jdbcType="DECIMAL" />
+		<result column="receipt_type" property="receiptType" jdbcType="TINYINT" />
+		<result column="pre_rec_id" property="preRecId" jdbcType="BIGINT" />
+		<result column="write_off_amount" property="writeOffAmount"
+			jdbcType="DECIMAL" />
+		<result column="diff_amount" property="diffAmount" jdbcType="DECIMAL" />
+		<result column="pre_rec_amount" property="preRecAmount"
+			jdbcType="DECIMAL" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="create_at" property="createAt" jdbcType="DATE" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="summary" property="summary" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="pay_unit" property="payUnit" jdbcType="VARCHAR" />
+		<result column="receipt_way" property="receiptWay" jdbcType="TINYINT" />
+		<result column="open_type" property="openType" jdbcType="TINYINT" />
+		<result column="open_date" property="openDate" jdbcType="TIMESTAMP" />
+		<result column="remain_amount" property="remainAmount"
+			jdbcType="DECIMAL" />
+		<result column="write_offat" property="writeOffAt" jdbcType="DATE" />
+		<result column="write_offtor_id" property="writeOfftorId"
+			jdbcType="BIGINT" />
+		<result column="actual_receipt_amount" property="actualReceiptAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_write_off_amount" property="actualWriteOffAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_diff_amount" property="actualDiffAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_pre_rec_amount" property="actualPreRecAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_paid_amount" property="actualPaidAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_currency_type" property="actualCurrencyType"
+			jdbcType="TINYINT" />
+		<result column="actual_currency_rate" property="actualCurrencyRate"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+
+	<sql id="bank_column_list">
+		id,
+		pid,
+		cust_id,
+		busi_unit,
+		project_id,
+		receipt_no,
+		receipt_note,
+		receipt_date,
+		bank_receipt_no,
+		bank_receipt_note,
+		rec_account_no,
+		currency_type,
+		receipt_amount,
+		receipt_type,
+		pre_rec_id,
+		write_off_amount,
+		diff_amount,
+		pre_rec_amount,
+		paid_amount,
+		state,
+		creator,
+		creator_id,
+		create_at,
+		update_at,
+		summary,
+		pay_unit,
+		receipt_way,
+		open_type,
+		open_date,
+		write_offat,
+		write_offtor_id,
+		actual_receipt_amount,
+		actual_write_off_amount,
+		actual_diff_amount,
+		actual_pre_rec_amount,
+		actual_paid_amount,
+		actual_currency_type,
+		actual_currency_rate
+	</sql>
+
+	<sql id="alias_bank_column_list">
+		r.id,
+		r.pid,
+		r.cust_id,
+		r.busi_unit,
+		r.project_id,
+		r.receipt_no,
+		r.receipt_note,
+		r.receipt_date,
+		r.bank_receipt_no,
+		r.bank_receipt_note,
+		r.rec_account_no,
+		r.currency_type,
+		r.receipt_amount,
+		r.receipt_type,
+		r.pre_rec_id,
+		r.write_off_amount,
+		r.diff_amount,
+		r.pre_rec_amount,
+		r.paid_amount,
+		r.state,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.summary,
+		r.pay_unit,
+		r.receipt_way,
+		r.write_offat,
+		r.open_type,
+		r.open_date,
+		r.actual_receipt_amount,
+		r.actual_write_off_amount,
+		r.actual_diff_amount,
+		r.actual_pre_rec_amount,
+		r.actual_paid_amount,
+		r.actual_currency_type,
+		r.actual_currency_rate
+	</sql>
+
+	<!-- 定时刷新付款单，查询水单对应的信息 -->
+	<select id="queryRefreshReceiveInfo" parameterType="java.lang.String"
+		resultType="com.scfs.domain.fi.entity.BankReceipt">
+		select
+		tbos.id AS outStoreId,
+		tpo.project_id AS projectId,
+		tpo.busi_unit
+		AS busiUnit,
+		tpo.currnecy_type AS currencyType,
+		tbos.customer_id AS
+		custId,
+		IFNULL(tbos.send_amount, 0) - IFNULL(tbos.received_amount, 0)
+		AS receiptAmount,
+		tpo.attached_numbe AS bankReceiptNo,
+		tpo.inner_pay_date AS receiptDate
+		from tb_pay_order tpo
+		INNER JOIN
+		tb_bill_out_store tbos ON tpo.attached_numbe = tbos.affiliate_no
+		INNER
+		JOIN tb_base_subject tbs on tbs.id = tpo.busi_unit
+		<where>
+			tpo.state = 6
+			AND tpo.is_delete = 0
+			AND tbos.status = 5
+			AND
+			tbos.is_delete = 0
+			AND tpo.inner_pay_date IS NOT NULL
+	    	<![CDATA[ AND tbos.received_amount < tbos.send_amount ]]>
+			<if test="requestPayTime != null and requestPayTime != null">
+	  			<![CDATA[ AND tpo.inner_pay_date < #{requestPayTime} ]]>
+			</if>
+			and tbs.subject_no = 'L05'
+		</where>
+	</select>
+
+	<!-- 定时刷新费用单，查询水单对应的信息 -->
+	<select id="queryRefreshFeeInfo" parameterType="java.lang.String"
+		resultType="com.scfs.domain.fi.entity.BankReceipt">
+		select
+		tf.id AS feeId,
+		tf.project_id AS projectId,
+		tbp.business_unit_id
+		AS busiUnit,
+		tf.currency_type AS currencyType,
+		tf.cust_payer AS custId,
+		IFNULL(tf.rec_amount, 0) - IFNULL(tf.received_amount, 0) AS
+		receiptAmount,
+		tf.fee_no AS bankReceiptNo,
+		tf.expire_date AS receiptDate
+		from tb_fee tf
+		INNER JOIN tb_base_project tbp on tbp.id = tf.project_id
+		INNER JOIN tb_base_subject tbs on tbs.id = tbp.business_unit_id
+		<where>
+			tf.state = 3
+			AND tf.is_delete = 0
+			AND tf.expire_date IS NOT NULL 
+			<![CDATA[ AND tf.received_amount < tf.rec_amount]]>
+			<if test="expireDate != null and expireDate != null">
+	  			<![CDATA[ AND tf.expire_date < #{expireDate}]]>
+			</if>
+			and tbs.subject_no = 'L05'
+		</where>
+	</select>
+
+	<!-- 查询应收保理水单 -->
+	<select id="queryRefreshResults" resultType="com.scfs.domain.fi.entity.BankReceipt">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt tfbr
+		<where>
+			tfbr.receipt_type = 6
+			and tfbr.is_delete = 0
+			and tfbr.receipt_no
+			not in (select tppfd.bill_no from
+			tb_project_pool_fund_dtl tppfd)
+		</where>
+	</select>
+	<!-- 查询所有 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		r.id,
+		r.pid,
+		r.cust_id,
+		r.busi_unit,
+		r.project_id,
+		r.receipt_no,
+		r.receipt_note,
+		r.receipt_date,
+		r.bank_receipt_no,
+		r.bank_receipt_note,
+		r.rec_account_no,
+		r.currency_type,
+		r.receipt_amount,
+		r.receipt_type,
+		r.pre_rec_id,
+		r.write_off_amount,
+		r.diff_amount,
+		r.pre_rec_amount,
+		r.paid_amount,
+		r.state,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.summary,
+		r.pay_unit,
+		r.receipt_way,
+		r.open_type,
+		r.open_date,
+		r.open_type,
+		r.write_offtor_id,
+		r.write_offat,
+		r.actual_receipt_amount,
+		r.actual_write_off_amount,
+		r.actual_diff_amount,
+		r.actual_pre_rec_amount,
+		r.actual_paid_amount,
+		r.actual_currency_type,
+		r.actual_currency_rate
+		from
+		tb_fi_bank_receipt r
+		<if test="userId!=null">
+		inner join tb_base_user_project bup
+		on r.project_id = bup.project_id		
+		</if>
+		where r.is_delete=0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="startReceiptDate != null and startReceiptDate !=''">
+			<![CDATA[
+				and r.receipt_date >=#{startReceiptDate}
+			]]>
+		</if>
+		<if test="endReceiptDate != null and endReceiptDate !=''">
+			<![CDATA[
+				and r.receipt_date <=#{endReceiptDate}
+			]]>
+		</if>
+		<if test="pid !=null">
+			and r.pid=#{pid}
+		</if>
+		<if test="custId !=null">
+			and r.cust_id=#{custId}
+		</if>
+		<if test="busiUnit !=null ">
+			and r.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId !=null ">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+		<if test="receiptType != null">
+			and r.receipt_type = #{receiptType}
+		</if>
+		<if test="bankReceiptNo != null and bankReceiptNo != ''">
+			and r.bank_receipt_no like
+			CONCAT('%',#{bankReceiptNo},'%')
+		</if>
+		<if test="receiptNo != null and receiptNo != ''">
+			and r.receipt_no like CONCAT('%',#{receiptNo},'%')
+		</if>
+		<if test="summary != null and summary != ''">
+			and r.summary like CONCAT('%',#{summary},'%')
+		</if>
+		<if test="receiptWay != null">
+			and r.receipt_way = #{receiptWay}
+		</if>
+		<if test="currencyType !=null">
+			and r.currency_type=#{currencyType}
+		</if>
+		<if test="isOver != null and isOver == 2">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount!=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		<if test="isOver != null and isOver == 1">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		<if test="receiptAmount != null">
+			and r.receipt_amount =#{receiptAmount}
+		</if>
+		<if test="receiptTypeList != null">
+			<foreach collection="receiptTypeList" item="receiptType"
+				open="and r.receipt_type in (" separator="," close=")">
+				${receiptType}
+			</foreach>
+		</if>
+		<if test="recAccountNo != null">
+			AND r.rec_account_no=#{recAccountNo}
+		</if>
+		<if test="actualCurrencyType != null">
+			AND r.actual_currency_type=#{actualCurrencyType}
+		</if>
+
+		<!-- order by -->
+		<if test="orderType != null and orderType == 1">
+			order by r.id desc
+		</if>
+		<if test="orderType != null and orderType == 2">
+			order by r.receipt_date
+		</if>
+		<if test="orderType == null">
+			order by r.id desc
+		</if>
+	</select>
+
+
+	<!-- 统计 -->
+	<select id="sumBankReceipt" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		SUM(r.receipt_amount) receipt_amount,
+		SUM(r.write_off_amount)
+		write_off_amount,
+		SUM(r.diff_amount) diff_amount,
+		SUM(r.pre_rec_amount)
+		pre_rec_amount,r.currency_type
+		from
+		tb_fi_bank_receipt r
+		<if test="userId!=null">
+		inner join tb_base_user_project bup
+		on r.project_id = bup.project_id		
+		</if>
+		where
+		r.is_delete=0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<if test="startReceiptDate != null and startReceiptDate !=''">
+			<![CDATA[
+					and r.receipt_date >=#{startReceiptDate}
+				]]>
+		</if>
+		<if test="endReceiptDate != null and endReceiptDate !=''">
+			<![CDATA[
+					and r.receipt_date <=#{endReceiptDate}
+				]]>
+		</if>
+		<if test="pid !=null">
+			and r.pid=#{pid}
+		</if>
+		<if test="custId !=null">
+			and r.cust_id=#{custId}
+		</if>
+		<if test="busiUnit !=null ">
+			and r.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId !=null ">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+		<if test="receiptType != null">
+			and r.receipt_type = #{receiptType}
+		</if>
+		<if test="bankReceiptNo != null and bankReceiptNo != ''">
+			and r.bank_receipt_no like
+			CONCAT('%',#{bankReceiptNo},'%')
+		</if>
+		<if test="receiptNo != null and receiptNo != ''">
+			and r.receipt_no like CONCAT('%',#{receiptNo},'%')
+		</if>
+		<if test="summary != null and summary != ''">
+			and r.summary like CONCAT('%',#{summary},'%')
+		</if>
+		<if test="receiptWay != null">
+			and r.receipt_way = #{receiptWay}
+		</if>
+		<if test="isOver != null and isOver == 2">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount!=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		<if test="isOver != null and isOver == 1">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		GROUP BY r.currency_type
+		order by r.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" parameterType="int"
+		resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt
+		where id = #{id} for update
+	</select>
+
+	<select id="queryExpireResults" resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt
+		where is_delete = 0 and receipt_way = 2 and
+		state = 3 and CURDATE() = DATE_ADD(DATE_FORMAT(open_date ,
+		'%Y-%m-%D'), INTERVAL open_type DAY)
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.BankReceipt"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_fi_bank_receipt
+		(
+		pid,
+		cust_id,
+		busi_unit,
+		project_id,
+		receipt_no,
+		receipt_note,
+		receipt_date,
+		bank_receipt_no,
+		bank_receipt_note,
+		rec_account_no,
+		currency_type,
+		receipt_amount,
+		receipt_type,
+		pre_rec_id,
+		paid_amount,
+		state,
+		creator,
+		creator_id,
+		create_at,
+		update_at,
+		summary,
+		receipt_way,
+		open_type,
+		open_date,
+		pay_unit,
+		actual_receipt_amount,
+		actual_write_off_amount,
+		actual_diff_amount,
+		actual_pre_rec_amount,
+		actual_paid_amount,
+		actual_currency_type,
+		actual_currency_rate
+		)
+		values
+		(
+		#{pid},
+		#{custId},
+		#{busiUnit},
+		#{projectId},
+		#{receiptNo},
+		#{receiptNote},
+		#{receiptDate},
+		#{bankReceiptNo},
+		#{bankReceiptNote},
+		#{recAccountNo},
+		#{currencyType},
+		#{receiptAmount},
+		#{receiptType},
+		#{preRecId},
+		IFNULL(#{paidAmount},0),
+		#{state},
+		#{creator},
+		#{creatorId},
+		#{createAt},
+		#{updateAt},
+		#{summary},
+		#{receiptWay},
+		#{openType},
+		#{openDate},
+		#{payUnit},
+		#{actualReceiptAmount},
+		#{actualWriteOffAmount},
+		#{actualDiffAmount},
+		#{actualPreRecAmount},
+		#{actualPaidAmount},
+		#{actualCurrencyType},
+		#{actualCurrencyRate}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.BankReceipt">
+		update tb_fi_bank_receipt
+		<set>
+			id = #{id}
+			<if test="pid != null">
+				,pid = #{pid}
+			</if>
+			<if test="custId != null">
+				,cust_id = #{custId}
+			</if>
+			<if test="custId != null and custId==0">
+				,cust_id = null
+			</if>
+			<if test="busiUnit != null">
+				,busi_unit = #{busiUnit}
+			</if>
+			<if test="projectId != null">
+				,project_id = #{projectId}
+			</if>
+			<if test="projectId != null and projectId==0">
+				,project_id =null
+			</if>
+
+			<if test="receiptNo != null and receiptNo != '' ">
+				,receipt_no = #{receiptNo}
+			</if>
+			<if test="receiptNote != null and receiptNote != '' ">
+				,receipt_note = #{receiptNote}
+			</if>
+			<if test="receiptDate != null">
+				,receipt_date = #{receiptDate}
+			</if>
+			<if test="bankReceiptNo != null and bankReceiptNo != '' ">
+				,bank_receipt_no = #{bankReceiptNo}
+			</if>
+			<if test="bankReceiptNote != null and bankReceiptNote != '' ">
+				,bank_receipt_note = #{bankReceiptNote}
+			</if>
+			<if test="recAccountNo != null and recAccountNo != '' ">
+				,rec_account_no = #{recAccountNo}
+			</if>
+			<if test="currencyType != null ">
+				,currency_type = #{currencyType}
+			</if>
+			<if test="receiptAmount != null">
+				,receipt_amount = #{receiptAmount}
+			</if>
+			<if test="receiptType != null">
+				,receipt_type = #{receiptType}
+			</if>
+			<if test="preRecId != null">
+				,pre_rec_id = #{preRecId}
+			</if>
+			<if test="writeOffAmount != null">
+				,write_off_amount = #{writeOffAmount}
+			</if>
+			<if test="diffAmount != null">
+				,diff_amount = #{diffAmount}
+			</if>
+			<if test="preRecAmount != null">
+				,pre_rec_amount = #{preRecAmount}
+			</if>
+			<if test="paidAmount != null">
+				,paid_amount = #{paidAmount}
+			</if>
+			<if test="state != null">
+				,state = #{state}
+			</if>
+			<if test="creator != null and creator != ''">
+				,creator = #{creator}
+			</if>
+			<if test="creatorId != null and creatorId != ''">
+				,creator_id = #{creatorId}
+			</if>
+			<if test="createAt != null ">
+				,create_at = #{createAt}
+			</if>
+			<if test="updateAt != null ">
+				,update_at = #{updateAt}
+			</if>
+			<if test="summary != null and summary !=''">
+				,summary = #{summary}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete}
+			</if>
+			<if test="deleter != null">
+				,deleter = #{deleter}
+			</if>
+			<if test="deleterId != null">
+				,deleter_id = #{deleterId}
+			</if>
+			<if test="deleteAt != null">
+				,delete_at = #{deleteAt}
+			</if>
+			<if test="receiptWay != null">
+				,receipt_way =#{receiptWay}
+			</if>
+			<if test="openType != null">
+				,open_type = #{openType}
+			</if>
+			<if test="openDate != null ">
+				,open_date = #{openDate}
+			</if>
+			<if test="payUnit != null and payUnit !=''">
+				,pay_unit = #{payUnit}
+			</if>
+			<if test="writeOffAt != null">
+				,write_offat = #{writeOffAt}
+			</if>
+			<if test="writeOfftorId != null">
+				,write_offtor_id = #{writeOfftorId}
+			</if>
+			<if test="actualReceiptAmount != null">
+				,actual_receipt_amount = #{actualReceiptAmount}
+			</if>
+			<if test="actualWriteOffAmount != null">
+				,actual_write_off_amount = #{actualWriteOffAmount}
+			</if>
+			<if test="actualDiffAmount != null">
+				,actual_diff_amount = #{actualDiffAmount}
+			</if>
+			<if test="actualPreRecAmount != null">
+				,actual_pre_rec_amount = #{actualPreRecAmount}
+			</if>
+			<if test="actualPaidAmount != null">
+				,actual_paid_amount = #{actualPaidAmount}
+			</if>
+			<if test="actualCurrencyType != null">
+				,actual_currency_type = #{actualCurrencyType}
+			</if>
+			<if test="actualCurrencyRate != null">
+				,actual_currency_rate = #{actualCurrencyRate}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 查询销售单审核的待核销水单 -->
+	<select id="queryResultsByCon4BillDelivery" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		r.id,
+		r.pid,
+		r.cust_id,
+		r.busi_unit,
+		r.project_id,
+		r.receipt_no,
+		r.receipt_note,
+		r.receipt_date,
+		r.bank_receipt_no,
+		r.bank_receipt_note,
+		r.rec_account_no,
+		r.currency_type,
+		r.receipt_amount,
+		r.receipt_type,
+		r.pre_rec_id,
+		r.write_off_amount,
+		r.diff_amount,
+		r.pre_rec_amount,
+		r.paid_amount,
+		r.state,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.summary,
+		r.receipt_way,
+		r.open_type,
+		r.open_date,
+		(r.receipt_amount +
+		r.diff_amount - r.write_off_amount - r.pre_rec_amount) as
+		remain_amount,
+		r.pay_unit,
+		r.actual_receipt_amount,
+		r.actual_write_off_amount,
+		r.actual_diff_amount,
+		r.actual_pre_rec_amount,
+		r.actual_paid_amount,
+		r.actual_currency_type,
+		r.actual_currency_rate
+		from
+		tb_fi_bank_receipt r
+		where r.is_delete=0
+		and
+		receipt_type in (1, 2, 3)
+		<if test="busiUnit != null and busiUnit != ''">
+			and r.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null and projectId != ''">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="custId != null and custId != ''">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="currencyType != null and currencyType != ''">
+			and r.currency_type = #{currencyType}
+		</if>
+		and (r.receipt_amount + r.diff_amount - r.write_off_amount -
+		r.pre_rec_amount) > 0
+		and r.state = 2
+		order by r.receipt_type asc, r.id
+		asc
+	</select>
+
+	<!-- 销售单财务主管审核时查询指定水单 -->
+	<select id="queryResultsById4BillDeliveryAudit" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		r.id,
+		r.pid,
+		r.cust_id,
+		r.busi_unit,
+		r.project_id,
+		r.receipt_no,
+		r.receipt_note,
+		r.receipt_date,
+		r.bank_receipt_no,
+		r.bank_receipt_note,
+		r.rec_account_no,
+		r.currency_type,
+		r.receipt_amount,
+		r.receipt_type,
+		r.pre_rec_id,
+		r.write_off_amount,
+		r.diff_amount,
+		r.pre_rec_amount,
+		r.paid_amount,
+		r.state,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.summary,
+		r.receipt_way,
+		r.open_type,
+		r.open_date,
+		(r.receipt_amount + r.diff_amount -
+		r.write_off_amount - r.pre_rec_amount) as remain_amount,
+		r.pay_unit,
+		r.actual_receipt_amount,
+		r.actual_write_off_amount,
+		r.actual_diff_amount,
+		r.actual_pre_rec_amount,
+		r.actual_paid_amount,
+		r.actual_currency_type,
+		r.actual_currency_rate
+		from
+		tb_fi_bank_receipt r
+		where r.id = #{id}
+	</select>
+
+	<select id="queryRootByConPayAdvanceRel" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		<include refid="alias_bank_column_list" />
+		from tb_fi_bank_receipt r
+		left join tb_fi_advance_receipt_rel a
+		on r.id
+		= a.receipt_id
+		where
+		r.is_delete = 0 and r.receipt_type = 1 and
+		a.advance_type = 1
+		<if test="projectId != null">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="currencyType != null">
+			and r.currency_type = #{currencyType}
+		</if>
+		<if test="state != null">
+			and r.state = #{state}
+		</if>
+		<if test="isPayOver != null and isPayOver == 1">
+			<![CDATA[
+				and r.paid_amount = (select IFNULL(sum(a.exchange_amount),0) from tb_fi_bank_receipt r1 
+									left join tb_fi_advance_receipt_rel a  
+ 									on r1.id = a.receipt_id  
+ 									where r.is_delete = 0 and r.receipt_type = 1 and advance_type = 1 and r1.id = r.id)
+			]]>
+		</if>
+		<if test="isPayOver != null and isPayOver == 2">
+			<![CDATA[
+				and r.paid_amount < (select IFNULL(sum(a.exchange_amount),0) from tb_fi_bank_receipt r1
+								left join tb_fi_advance_receipt_rel a 
+								on r1.id = a.receipt_id 
+								where r.is_delete = 0 and r.receipt_type = 1 and advance_type = 1 and r1.id = r.id)
+			]]>
+		</if>
+	</select>
+
+	<select id="querySubAmountByRoot" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.fi.entity.AdvanceReceiptRel">
+		select a.advance_type as advanceType,
+		sum(a.exchange_amount) as exchangeAmount
+		from tb_fi_bank_receipt r
+		left
+		join tb_fi_advance_receipt_rel a
+		on r.id = a.receipt_id
+		where
+		r.is_delete = 0 and r.receipt_type = 1 and state = 3 and r.id = #{id}
+		group by advance_type
+	</select>
+
+
+	<!-- 获取总行数 -->
+	<select id="isOverasyncMaxLine" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultType="int">
+		select
+		count(*)
+		from
+		tb_fi_bank_receipt r
+		where
+		r.is_delete=0
+		<if test="startReceiptDate != null and startReceiptDate !=''">
+			<![CDATA[
+				and r.receipt_date >=#{startReceiptDate}
+			]]>
+		</if>
+		<if test="endReceiptDate != null and endReceiptDate !=''">
+			<![CDATA[
+				and r.receipt_date <=#{endReceiptDate}
+			]]>
+		</if>
+		<if test="pid !=null">
+			and r.pid=#{pid}
+		</if>
+		<if test="custId !=null">
+			and r.cust_id=#{custId}
+		</if>
+		<if test="busiUnit !=null ">
+			and r.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId !=null ">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+		<if test="receiptType != null">
+			and r.receipt_type = #{receiptType}
+		</if>
+		<if test="bankReceiptNo != null and bankReceiptNo != ''">
+			and r.bank_receipt_no like
+			CONCAT('%',#{bankReceiptNo},'%')
+		</if>
+		<if test="receiptNo != null and receiptNo != ''">
+			and r.receipt_no like CONCAT('%',#{receiptNo},'%')
+		</if>
+		<if test="summary != null and summary != ''">
+			and r.summary like CONCAT('%',#{summary},'%')
+		</if>
+		<if test="receiptWay != null">
+			and r.receipt_way = #{receiptWay}
+		</if>
+		<if test="currencyType !=null">
+			and r.currency_type=#{currencyType}
+		</if>
+		<if test="isOver != null and isOver == 2">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount!=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		<if test="isOver != null and isOver == 1">
+			<![CDATA[
+				and	r.receipt_amount+diff_amount=write_off_amount + pre_rec_amount
+			]]>
+		</if>
+		order by r.id desc
+	</select>
+	<select id="queryRefundResult" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt re
+		where
+		re.is_delete=0
+		<if test="state != null ">
+			and re.state = #{state}
+		</if>
+		and re.pre_rec_amount = 0
+		and re.write_off_amount =0
+		and re.receipt_type
+		in ( 2, 3)
+		order by re.id
+		desc
+	</select>
+
+	<!-- 查询需刷新融资池的水单 -->
+	<select id="queryRefreshProjectPoolResults" resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt tfbr
+		where tfbr.receipt_type in (1, 2, 3, 6)
+		and tfbr.state = 3
+		and tfbr.is_delete = 0
+	</select>
+	<select id="queryBankReceptTypeThreeAllResult" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		r.id,
+		r.pid,
+		r.cust_id,
+		r.busi_unit,
+		r.project_id,
+		r.receipt_no,
+		r.receipt_note,
+		r.receipt_date,
+		r.bank_receipt_no,
+		r.bank_receipt_note,
+		r.rec_account_no,
+		r.currency_type,
+		r.receipt_amount,
+		r.receipt_type,
+		r.pre_rec_id,
+		r.write_off_amount,
+		r.diff_amount,
+		r.pre_rec_amount,
+		r.paid_amount,
+		r.state,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.update_at,
+		r.summary,
+		r.receipt_way,
+		r.open_type,
+		r.open_date,
+		(r.receipt_amount +
+		r.diff_amount - r.write_off_amount - r.pre_rec_amount) as
+		remain_amount,
+		r.pay_unit,
+		r.actual_receipt_amount,
+		r.actual_write_off_amount,
+		r.actual_diff_amount,
+		r.actual_pre_rec_amount,
+		r.actual_paid_amount,
+		r.actual_currency_type,
+		r.actual_currency_rate
+		from
+		tb_fi_bank_receipt r
+		where r.is_delete=0
+		and
+		receipt_type = 3
+		<if test="busiUnit != null and busiUnit != ''">
+			and r.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null and projectId != ''">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="custId != null and custId != ''">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="currencyType != null and currencyType != ''">
+			and r.currency_type = #{currencyType}
+		</if>
+		<if test="startReceiptDate != null and startReceiptDate !=''">
+			<![CDATA[
+				and r.receipt_date != #{startReceiptDate}
+			]]>
+		</if>
+		and (r.receipt_amount + r.diff_amount - r.write_off_amount -
+		r.pre_rec_amount) > 0
+		and r.state = 2
+		order by r.receipt_date asc
+	</select>
+
+	<select id="queryRootByPayAdvanceRel" parameterType="com.scfs.domain.fi.dto.req.BankReceiptSearchReqDto"
+		resultMap="bankReceiptResultMap">
+		select
+		<include refid="alias_bank_column_list" />
+		from tb_fi_bank_receipt r
+		where
+		r.is_delete = 0 and r.receipt_type = 2
+		and r.state=2
+		<if test="projectId != null">
+			and r.project_id = #{projectId}
+		</if>
+		<if test="custId != null">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="currencyType != null">
+			and r.currency_type = #{currencyType}
+		</if>
+	</select>
+
+	<select id="queryEntityByBankReceiptNo" parameterType="java.lang.String"
+		resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt
+		where receipt_no = #{receiptNo}
+		and is_delete =
+		0
+	</select>
+
+	<!-- 查询需刷新融资池的水单 -->
+	<select id="queryRefreshReceiptPoolResults" resultMap="bankReceiptResultMap">
+		select
+		<include refid="bank_column_list" />
+		from tb_fi_bank_receipt tfbr
+		where tfbr.receipt_type in (1, 2, 3, 5)
+		and tfbr.state = 3
+		and tfbr.is_delete = 0
+		ORDER BY tfbr.receipt_type=5
+		desc
+	</select>
+</mapper>

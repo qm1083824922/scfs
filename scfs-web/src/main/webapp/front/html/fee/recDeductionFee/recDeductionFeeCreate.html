@@ -1,0 +1,135 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>应收抵扣费用</li>
+			<li class="active">新建</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td width="180" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="USER_PROJECT"
+										id="projectId" name="projectId"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>抵扣类型：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="DEDUCTION_TYPE"
+										id="deductionType" name="deductionType"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应收客户：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="PROJECT_BCS" pid="projectId"
+										id="custPayer" name="custPayer"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应收抵扣科目：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="REC_FEE_SPEC"
+										id="recFeeSpec" name="recFeeSpec"></select></td>
+								</tr>  
+								<tr>
+									<td class="text-right"><b>应收抵扣方式：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-select" data-url="REC_TYPE"
+										id="recType" name="recType"></select></td>
+								</tr>
+								
+								<tr>
+									<td class="text-right"><b>应收抵扣日期：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input
+										class="form-control js_datePicker" id="recDate" name="recDate"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currencyType"
+										name="currencyType"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应收抵扣金额：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input class="form-control"
+										id="recAmount" name="recAmount"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left"><textarea class="form-control"
+											id="recNote" name="recNote"></textarea></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/fee/rec/deduction/add">保存</button>
+					<button type="button" id="back" data-url="html/fee/recDeductionFee/recDeductionFeeSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		$("#form1").validate({
+			rules : {
+				projectId : {
+					required : true
+				},
+				deductionType : {
+					required : true
+				},
+				custPayer : {
+					required : true
+				},
+				recFeeSpec : {
+					required : true
+				},
+				recType : {
+					required : true
+				},
+				recDate : {
+					required : true
+				},
+				currencyType : {
+					required : true
+				},
+				recAmount : {
+					required : true,
+					number : true
+				},
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				GLOBAL.ajax("fee/rec/deduction/add", data, function(e) {
+					if (e.success) {
+						layer.msg("新增成功！");
+						GLOBAL.go("html/fee/recDeductionFee/recDeductionFeeSearch.html");
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+		$(".js_datePicker").datetimepicker({
+	        format:'Y-m-d'
+	    });
+	}
+	$("#projectId").change(function(){
+		$("#custPayer").val('');
+	});
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,399 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>采购</li>
+        <li>采购订单</li>
+        <li class="active">财务审核</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+            <div class="box no-margin">
+                <form class="audit-form" id="poAuditInfoForm"
+                      data-url="po/info/audit">
+                    <div class="box-header">
+                        <input class="js-initform" type="hidden" id="id" name="id">
+                        <h3>财务审核</h3>
+                        <table class="table table-bordered table-hover no-margin">
+                            <tr>
+                                <td width="180" class="text-right"><b>订单编号：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="orderNo" name="orderNo"></label></td>
+                                <td width="180" class="text-right"><b>订单附属编号：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="appendNo" name="appendNo"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>项目：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="projectName" name="projectName"></label></td>
+                                <td width="180" class="text-right"><b>供应商：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="supplierName" name="supplierName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>收货仓库：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="warehouseName" name="warehouseName"></label></td>
+                                <td class="text-right"><b>客户：</b></td>
+                                <td class="text-left"><label class="js-initform"  id="customerName" name="customerName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>订单日期：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="orderTime" name="orderTime"></label></td>
+                                <td class="text-right"><b>预计到货时间：</b></td>
+                                <td class="text-left"><label type="text"
+                                                             class="js-initform" id="perdictTime" name="perdictTime"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>仓库地址：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="wareAddrName" name="wareAddrName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>订单数量：</b></td>
+                                <td class="text-left"><label class="js-initform" id="orderTotalNum"
+                                                             name="orderTotalNum"></label></td>
+                                <td class="text-right"><b>订单金额：</b></td>
+                                <td class="text-left"><label class="js-initform" id="orderTotalAmount"
+                                                             name="orderTotalAmount"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>可用额度：</b></td>
+                                <td class="text-left"><label class="js-initform" id="availAmount"
+                                                             name=""></label></td>
+                                <td class="text-right"><b>本次占用额度：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="useAmount" name="useAmount"></label></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>剩余额度：</b></td>
+                                <td class="text-left"><label class="js-initform" id=""
+                                                             name=""></label></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>付款：</b></td>
+                                <td class="text-left"><label class="js-initform" id="isRequestPayName"
+                                                             name="isRequestPayName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>申请付款金额：</b></td>
+                                <td class="text-left"><label class="js-initform" id="payAmount"
+                                                             name="payAmount"></label></td>
+                                <td class="text-right"><b>付款方式：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="payWayName" name="payWayName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>银行：</b></td>
+                                <td class="text-left"><label class="js-initform" id="bankName"
+                                                             name="bankName"></label></td>
+                                <td class="text-right"><b>付款账号：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="accountNo" name="accountNo"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>要求付款时间：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="requestPayTime" name="requestPayTime"></label></td>
+                                <td class="text-right"><b>付款币种：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="currencyName" name="currencyName"></label></td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-right"><b>开立类型：</b></td>
+                                <td class="text-left"><label class="js-initform"
+                                                             id="openType" name="openType"></label></td>
+                                <td class="text-right"><b>备注：</b></td>
+                                <td class="text-left"><label class="js-initform"  id="remark" name="remark"></label></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <h3>采购订单明细</h3>
+                        <table id="js_dataTable"></table>
+                    </div>
+                    <div class="box-body">
+                        <h4>审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="po/auditflow/audit/query"></table>
+                    </div>
+                    <!-- .box-body -->
+                    <div class="box-footer text-center">
+                        <div class="form-inline" style="width:500px; margin:auto"  id="buttom1">
+                            <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                            <p class="mt20">
+                                <button type="button" data-url="po/finance/audit" data-permissionUrl="/po/finance/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                                <button type="button" data-url="po/unpass/audit" data-permissionUrl="/po/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                                <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                            </p>
+                            <p class="mt20 psigh"  style="display:none">
+                                <label class="control-label pull-rihgt">加签给:</label>
+                                <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                                <button type="button" data-url="po/sigh/audit" data-permissionUrl="/po/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                            </p>
+                            <p class="mt20 pdeliver" style="display:none">
+                                <label class="control-label pull-rihgt">转交给:</label>
+                                <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                                <button type="button" data-url="po/deliver/audit" data-permissionUrl="/po/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                            </p>
+                        </div>
+                        <div class="form-inline" style="display:none" id="buttom2">
+                            <p class="mt20">
+                                <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+    </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '商品编号',
+        field: "goodsNo"
+    },{
+        title: '名称',
+        field: "goodsName"
+    },{
+        title: '型号',
+        field: "goodsType"
+    },{
+        title: '数量',
+        field: "goodsNum"
+    },{
+        title: '单价',
+        field: "goodsPrice"
+    },{
+        title: '币种',
+        field: "currencyName"
+    },{
+        title: '收货数量',
+        field: "arrivalNum"
+    },{
+        title: '收货金额',
+        field: "arrivalAmount"
+    },{
+        title: '收票数量',
+        field: "invoiceNum"
+    },{
+        title: '收票金额',
+        field: "invoiceAmount"
+    },{
+        title: '金额',
+        field: "goodsAmount"
+    },{
+        title: "批次",
+        field: "batchNum"
+    }
+    ];
+
+    var tabCols2 = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: '5%'
+    }, {
+        title: '流程节点',
+        field: "stateName",
+        width: '15%'
+    }, {
+        title: '处理人',
+        field: "dealName",
+        width: '15%'
+    }, {
+        title: '处理意见',
+        field: "suggestion",
+        width: '25%'
+    }, {
+        title: '开始时间',
+        field: "createTime",
+        width: '15%'
+    }, {
+        title: "处理时间",
+        field: "dealTime",
+        width: '15%'
+    }, {
+        title: "处理状态",
+        field: "auditStateName",
+        width: '10%'
+    }];
+    var id = GLOBAL.getParam("id");
+    var poId = GLOBAL.getParam("poId");
+    var flag = GLOBAL.getParam("flag");
+    if(flag){
+        $('#buttom2').show();
+        $('#buttom1').hide();
+    }
+    options.initPage = function() {
+        var $from = $("#poAuditInfoForm");
+        var url = $from.data("url");
+        GLOBAL.ajax(url, {poId: options.param.poId}, function(e) {
+            if (e.success) {
+                var data = e.items.poTitleRespDto;
+                if (data) {
+                    $(".js-initform", $from).each(function() {
+                        var $this = $(this);
+                        var id = $this.attr("id");
+                        data[id] = data[id] == null ? "" : data[id];
+
+                        if(this.nodeName.toLowerCase() == "label") {
+                            if(data[id]) {
+                                $this.text(data[id]);
+                            }
+                        } else {
+                            $this.val(data[id]);
+                        }
+                    });
+                }
+                var dtls = e.items.poLineDetailList;
+                if (dtls) {
+                    GLOBAL.initTable($('#js_dataTable'), tabCols, null, dtls);
+                }
+                GLOBAL.initTable($('#js_audit_dataTable'), tabCols2, {
+                	poId: options.param.poId
+                }, null, {
+                    pagination: false
+                });
+                GLOBAL.ajax('audit/id/query', {
+                    id: options.param.id
+                }, function(e) {
+                	var data = e.items;
+                    if (data) {
+                    	if(data.auditType==1||data.auditType==2){
+                    		$(".psigh,.pdeliver").show();
+                    	}else{
+                    		$(".punpass").hide();
+                    	}
+                        if(data.auditState == 1 || data.auditState == 3){//审核通过，隐藏
+                            $('#buttom2').show();
+                            $('#buttom1').hide();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    $("#pass").click(function(){
+        var suggestion = $("#suggestion").val();
+        var url = $(this).data("url");
+        GLOBAL.ajax(url, {auditId: options.param.id, poId: options.param.poId, suggestion: suggestion || ""}, function(e) {
+            if (e.success) {
+                MOBILE.msg("审核通过成功！");
+                if (options.param.entryType == 1) {
+                    GLOBAL.go("html/entry.html");
+                } else {
+                    GLOBAL.go("html/audit/audit.html");
+                }
+            } else {
+                MOBILE.msg(e.msg);
+            }
+        });
+    })
+
+	$("#sigh").click(function() {
+	    var url = $(this).data("url");
+	    var sighId = $("#sighId").val();
+        if(sighId){
+            MOBILE.confirm('确定加签吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+               GLOBAL.ajax(url, {
+                    auditId: options.param.id,
+                    pauditorId: sighId
+                }, function(e) {
+                    if (e.success) {
+                        MOBILE.msg("加签成功！");
+                        $("#sighId").val("");
+                        GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                            poId: options.param.poId
+                        });
+                    } else {
+                        MOBILE.msg(e.msg);
+                    }
+                });
+            });
+        }else{
+            MOBILE.msg("请选择！");
+            $("#sighId").focus();
+        }
+	    
+	})
+	
+	$("#deliver").click(function() {
+	    var url = $(this).data("url");
+	    var deliverId = $("#deliverId").val();
+        if(deliverId){
+            MOBILE.confirm('确定转交吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+               GLOBAL.ajax(url, {
+                    auditId: options.param.id,
+                    pauditorId: deliverId
+                }, function(e) {
+                    if (e.success) {
+                        MOBILE.msg("转交成功！");
+                        $("#deliverId").val("");
+                        if (options.param.entryType == 1) {
+                            GLOBAL.go("html/entry.html");
+                        } else {
+                            GLOBAL.go("html/audit/audit.html");
+                        }
+                    } else {
+                        MOBILE.msg(e.msg);
+                    }
+                });
+            });
+        }else{
+            MOBILE.msg("请选择！");
+            $("#deliverId").focus();
+        }
+	})
+
+    $("#unpass").click(function(){
+        var suggestion = $("#suggestion").val();
+        if (!suggestion) {
+            MOBILE.msg("请输入审核意见");
+            return;
+        }
+        var url = $(this).data("url");
+        GLOBAL.ajax(url, {auditId: options.param.id, poId: options.param.poId, suggestion: suggestion}, function(e) {
+            if (e.success) {
+                MOBILE.msg("审核不通过成功！");
+                if (options.param.entryType == 1) {
+                    GLOBAL.go("html/entry.html");
+                } else {
+                    GLOBAL.go("html/audit/audit.html");
+                }
+            } else {
+                MOBILE.msg(e.msg);
+            }
+        });
+    })
+
+    $(".js-back").click(function(){
+        if(flag){
+            location.href = "myApplying.html";
+        }else{
+            window.location.href = "audit_list_new.html";;
+        }
+    })
+</script>
+

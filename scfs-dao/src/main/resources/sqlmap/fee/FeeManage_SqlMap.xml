@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fee.FeeManageResDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fee.entity.FeeManage">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="fee_manage_no" property="feeManageNo" jdbcType="VARCHAR" />
+		<result column="department_id" property="departmentId"
+			jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="cust_id" property="custId" jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="fee_spec_id" property="feeSpecId" jdbcType="INTEGER" />
+		<result column="rec_type" property="recType" jdbcType="TINYINT" />
+		<result column="date" property="date" jdbcType="TIMESTAMP" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="amount" property="amount" jdbcType="VARCHAR" />
+		<result column="share_amount" property="shareAmount" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		f.id,
+		f.fee_manage_no,
+		f.department_id,
+		f.user_id,
+		f.project_id,
+		f.cust_id,
+		f.fee_spec_id,
+		f.rec_type,
+		f.date,
+		f.currnecy_type,
+		f.amount,
+		f.share_amount,
+		f.state,
+		f.remark,
+		f.create_at,
+		f.creator_id,
+		f.creator,
+		f.is_delete
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fee.dto.req.FeeManageSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_fee_manage f LEFT JOIN tb_fee_spec s ON f.fee_spec_id=s.id
+		where f.is_delete=0
+		<if test="feeManageNo != null and feeManageNo!=''">
+			and f.fee_manage_no=#{feeManageNo}
+		</if>
+		<if test="feeType != null">
+			and s.fee_type=#{feeType}
+		</if>
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND f.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="projectId != null">
+			and f.project_id = #{projectId}
+		</if>
+		<if test="startDate != null ">
+			<![CDATA[
+					and f.date >=#{startDate}
+				]]>
+		</if>
+		<if test="endDate != null ">
+			<![CDATA[
+					and f.date <=#{endDate}
+				]]>
+		</if>
+		<if test="state != null">
+			and f.state = #{state}
+		</if>
+		<if test="creatorId != null">
+			and f.creator_id = #{creatorId}
+		</if>
+		<if test="needShare != null">
+			<if test="needShare==2">
+				<![CDATA[	
+					AND IFNULL(FROM_BASE64(f.amount),0)-IFNULL(FROM_BASE64(f.share_amount),0) !=0
+					]]>
+			</if>
+			<if test="needShare==1">
+				<![CDATA[	
+					AND IFNULL(FROM_BASE64(f.amount),0)-IFNULL(FROM_BASE64(f.share_amount),0) =0
+				  ]]>
+			</if>
+		</if>
+		order by f.id desc
+	</select>
+
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fee_manage f
+		where f.id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fee.entity.FeeManage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fee_manage(
+		fee_manage_no,
+		department_id,
+		user_id,
+		project_id,
+		cust_id,
+		fee_spec_id,
+		rec_type,
+		date,
+		currnecy_type,
+		amount,
+		share_amount,
+		state,
+		remark,
+		create_at,
+		creator_id,
+		creator
+		)
+		values
+		(
+		#{feeManageNo,jdbcType=VARCHAR},
+		#{departmentId,jdbcType=INTEGER},
+		#{userId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{custId,jdbcType=INTEGER},
+		#{feeSpecId,jdbcType=INTEGER},
+		#{recType,jdbcType=TINYINT},
+		#{date,jdbcType=TIMESTAMP},
+		#{currnecyType,jdbcType=TINYINT},
+		#{amount,jdbcType=VARCHAR},
+		#{shareAmount,jdbcType=VARCHAR},
+		#{state,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.fee.entity.FeeManage">
+		update tb_fee_manage
+		<set>
+			id = #{id}
+			<if test="departmentId != null">
+				,department_id = #{departmentId,jdbcType=INTEGER}
+			</if>
+			<if test="userId != null">
+				,user_id = #{userId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				,project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="custId != null ">
+				,cust_id = #{custId,jdbcType=INTEGER}
+			</if>
+			<if test="feeSpecId != null">
+				,fee_spec_id = #{feeSpecId,jdbcType=INTEGER}
+			</if>
+			<if test="recType != null">
+				,rec_type = #{recType,jdbcType=TINYINT}
+			</if>
+			<if test="date != null">
+				,date = #{date,jdbcType=TIMESTAMP}
+			</if>
+			<if test="currnecyType != null">
+				,currnecy_type = #{currnecyType,jdbcType=TINYINT}
+			</if>
+			<if test="amount != null and amount != ''">
+				,amount = #{amount,jdbcType=VARCHAR}
+			</if>
+			<if test="shareAmount != null and shareAmount != ''">
+				,share_amount = #{shareAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="state != null">
+				,state = #{state,jdbcType=TINYINT}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="remark != null and remark != ''">
+				,remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.scfs.domain.fee.entity.FeeManage">
+		update tb_fee_manage
+		<set>
+			id = #{id},user_id = #{userId,jdbcType=INTEGER},project_id =
+			#{projectId,jdbcType=INTEGER},cust_id = #{custId,jdbcType=INTEGER}
+			<if test="departmentId != null">
+				,department_id = #{departmentId,jdbcType=INTEGER}
+			</if>
+			<if test="feeSpecId != null">
+				,fee_spec_id = #{feeSpecId,jdbcType=INTEGER}
+			</if>
+			<if test="recType != null">
+				,rec_type = #{recType,jdbcType=TINYINT}
+			</if>
+			<if test="date != null">
+				,date = #{date,jdbcType=TIMESTAMP}
+			</if>
+			<if test="currnecyType != null">
+				,currnecy_type = #{currnecyType,jdbcType=TINYINT}
+			</if>
+			<if test="amount != null and amount != ''">
+				,amount = #{amount,jdbcType=VARCHAR}
+			</if>
+			<if test="shareAmount != null and shareAmount != ''">
+				,share_amount = #{shareAmount,jdbcType=VARCHAR}
+			</if>
+			<if test="state != null">
+				,state = #{state,jdbcType=TINYINT}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="remark != null and remark != ''">
+				,remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<!-- 获取总行数 -->
+	<select id="isFeeManageMaxLine" parameterType="com.scfs.domain.fee.dto.req.FeeManageSearchReqDto"
+		resultType="int">
+		select
+		count(*)
+		from
+		tb_fee_manage f LEFT JOIN tb_fee_spec s ON
+		f.fee_spec_id=s.id
+		where f.is_delete=0
+		<if test="feeType != null">
+			and s.fee_type=#{feeType}
+		</if>
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND f.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="projectId != null">
+			and f.project_id = #{projectId}
+		</if>
+		<if test="startDate != null ">
+			<![CDATA[
+					and f.date >=#{startDate}
+				]]>
+		</if>
+		<if test="endDate != null ">
+			<![CDATA[
+					and f.date <=#{endDate}
+				]]>
+		</if>
+		<if test="state != null">
+			and f.state = #{state}
+		</if>
+		<if test="creatorId != null">
+			and f.creator_id = #{creatorId}
+		</if>
+		<if test="needShare != null">
+			<if test="needShare==2">
+				<![CDATA[	
+					AND IFNULL(FROM_BASE64(f.amount),0)-IFNULL(FROM_BASE64(f.share_amount),0) !=0
+					]]>
+			</if>
+			<if test="needShare==1">
+				<![CDATA[	
+					AND IFNULL(FROM_BASE64(f.amount),0)-IFNULL(FROM_BASE64(f.share_amount),0) =0
+				  ]]>
+			</if>
+		</if>
+		order by f.id desc
+	</select>
+</mapper>

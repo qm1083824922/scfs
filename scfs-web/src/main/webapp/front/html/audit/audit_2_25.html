@@ -1,0 +1,843 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>销售</li>
+        <li>销售单</li>
+        <li class="active">财务专员审核</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+            <div class="box no-margin">
+                <form class="form-horizontal" id="billDeliveryAuditInfoForm" data-url="billDelivery/info/audit">
+                    <div class="box-header">
+                        <input class="js-initform" type="hidden" id="id" name="id">
+                        <h3>财务专员审核</h3>
+                        <table class="table table-bordered table-hover no-margin">
+                            <tr>
+                                <td width="180" class="text-right"><b>销售编号：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="billNo" name="billNo"></label>
+                                </td>
+                                <td width="180" class="text-right"><b>销售附属编号：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="affiliateNo" name="affiliateNo"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>项目：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="projectName" name="projectName"></label>
+                                </td>
+                                <td class="text-right"><b>销售仓库：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                                </td>
+                            </tr>
+                            <tr>                            
+                                <td class="text-right"><b>客户：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="customerName" name="customerName"></label>
+                                </td>
+                                <td class="text-right"><b>运输方式：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="transferModeName" name="transferModeName"></label>
+                                </td>
+                            </tr>
+                            <tr>                              
+                                <td class="text-right"><b>收货地址：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="customerAddress" name="customerAddress"></label>
+                                </td>
+                                <td class="text-right"><b>销售日期：</b></td>
+                                <td class="text-left">
+                                    <label type="text" class="js-initform" id="requiredSendDate" name="requiredSendDate"></label>
+                                </td>
+                            </tr>
+                            <tr>                              
+                                <td class="text-right"><b>状态：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="statusName" name="statusName"></label>
+                                </td>
+                                <td class="text-right"><b>总数量：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="requiredSendNum" name="requiredSendNum"></label>
+                                </td>
+                            </tr>
+                            <tr>                              
+                                <td class="text-right"><b>总金额：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="requiredSendAmount" name="requiredSendAmount"></label>
+                                </td>
+                                <td class="text-right"><b>资金占用金额：</b></td>
+			                    <td class="text-left">
+			                      <label class="js-initform toThound" id="payAmount" name="payAmount"></label>
+			                    </td>  
+                            </tr>
+                            <tr>			                     
+			                    <td class="text-right"><b>服务金额：</b></td>
+			                    <td class="text-left">
+			                      <label class="js-initform toThound" id="serviceAmount" name="serviceAmount"></label>
+			                    </td>  
+			                    <td class="text-right"><b>币种：</b></td>
+			                    <td class="text-left">
+			                      <label class="js-initform" id="currencyTypeName" name="currencyTypeName"></label>
+			                    </td>                 
+			                </tr>               
+			
+			                <tr>		                                    			                    
+			                    <td class="text-right"><b>签收标准：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="signStandardName" name="signStandardName"></label>
+                                </td>
+                                <td class="text-right"><b>签收人：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="certificateName" name="certificateName"></label>
+                                </td>
+			                </tr> 
+                            <tr>                                                               
+                                <td class="text-right"><b>身份证：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="certificateId" name="certificateId"></label>
+                                </td>
+                                <td class="text-right"><b>公章：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="officialSeal" name="officialSeal"></label>
+                                </td>
+                            </tr>
+                            <tr>                                                             
+                                <td class="text-right"><b>备注：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="remark" name="remark"></label>
+                                </td>
+                                <td class="text-right"><h3>到账金额：</h3></td>
+                                <td class="text-left">
+                                    <h3 class="arrival-amount" id="arrivalAmount">0.0</h3>
+                                </td>
+                            </tr>
+                            <tr>                                                          
+                                <td class="text-right td_parentReceiptDate_title"><h3>到账日期：</h3></td>
+                                <td class="text-left td_parentReceiptDate">
+                                    <select style="width:300px" class="form-control" id="parentReceiptDate" name="parentReceiptDate"></select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <h4 class="title mt20 mb5">水单明细</h4>
+                        <table id="js_po_dataTable" data-url="billDelivery/fiBankReceipt/audit/query"></table>
+                        <h4 class="title mt20 mb5">抵扣水单明细</h4>
+                        <table id="js_recDeduction_dataTable" data-url="billDelivery/fiBankReceipt/advance/audit/query"></table>
+                        <h4 class="title mt20 mb5">销售单明细</h4>
+                        <table id="js_dataTable"></table>
+                        <h4 class="title mt20 mb5">附件</h4>
+          				<table id="js_dataFileTable"></table>
+                        <p class="text-center mt10">
+                            <button type="button" data-url="/billDeliveryFileList/downLoad" class="btn btn-primary btn-sm attachment-down">批量下载</button>
+                        </p>
+
+                        <h4 class="title mt20 mb5">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="billDelivery/auditflow/audit/query"></table>
+                    </div>
+                    <!-- .box-body -->
+                    <div class="box-footer text-center">
+                        <div class="form-inline" style="width:500px; margin:auto">
+                            <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                            <p class="mt20">
+                                <button type="button" data-permissionUrl="/billDelivery/finance/audit" data-url="billDelivery/finance/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                                <button type="button" data-permissionUrl="/billDelivery/unpass/audit" data-url="billDelivery/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                                <button type="button" data-permissionUrl="/billDelivery/finance/audit" data-url="billDelivery/finance/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                                <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                            </p>
+                            <p class="mt20 psigh" style="display:none">
+                                <label class="control-label pull-rihgt">加签给:</label>
+                                <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                                <button type="button" data-permissionUrl="/billDelivery/sigh/audit" data-url="billDelivery/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                            </p>
+                            <p class="mt20 pdeliver" style="display:none">
+                                <label class="control-label pull-rihgt">转交给:</label>
+                                <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                                <button type="button" data-permissionUrl="/billDelivery/deliver/audit" data-url="billDelivery/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+    </section>
+</div>
+<script src="../../js/plugins/bootstrap-table/bootstrap-table-mobile.js"></script>
+<script>
+var receiptDate = null;
+/*数据表格*/
+var tabCols = [
+    {
+        title: '序号',
+        field: 'columnsNumber',
+        width: 10
+    }, {
+        title: '商品编号',
+        field: 'goodsNumber',
+        align: 'center'
+    }, {
+        title: '商品条码',
+        field: 'goodsBarCode',
+        align: 'center'
+    }, {
+        title: '商品名称',
+        field: 'goodsName',
+        align: 'center'
+    }, {
+        title: '商品型号',
+        field: 'goodsType',
+        align: 'center'
+    }, {
+        title: '销售数量',
+        field: 'requiredSendNum',
+        align: 'center'
+    }, {
+        title: '销售单价',
+        field: 'requiredSendPrice',
+        align: 'center'
+    }, {
+        title: '销售金额',
+        field: 'requiredSendAmount',
+        align: 'center'
+    }, {
+        title: '资金占用金额',
+        field: 'payAmount',
+        align: 'center',
+ 	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+		}
+    }, {
+        title: '资金占用天数',
+        field: 'payDays',
+        align: 'center'
+    }, {
+        title: '服务费率',
+        field: 'fundMonthRate',
+        align: 'center'
+    }, {
+        title: '服务金额',
+        field: 'serviceAmount',
+        align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+		}
+    }, {
+        title: '其他费用',
+        field: 'otherAmount',
+        align: 'center',
+ 	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+		}
+    }, {
+        title: '批次',
+        field: 'batchNo',
+        align: 'center'
+    }, {
+        title: '库存状态',
+        field: 'goodsStatusName',
+        align: 'center'
+    }
+];
+
+var auditTabCols = [
+    {
+        title: '序号',
+        field: 'columnsNumber',
+        width: '5%'
+    }, {
+        title: '流程节点',
+        field: "stateName",
+        width: '15%'
+    }, {
+        title: '处理人',
+        field: "dealName",
+        width: '15%'
+    }, {
+        title: '处理意见',
+        field: "suggestion",
+        width: '25%'
+    }, {
+        title: '开始时间',
+        field: "createTime",
+        width: '15%'
+    }, {
+        title: "处理时间",
+        field: "dealTime",
+        width: '15%'
+    }, {
+        title: "处理状态",
+        field: "auditStateName",
+        width: '10%'
+    }
+];
+
+var poTabCols = [{
+        field: 'checkItem',
+        checkbox: true,
+        formatter: function(value, row, index) {
+            return {
+            	disabled: row.disabled,
+                checked: row.checked
+            }
+        }
+    }, {
+        title: '序号',
+        field: 'columnsNumber',
+    }, {
+        title: '水单号',
+        field: "parentReceiptNo",
+        width: '10%',
+        formatter: function(value, row, index) {
+            return value + "-" + row.receiptNo;
+        }
+    }, {
+        title: '水单类型',
+        field: "receiptTypeName",
+        width: '10%'
+    }, {
+        title: '到账日期',
+        field: "parentReceiptDate",
+        width: '10%'
+    }, {
+        title: '摘要',
+        field: "parentSummary",
+        width: '25%'
+    }, {
+        title: '到账金额',
+        field: "parentReceiptAmount",
+        width: '10%',
+ 	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+		}
+    }, {
+        title: '余额',
+        field: "remainAmount",
+        width: '10%',
+        formatter: function(value, row, index) {
+            return '<span class="balance">' + (row.remainAmount==null ? "": row.remainAmount.toThounds()) + '</span>';
+        }
+    }, {
+        title: "选择金额",
+        field: "availableAmount",
+        width: '25%',
+        formatter: function(value, row, index) {
+        	if (row.disabled) {
+                return'<input type="text" class="form-control po-cash-box availableAmount" readonly value="' + row.availableAmount + '"/>';
+        	} else {
+                return'<input type="text" class="form-control po-cash-box availableAmount" value="' + row.availableAmount + '"/>';
+        	}
+        }
+    }
+];
+
+/*附件*/
+window.operateEvents = {
+		'click .download': function(e, value, row, index){
+			var url = GLOBAL.host + "billDeliveryFile/downLoad?fileId="+row.id;
+			GLOBAL.preview({type: row.type, url: url}); 
+	    },
+    
+};
+function operateFormatter(value, row, index) {
+    return [
+            '<a class="download" href="javascript:void(0)">',
+            '<span class="btn btn-primary btn-sm">下载</span>',
+            '</a>  '
+        ].join('');
+}
+/*数据表格*/
+var fileCols = [{
+        field: 'checkItem',
+        checkbox: true,
+    }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '文件名称',
+	     field: 'name',
+	     width: 92,
+	     align: 'center'
+	 },  {
+	     title: '文件类型',
+	     field: 'type',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '上传人',
+	     field: 'creator',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '上传时间',
+	     field: 'createAt',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '操作',
+	     field: 'operta',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents,
+         formatter: operateFormatter
+	 }
+];  
+
+function sum(){
+  var selectedRows = $('#js_po_dataTable').bootstrapTable('getSelections');
+  var sum = 0;
+  for(var i= 0; i < selectedRows.length; i++){
+      var id = selectedRows[i].id;
+      var selectedVal = $('#js_po_dataTable tr[data-uniqueid='+id+']').find(".po-cash-box").val();
+      if(selectedVal){
+        sum += parseFloat(selectedVal);
+      }
+  }
+   selectedRows = $('#js_recDeduction_dataTable').bootstrapTable('getSelections');
+  var ductionSum = 0;
+  for(var i= 0; i < selectedRows.length; i++){
+      var id = selectedRows[i].id;
+      var selectedVal = $('#js_recDeduction_dataTable tr[data-uniqueid='+id+']').find(".po-cash-box").val();
+      if(selectedVal){
+        ductionSum += parseFloat(selectedVal);
+      }
+  }
+  sum += parseFloat(ductionSum);
+  $("#arrivalAmount").text(sum.toFixed(2));
+}
+
+function   ductionSum(){
+  var selectedRows = $('#js_recDeduction_dataTable').bootstrapTable('getSelections');
+  var ductionSum = 0;
+  for(var i= 0; i < selectedRows.length; i++){
+      var id = selectedRows[i].id;
+      var selectedVal = $('#js_recDeduction_dataTable tr[data-uniqueid='+id+']').find(".po-cash-box").val();
+      if(selectedVal){
+        ductionSum += parseFloat(selectedVal);
+      }
+  }
+  
+   selectedRows = $('#js_po_dataTable').bootstrapTable('getSelections');
+   var sum = 0;
+   for(var i= 0; i < selectedRows.length; i++){
+       var id = selectedRows[i].id;
+       var selectedVal = $('#js_po_dataTable tr[data-uniqueid='+id+']').find(".po-cash-box").val();
+       if(selectedVal){
+         sum += parseFloat(selectedVal);
+       }
+   }
+	 ductionSum += parseFloat(sum);
+  $("#arrivalAmount").text(ductionSum.toFixed(2));
+}
+
+options.initPage = function() {
+	var selectedOptions = "";
+    GLOBAL.ajax("billDelivery/fiBankReceiptDate/audit/query", {id: options.param.poId}, function(data){
+    	if (data.items) {
+    		data = data.items;
+    		for(var i = 0; i < data.length; i++){
+    	    	selectedOptions += '<option value="'+data[i].code+'">'+data[i].value+'</option>';
+    	    }   
+    	    $("#parentReceiptDate").empty().append(selectedOptions);
+    	    receiptDate = data[0].value;
+    	} else {
+    		$("#parentReceiptDate").empty();
+    	}
+    });
+    getFormData();
+    initPoTable();
+    recDeductionData();
+    $('#js_po_dataTable').on("input", ".po-cash-box", function(){
+        var val = $(this).val();
+	    var remainAmount = $(this).closest("tr").find(".balance").text().replace(/,/g, "");
+        var balance = parseFloat(remainAmount);
+        if(val <= balance){
+          sum();
+        }else{
+          layer.msg("不能大于余额");
+          $(this).val(balance);
+        }
+    });
+    $('#js_recDeduction_dataTable').on("input", ".po-cash-box", function(){
+        var val = $(this).val();
+	    var remainAmount = $(this).closest("tr").find(".balance").text().replace(/,/g, "");
+        var balance = parseFloat(remainAmount);
+        if(val <= balance){
+        	ductionSum();
+        }else{
+          layer.msg("不能大于余额");
+          $(this).val(balance);
+        }
+    });
+    $('#parentReceiptDate').change(function(){ 
+        var thisValue = $(this).val();
+		if (!thisValue) {
+			return;
+		}
+		receiptDate = thisValue;
+	    getFormData();
+	    initPoTable();
+	    recDeductionData();
+    });
+}
+
+function getFormData() {
+    var $from = $("#billDeliveryAuditInfoForm");
+    var url = $from.data("url");
+   	var params = {
+   	   	id: options.param.poId,
+ 	    receiptDate: receiptDate
+    };
+	
+    GLOBAL.ajax(url, params, function(e) {
+        if (e.success) {
+            var data = e.items.billDeliveryResDto;
+            if (data) {
+                $(".js-initform", $from).each(function() {
+                    var $this = $(this);
+                    var id = $this.attr("id");
+                    var toThound = $this.hasClass("toThound");
+                    data[id] = data[id] == null ? "" : data[id];
+
+                    if (this.nodeName.toLowerCase() == "label") {
+                        if (data[id] || data[id] == 0) {
+                        	var showValue = toThound && !isNaN(parseFloat(data[id])) ? parseFloat(data[id]).toThounds() : data[id];                            
+                            $this.text(showValue);
+                        }
+                    } else {
+                        $this.val(data[id]);
+                    }
+                });
+                if (!receiptDate) {
+                	receiptDate = data.returnTime;
+                }
+                if (data.settleType && data.settleType == 1) {
+                    $(".td_parentReceiptDate_title").hide();
+                    $(".td_parentReceiptDate").hide();
+                }
+            }
+          	//添加销售单附件信息
+          	var fileAttachList = e.items.billDeliveryFileList;
+            if(fileAttachList){
+            	 GLOBAL.initTable($('#js_dataFileTable'), fileCols, null, fileAttachList, {pagination: false});
+            }
+            var dtls = e.items.billDeliveryDtlResDtoList;
+            if (dtls) {
+        	    $('#js_dataTable').bootstrapTable('destroy');
+                GLOBAL.initTable($('#js_dataTable'), tabCols, null, dtls, {pagination: false});     
+                GLOBAL.initTable($('#js_audit_dataTable'), auditTabCols, {
+                    billDeliveryId: options.param.poId
+                }, null, {
+                    pagination: false
+                });
+                GLOBAL.ajax('audit/id/query', {
+                    id: options.param.id
+                }, function(e) {
+                    var data = e.items;
+                    if (data) {
+                        if (data.auditType == 1 || data.auditType == 2) {
+                            $(".psigh,.pdeliver").show();
+                        } else {
+                            $(".punpass").hide();
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+function initPoTable() {
+    $('#js_po_dataTable').bootstrapTable('destroy');
+    GLOBAL.initTable($('#js_po_dataTable'), poTabCols, {id: options.param.poId, auditId: options.param.id, receiptDate: receiptDate}, null, {
+        pagination: false,
+        onCheck: function(row, $element){
+			sum();
+        },
+        onUncheck:function(row, $element){
+            sum();
+        },
+        onCheckAll: function(){
+            sum();
+        },
+        onUncheckAll: function(){
+            sum();
+        },
+        onLoadSuccess: function(data) {
+        	sum();
+        }
+    });
+}
+//获取预收货款抵扣明显
+function  recDeductionData(){
+    $('#js_recDeduction_dataTable').bootstrapTable('destroy');
+    GLOBAL.initTable($('#js_recDeduction_dataTable'), poTabCols, {id: options.param.poId, auditId: options.param.id, receiptDate: receiptDate}, null, {
+        pagination: false,
+        onCheck: function(row, $element){
+        	ductionSum();
+        },
+        onUncheck:function(row, $element){
+        	ductionSum();
+        },
+        onCheckAll: function(){
+        	ductionSum();
+        },
+        onUncheckAll: function(){
+        	ductionSum();
+        },
+        onLoadSuccess: function(data) {
+        	ductionSum();
+        }
+    });
+}
+
+$("#pass").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+	var selectedRows = $('#js_po_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;   var rows = [];
+    if (idsLen > 0) {
+        for (var i = 0; i < idsLen; i++) {
+            var row = new Object();
+            var id = selectedRows[i].id;
+
+            var availableAmount = $('#js_po_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".availableAmount").val();
+            if (!availableAmount) {
+                layer.msg("选择余额必填且正确，请重新输入");
+                return;
+            }
+            if (availableAmount*1 <= 0) {
+                layer.msg("选择余额不能为负数和零，请重新输入");
+                return;
+            }
+            row.receiptId = id;
+            row.receiptNo = selectedRows[i].parentReceiptNo;
+            row.receiptType = selectedRows[i].receiptType;
+            row.receiptDate = selectedRows[i].parentReceiptDate;
+            row.receiptAmount = selectedRows[i].parentReceiptAmount;
+            row.remainAmount = selectedRows[i].remainAmount;
+            row.availableAmount = availableAmount;
+            rows.push(row);
+        }
+    }
+    
+    //预收货款抵扣水单
+    var selectedRows = $('#js_recDeduction_dataTable').bootstrapTable('getSelections');
+    var idsSize = selectedRows.length;
+    var dectionRows = [];
+    if (idsSize > 0) {
+        for (var i = 0; i < idsSize; i++) {
+            var dectionRow = new Object();
+            var id = selectedRows[i].id;
+
+            var availableAmount = $('#js_recDeduction_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".availableAmount").val();
+            if (!availableAmount) {
+                layer.msg("选择余额必填且正确，请重新输入");
+                return;
+            }
+            if (availableAmount*1 <= 0) {
+                layer.msg("选择余额不能为负数和零，请重新输入");
+                return;
+            }
+            dectionRow.receiptId = id;
+            dectionRow.receiptNo = selectedRows[i].parentReceiptNo;
+            dectionRow.receiptType = selectedRows[i].receiptType;
+            dectionRow.receiptAmount = selectedRows[i].parentReceiptAmount;
+            dectionRow.remainAmount = selectedRows[i].remainAmount;
+            dectionRow.availableAmount = availableAmount;
+            dectionRows.push(dectionRow);
+        }
+    }
+	var params = {
+	    auditId: options.param.id,
+	    billDeliveryId: options.param.poId,
+	    suggestion: suggestion || "",
+	    receiptDate: $('#parentReceiptDate').val(),
+	    verificationAdvanceList: rows,
+	    advanceMentList :dectionRows
+	};
+    GLOBAL.ajax(url, JSON.stringify(params), function(e) {
+        if (e.success) {
+            layer.msg("审核通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    }, true);
+})
+
+$("#passAndNext").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    
+	var selectedRows = $('#js_po_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    var rows = [];
+    if (idsLen > 0) {
+        for (var i = 0; i < idsLen; i++) {
+            var row = new Object();
+            var id = selectedRows[i].id;
+
+            var availableAmount = $('#js_po_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".availableAmount").val();
+            if (!availableAmount) {
+                layer.msg("选择余额必填且正确，请重新输入");
+                return;
+            }
+            if (availableAmount*1 <= 0) {
+                layer.msg("选择余额不能为负数和零，请重新输入");
+                return;
+            }
+            row.receiptId = id;
+            row.receiptNo = selectedRows[i].parentReceiptNo;
+            row.receiptType = selectedRows[i].receiptType;
+            row.receiptDate = selectedRows[i].parentReceiptDate;
+            row.receiptAmount = selectedRows[i].parentReceiptAmount;
+            row.remainAmount = selectedRows[i].remainAmount;
+            row.availableAmount = availableAmount;
+            rows.push(row);
+        }
+    }
+    
+	var params = {
+	    auditId: options.param.id,
+	    billDeliveryId: options.param.poId,
+	    suggestion: suggestion || "",
+	    receiptDate: $('#parentReceiptDate').val(),
+	    verificationAdvanceList: rows
+	};
+    GLOBAL.ajax(url, JSON.stringify(params), function(e) {
+        if (e.success) {
+        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+                if (e.success) { 
+                	 if(e.items){
+                		 var id = e.items.id;
+                         var state = e.items.state;
+                         var poId = e.items.poId;
+                         var poType = e.items.poType;
+                         options.param.id = id;
+                         options.param.poId = poId;  
+                         if (poType && state) { 
+                             GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+                         }
+                	 }else{
+                		 GLOBAL.go("html/entry.html");
+                	 }  
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        } else {
+            layer.msg(e.msg);
+        }
+    }, true);
+}) 
+$("#unpass").click(function() {
+    var suggestion = $("#suggestion").val();
+    if (!suggestion) {
+        layer.msg("请输入审核意见");
+        return;
+    }
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        billDeliveryId: options.param.poId,
+        suggestion: suggestion
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核不通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$("#sigh").click(function() {
+    var url = $(this).data("url");
+    var sighId = $("#sighId").val();
+
+    if (sighId) {
+        layer.confirm('确定加签吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: sighId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("加签成功！");
+                    $("#sighId").val("");
+                    GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                        billDeliveryId: options.param.poId
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#sighId").focus();
+    }
+})
+
+$("#deliver").click(function() {
+    var url = $(this).data("url");
+    var deliverId = $("#deliverId").val();
+
+    if (deliverId) {
+        layer.confirm('确定转交吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: deliverId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("转交成功！");
+                    $("#deliverId").val("");
+                    if (options.param.entryType == 1) {
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        GLOBAL.go("html/audit/audit.html");
+                    }
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#deliverId").focus();
+    }
+})
+
+$(".js-back").click(function() {
+    if (options.param.entryType == 1) {
+        GLOBAL.go("html/entry.html");
+    } else {
+        GLOBAL.go("html/audit/audit.html");
+    }
+})
+
+$(".attachment-down").click(function() {
+    var ids = GLOBAL.selectIds($("#js_dataFileTable"));
+    if (ids) {
+        var url = GLOBAL.host + $(this).data("url") + "?ids=" + ids;
+        window.open(url);
+    }
+})
+
+</script>

@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.InvoicingReportDao">
+	<select id="queryGoodsIdByCon" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.req.InvoicingReportReqDto">
+		SELECT * FROM(
+		SELECT
+		<if test="statisticsDimensionType == 1">
+			tbis.project_id as projectId,
+			tbp.department_id as
+			departmentId,
+			tbp.biz_special_id as bussinessUserId,
+			tbis.customer_id
+			as customerId,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tbis.warehouse_id as wareHouseId,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tbis.project_id as projectId,
+			tbp.department_id as
+			departmentId,
+			tbp.biz_special_id as bussinessUserId,
+			tbis.warehouse_id
+			as wareHouseId,
+			tbis.customer_id as customerId,
+		</if>
+		tbisd.goods_id as goodsId,
+		tbis.currency_type as currencyType,
+		tbp.business_unit_id as busiUnit
+		FROM tb_bill_in_store_dtl tbisd
+		INNER
+		JOIN tb_bill_in_store tbis ON tbisd.bill_in_store_id = tbis.id
+		INNER
+		JOIN tb_base_project tbp ON tbis.project_id = tbp.id
+		INNER join
+		tb_base_user_project tbup on tbp.id= tbup.project_id
+		WHERE
+		DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;= #{endBusinessDate} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="busiUnit != null">
+			AND tbp.business_unit_id =#{busiUnit,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		UNION SELECT
+		<if test="statisticsDimensionType == 1">
+			tbos.project_id as projectId,
+			tbp.department_id as
+			departmentId,
+			tbp.biz_special_id as bussinessUserId,
+			tbos.customer_id
+			as customerId,
+		</if>
+		<if test="statisticsDimensionType == 2">
+			tbos.warehouse_id as wareHouseId,
+		</if>
+		<if test="statisticsDimensionType == 3">
+			tbos.project_id as projectId,
+			tbp.department_id as
+			departmentId,
+			tbp.biz_special_id as bussinessUserId,
+			tbos.warehouse_id
+			as wareHouseId,
+			tbos.customer_id as customerId,
+		</if>
+		tbosd.goods_id as goodsId,
+		tbos.currency_type as currencyType,
+		tbp.business_unit_id as busiUnit
+		FROM
+		tb_bill_out_store tbos
+		INNER JOIN
+		tb_bill_out_store_dtl tbosd ON tbos.id = tbosd.bill_out_store_id
+		INNER
+		JOIN tb_base_project tbp ON tbos.project_id = tbp.id
+		INNER join
+		tb_base_user_project tbup on tbp.id= tbup.project_id
+		WHERE
+		DATE_FORMAT(tbos.deliver_time ,"%Y-%m-%d") &lt;= #{endBusinessDate}
+		AND
+		tbos.status = 5 AND
+		tbos.is_delete = 0
+		<if test="busiUnit != null">
+			AND tbp.business_unit_id =#{busiUnit,jdbcType=INTEGER}
+		</if>
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbos.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbos.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		)tmp WHERE 1=1
+		group by tmp.goodsId,tmp.currencyType,tmp.busiUnit
+		<if test="statisticsDimensionType == 1">
+			,tmp.projectId
+			,tmp.departmentId
+			,tmp.bussinessUserId
+			,tmp.customerId
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tmp.wareHouseId
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tmp.projectId
+			,tmp.wareHouseId
+			,tmp.departmentId
+			,tmp.bussinessUserId
+			,tmp.customerId
+		</if>
+		<if test="first != -1">
+			LIMIT #{first},#{last}
+		</if>
+	</select>
+
+	<select id="querySumNumber" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="Integer">
+		SELECT COUNT(1) FROM (
+		SELECT * FROM(
+		SELECT
+		tbis.project_id as
+		projectId,
+		tbis.warehouse_id as wareHouseId,
+		tbisd.goods_id as goodsId,
+		tbis.currency_type as currencyType,
+		tbp.department_id as departmentId,
+		tbp.biz_special_id as bussinessUserId,
+		tbis.customer_id as customerId
+		FROM tb_bill_in_store_dtl tbisd
+		INNER JOIN tb_bill_in_store tbis ON
+		tbisd.bill_in_store_id = tbis.id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		DATE_FORMAT(tbis.accept_time ,"%Y-%m-%d")
+		&lt;= #{endBusinessDate} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		UNION SELECT
+		tbos.project_id as projectId,
+		tbos.warehouse_id as
+		wareHouseId,
+		tbosd.goods_id as goodsId,
+		tbos.currency_type as
+		currencyType,
+		tbp.department_id as departmentId ,
+		tbp.biz_special_id as
+		bussinessUserId,
+		tbos.customer_id as customerId
+		FROM tb_bill_out_store
+		tbos
+		INNER JOIN tb_bill_out_store_dtl tbosd ON tbos.id =
+		tbosd.bill_out_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbos.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		DATE_FORMAT(tbos.deliver_time ,"%Y-%m-%d")
+		&lt;= #{endBusinessDate}
+		AND
+		tbos.status = 5 AND
+		tbos.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbos.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbos.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		)tmp WHERE 1=1
+		group by tmp.goodsId,tmp.currencyType
+		<if test="statisticsDimensionType == 1">
+			,tmp.projectId
+			,tmp.departmentId
+			,tmp.bussinessUserId
+			,tmp.customerId
+		</if>
+		<if test="statisticsDimensionType == 2">
+			,tmp.wareHouseId
+		</if>
+		<if test="statisticsDimensionType == 3">
+			,tmp.projectId
+			,tmp.wareHouseId
+			,tmp.departmentId
+			,tmp.bussinessUserId
+			,tmp.customerId
+		</if>
+		)temp
+	</select>
+	<!--根据商品查询 期初、期末出库数量 -->
+	<select id="queryStartOutByCon" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.NumAndAmount">
+		SELECT
+		IFNULL(SUM(IFNULL(tbisd.cost_amount,0)),0)as amount,
+		IFNULL(SUM(IFNULL(tbisd.send_num,0)),0) as num
+		FROM tb_bill_out_store
+		tbis
+		INNER JOIN tb_bill_out_store_dtl tbisd ON tbis.id =
+		tbisd.bill_out_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 5 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test=" startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time ,"%Y-%m-%d") &lt;
+			#{startBusinessDate}
+
+		</if>
+		<if test=" endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!--根据商品查询 期初、期末入库数量 -->
+	<select id="queryStartInByCon" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.NumAndAmount">
+		SELECT
+		IFNULL(SUM(IFNULL(tbisd.receive_num * tbisd.cost_price,0)) ,0)as
+		Amount ,
+		IFNULL(SUM(IFNULL(tbisd.receive_num,0)),0) as num
+		FROM
+		tb_bill_in_store tbis
+		INNER JOIN tb_bill_in_store_dtl tbisd ON tbis.id
+		= tbisd.bill_in_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;
+			#{startBusinessDate}
+		</if>
+		<if test="endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<!--根据商品查询本期入库数量 -->
+	<select id="queryInByCon" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.NumAndAmount">
+		SELECT
+		IFNULL(SUM(IFNULL(tbisd.receive_num * tbisd.cost_price,0)) ,0)as
+		Amount,
+		IFNULL(SUM(IFNULL(tbisd.receive_num,0)),0) as num
+		FROM
+		tb_bill_in_store tbis
+		INNER JOIN tb_bill_in_store_dtl tbisd ON tbis.id
+		= tbisd.bill_in_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &gt;=
+			#{startBusinessDate}
+		</if>
+		<if test="endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!--根据商品查询本期出库数量 -->
+	<select id="queryOutByCon" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.NumAndAmount">
+		SELECT
+		IFNULL(SUM(IFNULL(tbisd.cost_amount,0)),0) as amount,
+		IFNULL(SUM(IFNULL(tbisd.send_num ,0)),0) as num
+		FROM
+		tb_bill_out_store
+		tbis
+		INNER JOIN tb_bill_out_store_dtl tbisd ON tbis.id =
+		tbisd.bill_out_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 5 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &gt;=
+			#{startBusinessDate}
+		</if>
+		<if test="endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<!--根据商品查询 详细列表 -->
+	<select id="queryInfoDtl" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.InvoicingDTlResult">
+		SELECT * FROM (
+		SELECT
+		'1' as billType,
+		tbis.bill_no as billNo,
+		tbis.accept_time as billDate,
+		tbisd.receive_num as number,
+		(tbisd.receive_num * tbisd.cost_price) as
+		amount
+		FROM tb_bill_in_store
+		tbis
+		INNER JOIN tb_bill_in_store_dtl tbisd ON tbis.id =
+		tbisd.bill_in_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &gt;=
+			#{startBusinessDate}
+		</if>
+		<if test="endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+		UNION ALL
+		SELECT
+		'2' as billType,
+		tbis.bill_no as billNo,
+		tbis.deliver_time as billDate,
+		tbisd.send_num as number,
+		tbisd.cost_amount as amount
+		FROM
+		tb_bill_out_store tbis
+		INNER JOIN
+		tb_bill_out_store_dtl tbisd ON tbis.id = tbisd.bill_out_store_id
+		INNER
+		JOIN tb_base_project tbp ON tbis.project_id = tbp.id
+		INNER join
+		tb_base_user_project tbup on tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id = #{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 5 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &gt;=
+			#{startBusinessDate}
+		</if>
+		<if test="endBusinessDate !=null and endBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &lt;=
+			#{endBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+		) tmp ORDER BY tmp.billDate asc, tmp.billType asc
+	</select>
+	<!--根据商品查询 详细列表 -->
+	<select id="queryStartDtl" parameterType="com.scfs.domain.report.req.InvoicingReportReqDto"
+		resultType="com.scfs.domain.report.entity.NumAndAmount">
+		SELECT sum(tmp.number) as num,
+		sum(tmp.amount) as amount,
+		FROM (
+		SELECT
+		tbisd.receive_num as number,
+		(tbisd.receive_num * tbisd.cost_price) as
+		amount
+		FROM
+		tb_bill_in_store tbis
+		INNER JOIN tb_bill_in_store_dtl tbisd
+		ON tbis.id = tbisd.bill_in_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 2 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id =#{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.accept_time,"%Y-%m-%d") &lt;
+			#{startBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+		UNION ALL
+		SELECT
+		tbisd.send_num as number,
+		tbisd.cost_amount as amount
+		FROM tb_bill_out_store tbis
+		INNER JOIN tb_bill_out_store_dtl tbisd ON
+		tbis.id =
+		tbisd.bill_out_store_id
+		INNER JOIN tb_base_project tbp ON
+		tbis.project_id = tbp.id
+		INNER join tb_base_user_project tbup on
+		tbp.id= tbup.project_id
+		WHERE
+		tbisd.goods_id =
+		#{goodsId,jdbcType=INTEGER} AND
+		tbis.status = 5 AND
+		tbis.is_delete = 0
+		<if test="projectId != null">
+			AND tbp.id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="wareHouseId != null">
+			AND tbis.warehouse_id =#{wareHouseId,jdbcType=INTEGER}
+		</if>
+		<if test="bussinessUserId != null">
+			AND tbp.biz_special_id
+			=#{bussinessUserId,jdbcType=INTEGER}
+		</if>
+		<if test="departmentId != null">
+			AND tbp.department_id =#{departmentId,jdbcType=INTEGER}
+		</if>
+		<if test="startBusinessDate !=null and startBusinessDate !=''">
+			AND DATE_FORMAT(tbis.deliver_time,"%Y-%m-%d") &lt;
+			#{startBusinessDate}
+		</if>
+		<if test="currencyType != null">
+			AND tbis.currency_type =#{currencyType,jdbcType=INTEGER}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND tbis.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+		<if test="customerId != null">
+			AND tbis.customer_id =#{customerId,jdbcType=INTEGER}
+		</if>
+		)tmp
+	</select>
+
+</mapper>

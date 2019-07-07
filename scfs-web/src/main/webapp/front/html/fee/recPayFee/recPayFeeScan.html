@@ -1,0 +1,233 @@
+<style>
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>费用</li>
+		<li>应收应付费用</li>
+		<li class="active">浏览</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation" class="active"><a class="tab-item" data-url="html/fee/recPayFee/recPayFeeScan.html">应收应付费用浏览</a></li>
+	                    <li role="presentation" ><a class="tab-item" data-url="html/fee/recPayFee/recPayFeeVoucherScan.html">应收应付费用凭证浏览</a></li>
+	                </ul>
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>费用编号：</b></td>
+							<td class="text-left"><span id="feeNo"
+								name="feeNo"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left"><span id="projectName" name="projectName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应收客户：</b></td>
+							<td class="text-left"><span id="custPayerName"
+								name="custPayerName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应收费用科目：</b></td>
+							<td class="text-left"><span id="recFeeSpecName"
+								name="recFeeSpecName"></span></td>
+						</tr>  
+						<tr>
+							<td class="text-right"><b>应收方式：</b></td>
+							<td class="text-left"><span id="recTypeName"
+								name="recTypeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应收日期：</b></td>
+							<td class="text-left"><span id="recDate"
+								name="recDate"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>到期日：</b></td>
+							<td class="text-left"><span id="expireDate"
+								name="expireDate"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>币种：</b></td>
+							<td class="text-left"><span id="currencyTypeName"
+								name="currencyTypeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应收金额：</b></td>
+							<td class="text-left"><span id="recAmount" class="cash"
+								name="recAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已收金额：</b></td>
+							<td class="text-left"><span id="receivedAmount" class="cash"
+								name="receivedAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已开票金额：</b></td>
+							<td class="text-left"><span id="provideInvoiceAmount" class="cash"
+								name="provideInvoiceAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票方式：</b></td>
+							<td class="text-left"><span id="provideInvoiceTypeName"
+								name="provideInvoiceTypeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票税率：</b></td>
+							<td class="text-left"><span id="provideInvoiceTaxRateStr"
+								name="provideInvoiceTaxRateStr"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left"><span id="recNote"
+								name="recNote"></span></td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>应付客户：</b></td>
+							<td class="text-left"><span id="custReceiverName"
+								name="custReceiverName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应付费用科目：</b></td>
+							<td class="text-left"><span id="payFeeSpecName"
+								name="payFeeSpecName"></span></td>
+						</tr> 
+						<tr>
+							<td class="text-right"><b>应付方式：</b></td>
+							<td class="text-left"><span id="payTypeName"
+								name="payTypeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应付费用类型：</b></td>
+							<td class="text-left"><span id="payFeeTypeName" ></span></td>
+						</tr> 
+						<tr>
+							<td class="text-right"><b>应付日期：</b></td>
+							<td class="text-left"><span id="payDate"
+								name="payDate"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>应付金额：</b></td>
+							<td class="text-left"><span id="payAmount" class="cash"
+								name="payAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已付金额：</b></td>
+							<td class="text-left"><span id="paidAmount" class="cash"
+								name="paidAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已收票金额：</b></td>
+							<td class="text-left"><span id="acceptInvoiceAmount" class="cash"
+								name="acceptInvoiceAmount"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收票方式：</b></td>
+							<td class="text-left"><span id="acceptInvoiceTypeName"
+								name="acceptInvoiceTypeName"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收票税率：</b></td>
+							<td class="text-left"><span id="acceptInvoiceTaxRateStr"
+								name="acceptInvoiceTaxRateStr"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left"><span id="payNote"
+								name="payNote"></span></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>记账日期：</b></td>
+							<td class="text-left"><span id="bookDate"
+								name="bookDate"></span></td>
+						</tr>
+					</table>
+					<div class="mt15">
+                      <h4 class="mb10">审核记录</h4>
+                      <table id="js_audit_dataTable" data-permissionUrl="/fee/auditflow/audit/query" data-url="fee/auditflow/audit/query"></table>
+                  </div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button id="back" data-url="html/fee/recPayFee/recPayFeeSearch.html"
+						class="btn btn-default btn-sm">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+options.initPage = function() {
+	var state = options.param.state;
+	if(state==3){
+		$(".nav>li.state").show();	
+	}
+
+	var tabCols = [{
+	    title: '序号',
+	    field: 'columnsNumber',
+	    width: '5%'
+	}, {
+	    title: '流程节点',
+	    field: "stateName",
+	    width: '15%'
+	},{
+	    title: '处理人',
+	    field: "dealName",
+	    width: '15%'
+	},{
+	    title: '处理意见',
+	    field: "suggestion",
+	    width: '25%'
+	},{
+	    title: '开始时间',
+	    field: "createTime",
+	    width: '15%'
+	},{
+	    title: "处理时间",
+	    field: "dealTime",
+	    width: '15%'
+	},{
+	    title: "处理状态",
+	    field: "auditStateName",
+	    width: '10%'
+	}];
+
+	var callback = function(reply) {
+		var data = reply.items;
+
+		for ( var i in data) {
+			var value = data[i];
+			var element = $("#" + i) ;
+			if (element.hasClass("cash")) {
+				element.text(value == null ? "" : value.toThounds());
+			}else {
+				element.text(value == null ? "" : value);
+			}
+		}
+	}
+	GLOBAL.ajax("fee/receive/pay/detail", options.param, callback);
+
+	GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+        feeId: options.param.id
+    }, null, {
+        pagination: false
+    });
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url, options.param);
+	});
+}
+
+</script>

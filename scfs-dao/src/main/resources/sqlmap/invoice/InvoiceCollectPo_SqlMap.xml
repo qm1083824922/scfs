@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceCollectPoDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceCollectPo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="collect_id" property="collectId" jdbcType="INTEGER" />
+		<result column="po_id" property="poId" jdbcType="INTEGER" />
+		<result column="in_rate_amount" property="inRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="ex_rate_amount" property="exRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="rate_amount" property="rateAmount" jdbcType="DECIMAL" />
+		<result column="discount_in_rate_amount" property="discountInRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="discount_ex_rate_amount" property="discountExRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="discount_rate_amount" property="discountRateAmount"
+			jdbcType="DECIMAL" />
+		<result column="actual_invoice_amount" property="actualInvoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="po_num" property="poNum" jdbcType="DECIMAL" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<resultMap type="com.scfs.domain.invoice.entity.InvoiceCollectPo"
+		id="ModoleResultMap" extends="BaseResultMap">
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="goods_num" property="goodsNum" jdbcType="DECIMAL" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="invoice_num" property="invoiceNum" jdbcType="DECIMAL" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="blance_num" property="blanceNum" jdbcType="DECIMAL" />
+		<result column="blance_amount" property="blanceAmount"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		collect_id,
+		po_id,
+		in_rate_amount,
+		ex_rate_amount,
+		rate_amount,
+		discount_in_rate_amount,
+		discount_ex_rate_amount,
+		discount_rate_amount,
+		actual_invoice_amount,
+		tax_rate,
+		remark,
+		po_num,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 获取查询数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectPoReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		r.id,
+		r.collect_id,
+		r.po_id,
+		r.in_rate_amount,
+		r.ex_rate_amount,
+		r.rate_amount,
+		r.discount_in_rate_amount,
+		r.discount_ex_rate_amount,
+		r.discount_rate_amount,
+		r.actual_invoice_amount,
+		r.tax_rate,
+		r.po_num,
+		r.remark,
+		r.creator_id,
+		r.creator,
+		r.create_at,
+		r.is_delete,
+		p.goods_id,
+		p.goods_num,
+		p.goods_price,
+		p.amount,
+		p.invoice_num,
+		p.invoice_amount,
+		t.order_no,
+		t.order_time,
+		p.goods_num - invoice_num blance_num,
+		p.amount
+		-
+		invoice_amount blance_amount
+		FROM
+		tb_invoice_collect_po r
+		LEFT JOIN
+		tb_purchase_order_line p
+		ON r.po_id = p.id
+		LEFT JOIN
+		tb_purchase_order_title t
+		ON p.po_id = t.id
+		WHERE r.is_delete = 0
+		<if test="collectId != null ">
+			and r.collect_id = #{collectId,jdbcType=INTEGER}
+		</if>
+		order by r.id desc
+	</select>
+
+	<!-- 编辑 -->
+	<select id="queryInvoiceCollectPoById" resultMap="ModoleResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		r.id,
+		r.collect_id,
+		r.po_id,
+		r.in_rate_amount,
+		r.ex_rate_amount,
+		r.rate_amount,
+		r.discount_in_rate_amount,
+		r.discount_ex_rate_amount,
+		r.discount_rate_amount,
+		r.actual_invoice_amount,
+		r.tax_rate,
+		r.po_num,
+		r.remark,
+		r.creator_id,
+		r.creator,
+		r.create_at,
+		r.is_delete,
+		p.goods_id,
+		p.goods_num,
+		p.goods_price,
+		p.amount,
+		p.invoice_num,
+		p.invoice_amount,
+		t.order_no,
+		t.order_time,
+		p.goods_num - invoice_num blance_num,
+		p.amount
+		-
+		invoice_amount blance_amount
+		FROM
+		tb_invoice_collect_po r
+		LEFT JOIN
+		tb_purchase_order_line p
+		ON r.po_id = p.id
+		LEFT JOIN
+		tb_purchase_order_title t
+		ON p.po_id = t.id
+		WHERE
+		r.id =
+		#{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect_po
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceCollectPo"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoice_collect_po(
+		collect_id,
+		po_id,
+		in_rate_amount,
+		ex_rate_amount,
+		rate_amount,
+		discount_in_rate_amount,
+		discount_ex_rate_amount,
+		discount_rate_amount,
+		actual_invoice_amount,
+		tax_rate,
+		po_num,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{collectId,jdbcType=INTEGER},
+		#{poId,jdbcType=INTEGER},
+		#{inRateAmount,jdbcType=DECIMAL},
+		#{exRateAmount,jdbcType=DECIMAL},
+		#{rateAmount,jdbcType=DECIMAL},
+		#{discountInRateAmount,jdbcType=DECIMAL},
+		#{discountExRateAmount,jdbcType=DECIMAL},
+		#{discountRateAmount,jdbcType=DECIMAL},
+		#{actualInvoiceAmount,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{poNum,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceCollectPo">
+		update tb_invoice_collect_po
+		<set>
+			id = #{id}
+			<if test="collectId != null">
+				,collect_id = #{collectId,jdbcType=INTEGER}
+			</if>
+			<if test="poId != null">
+				, po_id = #{poId,jdbcType=INTEGER}
+			</if>
+			<if test="inRateAmount != null">
+				, in_rate_amount = #{inRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="exRateAmount != null">
+				, ex_rate_amount = #{exRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="rateAmount != null">
+				, rate_amount = #{rateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="discountInRateAmount != null">
+				, discount_in_rate_amount =
+				#{discountInRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="discountExRateAmount != null">
+				, discount_ex_rate_amount =
+				#{discountExRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="discountRateAmount != null">
+				, discount_rate_amount =
+				#{discountRateAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="actualInvoiceAmount != null">
+				, actual_invoice_amount =
+				#{actualInvoiceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="taxRate != null">
+				, tax_rate = #{taxRate,jdbcType=DECIMAL}
+			</if>
+			<if test="poNum != null">
+				, po_num = #{poNum,jdbcType=DECIMAL}
+			</if>
+			<if test="remark != null">
+				, remark = #{remark,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryRateSumByInvoiceCollectId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.invoice.dto.resp.TaxRateSum">
+		select sum(rate_amount-discount_rate_amount) as taxRateSum
+		, tax_rate as taxRate
+		from tb_invoice_collect_po
+		where collect_id =
+		#{invoice_collect_id}
+		and is_delete = 0
+		group by tax_rate
+	</select>
+
+	<select id="countTaxRateByInvoiceCollectId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(distinct tax_rate)
+		from tb_invoice_collect_po
+		where collect_id = #{invoiceCollectId}
+		and is_delete = 0
+	</select>
+</mapper>

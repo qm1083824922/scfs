@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>供应链金融</title>
+    <meta name="keywords" content="供应链金融">
+    <meta name="description" content="供应链金融">
+    <link href="css/bootstrap_min.css" rel="stylesheet">
+    <link href="fonts/font-awesome-4.4.0/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/login/style.css" rel="stylesheet">
+    <link href="css/login/login.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+
+</head>
+
+<body class="signin">
+<div class="signinpanel" id="rrapp" v-cloak>
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>蜂鸟1111</h1>
+                </div>
+                <div class="m-b"></div>
+                <h3>
+                    	欢迎使用<strong>供应链金融平台</strong>
+                </h3>
+                <ul class="m-b">
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>
+                    	服务中小微企业
+                    </li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 解决融资难、账期长痛点</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 缓解资金压力</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>
+                                                                         方便、高效、快捷
+                    </li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i>
+                                                                       互利互惠、安全可靠
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <form id="loginForm">
+                <h3 class="text-center">用户登录</h3>
+                <p class="m-t-md text-center">欢迎登录供应链金融平台</p>
+                <input type="text" name="username" class="form-control uname" v-model="username" placeholder="用户名"/>
+                <input type="password" name="pwd" class="form-control pword m-b" v-model="password" placeholder="密码"/>
+                <!--
+                <input type="text" name="captcha" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码" autocomplete="off"/>
+                <br>
+        		<img id="captchaimg" alt="如果看不清楚，请单击图片刷新！" class="pointer" :src="src"  @click="refreshCode">
+            	<a href="javascript:;" @click="refreshCode">点击刷新</a>
+            	!-->
+				<button type="button" id="submitBtn" class="btn btn-login btn-block" @click="login" data-url="index.html">登录</button>               
+            </form>
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-left">&copy; 2017 All Rights Reserved. 蜂鸟
+        </div>
+    </div>
+</div>
+<!-- 全局js -->
+<script src="js/lib/jQuery-2.1.4.min.js?v=2.1.4" type='text/javascript'></script>
+<script src="js/lib/bootstrap.min.js?v=3.3.6" type='text/javascript'></script>
+<script src="js/plugins/jquery.cookie.js" type="text/javascript"></script>
+
+<!-- jQuery Validation plugin javascript-->
+<script src="js/plugins/validate/jquery.validate.min.js" type='text/javascript'></script>
+<script src="js/plugins/validate/messages_zh.min.js" type='text/javascript'></script>
+<script src="js/plugins/layer/layer.js" type='text/javascript'></script>
+<script src='js/lib/base64.js' type='text/javascript'></script>
+<script src='js/lib/vue.min.js' type='text/javascript'></script>
+<script src='js/common.js' type='text/javascript'></script>
+	
+<script type="text/javascript">
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		username: '',
+		password: '',
+		captcha: '',
+		src: ''
+	},
+	beforeCreate: function(){
+		if(self != top){
+			top.location.href = self.location.href;
+		}
+	},
+	created: function() {
+	    /**
+		$.get(GLOBAL.host + "captcha?t=" + $.now(), function(result){
+			vm.src = 'data:image/jpeg;base64,'+result.img;
+	    	localStorage.setItem("uuid", result.uuid);
+		});
+         **/
+	},
+	methods: {
+		refreshCode: function(){
+		    /**
+			$.get(GLOBAL.host + "captcha?t=" + $.now(), function(result){
+				vm.src = 'data:image/jpeg;base64,'+result.img;
+		    	localStorage.setItem("uuid", result.uuid);
+			});
+             **/
+		},
+		login: function (event) {
+			if (!vm.username) {
+                layer.msg("请输入用户名");
+				return;
+			}
+			if (!vm.password) {
+                layer.msg("请输入密码");
+				return;
+			}
+			/**
+			if (!vm.captcha) {
+                layer.msg("请输入验证码");
+				return;
+			}
+             **/
+			var data = {
+				"username": vm.username,
+				"pwd": vm.password,
+				//"captcha": vm.captcha,
+                "captcha": "",
+				//"uuid": localStorage.getItem("uuid")
+                "uuid": ""
+			};
+	        var href = $("#submitBtn").data("url");
+	        GLOBAL.ajax("login", data, function(e){
+	            if (e.success) {
+	                $.cookie("CNAME", e.items);
+	                setTimeout(function(){
+	                    location.href = "" + href;
+	                },500);
+	            } else {
+	                layer.msg(e.msg);
+					vm.refreshCode();
+	            }
+	        });
+		}
+	}
+});
+
+</script>
+</body>
+</html>

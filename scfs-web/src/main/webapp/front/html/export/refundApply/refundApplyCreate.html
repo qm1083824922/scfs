@@ -1,0 +1,112 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>出口</li>
+			<li class="active">新建退税申请</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="payForm">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td class="text-right"><b>退税附属编号：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<input type="text" class="form-control" id="refundAttachNo" name="refundAttachNo">
+									</td>
+								</tr>
+								<tr>
+									<td width="180" class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+									</td>
+								</tr>
+								<tr class="gearbest_title">
+									<td class="text-right"><b>退税申请日期：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<input type="text"class="form-control js_datePicker" id="refundApplyDate"name="refundApplyDate">
+									</td>
+								</tr>
+								<tr class="custOne">
+									<td width="180" class="text-right"><b>客户：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-initform" data-url="PROJECT_BCS" id="custId" pid="projectId" name="custId"></select>
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left">
+										<textarea class="form-control"	id="remark" cols="50" rows="5" name="remark"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="submit" id="save" data-url="refundApply/add" data-permissionUrl="/refundApply/add" class="btn btn-primary btn-sm">保存</button>
+					<button type="button" id="js-back" data-url="html/export/refundApply/refundApplySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	var options = {
+		param : {
+			id : 0,
+			cid : 0,
+		},
+		initPage : function() {
+			$(".hideByRequestPay").hide();
+
+			$("#payForm").validate(
+			{
+				rules : {
+					refundAttachNo : {
+						required : true,
+		                maxlength : 50
+					},
+					projectId : {
+						required : true
+					},
+					refundApplyDate : {
+						required : true
+					},
+					custId : {
+						required : true
+					},
+					remark: {
+		            	maxlength : 200
+		            }
+				},
+				submitHandler : function() {
+					var data = $("#payForm").serialize();
+					GLOBAL.ajax("refundApply/add",data,function(e) {
+					layer.msg(
+						"保存成功！",
+						{
+							icon : 1,
+							time : 1500
+						},
+						function() {
+							options.param.id = e.items;
+							GLOBAL.go("html/export/refundApply/refundApplyEdit.html",options.param);
+						})
+				}, false, $("#save"));
+				}
+			});
+		}
+	};
+
+	GLOBAL.goBack();
+</script>

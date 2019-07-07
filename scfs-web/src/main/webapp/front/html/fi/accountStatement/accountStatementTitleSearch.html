@@ -1,0 +1,245 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>财务</li>
+			<li class="active">对账单</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="post" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<div class="search-item">	
+							<label class="control-label ml10">项目：</label> 
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select> 
+						</div>
+						<div class="search-item">	
+							<label class="control-label ml10">客户：</label> 
+							<select class="form-control js-select" data-url="BCS" id="custId" name="custId"></select> 
+						</div>
+						<div class="search-item">
+							<label class="control-label ml10">经营单位：</label> 
+							<select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+						</div>
+                        <div class="search-item">
+							<label class="control-label ml10">状态：</label> 
+							<select class="form-control js-select" data-url="AST_STATE" id="state" name="state"></select>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">单据编号：</label>
+							<input class="form-control" id="billNo" name="billNo" />
+						</div>
+						<div class="search-item">
+							<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+							<button type="button" id="btnNew" data-url="html/fi/accountStatement/accountStatementTitleCreate.html" class="btn btn-warning btn-sm ml20" data-permissionUrl="/accountStatementTitle/add">新建</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table id="js_dataTable" data-url="accountStatementTitle/query">
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
+<script>
+window.operateEvents = {
+	    'click .submit': function (e, value, row, index) {
+	    	var id = $(this).closest("tr").data('uniqueid');
+			if (id) {
+				layer.confirm('确定要提交吗？', {
+					btn : [ '确定', '取消' ]
+				// 按钮
+				}, function() {
+					GLOBAL.ajax("accountStatementTitle/submit", {
+						id : id
+					}, function(e) {
+						if (e.success) {
+							layer.msg("提交成功！");
+							$("#btnSearch").click();
+						} else {
+							layer.msg(e.msg);
+						}
+					});
+				}, function() {
+				});
+			}
+	    },
+	    'click .delete': function (e, value, row, index) {
+	    	var id = $(this).closest("tr").data('uniqueid');
+			if (id) {
+				layer.confirm('确定要删除吗？', {
+					btn : [ '确定', '取消' ]
+				// 按钮
+				}, function() {
+					GLOBAL.ajax("accountStatementTitle/delete", {
+						id : id
+					}, function(e) {
+						if (e.success) {
+							layer.msg("删除成功！");
+							$("#btnSearch").click();
+						} else {
+							layer.msg(e.msg);
+						}
+					})
+				}, function() {
+				});
+			}
+	    },
+	    'click .edit': function(e, value, row, index){
+	    	var id = $(this).closest("tr").data('uniqueid');
+			if (id) {
+				options.param.id = id;
+				GLOBAL.go("html/fi/accountStatement/accountStatementTitleEdit.html");
+			}
+	    },
+	    'click .scan': function(e, value, row, index){
+	    	var id = $(this).closest("tr").data('uniqueid');
+			if (id) {
+				options.param.id = id;
+				GLOBAL.go("html/fi/accountStatement/accountStatementTitleScan.html");
+			}
+	    },
+	    'click .print': function(e, value, row, index){
+			if(row){
+				var id = row.id;
+				window.open("html/fi/accountStatement/accountStatementTitlePrint.html?id="+id);
+			}
+	    }
+	};
+	/*数据表格*/
+	var tabCols = [ {
+		title : '序号',
+		field : 'columnsNumber',
+		width : '1%'
+	},{
+		title : '单据编号',
+		field : 'billNo',
+		width : '8%'
+	},{
+		title : '单据附属编号',
+		field : 'billAttachNo',
+		align : 'center',
+		width : '5%'
+	},{
+		title : '项目',
+		field : 'projectName',
+		align : 'center',
+		width : '10%'
+	},{
+		title : '客户',
+		field : 'custName',
+		align : 'center',
+		width : '10%'
+	},{
+		title : '结算区间',
+		align : 'center',
+		width : '10%',
+		formatter : function(value , row , index) {
+			return row.astStartDate + "~" + row.astEndDate;
+	    }
+	},{
+		title : '币种',
+		field : 'currencyTypeName',
+		align : 'center',
+		width : '4%'
+	},{
+		title : '项目总额度',
+		field : 'projectAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+	   	 	return value.toThounds();
+	    }
+	},{
+		title : '总占用额度',
+		field : 'totalAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+			return value.toThounds();
+	    }
+	},{
+		title : '可用额度',
+		field : 'inUseAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+			return value.toThounds();
+	    }
+	},{
+		title : '在库监管总额',
+		field : 'inStoreAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+			return value.toThounds();
+	    }
+	}, {
+		title : '在途总额',
+		field : 'onWayAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+			return value.toThounds();
+	   }
+	},{
+		title : '借货总额',
+		field : 'lendAmount',
+		align : 'center',
+		width : '3%',
+		formatter : function(value , row , index) {
+			return value.toThounds();
+	    }
+	},{
+		title : '状态',
+		field : 'stateName',
+		align : 'center',
+		width : '5%'
+	},{
+		title : '创建人',
+		field : 'creator',
+		align : 'center',
+		width : '5%'
+	},{
+		title : '创建时间',
+		field : 'createAt',
+		align : 'center',
+		width : '8%'
+	},{
+		title : '操作',
+		field : 'opertaList',
+		align : 'center',
+		width : '16%',
+		events: operateEvents
+	} ];
+
+	options.initPage = function() {
+		GLOBAL.initOptionsParam('id');
+		var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols);
+		
+		//还原查询条件及过滤后的数据
+		GLOBAL.restoreQuery($('#js_dataTable')); 
+	}
+
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+		GLOBAL.tableRefresh($('#js_dataTable'), data);
+	});
+
+	$("#btnNew").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+</script>

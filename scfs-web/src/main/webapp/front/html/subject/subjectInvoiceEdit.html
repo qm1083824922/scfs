@@ -1,0 +1,113 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">开票信息编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectBaseInfoEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAddressEdit.html">地址信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAccountEdit.html">帐号信息</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/subject/subjectInvoiceEdit.html">开票信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectUserInfoEdit.html">用户信息</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="baseSubject/invoice/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-primary btn-sm" data-url="html/subject/subjectInvoiceEditAdd.html" data-permissionUrl="/baseSubject/invoice/add" id="add">添加</button> 
+              <button type="button" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+              <button type="button" class="btn btn-danger btn-sm" data-url="baseSubject/invoice/batch/invalid" data-permissionUrl="/baseSubject/invoice/batch/invalid" id="multDel">批量作废</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [
+	{
+	    field: 'checkItem',
+	    checkbox: true,
+	}, {  
+	    title: '序号',
+	    field: 'columnsNumber',  
+	    width: 10
+	}, {
+         title: '纳税人识别号',
+         field: 'taxPayer',
+         width: 60,
+         align: 'center'
+     }, {
+         title: '开户银行',
+         field: 'bankName',
+         width: 80,
+         align: 'center'
+     }, {
+         title: '开户账号',
+         field: 'accountNo',
+         width: 100,
+         align: 'center'
+     }, {
+         title: '开票地址',
+         field: 'address',
+         width: 100,
+         align: 'center'
+     }, {
+         title: '开票电话',
+         field: 'phoneNumber',
+         width: 50,
+         align: 'center'
+     }, {
+         title: '状态',
+         field: 'stateLabel',
+         width: 50,
+         align: 'center'
+     }];
+    
+    options.initPage = function(){
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id});
+      };
+
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    $("#multDel").click(function(){
+    	var id = GLOBAL.selectIds($('#js_dataTable'));
+    	var url = $(this).data("url");
+    	if(id){
+    		layer.confirm('确定要作废吗？', {
+    			btn: ['确定', '取消'] //按钮
+    		}, function() {
+    			GLOBAL.ajax(url, {ids: id}, function(e) {
+    				if (e.success) {
+    					layer.msg("作废成功！");
+    					$('#js_dataTable').bootstrapTable('refresh', {query: {id: options.param.id}});
+    				} else {
+    					layer.msg(e.msg);
+    				}
+    			});
+    		}, function() {});
+    	}
+    })
+
+    $("#add").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+    
+    GLOBAL.goBack();
+
+
+</script>

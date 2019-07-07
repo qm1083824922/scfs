@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.pay.MergePayOrderDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.MergePayOrder">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="merge_pay_no" jdbcType="VARCHAR" property="mergePayNo" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="pay_type" jdbcType="TINYINT" property="payType" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="pay_way" jdbcType="TINYINT" property="payWay" />
+		<result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+		<result column="request_pay_time" jdbcType="TIMESTAMP"
+			property="requestPayTime" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="payee" jdbcType="INTEGER" property="payee" />
+		<result column="pay_account_id" jdbcType="INTEGER" property="payAccountId" />
+		<result column="payer" jdbcType="INTEGER" property="payer" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="print_num" jdbcType="INTEGER" property="printNum" />
+		<result column="union_print_identifier" jdbcType="VARCHAR"
+			property="unionPrintIdentifier" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, merge_pay_no, busi_unit, project_id, pay_type,
+		currency_type,
+		pay_way, pay_amount,
+		request_pay_time, remark,
+		creator_id, creator, create_at, update_at, payee,
+		pay_account_id,
+		payer, state, print_num, union_print_identifier
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		p.id, p.merge_pay_no, p.busi_unit, p.project_id,
+		p.pay_type,
+		p.currency_type, p.pay_way, p.pay_amount,
+		p.request_pay_time, p.remark, p.creator_id, p.creator, p.create_at,
+		p.update_at, p.payee,
+		p.pay_account_id,
+		p.payer, p.state, p.print_num,
+		p.union_print_identifier
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_merge_pay_order
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_merge_pay_order
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.MergePayOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_merge_pay_order (
+		merge_pay_no, busi_unit,
+		project_id, pay_type, currency_type,
+		pay_way,
+		pay_amount, request_pay_time,
+		remark, creator_id, creator,
+		create_at,
+		payee,
+		pay_account_id, payer, state,
+		print_num, union_print_identifier)
+		values ( #{mergePayNo,jdbcType=VARCHAR}, #{busiUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER}, #{payType,jdbcType=TINYINT},
+		#{currencyType,jdbcType=TINYINT},
+		#{payWay,jdbcType=TINYINT},
+		IFNULL(#{payAmount,jdbcType=DECIMAL},0),
+		#{requestPayTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}, #{payee,jdbcType=INTEGER},
+		#{payAccountId,jdbcType=INTEGER}, #{payer,jdbcType=INTEGER},
+		#{state,jdbcType=TINYINT},
+		IFNULL(#{printNum,jdbcType=INTEGER},0),
+		#{unionPrintIdentifier,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.MergePayOrder">
+		update tb_merge_pay_order
+		<set>
+			<if test="mergePayNo != null">
+				merge_pay_no = #{mergePayNo,jdbcType=VARCHAR},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=TINYINT},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="payWay != null">
+				pay_way = #{payWay,jdbcType=TINYINT},
+			</if>
+			<if test="payAmount != null">
+				pay_amount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="requestPayTime != null">
+				request_pay_time = #{requestPayTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="payee != null">
+				payee = #{payee,jdbcType=INTEGER},
+			</if>
+			<if test="payAccountId != null">
+				pay_account_id = #{payAccountId,jdbcType=INTEGER},
+			</if>
+			<if test="payer != null">
+				payer = #{payer,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+			<if test="unionPrintIdentifier != null">
+				union_print_identifier =
+				#{unionPrintIdentifier,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据用户下供应商获取信息 -->
+	<sql id="selectSubject">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_merge_pay_order p
+		INNER JOIN tb_base_user_subject bus
+		ON
+		p.busi_unit=bus.subject_id
+		INNER JOIN tb_base_project tbp
+		ON
+		p.project_id = tbp.id
+		<where>
+			<if test="userId != null">
+				AND p.project_id IS NULL
+				AND bus.user_id=#{userId}
+			</if>
+			<if test="subjectList != null">
+				<foreach collection="subjectList" item="dId"
+					open="AND bus.subject_type in(" separator="," close=")">
+					${dId}
+				</foreach>
+			</if>
+			<if test="busiUnit != null">
+				and p.busi_unit = #{busiUnit}
+			</if>
+			<if test="projectId != null">
+				and p.project_id = #{projectId}
+			</if>
+			<if test="payee != null">
+				and p.payee = #{payee}
+			</if>
+			<if test="payType != null">
+				and p.pay_type = #{payType}
+			</if>
+			<if test="payWay != null">
+				and p.pay_way = #{payWay}
+			</if>
+			<if test="startRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time >=#{startRequestTime}
+					]]>
+			</if>
+			<if test="endRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time <=#{endRequestTime}
+					]]>
+			</if>
+			<if test="state != null">
+				and p.state = #{state}
+			</if>
+			<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+				and p.union_print_identifier like
+				CONCAT('%',#{unionPrintIdentifier},'%')
+			</if>
+			<if test="mergePayNoList != null">
+				<foreach collection="mergePayNoList" item="no" open="AND ("
+					separator="or" close=")">
+					p.merge_pay_no like CONCAT('%','${no}','%')
+				</foreach>
+			</if>
+			<if test="bizType != null">
+				AND tbp.biz_type = #{bizType}
+			</if>
+		</where>
+		group by p.id
+	</sql>
+
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.pay.dto.req.MergePayOrderSearchReqDto"
+		resultMap="BaseResultMap">
+		select tmp.* from(
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_merge_pay_order p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project b on
+			p.project_id=b.project_id
+		</if>
+		INNER JOIN tb_base_project tbp
+		ON p.project_id = tbp.id
+		<where>
+			<if test="userId != null">
+				AND b.state=1
+				AND b.user_id=#{userId}
+			</if>
+			<if test="subjectList != null">
+				AND p.project_id IS NOT NULL
+			</if>
+			<if test="busiUnit != null">
+				and p.busi_unit = #{busiUnit}
+			</if>
+			<if test="projectId != null">
+				and p.project_id = #{projectId}
+			</if>
+			<if test="payee != null">
+				and p.payee = #{payee}
+			</if>
+			<if test="payType != null">
+				and p.pay_type = #{payType}
+			</if>
+			<if test="payWay != null">
+				and p.pay_way = #{payWay}
+			</if>
+			<if test="startRequestTime != null ">
+					<![CDATA[
+							and p.request_pay_time >=#{startRequestTime}
+						]]>
+			</if>
+			<if test="endRequestTime != null ">
+					<![CDATA[
+							and p.request_pay_time <=#{endRequestTime}
+						]]>
+			</if>
+			<if test="state != null">
+				and p.state = #{state}
+			</if>
+			<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+				and p.union_print_identifier like
+				CONCAT('%',#{unionPrintIdentifier},'%')
+			</if>
+			<if test="mergePayNoList != null">
+				<foreach collection="mergePayNoList" item="no" open="AND ("
+					separator="or" close=")">
+					p.merge_pay_no like CONCAT('%','${no}','%')
+				</foreach>
+			</if>
+			<if test="bizType != null">
+				AND tbp.biz_type = #{bizType}
+			</if>
+		</where>
+		group by p.id
+		<if test="subjectList != null">
+			UNION ALL
+			<include refid="selectSubject" />
+		</if>
+		)tmp
+		order by tmp.id desc
+	</select>
+
+	<!-- 统计 -->
+	<select id="sumMergePayOrder"
+		parameterType="com.scfs.domain.pay.dto.req.MergePayOrderSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		SUM(p.pay_amount) pay_amount,
+		p.currency_type
+		from (select tmp.*
+		from(
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_merge_pay_order p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project b on
+			p.project_id=b.project_id
+		</if>
+		INNER JOIN tb_base_project tbp
+		ON p.project_id = tbp.id
+		<where>
+			<if test="userId != null">
+				AND b.state=1
+				AND b.user_id=#{userId}
+			</if>
+			<if test="subjectList != null">
+				AND p.project_id IS NOT NULL
+			</if>
+			<if test="busiUnit != null">
+				and p.busi_unit = #{busiUnit}
+			</if>
+			<if test="projectId != null">
+				and p.project_id = #{projectId}
+			</if>
+			<if test="payee != null">
+				and p.payee = #{payee}
+			</if>
+			<if test="payType != null">
+				and p.pay_type = #{payType}
+			</if>
+			<if test="payWay != null">
+				and p.pay_way = #{payWay}
+			</if>
+			<if test="startRequestTime != null ">
+					<![CDATA[
+							and p.request_pay_time >=#{startRequestTime}
+						]]>
+			</if>
+			<if test="endRequestTime != null ">
+					<![CDATA[
+							and p.request_pay_time <=#{endRequestTime}
+						]]>
+			</if>
+			<if test="state != null">
+				and p.state = #{state}
+			</if>
+			<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+				and p.union_print_identifier like
+				CONCAT('%',#{unionPrintIdentifier},'%')
+			</if>
+			<if test="mergePayNoList != null">
+				<foreach collection="mergePayNoList" item="no" open="AND ("
+					separator="or" close=")">
+					p.merge_pay_no like CONCAT('%','${no}','%')
+				</foreach>
+			</if>
+			<if test="bizType != null">
+				AND tbp.biz_type = #{bizType}
+			</if>
+		</where>
+		group by p.id
+		<if test="subjectList != null">
+			UNION ALL
+			<include refid="selectSubject" />
+		</if>
+		)tmp
+		order by tmp.id desc) p
+		GROUP BY p.currency_type
+		order by p.id desc
+	</select>
+	<select id="querySumById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select IFNULL(sum(po.advance_amount),0) as advanceAmount,
+		IFNULL(sum(po.discount_amount), 0) as discountAmount,
+		IFNULL(sum(po.in_discount_amount),0) as inDiscountAmount,
+		IFNULL(sum(po.pay_amount),0) as payAmount, po.currnecy_type as
+		currencyType
+		from tb_merge_pay_order_rel mpor
+		left join tb_pay_order po
+		on mpor.pay_id = po.id
+		where po.is_delete = 0 and mpor.merge_pay_id =
+		#{id}
+		group by po.currnecy_type
+	</select>
+	<select id="querySaleAmountById" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select IFNULL(sum(pol.goods_num *
+		pol.required_send_price),0) as saleAmount
+		from tb_merge_pay_order_rel
+		mpor
+		left join tb_pay_po_relation por
+		on mpor.pay_id = por.pay_id
+		left
+		join tb_purchase_order_line pol
+		on por.po_line_id = pol.id
+		where
+		por.is_delete = 0 and mpor.merge_pay_id = #{id}
+	</select>
+	<select id="queryMergePayOrderByMerge" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_merge_pay_order
+		where merge_pay_no = #{mergePayNo}
+	</select>
+
+	<select id="queryFinishedBillCount" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM tb_merge_pay_order
+		WHERE state = 6
+		AND
+		project_id = #{projectId}
+	</select>
+
+</mapper>

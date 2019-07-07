@@ -1,0 +1,166 @@
+<style>
+.nav>li.one, .nav>li.two{
+	display: none;
+}
+
+.invoiceTaxRate {
+display: none;
+}
+</style>
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>收票</li>
+            <li class="active">编辑</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="invoiceCollect/edit">
+            <div class="box-body">  
+           		  <ul class="nav nav-tabs">
+	                  <li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/collect/collectInfoEdit.html">基础信息</a></li>
+	                  <li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/collect/collectFeeEdit.html">费用信息</a></li>
+	                  <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/collect/collectPoEdit.html">采购单信息</a></li>
+	                  <li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectApproveScan.html">认证信息</a></li>	                  
+	                  <li role="presentation"><a class="tab-item" data-url="html/invoice/collect/attachment.html">附件</a></li> 
+                  </ul>
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      	<td class="text-right"><b>申请编号：</b></td> 
+                        <td class="text-left">
+                           <label class="js-initform" id="applyNo" name="applyNo"></label>
+                        </td> 
+                    </tr>
+                    
+                  	<tr>
+                      	<td width="180" class="text-right"><b>项目：</b></td> 
+                        <td class="text-left">
+                           <label class="js-initform" id="projectName" name="projectName"></label>
+                        </td> 
+                    </tr>
+                    
+                    <tr>
+                        <td class="text-right"><b>供应商：</b></td> 
+                        <td class="text-left"> 
+                            <label class="js-initform" id="supplierName" name="supplierName"></label>
+                        </td>
+                    </tr>
+                    
+                     <tr>
+                       <td class="text-right"><b>票据类型：</b></td> 
+                       <td class="text-left">
+                            <label class="js-initform" id="invoiceTypeName" name="invoiceTypeName"></label>
+                       </td>
+                    </tr>
+                    
+                    <tr>
+                       <td class="text-right"><b>单据类别：</b></td> 
+                       <td class="text-left">
+                            <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                       </td>
+                    </tr>
+                    
+                    <tr>
+						<td class="text-right"><b>发票号：<em class="text-star">*</em><em
+								class="text-star"></em></b></td>
+						<td class="text-left"><input type="text" class="js-initform form-control" id="invoiceNo" name="invoiceNo">
+						</td>
+					</tr>
+                    
+                    <tr class="gearbest_title">
+						<td class="text-right"><b>发票日期：<em class="text-star">*</em></b></td>
+						<td class="text-left"><input type="text" class="form-control js-initform  js_datePicker" id="invoiceDate" name="invoiceDate"></td>
+					</tr>
+                    
+                    <tr class="invoiceTaxRate">
+                      <td class="text-right"><b>收票税率：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                       		<label class="js-initform" id="invoiceTaxRateValue" name="invoiceTaxRateValue"></label>
+                       </td>
+                    </tr> 
+                    
+                    <tr>
+                      <td class="text-right"><b>票据备注：</b></td> 
+                      <td class="text-left">
+                        	 <textarea class="form-control js-initform" id="invoiceRemark" cols="50" rows="5" name="invoiceRemark"></textarea>
+                       </td>
+                    </tr> 
+                     <tr>
+                         <td class="text-right"><b>单据备注：</b></td> 
+                         <td class="text-left">
+                        	<textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>
+                         </td>
+                     </tr> 
+                    
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/invoiceCollect/update" data-url="html/invoice/collect/collectInfoEdit.html" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/invoice/collect/collectInfoSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    var tabId = options.param.billType;
+    if(tabId==2){
+    	$(".invoiceTaxRate").show();
+    }
+    var tabArr = ["one","two","three"];
+    $(".nav>li." + tabArr[tabId - 1]).show();
+    
+    
+    $("#form1").validate({
+        rules: {
+        	invoiceNo: {
+                required: true,
+                maxlength : 50
+            },
+            invoiceDate: {
+                required: true
+            },
+            invoiceRemark: {
+            	maxlength : 500
+            },
+            remark: {
+            	maxlength : 500
+            }
+        },
+        submitHandler: function() {
+          var data = $("#form1").serialize();
+	          GLOBAL.ajax("invoiceCollect/update",data, function(e){
+	        	  if (e.success) {
+	            	  layer.msg("保存成功！", {
+	                      icon: 1,
+	                      time: 1500
+	                  },function(){
+	                	  //GLOBAL.go("html/pay/paySearch.html");
+	                  });
+	              } else {
+	                  layer.msg(e.msg);
+	              }
+	          });
+        }
+    });
+    
+};
+
+$(".js_datePicker").datetimepicker();
+
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+</script> 
+	 

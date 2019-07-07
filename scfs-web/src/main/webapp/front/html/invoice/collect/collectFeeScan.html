@@ -1,0 +1,120 @@
+<style>
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<ol class="breadcrumb">
+          <li>当前位置</li>
+          <li>发票</li>
+          <li>收票</li>
+          <li class="active">浏览</li>
+      </ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/collect/collectFeeScan.html">费用信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectApproveScan.html">认证信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/attachmentScan.html">附件</a></li> 
+						<li role="presentation" class="state"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/collect/collectVoucherScan.html">收票凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="invoiceCollectFee/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/invoice/collect/collectInfoSearch.html"class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '费用类型',
+				field : 'feeTypeName',
+				width : 210,
+				align : 'center'
+			},
+			{
+				title : '费用科目',
+				field : 'payFeeSpecName',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '费用日期',
+				field : 'payDate',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '费用税率',
+				field : 'taxRate',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '费用金额',
+				field : 'inRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '费用未税金额',
+				field : 'exRateAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '税额',
+				field : 'rateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			}
+    		}
+		var state = options.param.state;
+		if(state==4){
+			$(".nav>li.state").show();	
+		}
+		options.param.collectId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			collectId : options.param.id
+		}, false, option);
+	};
+
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<div class="wrapper">
+    <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>资金</li>
+        <li>付款确认</li>
+	    <li class="active">导入</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+            <div class="box-body">  
+	         <form class="form-horizontal form-inline" id="form1" enctype="multipart/form-data">
+                 <table class="table table-bordered table-hover no-margin">  
+                       <td width="180" class="text-right"><b>导入说明： </b></td> 
+                       <td class="text-left" style="font-size: 14px">
+                       		1、导入条数不能超过999；</br>
+                            2、付款账户不能为空，请输入付款账号后四位；</br>
+                            3、实际付款金额不能为空；</br>       
+                            4、确认日期不能为空；</br>       
+                       </td>
+                    </tr> 
+                    <tr>
+                       <td width="180" class="text-right"><b>选择导入文件： </b></td> 
+                       <td class="text-left"> 
+                            <span type="button" data-permissionUrl="/payEnsure/import" id="upload">导入文件</span>
+                       </td>
+                    </tr>
+                  </table>
+	          </form>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/pay/audit/payWiteComf.html" id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+        </div>
+  </section>
+</div>
+
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script >
+
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+}); 
+$("#upload").upload({
+ 	url: GLOBAL.host + "/payEnsure/import",
+ 	fileType: "xls, xlsx",
+ 	param: {
+ 	},
+	success: function(e){
+		layer.msg("导入成功！", {
+            icon: 1,
+            time: 1500
+        },function(){
+		     GLOBAL.go("html/pay/audit/payWiteComf.html");
+        })
+    }
+}); 
+</script> 
+

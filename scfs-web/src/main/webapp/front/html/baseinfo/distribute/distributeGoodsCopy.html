@@ -1,0 +1,312 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>铺货商品</li>
+	    <li class="active">新建</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="distributeGoods/edit">
+            <div class="box-body">  
+                  <table class="table table-bordered table-hover no-margin">
+                    <tr>
+						<td width="180" class="text-right"><b>事业部：<em class="text-star">*</em></b></td>
+						<td class="text-left">
+							<input type="text" class="form-control js-tree js-initform" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree" style="width: 600px">
+						</td>
+					  </tr>
+					  
+					<tr>
+                        <td class="text-right"><b>供应商：<em class="text-star">*</em></b></td>
+                        <td class="text-left">
+                          <select class="form-control js-initform" data-url="SUPPLIER" id="supplierId" name="supplierId" style="width: 600px"></select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="text-right"><b>质押比例：<em class="text-star">*</em></b></td>
+                        <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="pledge" name="pledge" style="width: 600px">
+                        </td>
+                    </tr>
+                  
+                  	<tr>
+                      <td width="180" class="text-right"><b>编号：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="number" name="number" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>名称：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="name" name="name" style="width: 600px">
+                       </td>
+                    </tr>
+                    
+                    
+                    <tr>
+                       <td class="text-right"><b>品牌：<em class="text-star">*</em></b></td>
+                       <td class="text-left">
+                           <input type="text" class="form-control js-initform" id="brand" name="brand" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>型号：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="type" name="type" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>条码：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="barCode" name="barCode" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>规格：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="specification" name="specification" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>税收分类：</b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="taxClassification" name="taxClassification" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>国内税率：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                        	<select class="form-control js-initform" data-url="GOODS_CHINA_RATE" id="taxRate"  name="taxRate" style="width: 600px"> </select> 
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>单位：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="unit" name="unit" style="width: 600px">
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>高：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                          <div class="input-group">
+                            <input type="text" class="form-control js-initform" id="volume" name="volume" onkeyup="numberFix4Decimal(this)" style="width: 557px">
+                            <span class="input-group-addon">cm</span>
+                          </div>
+                        </td>
+                    </tr> 
+                     <tr>
+                      <td class="text-right"><b>长：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                          <div class="input-group">
+                            <input type="text" class="form-control js-initform" id="grow" name="grow" onkeyup="numberFix4Decimal(this)" style="width: 557px">
+                            <span class="input-group-addon">cm</span>
+                          </div>
+                        </td>
+                    </tr> 
+                     <tr>
+                      <td class="text-right"><b>宽：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                          <div class="input-group">
+                            <input type="text" class="form-control js-initform" id="broad" name="broad" onkeyup="numberFix4Decimal(this)" style="width: 557px">
+                            <span class="input-group-addon">cm</span>
+                          </div>
+                        </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>毛重：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                          <div class="input-group">
+                            <input type="text" class="form-control js-initform" id="grossWeight" name="grossWeight" onkeyup="numberFix4Decimal(this)" style="width: 559px">
+                            <span class="input-group-addon">kg</span>
+                          </div>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>净重：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                          <div class="input-group">
+                            <input type="text" class="form-control js-initform" id="netWeight" name="netWeight" onkeyup="numberFix4Decimal(this)" style="width: 559px">
+                            <span class="input-group-addon">kg</span>
+                          </div>
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>采购指导价：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="purchasePrice" name="purchasePrice" onkeyup="numberFix4Decimal(this)"   style="width:500px">
+                            <select class="form-control js-initform" data-url="DEFAULT_CURRENCY_TYPE" id="purCurrencyType"  name="purCurrencyType"   style="width:100px"> </select> 
+                       
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>销售指导价：<em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                        	<input type="text" class="form-control js-initform" id="salePrice" name="salePrice" onkeyup="numberFix4Decimal(this)"   style="width:500px">
+                            <select class="form-control js-initform" data-url="DEFAULT_CURRENCY_TYPE" id="saleCurrencyType"  name="saleCurrencyType"  style="width:100px"> </select> 
+                      
+                       </td>
+                    </tr>  
+                    <tr>
+	                     <td class="text-right"><b>事业部主管：<em class="text-star">*</em></b></td>
+	                     <td class="text-left">
+	                     	<select class="form-control js-initform" data-url="USER" id="careerId" name="careerId" style="width: 600px"></select>
+	                     </td>
+	                  </tr>
+	                  <tr>
+	                     <td class="text-right"><b>采购部专员：<em class="text-star">*</em></b></td>
+	                     <td class="text-left">
+	                     	<select class="form-control js-initform" data-url="USER" id="purchaseId" name="purchaseId" style="width: 600px"></select>
+	                     </td>
+	                  </tr>
+	                  <tr>
+	                     <td class="text-right"><b>供应链小组：<em class="text-star">*</em></b></td>
+	                     <td class="text-left">
+	                     	<select class="form-control js-initform" data-url="USER" id="supplyChainGroupId" name="supplyChainGroupId" style="width: 600px"></select>
+	                     </td>
+	                  </tr>
+	                  <tr>
+	                     <td class="text-right"><b>供应链服务部：<em class="text-star">*</em></b></td>
+	                     <td class="text-left">
+	                     	<select class="form-control js-initform" data-url="USER" id="supplyChainServiceId" name="supplyChainServiceId" style="width: 600px"></select>
+	                     </td>
+	                  </tr>
+	                  <tr>
+	                     <td class="text-right"><b>风控专员：<em class="text-star">*</em></b></td>
+	                     <td class="text-left">
+	                     	<select class="form-control js-initform" data-url="USER" id="riskId" name="riskId" style="width: 600px"></select>
+	                     </td>
+	                 </tr>
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-permissionUrl="/distributeGoods/update" class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/baseinfo/distribute/distributeGoodsSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+options.initPage = function(){
+	
+	GLOBAL.getEditData($("#form1"), options.param.id);
+	 $("#form1").validate({
+		 rules: {
+			 departmentName:{
+                 required: true
+             },
+             supplierId: {
+                 required: true
+             },
+			 number: {
+                 required: true,
+                 alnum: true
+             },
+             name: {
+                 required: true 
+             },
+             pledge: {
+                 required: true,
+                 number: true
+             },
+             type: {
+                 required: true 
+             },
+             barCode: {
+                 required: true 
+             },
+             specification: {
+                 required: true
+             }, 
+             taxRate: {
+               required: true
+             },
+             unit: {
+                 required: true 
+             },
+             volume: {
+                 required: true,
+                 number: true
+             },
+             grossWeight: {
+                 required: true,
+                 number: true
+             },
+             netWeight: {
+                 required: true,
+                 number: true
+             },
+             purchasePrice: {
+                 required: true,
+                 number: true
+             },
+             salePrice: {
+                 required: true,
+                 number: true
+             }, 
+             purCurrencyType: {
+                 required: true
+             },
+             saleCurrencyType: {
+                 required: true 
+             },
+             careerId: {
+                 required: true
+             },
+             purchaseId: {
+                 required: true
+             },
+             supplyChainGroupId: {
+                 required: true
+             },
+             supplyChainServiceId: {
+                 required: true
+             },
+             riskId: {
+                 required: true
+             }
+         },
+	        submitHandler: function() {
+	          var data = $("#form1").serialize();
+	          var pledge = $("#pledge");
+              if(pledge.val()>1){
+              	layer.msg("质押比例不能大于1");
+              	pledge.focus();
+              }else{
+            	  GLOBAL.ajax("distributeGoods/update",data, function(e){
+    	        	  if (e.success) {
+    	            	  layer.msg("新建成功！", {
+    	                      icon: 1,
+    	                      time: 1500
+    	                  },function(){
+    	                	  GLOBAL.go("html/baseinfo/distribute/distributeGoodsSearch.html");
+    	                  })
+    	              } else {
+    	                  layer.msg(e.msg);
+    	              }
+    	          });
+              }
+	        }
+	    });
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  }) 
+  $("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    options.param.id=options.param.cid;
+	    GLOBAL.go(url, options.param);
+  })
+  
+</script>
+

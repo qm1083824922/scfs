@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fi.AdvanceReceiptRelDao">
+	<resultMap type="com.scfs.domain.fi.entity.AdvanceReceiptRel"
+		id="advanceRelResultMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="receipt_id" property="receiptId" jdbcType="BIGINT" />
+		<result column="pre_rec_id" property="preRecId" jdbcType="BIGINT" />
+		<result column="exchange_amount" property="exchangeAmount"
+			jdbcType="DECIMAL" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="DATE" />
+		<result column="currency_type" property="currencyType"
+			jdbcType="TINYINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="pre_rec_note" property="preRecNote" jdbcType="VARCHAR" />
+
+		<result column="busi_unit" property="busiUnit" jdbcType="BIGINT" />
+		<result column="cust_id" property="custId" jdbcType="BIGINT" />
+		<result column="advance_type" property="advanceType" jdbcType="TINYINT" />
+		<result column="delete_priv_flag" property="deletePrivFlag"
+			jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="advancerel_column_list">
+		r.id,
+		r.receipt_id,
+		r.pre_rec_id,
+		r.exchange_amount,
+		r.creator_id,
+		r.creator,
+		r.create_at,
+		r.currency_type,
+		r.project_id,
+		r.pre_rec_note,
+		r.advance_type,
+		r.delete_priv_flag,
+		b.busi_unit,
+		b.cust_id
+	</sql>
+
+	<!-- 查询 -->
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.fi.dto.req.AdvanceSearchReqDto"
+		resultMap="advanceRelResultMap">
+		SELECT
+		<include refid="advancerel_column_list" />
+		FROM tb_fi_advance_receipt_rel r LEFT JOIN tb_fi_bank_receipt b ON
+		r.receipt_id=b.id
+		<where>
+			<if test="receiptId != null">
+				and b.id=#{receiptId}
+			</if>
+			<if test="advanceType != null">
+				and r.advance_type=#{advanceType}
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<select id="queryEntityById" parameterType="com.scfs.domain.fi.entity.AdvanceReceiptRel"
+		resultMap="advanceRelResultMap">
+		SELECT
+		<include refid="advancerel_column_list" />
+		FROM tb_fi_advance_receipt_rel r LEFT JOIN tb_fi_bank_receipt b ON
+		r.receipt_id=b.id where r.id=#{id}
+	</select>
+
+	<select id="querySumByReceiptId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(exchange_amount)
+		ExchangeAmount
+		from
+		tb_fi_advance_receipt_rel
+		where receipt_id = #{receiptId}
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.AdvanceReceiptRel"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		tb_fi_advance_receipt_rel(
+		receipt_id,
+		exchange_amount,
+		creator_id,
+		creator,
+		create_at,
+		currency_type,
+		project_id,
+		pre_rec_note,
+		advance_type,
+		delete_priv_flag
+
+		)
+		VALUES
+		(
+		#{receiptId},
+		#{exchangeAmount},
+		#{creatorId},
+		#{creator},
+		#{createAt},
+		#{currencyType},
+		#{projectId},
+		#{preRecNote},
+		#{advanceType},
+		IFNULL(#{deletePrivFlag},0)
+
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.AdvanceReceiptRel">
+		UPDATE
+		tb_fi_advance_receipt_rel
+		SET id = #{id}
+		<if test="receiptId != null">
+			,receipt_id = #{receiptId}
+		</if>
+		<if test="preRecId != null">
+			,pre_rec_id = #{preRecId}
+		</if>
+		<if test="exchangeAmount != null">
+			,exchange_amount = #{exchangeAmount}
+		</if>
+		<if test="creatorId != null">
+			,creator_id = #{creatorId}
+		</if>
+		<if test="creator != null">
+			,creator = #{creator}
+		</if>
+		<if test="createAt != null">
+			,create_at = #{createAt}
+		</if>
+		<if test="currencyType != null">
+			,currency_type = #{currencyType}
+		</if>
+		<if test="projectId != null">
+			,project_id = #{projectId}
+		</if>
+		<if test="preRecNote != null and preRecNote != ''">
+			,pre_rec_note = #{preRecNote}
+		</if>
+		<if test=" advanceType != null">
+			,advance_type = #{advanceType}
+		</if>
+		<if test=" deletePrivFlag != null">
+			,delete_priv_flag = #{deletePrivFlag}
+		</if>
+		WHERE id =#{id}
+	</update>
+
+	<!-- 删除 -->
+	<delete id="deleteById" parameterType="int">
+		DELETE
+		FROM
+		tb_fi_advance_receipt_rel
+		WHERE id =#{id}
+	</delete>
+</mapper>

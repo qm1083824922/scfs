@@ -1,0 +1,140 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+        <li>发票</li>
+        <li>境外开票</li>
+		<li>销售单信息</li>
+		<li class="active">修改</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="invoiceOverseasPo/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"name="id"> 
+					<input class="form-control js-initform" type="hidden" id="overseasId" name="overseasId">
+					<table id="js_dataTable" class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>提货/退货单编号：</b></td>
+							<td class="text-left"><label class="js-initform" id="billNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>日期：</b></td>
+							<td class="text-left"><label class=" js-initform" id="requiredSendDate"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>商品编号：</b></td>
+							<td class="text-left"><label class=" js-initform" id="goodsNumber"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>商品描述：</b></td>
+							<td class="text-left"><label class=" js-initform" id="goodsName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可开票数量：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="provideMaxNum" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票数量：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="invoiceNum" name="invoiceNum">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="provideMaxAmount" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票金额：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="invoiceAmount" name="invoiceAmount">
+							</td>
+						</tr>
+						
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="save" data-url="invoiceOverseasPo/update" data-permissionUrl="/invoiceOverseasPo/update" class="btn btn-primary btn-sm">保存</button>
+					<button type="button" data-url="html/invoice/overseas/overseasPoEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.poId);
+		
+	};
+
+	$("#save").click(function() {
+		var dtlArr = [];
+		var saveUrl = $(this).data("url");
+		var poNum = $("#invoiceNum");
+		var price = $("#invoiceAmount");
+		var id = $("#id").val();
+		var overseasId = $("#overseasId").val();
+		var a = /^[0-9]*(\.[0-9]{1,2})?$/;
+		var isValid = true;
+		
+		if(poNum.val()==""){
+			layer.msg("数量不能为空");
+			poNum.focus();
+			isValid = false;
+		}
+		if (!a.test(poNum.val())) {
+			layer.msg("请输入正确格式");
+			poNum.focus();
+			isValid = false;
+		}
+		if (price.val() == "") {
+			price.focus();
+			layer.msg("开票金额不能为空");
+			isValid = false;
+		}
+		if (!a.test(price.val())) {
+			price.focus();
+			layer.msg("请输入正确格式");
+			isValid = false;
+		}
+		if (isValid) {
+			dtlArr.push({
+				"id" : id,
+				"invoiceNum" : poNum.val(),
+				"invoiceAmount" : price.val()
+			});
+			var saveData = {
+					poList : dtlArr,
+					overseasId : overseasId
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						GLOBAL.go("html/invoice/overseas/overseasPoEdit.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType);
+		}
+	});
+
+	GLOBAL.goBack(function() {
+	});
+</script>
+

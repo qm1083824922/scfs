@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.fee.FeeSpecDao">
+	<resultMap type="com.scfs.domain.fee.entity.FeeSpec" id="feeSpecResult">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="fee_spec_no" property="feeSpecNo" jdbcType="VARCHAR" />
+		<result column="fee_spec_name" property="feeSpecName" jdbcType="VARCHAR" />
+		<result column="fee_type" property="feeType" jdbcType="TINYINT" />
+
+		<result column="fee_one_name" property="feeOneName" jdbcType="TINYINT" />
+		<result column="fee_two_name" property="feeTwoName" jdbcType="TINYINT" />
+		<result column="finance_code" property="financeCode" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		fee_spec_no,
+		fee_type,
+		fee_spec_name,
+		fee_one_name,
+		fee_two_name,
+		finance_code,
+		remark
+	</sql>
+
+	<select id="queryAllFeeSpec" resultMap="feeSpecResult"
+		parameterType="com.scfs.domain.fee.dto.req.FeeSpecSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fee_spec
+		<where>
+			<if test="feeType != null">
+				and fee_type = #{feeType}
+			</if>
+			<if test="feeSpecNo !=null and feeSpecNo != ''">
+				and fee_spec_no like CONCAT('%',#{feeSpecNo},'%')
+			</if>
+			<if test="feeSpecName !=null and feeSpecName != ''">
+				and fee_spec_name like CONCAT('%',#{feeSpecName},'%')
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<select id="queryEntityById" resultMap="feeSpecResult"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_fee_spec
+		where id = #{id}
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.fee.entity.FeeSpec"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_fee_spec (
+		fee_spec_no,
+		fee_type,
+		fee_spec_name,
+		fee_one_name,
+		fee_two_name,
+		finance_code,
+		remark
+		)
+		VALUES
+		(
+		#{feeSpecNo,jdbcType=VARCHAR},
+		#{feeType,jdbcType=TINYINT},
+		#{feeSpecName,jdbcType=VARCHAR},
+		#{feeOneName,jdbcType=TINYINT},
+		#{feeTwoName,jdbcType=TINYINT},
+		#{financeCode,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.fee.entity.FeeSpec">
+		update tb_fee_spec
+		<set>
+			id = #{id}
+			<if test="feeSpecNo != null and feeSpecNo != ''">
+				,fee_spec_no = #{feeSpecNo,jdbcType=VARCHAR}
+			</if>
+			<if test="feeType != null">
+				,fee_type = #{feeType,jdbcType=TINYINT}
+			</if>
+			<if test="feeSpecName != null and feeSpecName != ''">
+				,fee_spec_name = #{feeSpecName,jdbcType=VARCHAR}
+			</if>
+			<if test="feeOneName != null ">
+				,fee_one_name = #{feeOneName,jdbcType=TINYINT}
+			</if>
+			<if test="feeTwoName != null ">
+				,fee_two_name = #{feeTwoName,jdbcType=TINYINT}
+			</if>
+			<if test="financeCode != null and financeCode != ''">
+				,finance_code = #{financeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				,remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deletById" parameterType="java.lang.Integer">
+		delete
+		from
+		tb_fee_spec
+		where
+		id = #{id}
+	</delete>
+</mapper>

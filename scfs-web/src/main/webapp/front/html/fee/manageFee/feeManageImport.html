@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<div class="wrapper">
+    <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+		<li>费用</li>
+		<li>费用管理</li>
+	    <li class="active">导入</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+            <div class="box-body">  
+	         <form class="form-horizontal form-inline" id="form1" enctype="multipart/form-data">
+                 <table class="table table-bordered table-hover no-margin">  
+                  	<tr>
+                       <td width="180" class="text-right"><b>导入说明： </b></td> 
+                       <td class="text-left">
+                       		1、导入条数不能超过999；</br>
+                            2、管理费用科目不能为空；</br>
+                            3、应付方式不能为空；</br>
+                            4、日期不能为空，请录入格式为：2017-01-01；</br>
+                            5、币种不能为空；</br>
+                            6、管理费用金额不能为空；</br>
+                            7、币种不能为空；</br>
+                            8、备注不能超1000字；</br>
+                       </td>
+                    </tr>
+                    <tr>
+                       <td width="180" class="text-right"><b>下载导入模板： </b></td> 
+                       <td class="text-left"> 
+                            <button type="button" data-permissionUrl="/fee/manage/feeManageExport.xls" 
+                            	data-url="fee/manage/feeManageExport.xls" id="download" class="btn btn-default btn-sm">下载</button>
+                       </td>
+                    </tr>
+                    <tr>
+                       <td width="180" class="text-right"><b>选择导入文件： </b></td> 
+                       <td class="text-left"> 
+                            <span type="button" class="btn" data-permissionUrl="/fee/manage/import" id="upload"></span>
+                       </td>
+                    </tr>
+                  </table>
+	          </form>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/fee/manageFee/feeManageSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+        </div>
+  </section>
+</div>
+
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script>
+options.initPage = function(){
+	
+};
+
+$("#js-back").click(function(){
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+});
+
+$("#download").click(function(){
+	var url = $(this).data("url");
+	location.href = GLOBAL.host + url;
+});
+
+$("#upload").upload({
+ 	url: GLOBAL.host + "fee/manage/import",
+ 	fileType: "xls, xlsx",
+ 	isMultiple: false,
+	success: function(){
+		
+    }
+}); 
+</script>

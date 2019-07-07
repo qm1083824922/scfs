@@ -1,0 +1,118 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>出口</li>
+    <li>报关申请</li>  
+    <li class="active">基本信息浏览</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="customsApplyScanForm" data-url="customsApply/detail">
+            <div class="box-body">
+              <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/export/customsApply/customsApplyScan.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/export/customsApply/customsApplyLineScan.html">报关明细</a></li>
+              </ul>
+              <input class="js-initform" type="hidden" id="id" name="id">
+              <table class="table table-bordered table-hover no-margin">
+            	  <tr>
+                    <td width="180" class="text-right"><b>报关编号：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="applyNo"></label>
+                    </td>
+                  </tr>
+            	  <tr>
+                    <td width="180" class="text-right"><b>报关附属编号：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="affiliateNo"></label>
+                    </td>
+                  </tr>
+               	  <tr>
+                    <td class="text-right"><b>项目：</b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="projectName"></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>代理公司：</b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="proxyCompanyName"></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>客户：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="customerName"></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>收货地址：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="customerAddressName"></label>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>报关日期：</b></td>
+                    <td class="text-left">
+                      <label type="text" class="js-initform" id="customsDate" ></label>
+                    </td>
+                  </tr>       
+                  <tr>
+                    <td class="text-right"><b>税率：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="taxRateValue"></label>
+                    </td>
+                  </tr>  
+                  <tr>
+                    <td class="text-right"><b>报关数量：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="taxNumValue"></label>
+                    </td>
+                  </tr>  
+                  <tr>
+                    <td class="text-right"><b>报关含税金额：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="customsAmountValue"></label>
+                    </td>
+                  </tr>  
+                  <tr>
+                    <td class="text-right"><b>报关税额：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="customsTaxAmountValue" ></label>
+                    </td>
+                  </tr>           
+                  <tr>
+                    <td class="text-right"><b>状态：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="statusName"></label>
+                    </td>
+                  </tr>                      
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="remark"></label>  
+                    </td>
+                  </tr>
+               </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/export/customsApply/customsApplySearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#customsApplyScanForm"), options.param.id);
+	}
+  	
+	GLOBAL.goBack();
+</script>
+

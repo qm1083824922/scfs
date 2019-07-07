@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.VlReceiptRelDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.VlReceiptRel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="voucher_line_id" jdbcType="INTEGER" property="voucherLineId" />
+		<result column="receipt_id" jdbcType="INTEGER" property="receiptId" />
+		<result column="write_off_amount" jdbcType="DECIMAL" property="writeOffAmount" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+
+		<result column="bill_type" jdbcType="INTEGER" property="billType" />
+		<result column="out_store_id" jdbcType="INTEGER" property="outStoreId" />
+		<result column="fee_id" jdbcType="INTEGER" property="feeId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, voucher_line_id, receipt_id, write_off_amount,
+		create_at, creator,
+		creator_id,
+		update_at
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		rel.id, rel.voucher_line_id, rel.receipt_id,
+		rel.write_off_amount,
+		rel.create_at, rel.creator, rel.creator_id,
+		rel.update_at,
+		line.bill_type, line.out_store_id, line.fee_id
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_vl_receipt_rel
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryEntityByReceiptAndLineId" parameterType="com.scfs.domain.fi.dto.req.VlReceiptRelSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_vl_receipt_rel
+		where receipt_id = #{receiptId} and
+		voucher_line_id = #{voucherLineId}
+	</select>
+	<select id="queryRecustsByCon" parameterType="com.scfs.domain.fi.dto.req.VlReceiptRelSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_vl_receipt_rel rel
+		left join tb_fi_voucher_line line
+		on
+		rel.voucher_line_id = line.id
+		<where>
+			<if test="voucherLineId != null">
+				and rel.voucher_line_id = #{voucherLineId}
+			</if>
+			<if test="receiptId != null">
+				and rel.receipt_id = #{receiptId}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_fi_vl_receipt_rel
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.VlReceiptRel">
+		insert into
+		tb_fi_vl_receipt_rel
+		(voucher_line_id,
+		receipt_id,
+		write_off_amount,
+		creator,
+		creator_id)
+		values(
+		#{voucherLineId,jdbcType=INTEGER},
+		#{receiptId,jdbcType=INTEGER},
+		#{writeOffAmount,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.VlReceiptRel">
+		update tb_fi_vl_receipt_rel
+		<set>
+			<if test="voucherLineId != null">
+				voucher_line_id = #{voucherLineId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptId != null">
+				receipt_id = #{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount = #{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

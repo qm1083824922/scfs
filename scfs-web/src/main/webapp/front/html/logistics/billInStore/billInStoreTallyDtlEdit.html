@@ -1,0 +1,285 @@
+<style>
+	td{
+		padding:0 !important;
+		border-top:1px solid #ddd !important;
+		border-bottom:0 none !important;
+	}
+	.subTable tr{
+		border-bottom:1px solid #ddd;
+		border-top:0 none;
+	}
+	.subTable tr td{
+		border-top:0 none !important;
+		padding:10px !important;
+	}
+	.subTable tr:last-child{
+		border-bottom:0 none;
+	}
+</style>
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>入库单</li>
+    <li>理货明细</li>
+    <li class="active">编辑</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreEdit.html">基础信息</a></li>
+                  	<li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreDtlEdit.html">收货明细</a></li>
+                	<li role="presentation" class="active"><a class="tab-item" data-url="html/logistics/billInStore/billInStoreTallyDtlEdit.html">理货明细</a></li> 
+                	<li role="presentation"><a class="tab-item" data-url="html/logistics/billInStore/attachment.html">附件</a></li>               	
+                </ul>
+                <table id="js_dataTable" data-url="billInStoreDtl/tally/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/billInStoreTallyDtl/autoTally" data-url="billInStoreTallyDtl/autoTally" id="autoTally">整单自动理货</button>
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/billInStore/submit" data-url="billInStore/submit" id="submit">提交</button>             
+              <button type="button" class="btn btn-warning btn-sm" data-permissionUrl="/billInStore/excel/billInStoreTallyDtl/import" data-url="html/logistics/billInStore/billInStoreTallyDtlImport.html" id="importTally">导入理货</button> 
+              <button type="button" data-url="html/logistics/billInStore/billInStoreSearch.html" class="btn btn-default btn-sm js-back">返回</button>  	
+              <button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/billInStoreTallyDtl/batch/delete" data-url="billInStoreTallyDtl/batch/delete" id="batchClearTally">批量清除理货</button>                     
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+	window.operateEvents = {
+   	    'click .tally': function (e, value, row, index) {
+   	    	options.param.cid = row.id;
+   	  		GLOBAL.go("html/logistics/billInStore/billInStoreTallyDtlEditTally.html", options.param);
+   	    }
+   	};
+	
+   	function operateFormatter(value, row, index) {
+   	    return [
+   	            '<a class="tally" href="javascript:void(0)">',
+   	            '<span class="btn btn-primary btn-sm btn-xs" data-permissionUrl="/billInStoreTallyDtl/add">理货</span>',
+   	            '</a>  '
+   	        ].join('');
+   	}
+    
+    function tallyDtlsFormatter(value, row, index) {
+   		var billInStoreTallyDtlResDtoList = row.billInStoreTallyDtlResDtoList;
+		var defaultHtml = "<table class='subTable'>" 
+				+ "<tr><td style='width:100px'>0</td>" 
+  				+ "<td style='width:100px'></td>" 
+  				+ "<td style='width:100px'></td>"
+  				+ "<td style='width:100px'>" + '<a class="delete"><span class="btn btn-danger btn-sm disabled" data-permissionUrl="/billInStoreTallyDtl/delete">清除</span></a>' + "</td></tr></table>";
+   		if (billInStoreTallyDtlResDtoList) {
+   			var html = "<table class='subTable'>";
+   			var defaultHtml = "<table class='subTable'><tr><td style='width:100px'>0</td>" + "<td style='width:100px'></td>" 
+   				+ "<td style='width:100px'></td>" 
+   				+ "<td style='width:100px'></td></tr></table>";
+   			if (billInStoreTallyDtlResDtoList.length > 0) {
+   				var tr = "";
+   				for (var i = 0; i < billInStoreTallyDtlResDtoList.length; i++) {
+   					var billInStoreTallyDtlResDto = billInStoreTallyDtlResDtoList[i];
+   					tr = tr + "<tr>" 
+   	   					+ "<td style='width:100px'>" + (billInStoreTallyDtlResDto.tallyNum || 0) + "</td>"
+   	   				    + "<td style='width:100px'>" + (billInStoreTallyDtlResDto.batchNo || '') + "</td>" 
+   	   					+ "<td style='width:100px'>" + (billInStoreTallyDtlResDto.goodsStatusName || '') + "</td>" 
+   	   					+ "<td style='width:100px'>" + '<a class="delete" onclick="clearTallyDtl(' + billInStoreTallyDtlResDto.id + ')" data-id=' 
+   	   					+ billInStoreTallyDtlResDto.id + '><span class="btn btn-danger btn-sm" data-permissionUrl="/billInStoreTallyDtl/delete">清除</span></a>' + "</td>"
+   	   					+ "</tr>";
+   				}  		
+   				html = html + tr + "</table>";
+   	   			return html;
+   			} else {
+   				return defaultHtml;
+   			}
+   		} else {
+   			return defaultHtml;
+   		}
+   	}
+   	
+    function clearTallyDtl(id) {
+    	if (id) {
+      	    layer.confirm('确定要删除理货明细吗？', {
+      	        btn: ['确定', '取消'] //按钮
+      	    }, function() {
+      	    	GLOBAL.ajax("billInStoreTallyDtl/delete", {billInStoreId:options.param.id, id: id}, function(){
+      	    		layer.msg("删除理货明细成功", {
+      	                icon: 1
+      	            })
+                    $('#js_dataTable').bootstrapTable('refresh');
+      	    	})
+      	    }, function() {});  
+    	}
+    }
+    
+    /*数据表格*/
+    var tabCols = [	{
+        field: 'checkItem',
+        checkbox: true,
+   	 }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+         title: '订单编号',
+         field: 'orderNo',
+         align: 'center'
+     }, {
+         title: '订单附属编号',
+         field: 'appendNo',
+         align: 'center'
+     }, {
+         title: '退货编号',
+         field: 'billDeliveryNo',
+         align: 'center'
+     }, {
+         title: '退货附属编号',
+         field: 'billDeliveryAffiliateNo',
+         align: 'center'
+     }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     }, {
+         title: '规格',
+         field: 'specification',
+         width: 100,
+         align: 'center'
+     }, {
+         title: '收货数量',
+         field: 'receiveNum',
+         align: 'center'
+     }, {
+         title: '理货数量',
+         field: 'tallyNum',
+         align: 'center'
+     }, {
+	     title: '操作',
+         field: 'operate',
+         width: 60,
+         align: 'center',
+         events: operateEvents,
+         formatter: operateFormatter
+	 }, {
+	     title: '理货明细(理货数量/批次/库存状态)',
+         field: 'tallyDtls',
+         width: 400,
+         align: 'center',
+         formatter: tallyDtlsFormatter
+	 }];
+    
+    options.initPage = function(){	
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {billInStoreId: options.param.id}, false, {
+            onPostBody: function(){
+                if($(".tally").length){
+                    GLOBAL.permissionBtn($(".tally .btn"));
+                }
+                if($(".delete").length){
+                    GLOBAL.permissionBtn($(".delete .btn"));
+                }
+            }
+        });
+        GLOBAL.ajax("billInStore/detail", {id: options.param.id}, function(data){
+       	 	if (data && data.items && data.items.billType) {
+       		 	var billType = data.items.billType;
+       		 	if (billType == 1 || billType == 2) {
+       		 		$('#js_dataTable').bootstrapTable("showColumn", "orderNo");
+       		 		$('#js_dataTable').bootstrapTable("showColumn", "appendNo");
+       		 		$('#js_dataTable').bootstrapTable("hideColumn", "billDeliveryNo");
+   		 			$('#js_dataTable').bootstrapTable("hideColumn", "billDeliveryAffiliateNo");
+       		 	} else if (billType == 3) {
+       		 		$('#js_dataTable').bootstrapTable("hideColumn", "orderNo");
+   		 			$('#js_dataTable').bootstrapTable("hideColumn", "appendNo");
+   		 			$('#js_dataTable').bootstrapTable("showColumn", "billDeliveryNo");
+		 			$('#js_dataTable').bootstrapTable("showColumn", "billDeliveryAffiliateNo");
+       		 	}
+       	 	}
+        });
+    }
+   
+  	$("#submit").click(function(){
+    	var url = $(this).data("url");
+    	layer.confirm('确定提交吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	 	    GLOBAL.ajax(url, {id: options.param.id}, function(e) {
+  	        	if (e.success) {
+  	              	layer.msg("提交成功！");
+  	              	GLOBAL.go("html/logistics/billInStore/billInStoreSearch.html", options.param);
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {});
+  	})
+  	
+  	$("#autoTally").click(function(){
+    	var url = $(this).data("url");
+    	layer.confirm('确定整单自动理货吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	 	    GLOBAL.ajax(url, {id: options.param.id}, function(e) {
+  	        	if (e.success) {
+  	              	layer.msg("理货成功！");
+  	                $('#js_dataTable').bootstrapTable('refresh');
+  	            } else {
+  	                layer.msg(e.msg);
+  	            }
+  	        });
+  	    }, function() {});
+  	})
+  	
+   $("#batchClearTally").click(function(){	   
+        var url = $(this).data("url");
+        var ids = GLOBAL.selectIds($('#js_dataTable'));
+        if (ids) {
+    	    layer.confirm('确定要批量清除理货吗？', {
+     	        btn: ['确定', '取消'] //按钮
+     	    }, function() {
+     	  	    GLOBAL.ajax(url, {billInStoreId:options.param.id, ids: ids}, function(e) {
+     	        	if (e.success) {
+     	            	layer.msg("批量清除理货成功！");
+     	                $('#js_dataTable').bootstrapTable('refresh');
+     	            } else {
+     	                layer.msg(e.msg);
+     	            }
+     	        });
+     	    }, function() {}); 
+        }
+  	})
+  	
+	$("#exportTally").click(function() {
+        var url = $(this).data("url");
+		url = url + '?billInStoreId=' + options.param.id;
+		location.href = GLOBAL.host + url;
+	})
+  	
+	$("#importTally").click(function() {
+    	var url = $(this).data("url");
+    	GLOBAL.go(url, options.param);
+	})
+	
+  	GLOBAL.goBack();
+</script>

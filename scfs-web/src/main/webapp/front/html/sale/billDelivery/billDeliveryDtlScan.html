@@ -1,0 +1,124 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>销售</li>
+    <li>销售单</li>  
+    <li>销售明细</li>
+    <li class="active">浏览</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a class="tab-item" data-url="html/sale/billDelivery/billDeliveryScan.html">基础信息</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" data-url="html/sale/billDelivery/billDeliveryDtlScan.html">销售明细</a></li>
+                  	<li role="presentation"><a class="tab-item" data-url="html/sale/billDelivery/attachmentScan.html">附件</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="billDeliveryDtl/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/sale/billDelivery/billDeliverySearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+         title: '订单编号',
+         field: 'orderNo',
+         align: 'center'
+     }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     }, {
+         title: '销售数量',
+         field: 'requiredSendNum',
+         align: 'center'
+     }, {
+         title: '销售单价',
+         field: 'requiredSendPriceStr',
+         align: 'center'
+     }, {
+         title: '销售金额',
+         field: 'requiredSendAmountStr',
+         align: 'center'
+     }, {
+         title: '可用库存数量',
+         field: 'availableNum',
+         align: 'center'
+     }, {
+         title: '库存单价',
+         field: 'costPriceStr',
+         align: 'center'
+     }, {
+         title: '资金占用金额',
+         field: 'payAmountStr',
+         align: 'center'
+     }, {
+         title: '资金占用天数',
+         field: 'payDays',
+         align: 'center'
+     }, {
+         title: '服务费率',
+         field: 'fundMonthRate',
+         align: 'center'
+     }, {
+         title: '服务金额',
+         field: 'serviceAmountStr',
+         align: 'center'
+     }, {
+         title: '其他费用',
+         field: 'otherAmountStr',
+         align: 'center'
+     }, {
+         title: '批次',
+         field: 'batchNo',
+         align: 'center'
+     }, {
+         title: '库存状态',
+         field: 'goodsStatusName',
+         align: 'center'
+     }, {
+         title: '指定库存',
+         field: 'assignStlFlagName',
+         align: 'center'
+     }];
+
+    options.initPage = function(){
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {billDeliveryId: options.param.id}, false, {
+        	onLoadSuccess: function(data){
+     			if (data.options.totalStr) {
+    				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+    			}
+    		}
+        });
+    }
+
+    GLOBAL.goBack();
+</script>

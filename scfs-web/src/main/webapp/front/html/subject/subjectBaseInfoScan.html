@@ -1,0 +1,141 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li class="active">客户信息浏览</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="baseSubject/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/subject/subjectBaseInfoScan.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAddressScan.html">地址信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectAccountScan.html">帐号信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectInvoiceScan.html">开票信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/subject/subjectUserInfoScan.html">用户信息</a></li>                  
+                </ul>
+                <input class="js-initform" type="hidden" id="id" name="id">
+                <input class="js-initform" type="hidden" id="subjectType" name="subjectType">
+                 <table class="table table-bordered table-hover no-margin">
+                   <tr>
+                     <td width="180" class="text-right"><b>类型：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="subjectTypeLabel" name="subjectTypeLabel">
+                     </td>
+                  </tr>
+                   <tr>
+                     <td class="text-right"><b>编号：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="subjectNo" name="subjectNo">
+                     </td>
+                  </tr>
+                   <tr>
+                     <td class="text-right"><b>简称：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="abbreviation" name="abbreviation">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>中文全称：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="chineseName" name="chineseName">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>英文全称：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="englishName" name="englishName">
+                     </td>
+                  </tr>
+                  <tr style="display:none" id="regPlaceTr">
+                     <td class="text-right" ><b>注册地：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="regPlace" name="regPlace">
+                     </td>
+                  </tr>
+                  <tr style="display:none" id="regNoTr">
+                     <td class="text-right"><b>注册号：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="regNo" name="regNo">
+                     </td>
+                  </tr>
+                  <tr style="display:none" id="regPhoneTr">
+                     <td class="text-right"><b>注册电话：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="regPhone" name="regPhone">
+                     </td>
+                  </tr>
+                  <tr style="display:none" id="officeAddressTr">
+                     <td class="text-right"><b>办公地址：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="officeAddress" name="officeAddress">
+                     </td>
+                  </tr>
+                  <tr style="display:none" id="warehouseTypeTr">
+                     <td class="text-right"><b>仓库类型：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="warehouseTypeLabel" name="warehouseTypeLabel">
+                     </td>
+                  </tr>
+                        <tr style="display:none" id="invoiceQuotaTr">
+                     <td class="text-right"><b>开票限额： </b></td>
+                     <td class="text-left">
+                            <label class="js-initform" id="invoiceQuotaAmount" name="invoiceQuotaAmount">
+                     </td>
+                  </tr>
+             	 <tr  style="display: none"  id="finance">
+                     <td class="text-right"><b>财务主管： </b></td>
+                     <td class="text-left">
+                            <label class="js-initform" id="financeManagerName" name="financeManagerName">
+                     </td>
+                  </tr>
+           <tr style="display: none"  id="depart">
+                     <td class="text-right"><b>部门主管： </b></td>
+                     <td class="text-left">
+                            <label class="js-initform" id="departmentManagerName" name="departmentManagerName">
+                     </td>
+                  </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/subject/subjectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+	  GLOBAL.getEditData($("#form1"), options.param.id);
+      if($("#subjectType").val()==2){
+      	$("#warehouseTypeTr").show();
+      }
+      
+      if(($("#subjectType").val()&1)==1||($("#subjectType").val()&4)==4||($("#subjectType").val()&8)==8){
+        	$("#regPlaceTr").show();
+        	$("#regNoTr").show();
+        	$("#regPhoneTr").show();
+        	$("#officeAddressTr").show();
+      }
+      if(($("#subjectType").val()&1)==1){
+        	$("#invoiceQuotaTr").show();
+        	$("#finance").show();
+        	$("#depart").show();
+        }
+      
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  })
+
+  GLOBAL.goBack();
+    
+</script>

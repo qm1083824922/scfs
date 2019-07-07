@@ -1,0 +1,155 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>采购</li>
+        <li>订单明细编辑</li>
+        <li class="active">修改</li>
+    </ol>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="/po/line/edit">
+                <div class="box-body">
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <input class="form-control js-initform" type="hidden" id="poId" name="poId">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>商品编号：</b></td>
+                            <td class="text-left">
+                                <label class="form-control js-initform" id="goodsNo"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品名称：</b></td>
+                            <td class="text-left">
+                                <label class="form-control js-initform" id="goodsName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品型号：</b></td>
+                            <td class="text-left">
+                                <label class="form-control js-initform" id="goodsType"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>商品条码：</b></td>
+                            <td class="text-left">
+                                <label class="form-control js-initform" id="goodsBarCode"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>数量：</b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="goodsNum"
+                                       name="goodsNum">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>单价：</b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="goodsPrice"
+                                       name="goodsPrice">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>金额：</b></td>
+                            <td class="text-left">
+                                <label class="form-control js-initform" id="goodsAmount"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>批次：</b></td>
+                            <td class="text-left">
+                                <input type="text" class="form-control js-initform" id="batchNum"
+                                       name="batchNum">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>折扣金额：</b></td>
+                            <td class="text-left">
+								<input type="text" class="form-control js-initform" id="discountAmount"
+                                       name="discountAmount">                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-url="po/line/update" data-permissionUrl="/po/line/update" class="btn btn-primary btn-sm">
+                        保存
+                    </button>
+                    <button type="button" data-url="html/purchase/poOrderDtlEdit.html"
+                            class="btn btn-default btn-sm js-back">返回
+                    </button>
+                </div>
+                <!-- /.box-footer -->
+
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+
+    options.initPage = function () {
+        GLOBAL.getEditData($("#form1"),   options.param.lineId);
+        $("#form1").validate({
+            rules: {
+                goodsNum: {
+                    required: true,
+                    number: true
+                },
+                goodsPrice: {
+                    number: true,
+                    required: true
+                }
+            },
+            submitHandler: function(){
+                var saveUrl = $("#save").data("url");
+                var gNum = $("#goodsNum").val();
+                if(gNum <= 0){
+                    layer.msg("商品数量不能为负数");
+                    return;
+                }
+                var gNum = $("#goodsPrice").val();
+                if(gNum < 0){
+                    layer.msg("商品价格不能为负数");
+                    return;
+                }
+                GLOBAL.ajax(saveUrl, $("#form1").serializeObject(),
+                  function(e) {
+                      if (e.success) {
+                          layer.msg("保存成功！", {time:1500}, function(){
+//                              options.param.id = options.param.cid;
+                              GLOBAL.go("html/purchase/poOrderDtlEdit.html");
+                          });
+                      } else {
+                          layer.msg(e.msg);
+                      }
+              },false);
+            }
+        });
+    };
+
+    $("#goodsNum").on("input", function () {
+        var $goodsPrice = $("#goodsPrice");
+        var $goodsAmount = $("#goodsAmount");
+        var count = $(this).val();
+        var price = $goodsPrice.val();
+        $goodsAmount.text((count * price).toFixed(2));
+    })
+
+    $("#goodsPrice").on("input", function () {
+        var $goodsCount = $("#goodsNum");
+        var $goodsAmount = $("#goodsAmount");
+        var price = $(this).val();
+        var count = $goodsCount.val();
+        $goodsAmount.text((count * price).toFixed(2));
+    })
+
+    GLOBAL.goBack(function () {
+//        options.param.id = options.param.cid;
+        options.param.lineId=null;
+    });
+
+</script>
+

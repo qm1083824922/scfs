@@ -1,0 +1,108 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>发票</li>
+		<li>开票</li>
+		<li class="active">修改费用信息</li>
+	 	</ol>
+    </section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="invoiceFee/edit">
+				<div class="box-body">
+					 <input class="form-control js-initform" type="hidden" id="id" name="id">    
+					 <table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>费用编号：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="feeNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>费用类型：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="feeTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用日期：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="feeDate"></label>
+							</td>
+						</tr> 
+						<tr>
+							<td class="text-right"><b>总金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="recAmount"></label>	
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="invoiceAmount"></label>	
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="useAmount"></label>	
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>本次开票金额：</b></td>
+							<td class="text-left"> 
+								<input type="text"
+									class="form-control js-initform" id="provideInvoiceAmount"
+									name="provideInvoiceAmount">		
+							</td>
+						</tr>
+						 
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceBatchFee/update">保存</button>
+					<button type="button" data-url="html/invoice/makeinvoice/feeInfoSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		 $("#form1").validate({
+			 rules: { 
+	             provideInvoiceAmount: {
+	                 required: true 
+	             }
+	         	},
+		        submitHandler: function() {
+		          var data = $("#form1").serialize();
+		          GLOBAL.ajax("invoiceBatchFee/update",data, function(e){
+		        	  if (e.success) {
+		            	  layer.msg("更新成功！", {
+		                      icon: 1,
+		                      time: 1500
+		                  },function(){
+		                	  options.param.id=options.param.cid;
+		                	  GLOBAL.go("html/invoice/makeinvoice/feeInfoSearch.html",options.param.id);
+		                  })
+		              } else {
+		                  layer.msg(e.msg);
+		              }
+		          });
+		        }
+		    });
+	};
+
+	 
+	GLOBAL.goBack(function() {
+		options.param.id = options.param.cid
+	});
+</script>
+

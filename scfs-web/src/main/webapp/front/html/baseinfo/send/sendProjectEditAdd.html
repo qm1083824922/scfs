@@ -1,0 +1,98 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+         <li>基础信息</li>
+         <li>推送人管理</li>
+		<li>项目编辑</li>
+		<li class="active">添加</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form method="post" action="###" class="form-inline" id="searchForm">
+                <div class="form-group-sm">
+                    <div class="search-item">
+                        <label class="control-label ml10">项目名称：</label>
+                        <input type="text" class="form-control" id="projectName" name="projectName">
+                    </div>
+                    <div class="search-item">
+                        <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                        <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                    </div>
+                </div>
+            </form>
+			<form class="form-horizontal form-inline" id="poAdvanceDtlEditAddForm" >
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="id" name="id">
+					<table id="js_dataTable" data-url="sendBaseProject/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/sendProject/add"  data-url="sendProject/add">保存</button> 
+					<button type="button" data-url="html/baseinfo/send/sendProjectEdit.html" class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+    }, {
+	     title: '未分配项目',
+	     field: 'projectName',
+	     width: 85,
+	     align: 'center'
+	 }];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {senderId : options.param.id }, null, null);
+	};
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+	    $.extend(data, {
+	    	senderId: options.param.id
+	    });
+	    $('#js_dataTable').bootstrapTable('refresh', {
+	        query: data
+	    });
+	})
+	
+	$("#save").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			GLOBAL.ajax("sendProject/add", {
+				id  : options.param.id,
+				ids : ids
+			}, function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						GLOBAL.go("html/baseinfo/send/sendProjectEdit.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, false);
+		}
+	})
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,282 @@
+<link href="../../css/zTreeStyle/zTreeStyle.css" rel="stylesheet"></link>
+<style>
+.wrapper {
+    overflow: visible !important;
+}
+
+#menuContent {
+    border: 1px solid #ccc;
+    background: #fff;
+}
+</style>
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>项目</li>
+    <li class="active">项目信息编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="project/edit">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectBaseInfoEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectVEdit.html">供应商信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectCEdit.html">客户信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectWEdit.html">仓库信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectGoodsEdit.html">商品信息</a></li>
+                  <li role="presentation"  ><a class="tab-item" data-url="html/project/projectUserEdit.html">用户信息</a></li>  
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                     <td width="180" class="text-right"><b>编号：</b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="projectNo" name="projectNo"></label>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td class="text-right"><b>简称：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control js-initform" id="projectName" name="projectName">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>全称：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control js-initform" id="fullName" name="fullName">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>经营单位：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="businessUnitName" name="businessUnitName"></label>
+                     </td>
+                  </tr>
+                   <tr>
+                     <td class="text-right"><b>行业：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="industrialName" name="industrialName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>项目编号类型：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="projectNoTypeName" name="projectNoTypeName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>额度：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <input type="text" class="form-control js-initform" id="totalAmount" name="totalAmount">
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>额度币种：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                       <select class="form-control js-initform" data-url="DEFAULT_CURRENCY_TYPE" id="amountUnit" name="amountUnit"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务类别：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="bizTypeValue" name="bizTypeValue"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>法务主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="lawId" name="lawId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务专员：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="bizSpecialId" name="bizSpecialId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="bizManagerId" name="bizManagerId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>商务主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="businessManagerId" name="businessManagerId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>财务专员：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="financeSpecialId" name="financeSpecialId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>财务主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="financeManagerId" name="financeManagerId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>风控专员：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="riskSpecialId" name="riskSpecialId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>风控主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="riskManagerId" name="riskManagerId"></select>
+                     </td>
+                  </tr>
+               	  <tr>
+                      <td class="text-right"><b>所属部门： </b></td>
+                      <td class="text-left">
+                        	<input type="text" class="form-control js-tree js-initform" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                      </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>部门主管：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="departmentManagerId" name="departmentManagerId"></select>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>总经理：<em class="text-star">*</em></b></td>
+                     <td class="text-left">
+                     	<select class="form-control" id="bossId" name="bossId"></select>
+                     </td>
+                  </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="save" class="btn btn-primary btn-sm" data-url="project/update" data-permissionUrl="/project/update">保存</button>
+              <button type="button" id="back" data-url="html/project/projectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+          </form>
+        </div>
+  </section>
+</div>
+ <div id="menuContent" class="menuContent" style="position:absolute;display:none;">
+    <ul id="departmentTree" class="ztree" style="margin-top:0;"></ul>
+</div>
+<script src="../../js/plugins/jquery.ztree.all-3.5.min.js"></script>
+<script>
+  options.initPage = function(){
+	  var selectedOptions = "";
+      GLOBAL.ajax("common/selected/query?key=USER", {}, function(data){
+    	  if (data.items) {
+    		  selectedOptions = "<option>请选择</option>";
+    		  data = data.items;
+    		  for(var i = 0; i < data.length; i++){
+    	    	  selectedOptions += '<option value="'+data[i].code+'">'+data[i].value+'</option>';
+    	      }   
+    		  $("#lawId").empty().append(selectedOptions);
+    		  $("#bizSpecialId").empty().append(selectedOptions);
+    	      $("#bizManagerId").empty().append(selectedOptions);
+    	      $("#businessManagerId").empty().append(selectedOptions);
+    	      $("#financeSpecialId").empty().append(selectedOptions);
+    	      $("#financeManagerId").empty().append(selectedOptions);
+    	      $("#riskSpecialId").empty().append(selectedOptions);
+    	      $("#riskManagerId").empty().append(selectedOptions);
+    	      $("#departmentManagerId").empty().append(selectedOptions);
+    	      $("#bossId").empty().append(selectedOptions);
+    	  } else {
+    		  $("#lawId").empty();
+    		  $("#bizSpecialId").empty();
+    	      $("#bizManagerId").empty();
+    	      $("#businessManagerId").empty();
+    	      $("#financeSpecialId").empty();
+    	      $("#financeManagerId").empty();
+    	      $("#riskSpecialId").empty();
+    	      $("#riskManagerId").empty();
+    	      $("#departmentManagerId").empty();
+    	      $("#bossId").empty();
+    	  }
+      });
+
+      var editData = GLOBAL.getEditData($("#form1"), options.param.id);
+      if (editData) {
+    	  $("#lawId").val(editData.lawId);
+    	  $("#bizSpecialId").val(editData.bizSpecialId);
+    	  $("#bizManagerId").val(editData.bizManagerId);
+	      $("#businessManagerId").val(editData.businessManagerId);
+	      $("#financeSpecialId").val(editData.financeSpecialId);
+	      $("#financeManagerId").val(editData.financeManagerId);
+	      $("#riskSpecialId").val(editData.riskSpecialId);
+	      $("#riskManagerId").val(editData.riskManagerId);
+	      $("#departmentManagerId").val(editData.departmentManagerId);
+	      $("#bossId").val(editData.bossId);
+      }
+      $("#form1").validate({
+          rules: {
+        	  projectNo: {
+                	required: true
+              },
+              projectName: {
+                  required: true
+              },
+              fullName: {
+                  required: true
+              },
+              totalAmount: {
+                  required: true,
+                  number:true
+              },
+              lawId: {
+            	  required: true
+              },
+              bizManagerId: {
+                  required: true
+              },
+              businessManagerId: {
+                  required: true
+              },
+              financeManagerId: {
+                  required: true
+              },
+              riskManagerId: {
+                  required: true
+              },
+              financeSpecialId:{
+                  required: true
+              }, 
+              departmentName:{
+                  required: true
+              },
+              departmentManagerId:{
+                  required: true
+              },
+              bossId:{
+                  required: true
+              }
+          },
+          submitHandler: function() {
+            var data = $("#form1").serialize();
+            GLOBAL.ajax("project/update",data, function(e){
+          	  if (e.success) {
+              	  layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+          }
+      });
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  })
+
+  GLOBAL.goBack();
+    
+</script>

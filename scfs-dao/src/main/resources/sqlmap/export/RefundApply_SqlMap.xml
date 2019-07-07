@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.export.RefundApplyDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.export.entity.RefundApply">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="refund_apply_no" property="refundApplyNo"
+			jdbcType="VARCHAR" />
+		<result column="refund_attach_no" property="refundAttachNo"
+			jdbcType="VARCHAR" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="cust_id" property="custId" jdbcType="INTEGER" />
+		<result column="refund_apply_num" property="refundApplyNum"
+			jdbcType="DECIMAL" />
+		<result column="refund_apply_amount" property="refundApplyAmount"
+			jdbcType="DECIMAL" />
+		<result column="refund_apply_tax" property="refundApplyTax"
+			jdbcType="DECIMAL" />
+		<result column="refund_apply_date" property="refundApplyDate"
+			jdbcType="TIMESTAMP" />
+		<result column="verify_amount" property="verifyAmount"
+			jdbcType="DECIMAL" />
+		<result column="verify_date" property="verifyDate" jdbcType="TIMESTAMP" />
+		<result column="verify" property="verify" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="deleter_id" property="deleterId" jdbcType="INTEGER" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="print_num" property="printNum" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		refund_apply_no,
+		refund_attach_no,
+		project_id,
+		cust_id,
+		refund_apply_num,
+		refund_apply_amount,
+		refund_apply_tax,
+		refund_apply_date,
+		verify_amount,
+		verify_date,
+		verify,
+		creator,
+		creator_id,
+		creator_at,
+		update_at,
+		deleter,
+		deleter_id,
+		delete_at,
+		is_delete,
+		state,
+		remark,
+		print_num
+	</sql>
+
+	<!-- 获取所有数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.export.dto.req.RefundApplySearchReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		r.id,
+		r.refund_apply_no,
+		r.refund_attach_no,
+		r.project_id,
+		r.cust_id,
+		r.refund_apply_num,
+		r.refund_apply_amount,
+		r.refund_apply_tax,
+		r.refund_apply_date,
+		r.verify_amount,
+		r.verify_date,
+		r.verify,
+		r.creator,
+		r.creator_id,
+		r.creator_at,
+		r.update_at,
+		r.deleter,
+		r.deleter_id,
+		r.delete_at,
+		r.is_delete,
+		r.state,
+		r.remark
+		FROM
+		tb_refund_apply r INNER
+		JOIN tb_base_user_project b on
+		r.project_id=b.project_id
+		where
+		r.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			and r.project_id=#{projectId}
+		</if>
+		<if test="refundApplyNo != null and refundApplyNo != ''">
+			and r.refund_apply_no like
+			CONCAT('%',#{refundApplyNo},'%')
+		</if>
+		<if test="refundAttachNo != null and refundAttachNo != ''">
+			and r.refund_attach_no like
+			CONCAT('%',#{refundAttachNo},'%')
+		</if>
+		<if test="startApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date >=#{startApplyDate}
+				]]>
+		</if>
+		<if test="endApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date <=#{endApplyDate}
+				]]>
+		</if>
+		<if test="custId != null ">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+		order by r.id desc
+	</select>
+
+
+	<!-- 统计 -->
+	<select id="sumRefundApply"
+		parameterType="com.scfs.domain.export.dto.req.RefundApplySearchReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		SUM(r.refund_apply_num)
+		refund_apply_num,SUM(r.refund_apply_amount)
+		refund_apply_amount,SUM(r.refund_apply_tax) refund_apply_tax
+		FROM
+		tb_refund_apply r INNER
+		JOIN tb_base_user_project b ON
+		r.project_id=b.project_id
+		WHERE
+		r.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			and r.project_id=#{projectId}
+		</if>
+		<if test="refundApplyNo != null and refundApplyNo != ''">
+			and r.refund_apply_no like
+			CONCAT('%',#{refundApplyNo},'%')
+		</if>
+		<if test="refundAttachNo != null and refundAttachNo != ''">
+			and r.refund_attach_no like
+			CONCAT('%',#{refundAttachNo},'%')
+		</if>
+		<if test="startApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date >=#{startApplyDate}
+				]]>
+		</if>
+		<if test="endApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date <=#{endApplyDate}
+				]]>
+		</if>
+		<if test="custId != null ">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+		order by r.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_refund_apply
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.export.entity.RefundApply"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_refund_apply (
+		refund_apply_no,
+		refund_attach_no,
+		project_id,
+		cust_id,
+		refund_apply_num,
+		refund_apply_amount,
+		refund_apply_tax,
+		refund_apply_date,
+		verify_amount,
+		verify_date,
+		verify,
+		creator,
+		creator_id,
+		creator_at,
+		update_at,
+		deleter,
+		deleter_id,
+		delete_at,
+		is_delete,
+		state,
+		remark
+		)
+		VALUES
+		(
+		#{refundApplyNo,jdbcType=VARCHAR},
+		#{refundAttachNo,jdbcType=VARCHAR},
+		#{projectId,jdbcType=INTEGER},
+		#{custId,jdbcType=INTEGER},
+		#{refundApplyNum,jdbcType=DECIMAL},
+		#{refundApplyAmount,jdbcType=DECIMAL},
+		#{refundApplyTax,jdbcType=DECIMAL},
+		#{refundApplyDate,jdbcType=TIMESTAMP},
+		#{verifyAmount,jdbcType=DECIMAL},
+		#{verifyDate,jdbcType=TIMESTAMP},
+		#{verify,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{deleter,jdbcType=VARCHAR},
+		#{deleterId,jdbcType=INTEGER},
+		#{deleteAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT},
+		#{state,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.export.entity.RefundApply">
+		update tb_refund_apply
+		<set>
+			id = #{id}
+			<if test="refundApplyNo != null and refundApplyNo !='' ">
+				,refund_apply_no = #{refundApplyNo,jdbcType=VARCHAR}
+			</if>
+			<if test="refundAttachNo != null and refundAttachNo != ''">
+				,refund_attach_no = #{refundAttachNo,jdbcType=VARCHAR}
+			</if>
+			<if test="projectId != null ">
+				,project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="custId != null">
+				,cust_id = #{custId,jdbcType=INTEGER}
+			</if>
+			<if test="refundApplyNum != null">
+				,refund_apply_num = #{refundApplyNum,jdbcType=DECIMAL}
+			</if>
+			<if test="refundApplyAmount != null">
+				,refund_apply_amount =
+				#{refundApplyAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="refundApplyTax != null">
+				,refund_apply_tax = #{refundApplyTax,jdbcType=DECIMAL}
+			</if>
+			<if test="refundApplyDate != null">
+				,refund_apply_date =
+				#{refundApplyDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="verifyAmount != null">
+				,verify_amount = #{verifyAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="verifyDate != null">
+				,verify_date= #{verifyDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="verify != null and verify != ''">
+				,verify = #{verify,jdbcType=VARCHAR}
+			</if>
+			<if test="creator != null and creator != ''">
+				,creator = #{creator,jdbcType=VARCHAR}
+			</if>
+			<if test="creatorId != null">
+				,creator_id = #{creatorId,jdbcType=INTEGER}
+			</if>
+			<if test="createAt != null">
+				,creator_at = #{createAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateAt != null">
+				,update_at = #{updateAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="deleter != null and deleter != ''">
+				,deleter = #{deleter,jdbcType=VARCHAR}
+			</if>
+			<if test="deleterId != null">
+				,deleter_id = #{deleterId,jdbcType=INTEGER}
+			</if>
+			<if test="deleteAt != null">
+				,delete_at =#{deleteAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="state != null">
+				,state = #{state,jdbcType=TINYINT}
+			</if>
+			<if test="remark !=null and remark != ''">
+				,remark = #{remark,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePrintNum" parameterType="com.scfs.domain.export.entity.CustomsApply">
+		update tb_refund_apply
+		<set>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 获取总行数 -->
+	<select id="isOverasyncMaxLine"
+		parameterType="com.scfs.domain.export.dto.req.RefundApplySearchReqDto"
+		resultType="int">
+		SELECT
+		count(*)
+		FROM
+		tb_refund_apply r INNER
+		JOIN tb_base_user_project b
+		on
+		r.project_id=b.project_id
+		where
+		r.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			and r.project_id=#{projectId}
+		</if>
+		<if test="refundApplyNo != null and refundApplyNo != ''">
+			and r.refund_apply_no like
+			CONCAT('%',#{refundApplyNo},'%')
+		</if>
+		<if test="refundAttachNo != null and refundAttachNo != ''">
+			and r.refund_attach_no like
+			CONCAT('%',#{refundAttachNo},'%')
+		</if>
+		<if test="startApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date >=#{startApplyDate}
+				]]>
+		</if>
+		<if test="endApplyDate != null">
+			<![CDATA[
+					and r.refund_apply_date <=#{endApplyDate}
+				]]>
+		</if>
+		<if test="custId != null ">
+			and r.cust_id = #{custId}
+		</if>
+		<if test="state != null ">
+			and r.state = #{state}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,230 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+        <li>发票</li>
+        <li>收票</li>
+		<li>采购信息</li>
+		<li class="active">修改</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="invoiceCollectPo/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"name="id"> 
+					<input class="form-control js-initform" type="hidden" id="collectId" name="collectId">
+					<table id="js_dataTable" class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>采购编号：</b></td>
+							<td class="text-left"><label class="js-initform" id="orderNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>日期：</b></td>
+							<td class="text-left"><label class=" js-initform" id="orderTime"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>商品编号：</b></td>
+							<td class="text-left"><label class=" js-initform" id="goodsNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>商品描述：</b></td>
+							<td class="text-left"><label class=" js-initform" id="goodsDescribe"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>单位：</b></td>
+							<td class="text-left"><label class=" js-initform" id="unit"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>税率：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="taxRate" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可收票数量：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="blanceNum" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>数量：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="poNum" name="poNum">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>含税单价：</b></td>
+							<td class="text-left"><label class=" js-initform" id="goodsPrice"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可收票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="blanceAmount" ></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>含税金额：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="inRateAmount" name="inRateAmount">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>未税金额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="exRateAmount" name="exRateAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>税额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="rateAmount" name="rateAmount"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>含税折扣金额：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="discountInRateAmount" name="discountInRateAmount">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>未税折扣金额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="discountExRateAmount" name="discountExRateAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>折扣税额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="discountRateAmount" name="discountRateAmount"></label>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="save" data-url="invoiceCollectPo/update" data-permissionUrl="/invoiceCollectPo/update" class="btn btn-primary btn-sm">保存</button>
+					<button type="button" data-url="html/invoice/collect/collectPoEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		$('#js_dataTable').on("blur","#inRateAmount",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($("#taxRate").text());
+				var exRateAmount = (inRateAmount / ( 1 + rateAmount)).toFixed(2);
+				var rateAmount = (inRateAmount / ( 1 + rateAmount) * rateAmount).toFixed(2);
+				$("#exRateAmount").text(exRateAmount);
+				$("#rateAmount").text(rateAmount);
+			}else{
+				$(this).val("");
+				/* $("#exRateAmount").text("0");
+				$("#rateAmount").text("0"); */
+			}
+		});
+		
+		$('#js_dataTable').on("blur","#discountInRateAmount",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($("#taxRate").text());
+				var discountExRateAmount = (inRateAmount / ( 1 + rateAmount)).toFixed(2);
+				var discountRateAmount = (inRateAmount / ( 1 + rateAmount) * rateAmount).toFixed(2);
+				$("#discountExRateAmount").text(discountExRateAmount);
+				$("#discountRateAmount").text(discountRateAmount);
+			}else{
+				$(this).val("");
+				/* $("#exRateAmount").text("0");
+				$("#rateAmount").text("0"); */
+			}
+		});
+	};
+
+	$("#save").click(function() {
+		var dtlArr = [];
+		var saveUrl = $(this).data("url");
+		var poNum = $("#poNum");
+		var price = $("#inRateAmount");
+		var discountInRateAmount = $("#discountInRateAmount");
+		var id = $("#id").val();
+		var collectId = $("#collectId").val();
+		var a = /^[0-9]*(\.[0-9]{1,2})?$/;
+		var isValid = true;
+		
+		if(poNum.val()==""){
+			layer.msg("数量不能为空");
+			poNum.focus();
+			isValid = false;
+		}
+		if (!a.test(poNum.val())) {
+			layer.msg("请输入正确格式");
+			poNum.focus();
+			isValid = false;
+		}
+		if (price.val() == "") {
+			price.focus();
+			layer.msg("含税金额不能为空");
+			isValid = false;
+		}
+		if (!a.test(price.val())) {
+			price.focus();
+			layer.msg("请输入正确格式");
+			isValid = false;
+		}
+		if(discountInRateAmount.val()==""){
+			layer.msg("未税折扣金额不能为空");
+			discountInRateAmount.focus();
+			isValid = false;
+		}
+		if (!a.test(discountInRateAmount.val())) {
+			layer.msg("请输入正确格式");
+			discountInRateAmount.focus();
+			isValid = false;
+		}
+		if (isValid) {
+			dtlArr.push({
+				"id" : id,
+				"discountInRateAmount" : discountInRateAmount.val(),
+				"poNum" : poNum.val(),
+				"inRateAmount" : price.val()
+			});
+			var saveData = {
+					colRel : dtlArr,
+				collectId : collectId
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						options.param.id = $("#collectId").val();
+						GLOBAL.go("html/invoice/collect/collectPoEdit.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType);
+		}
+	});
+
+	GLOBAL.goBack(function() {
+		options.param.id = options.param.collectId
+	});
+</script>
+

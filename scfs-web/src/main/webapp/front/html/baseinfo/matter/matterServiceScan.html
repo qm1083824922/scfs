@@ -1,0 +1,179 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>事项管理</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="matterService/edit">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6" style="width: 70%;">
+							<ul class="nav nav-tabs">
+			                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/matter/matterManageScan.html">基础信息</a></li>
+			                  <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/matter/matterServiceScan.html">服务需求</a></li> 
+			                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/matter/attachmentScan.html">附件</a></li> 
+			                </ul>
+							<input class="form-control js-initform" type="hidden" id="id" name="id">
+							<table class="table table-bordered table-hover no-margin">
+								 <tr>
+				                     <td class="text-center" rowspan="11"><b>结算条款信息</b></td>
+				                     <td class="text-center"><b>服务类型：</b></td>
+	                                 <td class="text-left" colspan="3">
+	                                    <label class=" js-initform" id="serviceTypeName" name="serviceTypeName"/>
+	                               	 </td>
+				                 </tr>
+				                 <tr>
+				                     <td class="text-center"><b>业务模型说明（项目流程）：</b></td>
+				                     <td class="text-left"  colspan="3">
+				                     	<label class=" js-initform" id="serviceExplain" name="serviceExplain"/>
+									 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>合作账期：</b></td>
+				                     <td class="text-left" colspan="3">
+					                     	<label class="js-initform" id="accountPeriodName" name="accountPeriodName"/>&nbsp;&nbsp;&nbsp;
+	                                    	<label class="js-initform" id="accountPeriodRemark" name="accountPeriodRemark"/>
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>现配套资金申请金额：</b></td>
+				                     <td class="text-left">
+				                     	<label class=" js-initform" id="matchedAmount" name="matchedAmount"/>
+				                     </td>
+				                     <td class="text-center"><b>结算币种：</b></td>
+	                                 <td class="text-left">
+	                                 		<label class="js-initform" id="currnecyTypeName" name="currnecyTypeName"/>&nbsp;&nbsp;&nbsp;
+	                                    	<label class="js-initform" id="currnecyTypeRemark" name="currnecyTypeRemark"/>
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>收取待采定金：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class="js-initform" id="depositPaidName" name="depositPaidName"/>&nbsp;&nbsp;&nbsp;
+	                                    <label class="js-initform" id="depositAmount" name="depositAmount"/>
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>服务费率：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="serviceRateTypeName" name="serviceRateTypeName">&nbsp;&nbsp;&nbsp;
+	                                    <label class=" js-initform" id="serviceRate" name="serviceRate">%
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>应收费用：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="recFeeTypeName" name="recFeeTypeName"/>&nbsp;&nbsp;&nbsp;
+	                                    <label class=" js-initform" id="recFeeRemark" name="recFeeRemark"/>
+				                     </td>
+				                  </tr>
+								<tr>
+				                     <td class="text-center"><b>应付费用：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="payFeeTypeName" name="payFeeTypeName"/>&nbsp;&nbsp;&nbsp;
+	                                    <label class=" js-initform" id="payFeeRemark" name="payFeeRemark"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>服务费结算时间：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="serviceSettlementTimeName" name="serviceSettlementTimeName"/>&nbsp;&nbsp;&nbsp;
+	                                    <label class=" js-initform" id="serviceSettlementRemark" name="serviceSettlementRemark"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>付款方式：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="payWayName" name="payWayName"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>放贷方式：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="lendWayName" name="lendWayName"/>&nbsp;&nbsp;&nbsp;
+	                                    <label class=" js-initform" id="lendWayRemark" name="lendWayRemark"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center" rowspan="6"><b>项目盈利预测</b></td>
+				                     <td class="text-center"><b>预计年度垫资规模：</b></td>
+	                                 <td class="text-left" colspan="3">
+	                                 	  <label class=" js-initform" id="scale" name="scale"/>
+	                               	 </td>
+				                 </tr>
+				                 <tr>
+				                     <td class="text-center"><b>预计资金周转次数（/年）：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="turnoverTimes" name="turnoverTimes"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计资金回报率（/年）：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="returnRate" name="returnRate"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>成本支出项：</b></td>
+				                     <td class="text-left" colspan="3">
+				                       	<label class=" js-initform" id="costExpendTypeName" name="costExpendTypeName"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计年度业务毛利：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="bizBlance" name="bizBlance"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计年度业务净利：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class=" js-initform" id="blance" name="blance"/>
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>我司签约主体：</b></td>
+				                     <td class="text-left" colspan="2">
+				                     	<label class=" js-initform" id="signSubject" name="signSubject"/>
+				                     </td>
+				                     <td class="text-center"><b>项目导入业务员：</b></td>
+				                     <td class="text-left" colspan="2">
+				                     	<label class=" js-initform" id="projectBizManager" name="projectBizManager"/>
+				                     </td>
+				                </tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/baseinfo/matter/matterManageSearch.html" class="btn btn-default btn-sm js-back showProject">返回</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMatterManage.html" class="btn btn-default btn-sm js-back showAbbreviate">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		var matterName = options.param.matterName;
+		var show = options.param.show;
+		if(show==1){
+			$(".showProject").show();	
+	    	$(".showAbbreviate").hide();		
+		}else{
+			$(".showAbbreviate").show();	
+	    	$(".showProject").hide();
+		}
+		GLOBAL.getEditData($("#form1"), options.param.id);
+	}
+	GLOBAL.goBack();
+</script>

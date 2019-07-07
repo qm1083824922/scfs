@@ -1,0 +1,154 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>权限</li>
+            <li class="active">新建权限</li>
+        </ol>
+  </section>
+  <section class="product-wrap">
+      <div class="box no-margin"> 
+        <form class="form-horizontal form-inline" id="form1">
+          <div class="box-body">  
+          	<div class="row">
+				<div class="col-md-6">
+                <table class="table table-bordered table-hover no-margin">
+                	<tr>
+                    <td width="180" class="text-right"><b>权限名：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<input type="text" class="form-control" id="name" name="name">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>URL：<em class="text-star">*</em></b></td> 
+                     <td class="text-left">
+                      	<input type="text" class="form-control" id="url" name="url">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>排序：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                      	<input type="text" class="form-control" id="ord" name="ord">
+                     </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>权限类型：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                       <select class="form-control js-select" data-url="PERMISSIONTYPE" id="type"  name="type"> </select> 
+                     </td>
+                  </tr>
+                  <tr id="menu">
+                    <td class="text-right"><b>菜单级别：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                        <select class="form-control js-select" data-url="PERMISSIONMENULEVEL" id="menuLevel" name="menuLevel"> </select> 
+                    </td>
+                  </tr> 
+                  <tr id="firstMenu">
+                    <td class="text-right"><b>所属一级菜单：<em class="text-star">*</em></b></td> 
+                    <td class="text-left">
+                       <select class="form-control js-select" data-url="first/menu/query" id="parentId"  name="parentId"> </select> 
+                     </td>
+                  </tr>
+                </table>
+                </div>
+              </div>
+          </div>
+          <!-- /.box-body --> 
+          <div class="box-footer text-center">
+            <button type="submit" id="save" data-url="html/baseinfo/authority/authorityEdit.html" data-permissionUrl="/permission/add" class="btn btn-primary btn-sm">保存</button> 
+            <button type="button" data-url="html/baseinfo/authority/authoritySearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+          </div>
+          <!-- /.box-footer -->
+
+        </form>
+      </div>
+  </section>
+</div>
+<script>
+
+    var options = {
+        param: {
+            id: 0,
+            cid: 0
+        },
+        initPage: function(){
+        	 $("#menu").hide();  
+        	 $("#firstMenu").hide();  
+        	 
+        	 var option = "<option value=''>请选择</option>";
+             GLOBAL.ajax("first/menu/query", null, function(data){
+                 for(var k = 0; k < data.length; k++){
+                     option += '<option value="'+data[k].id+'">'+data[k].name+'</option>';
+                 }   
+                 $("#parentId").empty().append(option);
+             })
+        	 $("#type").change(function(){ 
+        		if($("#type").val() == 2) {
+        			$("#menu").show(); 
+        		}else if($("#type").val() == 1) {
+        			$("#menu").hide().find("#menuLevel").val("");  
+            		$("#firstMenu").hide().find("#parentId").val("");
+            	}else if($("#type").val() == '') {
+                	$("#menu").hide().find("#menuLevel").val("");  
+                	$("#firstMenu").hide().find("#parentId").val("");
+                }
+                $("select").select2({language: "zh-CN"});
+        	 });
+        	 $("#menuLevel").change(function(){  
+         		if($("#menuLevel").val() == 2) {
+         			$("#firstMenu").show(); 
+         		}else if($("#menuLevel").val() == 1){
+         			$("#firstMenu").hide().find("#parentId").val("");  
+         		}else if($("#menuLevel").val() == ''){
+                 	$("#firstMenu").hide().find("#parentId").val("");  
+                }
+                $("select").select2({language: "zh-CN"});
+         	 });
+            $("#form1").validate({
+                rules: {
+                	name: {
+                      required: true
+                    },
+                    url: {
+                        required: true, 
+                    },
+                    ord: {
+                      required: true,
+                      digits:true
+                    },
+                    type: {
+                        required: true, 
+                    },
+                    parentId: {
+                        required: true, 
+                    },
+                    menuLevel: {
+                        required: true, 
+                    }
+                },
+                submitHandler: function() {
+                  var data = $("#form1").serialize();
+                  GLOBAL.ajax("permission/add",data, function(e){
+                      layer.msg("保存成功！", {
+                          icon: 1,
+                          time: 1500
+                      },function(){
+                    	  options.param.id = e.items;
+                    	  options.param.cid = e.items;
+                    	  GLOBAL.go("html/baseinfo/authority/authoritySearch.html", options.param);
+                      })
+                      
+                  }, false, $("#save"));
+                }
+            });
+        }
+    }
+
+    $(".js_datePicker").datetimepicker();
+
+    $("#js-back").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+</script>

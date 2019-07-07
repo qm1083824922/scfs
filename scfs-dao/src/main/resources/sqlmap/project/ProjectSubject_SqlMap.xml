@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.project.ProjectSubjectDao">
+
+	<resultMap id="ProjectSubjectMap" type="com.scfs.domain.project.entity.ProjectSubject">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="subject_type" property="subjectType" jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="project_id" property="projectId" jdbcType="TINYINT" />
+		<result column="subject_id" property="subjectId" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="detail_column_list">
+		id,project_id,subject_id,subject_type,creator,create_at,deleter,delete_at,status,is_delete
+	</sql>
+
+	<resultMap id="SubjectMap" type="com.scfs.domain.base.entity.BaseSubject">
+		<id column="id" property="id" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="ProjectSubjectMap">
+		select
+		<include refid="detail_column_list" />
+		from tb_project_subject where id=#{id} for update
+	</select>
+
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectSubject">
+		update tb_project_subject
+		<set>
+			<if test="deleter != null">deleter=#{deleter,jdbcType=VARCHAR},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="status != null">status=#{status,jdbcType=TINYINT},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=INTEGER}
+		</where>
+	</update>
+
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectSubject">
+		insert into
+		tb_project_subject(
+		project_id,
+		subject_id,
+		subject_type,
+		creator,
+		create_at,
+		status,
+		is_delete
+		)
+		values(
+		#{projectId,jdbcType=INTEGER},
+		#{subjectId,jdbcType=INTEGER},
+		#{subjectType,jdbcType=TINYINT},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{status,jdbcType=TINYINT},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<select id="queryResultsByCon" resultMap="ProjectSubjectMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSubjectSearchReqDto">
+		select
+		<include refid="detail_column_list" />
+		from
+		tb_project_subject
+		where project_id = #{projectId} and is_delete =
+		0
+		<if test="subjectType != null">
+			and subject_type &amp; #{subjectType} = #{subjectType}
+		</if>
+		<if test="status != null">
+			and status = #{status}
+		</if>
+		order by id desc
+	</select>
+
+	<select id="querySubjectToProjectByCon" resultMap="SubjectMap"
+		parameterType="com.scfs.domain.project.dto.req.ProjectSubjectSearchReqDto">
+		select id from tb_base_subject
+		where is_delete=0 and state=2 and id !=
+		1 and subject_type &amp;
+		#{subjectType,jdbcType=TINYINT} =
+		#{subjectType,jdbcType=TINYINT} and
+		id not in (select subject_id from
+		tb_project_subject where project_id
+		= #{projectId,jdbcType=INTEGER} and
+		subject_type &amp;
+		#{subjectType,jdbcType=TINYINT} =
+		#{subjectType,jdbcType=TINYINT} and
+		is_delete=0)
+		<if test="subjectNo != null">
+			and subject_no like CONCAT('%',#{subjectNo},'%')
+		</if>
+		<if test="abbreviation != null">
+			and abbreviation like CONCAT('%',#{abbreviation},'%')
+		</if>
+		<if test="chineseName != null">
+			and chinese_name like CONCAT('%',#{chineseName},'%')
+		</if>
+		<if test="englishName != null">
+			and english_name like CONCAT('%',#{englishName},'%')
+		</if>
+		ORDER BY
+		id desc
+	</select>
+	<select id="queryIsExistByProjectSub" resultMap="ProjectSubjectMap"
+		parameterType="com.scfs.domain.project.entity.ProjectSubject">
+		select
+		<include refid="detail_column_list" />
+		from
+		tb_project_subject
+		<where>
+			is_delete=0
+			<if test="subjectId != null">
+				AND subject_id = #{subjectId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null">
+				AND project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryAllProjectSub" resultMap="ProjectSubjectMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="detail_column_list" />
+		from
+		tb_project_subject
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_project_subject
+	</select>
+
+</mapper>

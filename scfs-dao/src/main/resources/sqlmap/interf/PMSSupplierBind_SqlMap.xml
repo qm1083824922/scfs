@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.interf.PMSSupplierBindDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.interf.entity.PMSSupplierBind">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="supplier_no" jdbcType="VARCHAR" property="supplierNo" />
+		<result column="pms_supplier_no" jdbcType="VARCHAR" property="pmsSupplierNo" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deleter_id" jdbcType="INTEGER" property="deleterId" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, supplier_id, supplier_no, pms_supplier_no, status,
+		creator_id,
+		creator, create_at,
+		update_at, deleter_id, deleter,
+		is_delete, delete_at, project_id
+	</sql>
+	<sql id="QUERY_lIST">
+		tpsb.id, tpsb.supplier_id, tpsb.supplier_no,
+		tpsb.pms_supplier_no,
+		tpsb.status, tpsb.creator_id, tpsb.creator,
+		tpsb.create_at,
+		tpsb.update_at, tpsb.deleter_id, tpsb.deleter,
+		tpsb.is_delete,
+		tpsb.delete_at, tpsb.project_id
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_supplier_bind
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryBySub" parameterType="com.scfs.domain.interf.dto.PMSSupplierBindReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_supplier_bind
+		where is_delete = 0
+		<if test="pmsSupplierNo != null and pmsSupplierNo != ''">
+			AND pms_supplier_no =#{pmsSupplierNo,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierNo != null and supplierNo != ''">
+			AND supplier_no = #{supplierNo,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null">
+			AND status = #{status,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="queryByCondition" parameterType="com.scfs.domain.interf.dto.PMSSupplierBindReqDto"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="QUERY_lIST" />
+		from tb_pms_supplier_bind tpsb inner join tb_base_user_project userPro
+		on
+		tpsb.project_id = userPro.project_id
+		where
+		userPro.user_id =
+		#{userId,jdbcType=INTEGER}
+		AND userPro.state = 1
+		AND tpsb.is_delete = 0
+		<if test="supplierId != null ">
+			AND tpsb.supplier_id = #{supplierId,jdbcType=INTEGER}
+		</if>
+		<if test="pmsSupplierNo != null and pmsSupplierNo != ''">
+			AND tpsb.pms_supplier_no like CONCAT('%' ,
+			#{pmsSupplierNo} , '%')
+		</if>
+		<if test="projectId != null ">
+			AND tpsb.project_id = #{projectId,jdbcType=INTEGER}
+		</if>
+		<if test="supplierNo != null and supplierNo != ''">
+			AND tpsb.supplier_no like CONCAT('%' , #{supplierNo} ,
+			'%')
+		</if>
+		<if test="status != null ">
+			AND tpsb.status = #{status,jdbcType=INTEGER}
+		</if>
+		order by tpsb.create_at DESC
+	</select>
+	<update id="deleteById" parameterType="java.lang.Integer">
+		update
+		tb_pms_supplier_bind set is_delete = 1
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" parameterType="com.scfs.domain.interf.entity.PMSSupplierBind">
+		insert into
+		tb_pms_supplier_bind (id, supplier_id,
+		supplier_no,
+		pms_supplier_no,
+		status, creator_id,
+		creator, create_at,
+		update_at,
+		deleter_id, deleter,
+		delete_at, project_id)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER},
+		#{supplierNo,jdbcType=VARCHAR},
+		#{pmsSupplierNo,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{deleterId,jdbcType=INTEGER},
+		#{deleter,jdbcType=VARCHAR},
+		#{deleteAt,jdbcType=TIMESTAMP},
+		#{projectId,jdbcType=INTEGER})
+	</insert>
+
+	<update id="submit" parameterType="com.scfs.domain.interf.entity.PMSSupplierBind">
+		update tb_pms_supplier_bind
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="update" parameterType="com.scfs.domain.interf.entity.PMSSupplierBind">
+		update tb_pms_supplier_bind
+		<set>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierNo != null">
+				supplier_no = #{supplierNo,jdbcType=VARCHAR},
+			</if>
+			<if test="pmsSupplierNo != null">
+				pms_supplier_no = #{pmsSupplierNo,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleterId != null">
+				deleter_id = #{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryEntityByProjectIdAndSupplierId" resultMap="BaseResultMap">
+		select distinct supplier_id, supplier_no, project_id
+		from
+		tb_pms_supplier_bind tpsb
+		where tpsb.is_delete = 0
+		AND tpsb.supplier_id
+		= #{supplierId,jdbcType=INTEGER}
+		AND tpsb.project_id =
+		#{projectId,jdbcType=INTEGER}
+		AND status = 2
+	</select>
+
+	<select id="queryEntityBySupplierNo" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="QUERY_lIST" />
+		from tb_pms_supplier_bind tpsb inner join tb_base_project tbp on
+		tpsb.project_id = tbp.id
+		where tpsb.is_delete = 0
+		AND tbp.is_delete = 0
+		AND tpsb.status=2
+		AND tpsb.pms_supplier_no =
+		#{pmsSupplierNo,jdbcType=VARCHAR}
+		AND tbp.biz_type = 6
+	</select>
+
+
+	<select id="queryByProjectStatus" parameterType="com.scfs.domain.interf.dto.PMSSupplierBindReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		s.id,
+		s.supplier_id,
+		s.supplier_no,
+		s.pms_supplier_no,
+		s.status,
+		s.creator_id,
+		s.creator,
+		s.create_at,
+		s.update_at,
+		s.deleter_id,
+		s.deleter,
+		s.is_delete,
+		s.delete_at,
+		s.project_id
+		FROM
+		tb_pms_supplier_bind s
+		INNER JOIN tb_base_project p
+		ON s.project_id =
+		p.id
+		where s.is_delete = 0
+		<if test="pmsSupplierNo != null and pmsSupplierNo != ''">
+			AND s.pms_supplier_no =#{pmsSupplierNo,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierNo != null and supplierNo != ''">
+			AND s.supplier_no = #{supplierNo,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null">
+			AND s.status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="bizType != null">
+			AND p.biz_type = #{bizType,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="queryBySupplierNoAndBusi" parameterType="com.scfs.domain.interf.dto.PMSSupplierBindReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="QUERY_lIST" />
+		from tb_pms_supplier_bind tpsb inner join tb_base_project tbp on
+		tpsb.project_id = tbp.id
+		where tpsb.is_delete = 0
+		AND tbp.is_delete = 0
+		AND tpsb.status=2
+		AND tpsb.pms_supplier_no =
+		#{pmsSupplierNo,jdbcType=VARCHAR}
+		AND
+		tbp.business_unit_id=#{businessUnit,jdbcType=INTEGER}
+		AND tbp.biz_type
+		= 6
+	</select>
+</mapper>

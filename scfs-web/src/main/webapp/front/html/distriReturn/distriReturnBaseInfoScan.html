@@ -1,0 +1,166 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+	  <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>采购</li>
+	    <li>铺货退货单</li>
+	    <li class="active">基本信息浏览</li>
+	  </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="distriReturn/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/distriReturn/distriReturnBaseInfoScan.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/distriReturn/distriReturnDtlScan.html">铺货退货单明细信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/distriReturn/attachmentScan.html">附件</a></li> 
+                 
+                 </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                  <tr>
+                      <td width="180" class="text-right"><b>项目：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectName" name="projectName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应商：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="supplierName" name="supplierName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应商地址：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="supplierAddress" name="supplierAddress"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>币种：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="currencyName"  ></label>
+                      </td>
+                    </tr>
+                     <tr>
+	                    <td class="text-right"><b>运输方式:</b></td>
+	                    <td class="text-left">
+	                       <label class="js-initform" id="transferModeName"  ></label>	                    
+ 	                    </td>
+                  	</tr>
+                    <tr>
+                      <td class="text-right"><b>附属编号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="appendNo" name="appendNo"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>退货日期：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="orderTime" name="orderTime"></label>
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>发货仓库：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>仓库地址：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="wareAddrName" name="wareAddrName"></label>
+                      </td>
+                    </tr>  
+                     <tr>
+	                      <td class="text-right"><b>签收标准：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="signStandardName" name="signStandardName"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>签收人：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="certificateName" name="certificateName"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>身份证：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="certificateId" name="certificateId"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>公章：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="officialSeal" name="officialSeal"></label>
+	                      </td>
+	                    </tr>            
+                    <tr>
+                      <td class="text-right"><b>备注：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remark" name="remark"></label>
+                      </td>
+                    </tr>
+                  </table> 
+                  <div class="mt15">
+                  	<h4 class="mb10">审核记录</h4>
+                    <table id="js_audit_dataTable" data-url="distributionReturn/auditflow/audit/query"></table>
+                  </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/distriReturn/distriReturnSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+             </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script> 
+var auditTabCols = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+}, {
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+}, {
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+}, {
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+}, {
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+}, {
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+    
+  options.initPage = function(){
+      GLOBAL.getEditData($("#form1"), options.param.id);
+      
+      GLOBAL.initTable($('#js_audit_dataTable'), auditTabCols, {
+      	poId: options.param.id
+      }, null, {
+          pagination: false
+      });
+  } 
+  GLOBAL.goBack();
+    
+</script>

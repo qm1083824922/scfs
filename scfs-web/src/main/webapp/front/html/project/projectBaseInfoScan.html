@@ -1,0 +1,167 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>项目</li>
+    <li class="active">项目信息浏览</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="project/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectBaseInfoScan.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectVScan.html">供应商信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectCScan.html">客户信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectWScan.html">仓库信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectGoodsScan.html">商品信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/project/projectUserScan.html">用户信息</a></li>
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                     <td width="180" class="text-right"><b>编号：</b></td>
+                     <td class="text-left">
+                       <label class="js-initform" id="projectNo" name="projectNo"></label>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td class="text-right"><b>简称：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="projectName" name="projectName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>全称：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="fullName" name="fullName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>经营单位：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="businessUnitName" name="businessUnitName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>行业： </b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="industrialName" name="industrialName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>项目编号类型： </b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="projectNoTypeName" name="projectNoTypeName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>额度：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="totalAmount" name="totalAmount"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>额度币种：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="amountUnitValue" name="amountUnitValue"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务类别：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="bizTypeValue" name="bizTypeValue"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>法务主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="lawName" name="lawName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务专员：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="bizSpecialName" name="bizSpecialName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>业务主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="bizManagerName" name="bizManagerName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>商务主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="businessManagerName" name="businessManagerName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>财务专员：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="financeSpecialName" name="financeSpecialName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>财务主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="financeManagerName" name="financeManagerName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>风控专员：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="riskSpecialName" name="riskSpecialName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>风控主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="riskManagerName" name="riskManagerName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>所属部门： </b></td> 
+                     <td class="text-left">
+                     	<label class="js-initform" id="departmentName"></label> 
+                     </td>
+                   </tr> 
+                   <tr>
+                     <td class="text-right"><b>部门主管：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="departmentManagerName" name="departmentManagerName"></label>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td class="text-right"><b>总经理：<em class="text-star">&nbsp;</em></b></td>
+                     <td class="text-left">
+                     	<label class="js-initform" id="bossName" name="bossName"></label>
+                     </td>
+                  </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/project/projectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+      GLOBAL.getEditData($("#form1"), options.param.id);
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  })
+
+  GLOBAL.goBack();
+    
+</script>

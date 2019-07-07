@@ -1,0 +1,130 @@
+
+<div class="wrapper">
+	 <section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>应收费用</li>
+			<li class="active">编辑</li>
+		</ol>
+  </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation"><a class="tab-item"data-url="html/fee/recFee/recFeeEdit.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" data-url="html/fee/recFee/recFeePayEdit.html">应付费用信息</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="fee/spec/pay/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" class="btn btn-primary btn-sm" data-url="html/fee/recFee/recFeePayEditAdd.html" data-permissionUrl="/fee/spec/pay/add" id="add">添加</button>
+					<button type="button" data-url="html/fee/recFee/recFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+					<button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/fee/spec/pay/deleteAll" id="multDel">批量删除</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+				width : '1%'
+			},
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				align : 'center',
+				width : '8%'
+			},{
+				title : '经营单位',
+				field : 'busiUnitNameNo',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '项目',
+				field : 'projectName',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '应付客户',
+				field : 'custReceiverName',
+				align : 'center',
+				width : '10%'
+			},{
+				title : '应付费用科目',
+				field : 'payFeeSpecName',
+				align : 'center',
+				width : '7%'
+			},{
+				title : '应付费用类型',
+				field : 'payFeeTypeName',
+				align : 'center',
+				width : '7%'
+			},{
+				title : '应付日期',
+				field : 'payDate',
+				align : 'center',
+				width : '6%'
+			},{
+				title : '币种',
+				field : 'currencyTypeName',
+				align : 'center',
+				width : '3%'
+			},{
+				title : '应付金额',
+				field : 'payAmount',
+				align : 'center',
+				width : '4%',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, false);
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("fee/spec/pay/deleteAll", {
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+
+	GLOBAL.goBack();
+</script>

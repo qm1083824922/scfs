@@ -1,0 +1,343 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">进销存报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+          <div class="box">
+              <div class="box-header">
+                  <form method="post" action="###" class="form-inline" id="searchForm">
+                      <div class="form-group-sm">
+                      	  <div class="search-item">               
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">仓库：</label>
+                              <select class="form-control js-select" data-url="WAREHOUSE" id="wareHouseId" name="wareHouseId"></select>
+                          </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">日期：</label>
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startBusinessDate"> -
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endBusinessDate">                                                    
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">统计维度：</label>
+                              <select class="form-control js-select" data-url="INVOICING_TYPE" id="statisticsDimensionType" name="statisticsDimensionType" data-empty-option=true></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">部门：</label>
+                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                          </div>
+                           <div class="search-item">
+                              <label class="control-label ml10">业务员：</label>
+                              <select class="form-control js-select" data-url="DEPARTMENT_USER" id="bussinessUserId" name="bussinessUserId" ></select>
+                          </div>
+                           <div class="search-item">
+                              <label class="control-label ml10">是否合计：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                              <button type="reset" id="btnClear" onclick="clearSearch();" class="btn btn-success btn-sm ml10 mr10">清空</button>
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnExport" data-permissionUrl="/invoicing/report/invoicingReport.xls"
+                           		 data-url="invoicing/report/invoicingReport.xls" class="btn btn-warning btn-sm ml10">导出</button>                                 	
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <table id="js_dataTable" data-url="invoicingReport/query">
+                  </table>
+              </div>
+              <!-- .box-body -->
+          </div>
+    </section>
+</div>
+<script>
+function clearSearch() {
+	$('#searchForm')[0].reset();
+	$('#departmentId').val('');
+};
+function scanForward(row, amountTypeFlag) {
+	var condition = "?forward=1";
+	if (row.projectId) {
+		condition = condition + "&projectId=" + row.projectId;
+	}
+	if (row.wareHouseId) {
+		condition = condition + "&wareHouseId=" + row.wareHouseId;
+	}
+	if (row.goodsId) {
+		condition = condition + "&goodsId=" + row.goodsId;
+	}
+	if (row.departmentId) {
+		condition = condition + "&departmentId=" + row.departmentId;
+	}
+	if (row.bussinessUserId) {
+		condition = condition + "&bussinessUserId=" + row.bussinessUserId;
+	}
+	if (row.currencyType) {
+		condition = condition + "&currencyType=" + row.currencyType;
+	}
+	if (amountTypeFlag) {
+		condition = condition + "&amountTypeFlag=" + amountTypeFlag;
+	}
+	if (statisticsDimensionType) {
+		condition = condition + "&statisticsDimensionType=" + $("#statisticsDimensionType").val();
+	}
+	condition = condition + "&startBusinessDate=" + $("#js_form_datetimeStart").val() 
+		+ "&endBusinessDate=" + $("#js_form_datetimeEnd").val();
+	console.info(condition);
+	window.open("html/report/invoicingReport/invoiceDtl.html" + condition);
+}
+
+window.operateEvents = {
+    'click .outerScan': function (e, value, row, index) {
+    	scanForward(row, 1);
+    },
+    'click .innerScan': function (e, value, row, index) {
+    	scanForward(row, 2);
+    },
+    'click .scan': function (e, value, row, index) {
+    	scanForward(row, 0);
+    }
+};
+
+function outerForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		return value;
+	} else {
+	    return '<a class="outerScan">' + value + '</a>';
+	}
+}
+
+function innerForwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		return value;
+	} else {
+	    return '<a class="innerScan">' + value + '</a>';
+	}
+}
+
+function forwardFormatter(value, row, index) {
+	if (!value) {
+		value = "0";
+		return value;
+	} else {
+	    return '<a class="scan">' + value + '</a>';
+	}
+}
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '部门',
+	     field: 'departName',
+	     align: 'center'
+	 },  {
+	     title: '业务员',
+	     field: 'bussinessUserName',
+	     align: 'center'
+	 },{
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 },{
+	     title: '经营单位',
+	     field: 'busiUnitName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'wareHouseName',
+	     align: 'center'
+	 },{
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '商品编码',
+	     field: 'number',
+	     align: 'center',
+	     events: operateEvents,
+	     formatter: outerForwardFormatter
+	 }, {
+	     title: '商品描述',
+	     field: 'name',
+	     align: 'center'
+	 }, 
+	 {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 },{
+	     title: '期初数量',
+	     field: 'startNumber',
+	     align: 'center'
+	 }, {
+	     title: '本期入库数量',
+	     field: 'currInNumber',
+	     align: 'center' 
+	 }, {
+	     title: '本期出库数量',
+	     field: 'currOutNumber',
+	     align: 'center' 
+	 }, {
+	     title: '期末数量',
+	     field: 'endNumber',
+	     align: 'center' 
+	 }, {
+	     title: '期初金额',
+	     field: 'startAmount',
+	     align: 'center' 
+	 },{
+	     title: '期初金额(未税)',
+	     field: 'startExRateAmount',
+	     align: 'center' 
+	 }, {
+	     title: '本期入库金额',
+	     field: 'currInAmount',
+	     align: 'center' 
+	 }, {
+	     title: '本期入库金额(未税)',
+	     field: 'currInExRateAmount',
+	     align: 'center' 
+	 }, {
+	     title: '本期出库金额',
+	     field: 'currOutAmount',
+	     align: 'center' 
+	 }, {
+	     title: '本期出库金额(未税)',
+	     field: 'currOutExRateAmount',
+	     align: 'center' 
+	 }, {
+	     title: '期末金额',
+	     field: 'endAmount',
+	     align: 'center'
+	 },{
+	     title: '期末金额(未税)',
+	     field: 'endExRateAmount',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){ 
+	var datea =  new Date(); 
+	$("#js_form_datetimeEnd").val(GLOBAL.setDefaultDate(0));
+	$("#js_form_datetimeStart").val(GLOBAL.setDefaultDate(1-datea.getDate()));
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) { 
+				var arr=new Array();  
+				arr = data.options.totalStr.split(','); 
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：期初总数量："+
+						arr[0]+"&nbsp;" +",入库单总数量:"+ 
+						arr[1] +",出库单总数量:"+ arr[2] +",期末总数量:"+ 
+						arr[3] +",期初总金额:"+ 
+						arr[4]+data.options.currency+",入库单总金额:"+ 
+						arr[5]+data.options.currency+ ",出库单总金额:"+
+						arr[6]+data.options.currency+ ",期末总金额:"+ 
+						arr[7]+data.options.currency+ "</b></td></tr>");
+			}
+		}
+	});
+
+  	//还原查询条件及过滤后的数据
+  	GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+	$("#statisticsDimensionType").change(function(){
+        var thisValue = $(this).val();
+        if (thisValue == 1) {	//1-项目 
+			$("#wareHouseId").val("");
+			$("#wareHouseId").attr("disabled","disabled");
+			$("#projectId").val("");
+			$("#projectId").removeAttr("disabled");
+			$("#bussinessUserId").val("");
+			$("#bussinessUserId").removeAttr("disabled");
+			$("#departmentName").val("");
+			$("#departmentName").removeAttr("disabled","disabled");
+			$("#departmentId").val("");
+			$("#departmentId").removeAttr("disabled","disabled"); 
+        } else if (thisValue == 2) {	//2-仓库 
+        	$("#wareHouseId").val("");
+			$("#wareHouseId").removeAttr("disabled");
+			$("#projectId").val("");
+			$("#projectId").attr("disabled","disabled");
+			$("#bussinessUserId").val("");
+			$("#bussinessUserId").attr("disabled","disabled");
+			$("#departmentName").val("");
+			$("#departmentName").attr("disabled","disabled");
+			$("#departmentId").val("");
+			$("#departmentId").attr("disabled","disabled");  
+        } else {	//3-项目+仓库
+        	$("#wareHouseId").val("");
+			$("#wareHouseId").removeAttr("disabled");
+			$("#projectId").val("");
+			$("#projectId").removeAttr("disabled");
+			$("#bussinessUserId").val("");
+			$("#bussinessUserId").removeAttr("disabled");
+			$("#departmentName").val("");
+			$("#departmentName").removeAttr("disabled");
+			$("#departmentId").val("");
+			$("#departmentId").removeAttr("disabled");
+        }  
+    });
+	$("#wareHouseId").val("");
+	$("#wareHouseId").attr("disabled","disabled");
+	$("#projectId").val("");
+	$("#projectId").removeAttr("disabled");
+	$("#bussinessUserId").val("");
+	$("#bussinessUserId").removeAttr("disabled");
+	$("#departmentName").val("");
+	$("#departmentName").removeAttr("disabled","disabled");
+	$("#departmentId").val("");
+	$("#departmentId").removeAttr("disabled","disabled"); 
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+$("#btnExport").click(function() {
+	var url = $(this).data("url");
+	url = url + "?" + $("#searchForm").serialize();
+	location.href = GLOBAL.host + url;
+})
+$("#departmentName").change(function() {
+	$("#bussinessUserId").empty();
+	GLOBAL.ajax("common/selected/query?key=DEPARTMENT_USER&pId=" + $("#departmentId").val(), null, function(data) {
+        if (data) {
+            var option = "<option value=''>请选择</option>";
+            var items = data.items;
+            if (items) {
+                for (var k = 0; k < items.length; k++) {
+                	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                }
+                $("#bussinessUserId").append(option);
+            }
+        }
+    })
+    $('select').select2({language: "zh-CN"});
+});
+
+</script>

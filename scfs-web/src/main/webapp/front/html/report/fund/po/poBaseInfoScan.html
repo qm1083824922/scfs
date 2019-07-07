@@ -1,0 +1,241 @@
+<style>
+	.state{
+		display: none;
+	}
+</style>
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>采购</li>
+    <li class="active">基本信息编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="po/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="poBaseInfoScan.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="poOrderDtlScan.html">订单明细</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="attachmentScan.html">附件</a></li>                                
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                  <tr>
+                      <td width="180" class="text-right"><b>项目：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="projectName" name="projectName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应商：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="supplierName" name="supplierName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>客户：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="customerName" name="customerName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>币种：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="currencyName" name="currencyName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>附属编号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="appendNo" name="appendNo"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>订单日期：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="orderTime" name="orderTime"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>预计到货时间：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="perdictTime" name="perdictTime"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>收货仓库：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>仓库地址：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="wareAddrName" name="wareAddrName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收货数量：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id=arrivalNum name="arrivalNum"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收货金额：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="arrivalAmount" name="arrivalAmount"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收票数量：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="invoiceTotalNum" name="invoiceTotalNum"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>收票金额：</b></td>
+                        <td class="text-left">
+                            <label class="js-initform toThound" id="invoiceTotalAmount" name="invoiceTotalAmount"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>要求付款：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="isRequestPayName" name="isRequestPayName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>付款方式：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="payWayName" name="payWayName"></label>
+                      </td>
+                    </tr>
+
+                    <tr class="gearbest_title"><td class="text-right"><b>收款账号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="accountNo" name="accountNo"></label>
+                      </td>
+                    </tr>
+
+                    <tr class="gearbest_title"><td class="text-right"><b>要求付款时间：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="requestPayTime" name="requestPayTime"></label>
+                      </td>
+                    </tr>
+
+                     <tr class="gearbest_title"><td class="text-right"><b>预收订金：</b></td>
+                         <td class="text-left">
+                             <label type="text" class="js-initform toThound" id="perRecAmount" name="perRecAmount"></label>
+                         </td>
+                     </tr>
+
+                     <tr>
+                         <td class="text-right"><b>开立类型：</b></td>
+                         <td class="text-left">
+                             <label type="text" class="js-initform" id="openType" name="openType" />
+                     </tr>
+                    
+                    <tr>
+                      <td class="text-right"><b>预收订金水单号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="cBankWater" name="cBankWater"></label>
+                    </tr>                  
+                    <tr>
+                      <td class="text-right"><b>备注：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="remark" name="remark"></label>
+                      </td>
+                    </tr>
+                  </table>
+                  <div class="mt15">
+                      <h4 class="mb10">审核记录</h4>
+                      <table id="js_audit_dataTable" data-url="po/auditflow/audit/query"></table>
+                  </div>
+            </div>
+            <!-- /.box-body -->
+
+<!--             <div class="box-footer text-center"> -->
+<!--                 <button type="button" data-url="html/purchase/poSearchScanPrint.html" class="btn btn-primary btn-sm state" id="printContract">采购合同打印</button> -->
+<!--               <button type="button" data-url="html/purchase/poSearch.html" class="btn btn-default btn-sm js-back">返回</button> -->
+<!--               <button type="button" id="print" class="btn btn-default btn-sm" data-permissionUrl="/po/print">打印</button> -->
+<!--              <button type="button" data-url="html/purchase/poSearchPackScanPrint.html" class="btn btn-primary btn-sm state" id="printPack">装箱单打印</button> -->
+<!--               <button type="button" data-url="html/purchase/poSearchInvoiceScanPrint.html" class="btn btn-primary btn-sm state"  id="printInvoice">发票打印</button> -->
+<!--             </div> -->
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+    var tabCols2 = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: '5%'
+    }, {
+        title: '流程节点',
+        field: "stateName",
+        width: '15%'
+    }, {
+        title: '处理人',
+        field: "dealName",
+        width: '15%'
+    }, {
+        title: '处理意见',
+        field: "suggestion",
+        width: '25%'
+    }, {
+        title: '开始时间',
+        field: "createTime",
+        width: '15%'
+    }, {
+        title: "处理时间",
+        field: "dealTime",
+        width: '15%'
+    }, {
+        title: "处理状态",
+        field: "auditStateName",
+        width: '10%'
+    }];
+    
+  options.initPage = function(){
+		var status = options.param.stateId;
+		 if(status == 5){
+			 $(".state").show();	
+			$("#printContract").data('data-permissionUrl','/poContract/print');
+			$("#printInvoice").data('data-permissionUrl','/poInvoice/print');
+			$("#printPack").data('data-permissionUrl','/poPack/print');
+		 }
+      GLOBAL.getEditData($("#form1"), options.param.id);
+      GLOBAL.initTable($('#js_audit_dataTable'), tabCols2, {
+          poId: options.param.id
+      }, null, {
+          pagination: false
+      });
+  }
+
+  $("#print").click(function(){
+      //GLOBAL.PRINT.print($("#form1 table"));
+      window.open("html/purchase/poPrint.html?id="+options.param.id);
+  })
+ 
+  $("#printContract").click(function() {
+    	var url = $(this).data("url");
+    	var id = options.param.id;
+    	window.open(url+"?id="+id);
+    });
+      $("#printPack").click(function() {
+    	var url = $(this).data("url");
+    	var id = options.param.id;
+    	window.open(url+"?id="+id);
+    });
+      $("#printInvoice").click(function() {
+    	var url = $(this).data("url");
+    	var id = options.param.id;
+    	window.open(url+"?id="+id);
+    });
+    
+  GLOBAL.goBack();
+    
+</script>

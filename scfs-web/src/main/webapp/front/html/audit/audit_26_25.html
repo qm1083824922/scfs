@@ -1,0 +1,485 @@
+<style>
+.one,
+.two {
+    display: none;
+}
+</style>
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>发票</li>
+        <li>Invoice收票</li>
+        <li class="active">财务专员审核</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="InvoiceCollectAuditInfoFrom" data-url="invoiceCollect/info/audit">
+                <div class="box-header">
+                    <input class="js-initform" type="hidden" id="id" name="id">
+                    <h3 class="mt15 mb5">财务专员审核</h3>
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td class="text-right"><b>项目：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectName" name="projectName"></label>
+                            </td>
+                            <td width="180" class="text-right"><b>供应商：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="supplierName" name="supplierName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>收票金额：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="invoiceAmount" name="invoiceAmount"></label>
+                            </td>
+ 						 <td class="text-right"><b>发票币种：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="currnecyTypeName" name="currnecyTypeName"></label>
+                            </td>                           
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>发票号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="invoiceNo" name="invoiceNo"></label>
+                            </td>
+                            <td class="text-right"><b>发票日期：</b></td>
+                            <td class="text-left">
+                                <label type="text" class="js-initform" id="invoiceDate" name="invoiceDate"></label>
+                            </td>
+                        </tr>
+                         <tr>
+                  			  <td class="text-right"><b>单据类别：</b></td>
+                             <td class="text-left">
+                                <label class="js-initform" id="billTypeName" name="billTypeName"></label>
+                            </td>
+                            <td class="text-right"><b>单据备注：</b></td>
+                            <td class="text-left">
+                                <label type="text" class="js-initform" id="remark" name="remark"></label>
+                            </td>
+                        </tr>
+                          <tr>
+                            <td class="text-right"><b>票据备注：</b></td>
+                            <td class="text-left">
+                                <label type="text" class="js-initform" id="invoiceRemark" name="invoiceRemark"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <h3 class="one mt15 mb5">采购信息</h3>
+                    <h3 class="two mt15 mb5">费用信息</h3>
+                    <table id="js_dataTable"></table>
+                </div>
+                <div class="box-body">
+                    <h4 class="mt15 mb5">附件</h4>
+                    <table id="js_dataFileTable"></table>
+                    <p class="text-center mt10">
+                        <button type="button" data-url="invoiceCollectOverFileList/downLoad" class="btn btn-primary btn-sm attachment-down">批量下载</button>
+                    </p>
+                    <h4 class="mt15 mb5">审核记录</h4>
+                    <table id="js_audit_dataTable" data-url="invoiceCollect/auditflow/audit/query"></table>
+                </div>
+                <!-- .box-body -->
+                <div class="box-footer text-center">
+                    <div class="form-inline" style="width:500px; margin:auto">
+                        <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                        <p class="mt20">
+                            <button type="button" data-url="invoiceCollect/finance/audit" data-permissionUrl="/invoiceCollect/finance/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                            <button type="button" data-url="invoiceCollect/unpass/audit" data-permissionUrl="/invoiceCollect/unpass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                            <button type="button" data-url="invoiceCollect/finance/audit" data-permissionUrl="/invoiceCollect/finance/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                            <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                        </p>
+                        <p class="mt20 psigh" style="display:none">
+                            <label class="control-label pull-rihgt">加签给:</label>
+                            <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                            <button type="button" data-url="collect/sigh/audit" data-permissionUrl="/collect/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                        </p>
+                        <p class="mt20 pdeliver" style="display:none">
+                            <label class="control-label pull-rihgt">转交给:</label>
+                            <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                            <button type="button" data-url="invoiceCollect/deliver/audit" data-permissionUrl="/invoiceCollect/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                        </p>
+                    </div>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [{
+    title: '采购编号',
+    field: 'orderNo',
+    width: 80,
+    align: 'center'
+}, {
+    title: '日期',
+    field: 'orderTime',
+    width: 100,
+    align: 'center'
+}, {
+    title: '商品编号',
+    field: 'goodsNo',
+    width: 70,
+    align: 'center'
+}, {
+    title: '商品描述',
+    field: 'goodsDescribe',
+    width: 210,
+    align: 'center'
+}, {
+    title: '实际收票金额',
+    field: 'realInvoiceAmount',
+    width: 70,
+    align: 'center',
+    formatter: function(value, row, index) {
+            return value == null ? "" : value.toThounds();
+      }
+}, {
+    title: '实际收票币种',
+    field: 'realCurrnecyTypeName',
+    width: 70,
+    align: 'center'
+}];
+
+/*费用数据表格*/
+var tabColsFee = [{
+    title: '费用编号',
+    field: 'feeNo',
+    width: 80,
+    align: 'center'
+}, {
+    title: '费用类型',
+    field: 'feeTypeName',
+    width: 210,
+    align: 'center'
+}, {
+    title: '费用日期',
+    field: 'payDate',
+    width: 100,
+    align: 'center'
+}, {
+    title: '收票币种',
+    field: 'currencyTypeName',
+    width: 70,
+    align: 'center'
+}, {
+    title: '收票金额',
+    field: 'invoiceAmount',
+    width: 70,
+    align: 'center'
+}];
+
+/*审核数据表格*/
+var tabColsLog = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+}, {
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+}, {
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+}, {
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+}, {
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+}, {
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+
+/*附件*/
+window.operateEvents = {
+    'click .download': function(e, value, row, index) {
+        var url = GLOBAL.host + "invoiceCollectOverFile/downLoad?fileId=" + row.id;
+        GLOBAL.preview({type: row.type, url: url});
+    },
+
+};
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="download" href="javascript:void(0)">',
+        '<span class="btn btn-primary btn-sm">下载</span>',
+        '</a>  '
+    ].join('');
+}
+
+/*数据表格*/
+var fileCols = [
+{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '文件名称',
+    field: 'name',
+    width: 92,
+    align: 'center'
+}, {
+    title: '文件类型',
+    field: 'type',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '上传时间',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '操作',
+    field: 'operta',
+    width: 100,
+    align: 'center',
+    events: operateEvents,
+    formatter: operateFormatter
+}];
+
+options.initPage = function() {
+    var $from = $("#InvoiceCollectAuditInfoFrom");
+    var url = $from.data("url");
+    GLOBAL.ajax(url, {
+    	overId: options.param.poId
+    }, function(e) {
+        if (e.success) {
+            var data = e.items.overseasResDto;
+            var type;
+            if (data) {
+                type = data.billType;
+                $(".js-initform", $from).each(function() {
+                    var $this = $(this);
+                    var id = $this.attr("id");
+                    data[id] = data[id] == null ? "" : data[id];
+
+                    if (this.nodeName.toLowerCase() == "label") {
+                        if (data[id]) {
+                            $this.text(data[id]);
+                        }
+                    } else {
+                        $this.val(data[id]);
+                    }
+                });
+            }
+            var fileAttachList = e.items.invoiceCollectFileList;
+            if (fileAttachList) {
+                GLOBAL.initTable($('#js_dataFileTable'), fileCols, null, fileAttachList, {
+                    pagination: false
+                });
+            }
+
+            var tabId;
+            if (type) {
+                if (type == 1) {
+                    var dtls = e.items.overseasPoResDto;
+                    tabId = 1;
+                    GLOBAL.initTable($('#js_dataTable'), tabCols, null, dtls, {pagination: false});
+                }
+                if (type == 2) {
+                    var fees = e.items.overseasFeeResDto;
+                    tabId = 2;
+                    GLOBAL.initTable($('#js_dataTable'), tabColsFee, null, fees, {pagination: false});
+                }
+                var tabArr = ["one", "two", "three"];
+                $("." + tabArr[tabId - 1]).show();
+            }
+
+            GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+                projectItemId: options.param.poId
+            }, null, {
+                pagination: false
+            });
+            GLOBAL.ajax('audit/id/query', {
+                id: options.param.id
+            }, function(e) {
+                var data = e.items;
+                if (data) {
+                    if (data.auditType == 1 || data.auditType == 2) {
+                        $(".psigh,.pdeliver").show();
+                    } else {
+                        $(".punpass").hide();
+                    }
+                }
+            });
+        }
+    });
+}
+
+$("#pass").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+}) 
+$("#passAndNext").click(function() {
+	    var suggestion = $("#suggestion").val();
+	    var url = $(this).data("url");
+	    GLOBAL.ajax(url, {
+	        auditId: options.param.id,
+	        projectItemId: options.param.poId,
+	        suggestion: suggestion || ""
+	    }, function(e) {
+	        if (e.success) {
+	        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+	                if (e.success) { 
+	                	 if(e.items){
+	                		 var id = e.items.id;
+	                         var state = e.items.state;
+	                         var poId = e.items.poId;
+	                         var poType = e.items.poType;
+	                         options.param.id = id;
+	                         options.param.poId = poId;  
+	                         if (poType && state) { 
+	                             GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+	                         }
+	                	 }else{
+	                		 GLOBAL.go("html/entry.html");
+	                	 }  
+	                } else {
+	                    layer.msg(e.msg);
+	                }
+	            });
+	        } else {
+	            layer.msg(e.msg);
+	        }
+	    });
+	})
+$("#sigh").click(function() {
+    var url = $(this).data("url");
+    var sighId = $("#sighId").val();
+
+    if (sighId) {
+        layer.confirm('确定加签吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: sighId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("加签成功！");
+                    $("#sighId").val("");
+                    GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                        projectItemId: options.param.poId
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#sighId").focus();
+    }
+
+
+})
+
+$("#deliver").click(function() {
+    var url = $(this).data("url");
+    var deliverId = $("#deliverId").val();
+    if (deliverId) {
+        layer.confirm('确定转交吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: deliverId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("转交成功！");
+                    $("#deliverId").val("");
+                    if (options.param.entryType == 1) {
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        GLOBAL.go("html/audit/audit.html");
+                    }
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#deliverId").focus();
+    }
+})
+
+$("#unpass").click(function() {
+    var suggestion = $("#suggestion").val();
+    if (!suggestion) {
+        layer.msg("请输入审核意见");
+        return;
+    }
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        projectItemId: options.param.poId,
+        suggestion: suggestion
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核不通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+$(".js-back").click(function() {
+    if (options.param.entryType == 1) {
+        GLOBAL.go("html/entry.html");
+    } else {
+        GLOBAL.go("html/audit/audit.html");
+    }
+})
+
+$(".attachment-down").click(function() {
+    var ids = GLOBAL.selectIds($("#js_dataFileTable"));
+    if (ids) {
+        var url = GLOBAL.host + $(this).data("url") + "?ids=" + ids;
+        window.open(url);
+    }
+})
+</script>

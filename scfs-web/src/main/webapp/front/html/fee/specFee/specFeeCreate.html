@@ -1,0 +1,133 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用科目</li>
+			<li class="active">新建费用科目</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="payForm">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td class="text-right"><b>费用科目编号：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<input type="text" class="form-control" id="feeSpecNo" name="feeSpecNo">
+									</td>
+								</tr>
+								<tr>
+									<td width="180" class="text-right"><b>费用科目类型：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="FEE_SPEC_TYPE" id="feeType" name="feeType"></select>
+									</td>
+								</tr>
+								<tr >
+									<td class="text-right"><b>费用科目名称：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<input type="text" class="form-control" id="feeSpecName" name="feeSpecName">
+									</td>
+								</tr>
+								<tr >
+									<td class="text-right"><b>管理一级名称：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="FEE_SPEC_ONE" id="feeOneName" name="feeOneName"></select>
+										<!-- <input type="text" class="form-control" id="feeOneName" name="feeOneName"> -->
+									</td>
+								</tr>
+								<tr >
+									<td class="text-right"><b>管理二级名称：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<select class="form-control js-select" data-url="FEE_SPEC_ONE" id="feeTwoName" name="feeTwoName" pid="feeOneName"></select>
+										<!-- <input type="text" class="form-control" id="feeTwoName" name="feeTwoName"> -->
+									</td>
+								</tr>
+								<tr >
+									<td class="text-right"><b>财务科目编码：<em class="text-star">*</em></b></td>
+									<td class="text-left">
+										<input type="text" class="form-control" id="financeCode" name="financeCode">
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left">
+										<textarea class="form-control"	id="remark" cols="50" rows="5" name="remark"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="submit" id="save" data-url="fee/spec/add"  class="btn btn-primary btn-sm" data-permissionUrl="/fee/spec/add">保存</button>
+					<button type="button" id="js-back" data-url="html/fee/specFee/specFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	var options = {
+		param : {
+			id : 0,
+			cid : 0,
+		},
+		initPage : function() {
+
+			$("#payForm").validate(
+			{
+				rules : {
+					feeSpecNo : {
+						required : true,
+		                maxlength : 30
+					},
+					feeType : {
+						required : true,
+					},
+					feeSpecName : {
+						required : true,
+		                maxlength : 20
+					},
+					feeOneName : {
+						required : true,
+					},
+					feeTwoName : {
+						required : true,
+					},
+					financeCode : {
+						required : true,
+		                maxlength : 50
+					},
+					remark: {
+		            	maxlength : 200
+		            }
+				},
+				submitHandler : function() {
+					var data = $("#payForm").serialize();
+					GLOBAL.ajax("fee/spec/add",data,function(e) {
+					layer.msg(
+						"保存成功！",
+						{
+							icon : 1,
+							time : 1500
+						},
+						function() {
+							options.param.id = e.items;
+							GLOBAL.go("html/fee/specFee/specFeeEdit.html",options.param);
+						})
+				}, false, $("#save"));
+				}
+			});
+		}
+	};
+
+	GLOBAL.goBack();
+</script>

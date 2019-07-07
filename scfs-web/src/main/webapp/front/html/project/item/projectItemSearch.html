@@ -1,0 +1,42 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li class="active">条款</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <p>
+                            <label class="control-label">经营单位：</label> 
+							<select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId"  name="businessUnitId"> </select>
+                     		<label class="control-label">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+                            <label class="control-label ml10">编号：</label>
+                            <input type="text" class="form-control" id="itemNo" name="itemNo">
+                            <label class="control-label ml10">状态：</label> 
+							<select class="form-control js-select" data-url="PROJECTITEM_STATE" id="status"  name="status"> </select>
+                          	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                           	<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/project/item/newBuildProjectItem.html" data-permissionUrl="/projectItem/add" class="btn btn-warning btn-sm ml10">新建</button>   
+                        </p>  
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="projectItem/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>  
+    </section>
+</div>
+
+<script src="../../../js/project/item/projectItem.js"></script>

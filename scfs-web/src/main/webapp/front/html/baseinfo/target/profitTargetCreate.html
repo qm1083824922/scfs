@@ -1,0 +1,168 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>业务目标值</li>
+            <li class="active">新建</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1">
+                <div class="box-body">
+                    <div class="row">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <td class="text-right"><b>业务员：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="USER" id="userId" name="userId"> </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                     <td width="160" class="text-right"><b>月份：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="issue" name="issue">
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>利润目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetProfitAmount" name="targetProfitAmount" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>业务利润目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetBizManager" name="targetBizManager" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>销售毛利润目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetSaleBlance" name="targetSaleBlance" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>经营收入目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetSaleAmount" name="targetSaleAmount" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>管理费用目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetManageAmount" name="targetManageAmount" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>经营费用目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetWarehouseAmount" name="targetWarehouseAmount" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="text-right"><b>资金成本目标值：<em class="text-star">*</em></b></td>
+                                     <td class="text-left">
+                                         <input type="text" class="form-control" id="targetFundVost" name="targetFundVost" >
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="text-right"><b>业务审核人：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="USER" id="busiId" name="busiId"> </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><b>部门主管审核人：<em class="text-star">*</em></b></td>
+                                    <td class="text-left">
+                                        <select class="form-control js-select" data-url="USER" id="deptManageId" name="deptManageId"> </select>
+                                    </td>
+                                </tr>
+                            </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="submit" id="save" data-permissionUrl="/profitTarget/add" data-url="html/baseinfo/target/profitTargetEdit.html" class="btn btn-primary btn-sm">保存</button>
+                    <button type="button" data-url="html/baseinfo/target/profitTargetSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+var options = {
+    param: {
+        id: 0,
+        cid: 0
+    },
+    initPage: function() {
+        $("#form1").validate({
+            rules: {
+            	userId: {
+                    required: true
+                },
+                issue: {
+                    required: true,
+                    digits: true,
+                    maxlength:6
+                },
+                targetProfitAmount: {
+                    required: true,
+                    number: true
+                },
+                targetBizManager: {
+                    required: true,
+                    number: true
+                },
+                targetSaleBlance: {
+                    required: true,
+                    number: true
+                },
+                targetSaleAmount: {
+                    required: true,
+                    number: true
+                },
+                targetManageAmount: {
+                    required: true,
+                    number: true
+                },
+                targetWarehouseAmount: {
+                    required: true,
+                    number: true
+                },
+                targetFundVost: {
+                    required: true,
+                    number: true
+                },
+                busiId: {
+                    required: true
+                },
+                deptManageId: {
+                    required: true
+                }
+                
+            },
+            submitHandler: function() {
+                var data = $("#form1").serialize();
+                GLOBAL.ajax("profitTarget/add", data, function(e) {
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    }, function() {
+                        options.param.id = e.items;
+                        GLOBAL.go("html/baseinfo/target/profitTargetSearch.html", options.param);
+                    })
+
+                }, false, $("#save"));
+            }
+        });
+    }
+}
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

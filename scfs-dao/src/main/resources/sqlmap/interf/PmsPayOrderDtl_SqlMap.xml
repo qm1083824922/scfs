@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.interf.PmsPayOrderDtlDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsPayOrderDtl">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pms_pay_order_title_id" jdbcType="INTEGER"
+			property="pmsPayOrderTitleId" />
+		<result column="po_no" jdbcType="VARCHAR" property="poNo" />
+		<result column="goods_no" jdbcType="VARCHAR" property="goodsNo" />
+		<result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+		<result column="in_qty" jdbcType="DECIMAL" property="inQty" />
+		<result column="in_price" jdbcType="DECIMAL" property="inPrice" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pms_pay_order_title_id, po_no, goods_no, goods_name,
+		in_qty,
+		in_price, message,
+		create_at, update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_order_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryResultsByTitleId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_pay_order_dtl
+		where pms_pay_order_title_id = #{titleId}
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsPayOrderDtl">
+		insert into
+		tb_pms_pay_order_dtl (pms_pay_order_title_id, po_no,
+		goods_no,
+		goods_name, in_qty,
+		in_price, message, create_at)
+		values (
+		#{pmsPayOrderTitleId,jdbcType=INTEGER}, #{poNo,jdbcType=VARCHAR},
+		#{goodsNo,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR},
+		#{inQty,jdbcType=DECIMAL},
+		#{inPrice,jdbcType=DECIMAL},
+		#{message,jdbcType=VARCHAR}, #{createAt,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.entity.PmsPayOrderDtl">
+		update tb_pms_pay_order_dtl
+		<set>
+			<if test="pmsPayOrderTitleId != null">
+				pms_pay_order_title_id =
+				#{pmsPayOrderTitleId,jdbcType=INTEGER},
+			</if>
+			<if test="poNo != null">
+				po_no = #{poNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsNo != null">
+				goods_no = #{goodsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="inQty != null">
+				in_qty = #{inQty,jdbcType=DECIMAL},
+			</if>
+			<if test="inPrice != null">
+				in_price = #{inPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="message != null">
+				message = #{message,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

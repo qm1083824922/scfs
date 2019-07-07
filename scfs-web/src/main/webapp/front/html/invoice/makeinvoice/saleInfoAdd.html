@@ -1,0 +1,255 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票</li>
+            <li class="active">销售信息新增</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box"> 
+        	<div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <p>
+                            <label class="control-label">单据编号：</label> 
+							<input type="text" class="form-control" id="billNo" name="billNo">
+                            <label class="control-label ml10">商品编号：</label>
+							<input type="text" class="form-control" id="goodsNumber" name="goodsNumber">
+                            <label class="control-label ml10">商品名称：</label>
+                            <input type="text"  class="form-control" id="goodsName"  name="goodsName"> 
+                     		<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                        </p> 
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body"> 
+                <table id="js_dataTable" data-url="invoiceSaleNotSelect/query">
+                </table>
+                <b><span class="total_sum"></span></b>
+            </div>
+            <div class="box-footer text-center"> 
+               <button type="button" id="save" class="btn btn-primary btn-sm" data-url="invoiceBatchSale/add" data-permissionUrl="/invoiceBatchSale/add" >保存</button>
+               <button type="button" id="back" data-url="html/invoice/makeinvoice/saleInfoSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+   			</div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+
+/*数据表格*/
+var tabCols = [
+	 {
+         field: 'checkItem',
+         checkbox: true,
+     },{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '销售/退货单编号',
+	     field: 'billNo',
+	     width: 92,
+	     align: 'center'
+	 }, {
+	     title: '单据日期',
+	     field: 'billDate',
+	     width: 85,
+	     align: 'center'
+	 }, {
+	     title: '商品编号',
+	     field: 'goodsNumber',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '商品描述',
+	     field: 'goodsName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '可开票数量',
+	     field: 'provideMaxNum',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '可开票金额',
+	     field: 'provideMaxAmount',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '开票单价',
+	     field: 'provideInvoicePrice',
+	     visible: false
+	 },{
+	     title: '开票数量',
+	     field: 'provideInvoiceNum',
+	     width: 100,
+	     align: 'center',
+		 formatter : function(value, row, index) { 
+			return '<input type="text" class="form-control advance-amount" value="'+value+'">';
+		 }
+	 }, {
+	     title: '开票金额',
+	     field: 'provideInvoiceAmount',
+	     width: 100,
+	     align: 'center',
+		 formatter : function(value, row, index) {
+			return '<input type="text"class="form-control advance-price" value="'+value+'">';
+		  }
+	 },
+];
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols,  {id: options.param.id}, null, {
+        onCheck: function(row, $element){
+			sum();
+        },
+        onUncheck:function(row, $element){
+            sum();
+        },
+        onCheckAll: function(){
+            sum();
+        },
+        onUncheckAll: function(){
+            sum();
+        },
+        onLoadSuccess: function(data) {
+        	sum();
+        }
+    });
+	$('#js_dataTable').on("input", ".advance-amount", function(){
+        var provideInvoiceNum = $(this).val();
+	    var $provideInvoiceAmount = $(this).closest("tr").find(".advance-price");
+        var uniqueid = $(this).closest("tr").data("uniqueid");
+        var row = $('#js_dataTable').bootstrapTable('getRowByUniqueId', uniqueid);
+        var provideInvoicePrice = row.provideInvoicePrice;
+        var provideInvoiceAmount = provideInvoiceNum*provideInvoicePrice;
+        $provideInvoiceAmount.val(provideInvoiceAmount.toFixed(2));
+        sum();
+    });
+	$('#js_dataTable').on("input", ".advance-price", function(){
+        sum();
+    });
+ };
+ 
+ function sum(){
+	  var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+	  var totalProvideInvoiceNum = 0;
+	  var totalProvideInvoiceAmount = 0;
+	  for(var i= 0; i < selectedRows.length; i++){
+	      var id = selectedRows[i].id;
+	      var provideInvoiceNum = $('#js_dataTable tr[data-uniqueid='+id+']').find(".advance-amount").val();
+	      var provideInvoiceAmount = $('#js_dataTable tr[data-uniqueid='+id+']').find(".advance-price").val();
+	      if(provideInvoiceNum){
+	    	  totalProvideInvoiceNum += parseFloat(provideInvoiceNum);
+	      }
+	      if(provideInvoiceAmount){
+	    	  totalProvideInvoiceAmount += parseFloat(provideInvoiceAmount);
+	      }
+	  }
+	  totalProvideInvoiceNum = totalProvideInvoiceNum.toFixed(2);
+	  totalProvideInvoiceAmount = totalProvideInvoiceAmount.toFixed(2);
+	  $(".total_sum").text("合计：开票数量：" + totalProvideInvoiceNum + "；开票金额：" + totalProvideInvoiceAmount);
+	}
+ 
+$("#btnSearch").click(function() {
+	var data = {id: options.param.id,
+			billNo:$('#billNo').val(),
+			goodName:$('#goodsName').val(),
+			goodNum:$('#goodsNumber').val()}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#back").click(function(){
+    var url = $(this).data("url");
+    options.param.id=options.param.cid;
+    GLOBAL.go(url, options.param);
+})  
+$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+		
+				var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+				console.log(selectedRows);
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id; 
+						var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;//金额校验
+						var $tr = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]');
+						var $provideInvoiceNum = $tr.find(".advance-amount ");
+						var $provideInvoiceAmount = $tr.find(".advance-price");
+						var provideInvoiceNum = $provideInvoiceNum.val();
+						var provideInvoiceAmount = $provideInvoiceAmount.val();
+						if (provideInvoiceNum == "") {
+							layer.msg("数量不能为空");
+							$provideInvoiceNum.focus();
+							isValid = false;
+						}
+						if (provideInvoiceAmount == "") {
+							layer.msg("金额不能为空");
+							$provideInvoiceAmount.focus();
+							isValid = false;
+						}
+						if (!pattern.test(provideInvoiceNum)) {
+							layer.msg("请输入正确格式");
+							$provideInvoiceNum.focus();
+							isValid = false;
+						}else if (!pattern.test(provideInvoiceAmount)) {
+							layer.msg("请输入正确格式");
+							$provideInvoiceAmount.focus();
+							isValid = false;
+						}  else {
+							console.log("selectedRows: ",selectedRows)
+							dtlArr.push({ 
+								"provideInvoiceNum": provideInvoiceNum,
+								"provideInvoicePrice": selectedRows[i].provideInvoicePrice,
+								"provideInvoiceAmount" : provideInvoiceAmount,
+								"billNo":selectedRows[i].billNo,
+								"billDate" : selectedRows[i].billDate,
+								"goodsNumber": selectedRows[i].goodsNumber,
+								"goodsName" : selectedRows[i].goodsName, 
+								"billId" : selectedRows[i].billId, 
+								"billDtlId" : selectedRows[i].billDtlId,  
+								"invoiceApplyId" : selectedRows[i].invoiceApplyId,
+								"goodsId" : selectedRows[i].goodsId,
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+					    invoiceSaleManagerReqDto : dtlArr,
+						id : options.param.id
+					};
+					var setContentType = false;
+					console.log(saveData);
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								   options.param.id=options.param.cid; 
+								GLOBAL.go("html/invoice/makeinvoice/saleInfoSearch.html",options.param);
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, true);
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

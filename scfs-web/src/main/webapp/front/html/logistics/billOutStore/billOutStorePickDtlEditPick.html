@@ -1,0 +1,171 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>出库单</li>
+    <li>拣货明细</li>
+    <li class="active">拣货</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="billOutStorePickDtlEditPickForm"> 
+            <div class="box-body">
+                <table id="js_dataTable" data-url="stl/available/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+              <button type="button" data-permissionUrl="/billOutStorePickDtl/add" id="save" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" data-url="html/logistics/billOutStore/billOutStorePickDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+	  var params = {
+		  billOutStoreId : options.param.id,
+		  billOutStoreDtlId : options.param.cid,
+	      querySource : 3
+	  };
+	  GLOBAL.initTable($('#js_dataTable'), tabCols, params);
+  }
+  
+  function pickupNumFormatter(value, row, index) {
+	  if (value) {
+	      return "<input type='number' class='pickupNum' style='text-align:center;color:red' value=" + value + "></input>";
+	  } else {
+		  return "<input type='number' class='pickupNum' style='text-align:center;color:red'></input>";
+	  }
+  }
+  
+  /*数据表格*/
+  var tabCols = [{
+           field: 'checkItem',
+           checkbox: true,
+      }, {  
+  	     title: '序号',
+  	     field: 'columnsNumber',  
+  	     width: 10
+       }, {
+  	     title: '商品编号',
+  	     field: 'goodsNumber',
+  	     align: 'center'
+  	 }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+  	     title: '商品名称',
+  	     field: 'goodsName',
+  	     align: 'center'
+  	 }, {
+  	     title: '商品型号',
+  	     field: 'goodsType',
+  	     align: 'center'
+  	 }, {
+  	     title: '订单编号',
+  	     field: 'orderNo',
+  	     align: 'center'
+  	 }, {
+  	     title: '订单附属编号',
+  	     field: 'appendNo',
+  	     align: 'center'
+  	 }, {
+  	     title: '入库编号',
+  	     field: 'billNo',
+  	     align: 'center'
+  	 }, {
+  	     title: '入库附属编号',
+  	     field: 'affiliateNo',
+  	     align: 'center'
+  	 }, {
+         title: '库存数量',
+         field: 'storeNum',
+         align: 'center'
+     }, {
+         title: '锁定数量',
+         field: 'lockNum',
+         align: 'center'
+     }, {
+         title: '可用库存数量',
+         field: 'availableNum',
+         align: 'center'
+     }, {
+  	     title: '批次',
+  	     field: 'batchNo',
+  	     align: 'center'
+  	 }, {
+  	     title: '库存状态',
+  	     field: 'goodsStatusName',
+  	     align: 'center'
+  	 }, {
+         title: '拣货数量',
+         field: 'pickupNum',
+         align: 'center',
+         formatter: pickupNumFormatter
+     }
+  ];
+  
+$("#save").click(function() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    if (idsLen == 0) {
+      	layer.msg("请选择！");
+      	return;
+    }
+    var rows = [];
+    for (var i = 0; i < idsLen; i++) {
+    	var row = new Object();
+    	var id = selectedRows[i].id;
+    	row.id = id;
+    	row.goodsId = selectedRows[i].goodsId;
+    	row.batchNo = selectedRows[i].batchNo || "";
+    	row.goodsStatus = selectedRows[i].goodsStatus;
+    	row.costPrice = selectedRows[i].costPrice;
+    	row.poPrice = selectedRows[i].poPrice;
+    	var availableNum = selectedRows[i].availableNum;
+    	
+    	var pickupNum = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".pickupNum").val();
+    	if (!pickupNum) {
+    		layer.msg("拣货数量必填且正确，请重新输入");
+    		return;
+    	}
+    	if (pickupNum <= 0) {
+    		layer.msg("拣货数量不能为负数和零，请重新输入");
+    		return;
+    	}
+    	if (pickupNum*1 > availableNum*1) {
+    		layer.msg("拣货数量大于可用库存数量，请重新输入");
+    		return;
+    	}
+    	row.pickupNum = pickupNum;
+    	rows.push(row);
+    }
+    add(rows);
+})
+
+function add(rows) {
+	var params = {
+		id: options.param.cid,
+		billOutStoreId: options.param.id,
+		stlList: rows
+	}
+	GLOBAL.ajax("billOutStorePickDtl/add", JSON.stringify(params), function(e){
+        if (e.success) {
+      		layer.msg("拣货成功", {
+                icon: 1
+          	})
+          	GLOBAL.go("html/logistics/billOutStore/billOutStorePickDtlEdit.html", options.param);
+        } else {
+           layer.msg(e.msg);
+        } 
+  	}, true)
+}
+
+GLOBAL.goBack();
+
+</script>

@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.DistributionGoodsDao">
+
+	<resultMap id="BaseGoodsMap" type="com.scfs.domain.base.entity.DistributionGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="number" property="number" jdbcType="VARCHAR" />
+		<id column="name" property="name" jdbcType="VARCHAR" />
+		<id column="department_id" property="departmentId" jdbcType="INTEGER" />
+		<id column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<id column="pledge" property="pledge" jdbcType="VARCHAR" />
+		<id column="type" property="type" jdbcType="VARCHAR" />
+		<id column="bar_code" property="barCode" jdbcType="VARCHAR" />
+		<id column="specification" property="specification" jdbcType="VARCHAR" />
+		<id column="tax_classification" property="taxClassification"
+			jdbcType="VARCHAR" />
+		<id column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<id column="unit" property="unit" jdbcType="VARCHAR" />
+		<id column="volume" property="volume" jdbcType="DECIMAL" />
+		<id column="gross_weight" property="grossWeight" jdbcType="DECIMAL" />
+		<id column="net_weight" property="netWeight" jdbcType="DECIMAL" />
+		<id column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+		<id column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+		<id column="status" property="status" jdbcType="TINYINT" />
+		<id column="creator" property="creator" jdbcType="VARCHAR" />
+		<id column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<id column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<id column="delete_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<id column="locker" property="locker" jdbcType="VARCHAR" />
+		<id column="lock_at" property="lockAt" jdbcType="TIMESTAMP" />
+		<id column="sale_currency_type" property="saleCurrencyType"
+			jdbcType="TINYINT" />
+		<id column="pur_currency_type" property="purCurrencyType" jdbcType="TINYINT" />
+		<id column="brand" property="brand" jdbcType="VARCHAR" />
+
+		<id column="career_id" property="careerId" jdbcType="INTEGER" />
+		<id column="purchase_id" property="purchaseId" jdbcType="INTEGER" />
+		<id column="supply_chain_group_id" property="supplyChainGroupId"
+			jdbcType="INTEGER" />
+		<id column="supply_chain_service_id" property="supplyChainServiceId"
+			jdbcType="INTEGER" />
+		<id column="risk_id" property="riskId" jdbcType="INTEGER" />
+		<id column="good_type" property="goodType" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="detail_goods_column_list">
+		id, number, name, department_id, supplier_id, pledge, type,
+		bar_code, specification,
+		tax_classification, tax_rate, unit, volume,
+		gross_weight, net_weight,
+		purchase_price, sale_price, status, creator,
+		deleter, create_at,
+		update_at, delete_at, is_delete,lock_at,locker,
+		pur_currency_type,sale_currency_type,brand,career_id,purchase_id,supply_chain_group_id,supply_chain_service_id,risk_id,good_type,grow,broad
+	</sql>
+	<sql id="Query_goods_column_list">
+		go.id, go.number, go.name,go.department_id, go.supplier_id,
+		go.pledge, go.type,
+		go.bar_code, go.specification,
+		go.tax_classification,go.tax_rate, go.unit, go.volume,
+		go.gross_weight, go.net_weight,
+		go.purchase_price, go.sale_price,
+		go.status, go.creator,
+		go.deleter, go.create_at,
+		go.update_at,
+		go.delete_at, go.is_delete,go.lock_at,go.locker,
+		go.pur_currency_type,go.sale_currency_type,go.brand,go.career_id,go.purchase_id,go.supply_chain_group_id,go.supply_chain_service_id,go.risk_id,go.good_type
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.DistributionGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_base_goods(
+		number,
+		name,
+		department_id,
+		supplier_id,
+		pledge,
+		type,
+		bar_code,
+		specification,
+		tax_classification,
+		tax_rate,
+		unit,
+		volume,
+		gross_weight,
+		net_weight,
+		purchase_price,
+		sale_price,
+		status,
+		creator,
+		pur_currency_type,
+		sale_currency_type,
+		brand,
+		good_type,
+
+		career_id,
+		purchase_id,
+		supply_chain_group_id,
+		supply_chain_service_id,
+		risk_id,
+		grow,
+		broad
+		)
+		values(
+		#{number,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+
+		#{departmentId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER},
+		#{pledge,jdbcType=VARCHAR},
+
+		IFNULL(#{type,jdbcType=VARCHAR},'') ,
+		#{barCode,jdbcType=VARCHAR},
+		#{specification,jdbcType=VARCHAR},
+		#{taxClassification,jdbcType=VARCHAR},
+		#{taxRate,jdbcType=DECIMAL},
+		#{unit,jdbcType=VARCHAR},
+		#{volume,jdbcType=DECIMAL},
+		#{grossWeight,jdbcType=DECIMAL},
+		#{netWeight,jdbcType=DECIMAL},
+		#{purchasePrice,jdbcType=DECIMAL},
+		#{salePrice,jdbcType=DECIMAL},
+		#{status,jdbcType=TINYINT},
+		#{creator,jdbcType=VARCHAR},
+		#{purCurrencyType,jdbcType=TINYINT},
+		#{saleCurrencyType,jdbcType=TINYINT},
+		#{brand,jdbcType=VARCHAR},
+		#{goodType,jdbcType=TINYINT},
+
+		#{careerId,jdbcType=INTEGER},
+		#{purchaseId,jdbcType=INTEGER},
+		#{supplyChainGroupId,jdbcType=INTEGER},
+		#{supplyChainServiceId,jdbcType=INTEGER},
+		#{riskId,jdbcType=INTEGER},
+		#{grow,jdbcType=DECIMAL},
+		#{broad,jdbcType=DECIMAL}
+		)
+	</insert>
+	<update id="update" parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		update tb_base_goods
+		<set>
+			<if test="number != null">
+				number=#{number},
+			</if>
+			<if test="name != null">
+				name=#{name},
+			</if>
+
+			<if test="departmentId != null">
+				department_id=#{departmentId},
+			</if>
+			<if test="supplierId != null">
+				supplier_id=#{supplierId},
+			</if>
+			<if test="pledge != null and pledge != ''">
+				pledge=#{pledge},
+			</if>
+
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="barCode != null">
+				bar_code = #{barCode},
+			</if>
+			<if test="specification != null">
+				specification = #{specification},
+			</if>
+			<if test="taxClassification != null ">
+				tax_classification = #{taxClassification},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate},
+			</if>
+			<if test="unit != null">
+				unit = #{unit},
+			</if>
+			<if test="volume != null">
+				volume = #{volume},
+			</if>
+			<if test="grossWeight != null">
+				gross_weight = #{grossWeight},
+			</if>
+			<if test="netWeight != null">
+				net_weight = #{netWeight},
+			</if>
+			<if test="purchasePrice != null">
+				purchase_price = #{purchasePrice},
+			</if>
+			<if test="salePrice != null">
+				sale_price = #{salePrice},
+			</if>
+			<if test="status != null">
+				status = #{status}
+			</if>
+			<if test="creator != null">
+				creator = #{creator},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt},
+			</if>
+			<if test="saleCurrencyType != null">
+				sale_currency_type = #{saleCurrencyType},
+			</if>
+			<if test="purCurrencyType != null">
+				pur_currency_type = #{purCurrencyType},
+			</if>
+			<if test="brand != null">
+				brand = #{brand},
+			</if>
+			<if test="goodType != null">
+				good_type=#{goodType}
+			</if>
+
+			<if test="careerId != null">
+				career_id = #{careerId},
+			</if>
+			<if test="purchaseId != null">
+				purchase_id = #{purchaseId},
+			</if>
+			<if test="supplyChainGroupId != null">
+				supply_chain_group_id = #{supplyChainGroupId},
+			</if>
+			<if test="supplyChainServiceId != null">
+				supply_chain_service_id = #{supplyChainServiceId},
+			</if>
+			<if test="riskId != null">
+				risk_id = #{riskId},
+			</if>
+			<if test="broad != null">
+				broad = #{broad},
+			</if>
+			<if test="grow != null">
+				grow = #{grow},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="delete" parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		update tb_base_goods
+		set
+		is_delete=#{isDelete} ,
+		deleter=#{deleter} , delete_at=#{deleteAt}
+		where id=#{id}
+	</update>
+	<update id="submit" parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		update tb_base_goods
+		set
+		status=#{status}
+		where
+		id=#{id}
+	</update>
+	<update id="lock" parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		update tb_base_goods
+		set
+		status=#{status},
+		locker=#{locker} , lock_at=#{lockAt}
+		where id=#{id}
+	</update>
+	<update id="unlock" parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		update tb_base_goods
+		set
+		status=#{status},
+		locker=#{locker} , lock_at=#{lockAt}
+		where
+		id=#{id}
+	</update>
+
+	<!-- 查询分页数据 -->
+	<select id="queryDistributionGoodsList" resultMap="BaseGoodsMap"
+		parameterType="com.scfs.domain.base.dto.req.DistributionGoodsReqDto">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		<where>
+			is_delete = 0
+			and good_type=1
+			<if test="number != null and number != ''">
+				and number like CONCAT('%',#{number},'%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''">
+				and type like CONCAT('%',#{type},'%')
+			</if>
+			<if test="specification != null and specification != ''">
+				and specification like CONCAT('%',#{specification},'%')
+			</if>
+			<if test="barCode != null and barCode != '' ">
+				and bar_code like CONCAT('%',#{barCode},'%')
+			</if>
+			<if test="status != null">
+				and status=#{status}
+			</if>
+			<if test="departmentId != null">
+				and department_id = #{departmentId}
+			</if>
+			<if test="supplierId != null">
+				and supplier_id = #{supplierId}
+			</if>
+			<if test="codeList != null">
+				<foreach collection="codeList" item="dId" open="AND supplier_id in("
+					separator="," close=")">
+					${dId.code}
+				</foreach>
+			</if>
+			<if test="projectId != null">
+				and id not in(select goods_id from tb_project_goods where
+				is_delete=0 AND STATUS=1 AND project_id =#{projectId})
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<select id="getExistCountByCon" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.base.entity.DistributionGoods">
+		select count(1)
+		from tb_base_goods
+		<where>
+			is_delete = 0
+			and good_type=1
+			<if test="number != null and number != ''">
+				and number = #{number}
+			</if>
+			<if test="id != null">
+				and id != #{id}
+			</if>
+		</where>
+	</select>
+
+	<!-- 获取所有信息 -->
+	<select id="queryAllDistributionGoodsList" resultMap="BaseGoodsMap"
+		parameterType="com.scfs.domain.base.dto.req.DistributionGoodsReqDto">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		<where>
+			is_delete = 0
+			and good_type=1
+			<if test="updateAt != null">
+                <![CDATA[
+                  and update_at > #{updateAt}
+                ]]>
+			</if>
+			<if test="departmentId != null">
+				and department_id = #{departmentId}
+			</if>
+			<if test="supplierId != null">
+				and supplier_id = #{supplierId}
+			</if>
+			<if test="number != null and number != ''">
+				and number = #{number}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询融通质押项目下信息 -->
+	<select id="queryDistributionGoodsListByProject" resultMap="BaseGoodsMap"
+		parameterType="com.scfs.domain.base.dto.req.DistributionGoodsReqDto">
+		select
+		r.id,
+		g.number,
+		g.name,
+		g.department_id,
+		g.supplier_id,
+		g.pledge,
+		g.type,
+		g.bar_code,
+		g.specification,
+		g.tax_classification,
+		g.tax_rate,
+		g.unit,
+		g.volume,
+		g.gross_weight,
+		g.net_weight,
+		g.purchase_price,
+		g.sale_price,
+		g.status,
+		r.creator,
+		r.create_at,
+		r.deleter,
+		r.delete_at,
+		g.update_at,
+		g.is_delete,
+		g.locker,
+		g.lock_at,
+		g.sale_currency_type,
+		g.pur_currency_type,
+		g.brand,
+		g.career_id,
+		g.purchase_id,
+		g.supply_chain_group_id,
+		g.supply_chain_service_id,
+		g.risk_id
+		from
+		tb_base_goods g
+		LEFT JOIN tb_project_goods r
+		ON
+		g.id=r.goods_id
+		<where>
+			g.is_delete = 0
+			and g.good_type=1
+			and r.is_delete=0
+			and r.STATUS=1
+			<if test="projectId != null">
+				and project_id =#{projectId}
+			</if>
+		</where>
+		order by r.id desc
+	</select>
+
+
+	<!-- 获取最后更新时间 -->
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_goods where is_delete=0 and good_type=1
+	</select>
+	<!-- 获取详情 -->
+	<select id="queryDistributionGoodsById" resultMap="BaseGoodsMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		WHERE id=#{id}
+		for update
+	</select>
+	<!--根据编号和币种查询铺货商品 -->
+	<select id="queryDistributionGoodByNumber"
+		parameterType="com.scfs.domain.base.dto.req.DistributionGoodsReqDto"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="Query_goods_column_list" />
+		from tb_base_goods go INNER JOIN tb_project_goods pro on
+		go.id=pro.goods_id where
+		go.supplier_id=#{supplierId,jdbcType=INTEGER}
+		and pro.goods_id=#{goodId,jdbcType=INTEGER}
+		and pro.project_id =
+		#{projectId,jdbcType=INTEGER}
+		and go.is_delete=0 and pro.is_delete=0
+		and go.good_type=1
+	</select>
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods where id=#{id} for update
+	</select>
+
+	<!-- 获取所有更新信息 -->
+	<select id="queryAllDistributeGoodsList" resultMap="BaseGoodsMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		<where>
+			is_delete=0
+			and good_type=1
+			<if test="updateAt != null">
+                <![CDATA[
+                and update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryDistributionGoodsByNumber" parameterType="java.lang.String"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods where number=#{number,jdbcType=VARCHAR}
+		and
+		is_delete=0 and status =2 and good_type=1
+	</select>
+	<select id="queryResultGoodsBySku" parameterType="java.lang.String"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods where number=#{number,jdbcType=VARCHAR}
+		and
+		is_delete=0 and status in (2,3) and good_type=1
+	</select>
+
+</mapper>

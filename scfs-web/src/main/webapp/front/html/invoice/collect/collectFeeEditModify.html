@@ -1,0 +1,156 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+        <li>发票</li>
+        <li>收票</li>
+        <li>费用信息</li>
+		<li class="active">修改</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="invoiceCollectFee/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"name="id"> 
+					<input class="form-control js-initform" type="hidden" id="collectId" name="collectId">
+					<table id="js_dataTable" class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>费用编号：</b></td>
+							<td class="text-left"><label class="js-initform" id="feeNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>费用类型：</b></td>
+							<td class="text-left"><label class="js-initform" id="feeTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用科目：</b></td>
+							<td class="text-left"><label class="js-initform" id="payFeeSpecName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用日期：</b></td>
+							<td class="text-left"><label class=" js-initform" id="payDate"></label></td>
+						</tr>
+
+						<tr>
+							<td class="text-right"><b>费用税率：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="taxRate" ></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>余额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="blance" name="blance"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>费用金额：</b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="inRateAmount" name="inRateAmount">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>费用未税金额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="exRateAmount" name="exRateAmount"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>税额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="rateAmount" name="rateAmount"></label>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="save" data-url="invoiceCollectFee/update" data-permissionUrl="/invoiceCollectFee/update"
+						class="btn btn-primary btn-sm">保存</button>
+					<button type="button" data-url="html/invoice/collect/collectFeeEdit.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		$('#js_dataTable').on("blur","#inRateAmount",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($("#taxRate").text());
+				var exRateAmount = (inRateAmount / ( 1 + rateAmount)).toFixed(2);
+				var rateAmount = (inRateAmount / ( 1 + rateAmount) * rateAmount).toFixed(2);
+				$("#exRateAmount").text(exRateAmount);
+				$("#rateAmount").text(rateAmount);
+			}else{
+				$(this).val("");
+				/* $("#exRateAmount").text("0");
+				$("#rateAmount").text("0"); */
+			}
+		});
+	};
+
+	$("#save").click(function() {
+		var dtlArr = [];
+		var saveUrl = $(this).data("url");
+		var price = $("#inRateAmount");
+		var id = $("#id").val();
+		var collectId = $("#collectId").val();
+		var a = /^[0-9]*(\.[0-9]{1,2})?$/;
+		var isValid = true;
+		if (price.val() == "") {
+			price.focus();
+			layer.msg("请输入金额");
+			isValid = false;
+		}
+		if (!a.test(price.val())) {
+			price.focus();
+			layer.msg("请输入正确格式");
+			isValid = false;
+		}
+		if (isValid) {
+			dtlArr.push({
+				"id" : id,
+				"inRateAmount" : price.val()
+			});
+			var saveData = {
+					colRel : dtlArr,
+				collectId : collectId
+			};
+			var setContentType = true;
+			GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+				if (e.success) {
+					layer.msg("保存成功！", {
+						icon : 1,
+						time : 1500,
+					}, function() {
+						options.param.id = $("#collectId").val();
+						GLOBAL.go("html/invoice/collect/collectFeeEdit.html");
+					});
+				} else {
+					layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+				}
+			}, setContentType);
+		}
+	});
+
+	GLOBAL.goBack(function() {
+		options.param.id = options.param.collectId
+	});
+</script>
+

@@ -1,0 +1,77 @@
+<div class="wrapper">
+ 
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>角色</li>
+    	<li class="active">新建角色</li>
+  	   </ol>
+   </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1">
+            <div class="box-body">  
+            	<div class="row">
+					<div class="col-md-6">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>角色名：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                        	<input type="text" class="form-control" id="name" name="name">
+                       </td>
+                    </tr> 
+                  </table>
+                  </div>
+                </div>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save"  class="btn btn-primary btn-sm" data-permissionUrl="/role/add">保存</button> 
+              <button type="button" data-url="html/baseinfo/role/rolesearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+    var options = {
+        param: {
+            id: 0,
+            cid: 0
+        },
+        initPage: function(){
+            $("#form1").validate({
+                rules: {
+                	name: {
+                      required: true
+                    }
+                },
+                submitHandler: function() {
+                  var data = $("#form1").serialize();
+                  GLOBAL.ajax("role/add",data, function(e){
+                      layer.msg("保存成功！", {
+                          icon: 1,
+                          time: 1500
+                      },function(){
+                    	  options.param.id = e.items;
+                    	  options.param.cid = e.items;
+                    	  GLOBAL.go("html/baseinfo/role/roleEdit.html", options.param);
+                      })
+                      
+                  }, false, $("#save"));
+                }
+            });
+        }
+    }
+
+    $(".js_datePicker").datetimepicker();
+
+    $("#js-back").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+</script>

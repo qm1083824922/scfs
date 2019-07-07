@@ -1,0 +1,65 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>推送人管理</li>
+            <li class="active">浏览</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+          <div class="box no-margin">
+              <form class="form-horizontal form-inline" id="form1" data-url="sendManage/detail">
+                  <div class="box-body">
+                  	  <ul class="nav nav-tabs">
+		                  <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/send/sendManageScan.html">推送信息</a></li>
+		                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/send/sendProjectScan.html">项目信息</a></li>
+                 	  </ul>
+                      <input class="form-control js-initform" type="hidden" id="id" name="id">
+                      <table class="table table-bordered table-hover no-margin">
+                          <tr>
+                              <td class="text-right"><b>所属部门：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="departmentName" name="departmentName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>项目：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="projectName" name="projectName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td width="180" class="text-right"><b>用户：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="userName" name="userName"></label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="text-right"><b>业务类型：</b></td>
+                              <td class="text-left">
+                                  <label class="js-initform" id="bizSendTypeName" name="bizSendTypeName"></label>
+                              </td>
+                          </tr>
+                      </table>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer text-center">
+                      <button type="button" data-url="html/baseinfo/send/sendManageSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+          </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+};
+
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

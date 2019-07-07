@@ -1,0 +1,100 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>财务</li>
+			<li>对账单</li>
+			<li class="active">编辑</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1" data-url="accountStatementTitle/edit">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<input class="form-control js-initform" type="hidden" id="id" name="id">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td width="180" class="text-right"><b>项目：</b></td>
+									<td class="text-left"><label
+										class="form-control js-initform" id="projectName" name="projectName"></label></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>客户：</b></td>
+									<td class="text-left"><select
+										class="form-control js-initform" data-url="PROJECT_BCS"
+										pid="projectId" id="custId" name="custId"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>单据附属编号：</b></td>
+									<td class="text-left"><input class="form-control js-initform" id="billAttachNo" name="billAttachNo"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>结算开始日期：</b></td>
+									<td class="text-left"><input
+										class="form-control js-initform js_datePicker" id="astStartDate" name="astStartDate"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>结算结束日期：</b></td>
+									<td class="text-left"><input
+										class="form-control js-initform js_datePicker" id="astEndDate" name="astEndDate"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注： </b></td>
+									<td class="text-left" rows="3"><textarea
+										class="form-control js-initform"
+										id="note" name="note"></textarea></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/accountStatementTitle/update">保存</button>
+					<button type="button" id="back" data-url="html/fi/accountStatement/accountStatementTitleSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+options.initPage = function(){
+	GLOBAL.getEditData($("#form1"), options.param.id);
+	$("#form1").validate({
+		rules : {
+			custId : {
+				required : true
+			},
+			billAttachNo : {
+				required : true
+			},
+			astStartDate : {
+				required : true
+			},
+			astEndDate : {
+				required : true
+			}
+		},
+		submitHandler : function() {
+			var data = $("#form1").serializeObject();
+			GLOBAL.ajax("accountStatementTitle/update", data, function(e) {
+				if (e.success) {
+					layer.msg("修改成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+			});
+		}
+	});
+	$(".js_datePicker").datetimepicker({
+        format:'Y-m-d'
+    });
+}
+GLOBAL.goBack();
+</script>

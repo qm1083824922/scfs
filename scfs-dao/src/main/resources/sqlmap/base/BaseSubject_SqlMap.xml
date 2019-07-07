@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseSubjectDao">
+	<resultMap id="SubjectResultMap" type="com.scfs.domain.base.entity.BaseSubject">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="subject_type" property="subjectType" jdbcType="TINYINT" />
+		<result column="subject_no" property="subjectNo" jdbcType="VARCHAR" />
+		<result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+		<result column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
+		<result column="english_name" property="englishName" jdbcType="VARCHAR" />
+		<result column="reg_place" property="regPlace" jdbcType="VARCHAR" />
+		<result column="reg_no" property="regNo" jdbcType="VARCHAR" />
+		<result column="reg_phone" property="regPhone" jdbcType="VARCHAR" />
+		<result column="office_address" property="officeAddress"
+			jdbcType="VARCHAR" />
+		<result column="pms_cust_no" property="pmsCustNo" jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="TINYINT" />
+		<result column="warehouse_type" property="warehouseType"
+			jdbcType="TINYINT" />
+		<result column="warehouse_no" property="warehouseNo" jdbcType="VARCHAR" />
+		<result column="supplier_type" property="supplierType"
+			jdbcType="TINYINT" />
+		<result column="cust_type" property="custType" jdbcType="TINYINT" />
+		<result column="oms_supplier_no" property="omsSupplierNo"
+			jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="business_unit_code" property="businessUnitCode"
+			jdbcType="VARCHAR" />
+		<result column="pms_supplier_code" property="pmsSupplierCode"
+			jdbcType="VARCHAR" />
+		<result column="invoice_quota_type" property="invoiceQuotaType"
+			jdbcType="DECIMAL" />
+		<result column="finance_manager_id" property="financeManagerId"
+			jdbcType="BIGINT" />
+		<result column="department_manager_id" property="departmentManagerId"
+			jdbcType="BIGINT" />
+
+	</resultMap>
+	<sql id="detail_subject_column_list">
+		id, subject_type, subject_no, abbreviation, chinese_name,
+		english_name, reg_place, reg_no, reg_phone, office_address,
+		nation,
+		warehouse_type, warehouse_no, supplier_type, oms_supplier_no,
+		cust_type, pms_cust_no, state, creator, create_at, update_at,
+		delete_at,
+		is_delete,business_unit_code,invoice_quota_type,pms_supplier_code,finance_manager_id,department_manager_id
+	</sql>
+	<sql id="comm_subject_column_list">
+		id, subject_type, subject_no, abbreviation, chinese_name,
+		english_name, nation, warehouse_type, warehouse_no, supplier_type,
+		oms_supplier_no, cust_type, pms_cust_no, state,business_unit_code
+	</sql>
+	<insert id="insertBaseSubject" parameterType="com.scfs.domain.base.subject.dto.req.AddSubjectDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_base_subject(
+		subject_type,
+		subject_no,
+		abbreviation,
+		chinese_name,
+		english_name,
+		reg_place,
+		reg_no,
+		reg_phone,
+		office_address,
+		supplier_type,
+		oms_supplier_no,
+		nation,
+		warehouse_type,
+		warehouse_no,
+		cust_type,
+		pms_cust_no,
+		state,
+		creator,
+		business_unit_code,
+		invoice_quota_type,
+		pms_supplier_code,
+		finance_manager_id,
+		department_manager_id)
+		VALUES (
+		#{subjectType , jdbcType = TINYINT},
+		#{subjectNo},
+		#{abbreviation},
+		#{chineseName},
+		#{englishName},
+		#{regPlace},
+		#{regNo},
+		#{regPhone},
+		#{officeAddress},
+		#{supplierType , jdbcType = TINYINT},
+		#{omsSupplierNo},
+		#{nation},
+		#{warehouseType , jdbcType = TINYINT},
+		#{warehouseNo},
+		#{custType , jdbcType = TINYINT},
+		#{pmsCustNo},
+		#{state ,
+		jdbcType = TINYINT},
+		#{creator},
+		#{businessUnitCode},
+		#{invoiceQuotaType},
+		#{pmsSupplierCode},
+		IFNULL(#{financeManagerId,
+		jdbcType=BIGINT}, 0),
+		IFNULL(#{departmentManagerId, jdbcType=BIGINT},
+		0)
+		)
+	</insert>
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where id=#{id} for update
+	</select>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where id=#{id}
+	</select>
+	<select id="queryEntityByBusiUnitCode" resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where business_unit_code=#{businessUnitCode}
+	</select>
+	<select id="querySubjectByType"
+		parameterType="com.scfs.domain.base.subject.dto.req.QuerySubjectReqDto"
+		resultMap="SubjectResultMap">
+		select DISTINCT
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where is_delete=0
+		<if test="subjectType != null and subjectType != ''">
+			and subject_type &amp; #{subjectType} = #{subjectType}
+		</if>
+		<if test="subjectNo != null and subjectNo != ''">
+			and subject_no = #{subjectNo}
+		</if>
+	</select>
+	<select id="querySubjectByAbb"
+		parameterType="com.scfs.domain.base.subject.dto.req.QuerySubjectReqDto"
+		resultMap="SubjectResultMap">
+		select DISTINCT
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where is_delete=0
+		<if test="abbreviation != null and abbreviation != ''">
+			AND abbreviation = #{abbreviation}
+		</if>
+	</select>
+	<select id="querySubjectByCond"
+		parameterType="com.scfs.domain.base.subject.dto.req.QuerySubjectReqDto"
+		resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where is_delete=0
+		<if test="subjectType != null and subjectType != ''">
+			and subject_type &amp; #{subjectType} = #{subjectType}
+		</if>
+		<if test="subjectNo != null and subjectNo != ''">
+			and subject_no like CONCAT('%',#{subjectNo},'%')
+		</if>
+		<if test="abbreviation != null and abbreviation != ''">
+			and abbreviation like CONCAT('%',#{abbreviation},'%')
+		</if>
+		<if test="chineseName != null and chineseName != ''">
+			and chinese_name like CONCAT('%',#{chineseName},'%')
+		</if>
+		<if test="englishName != null and englishName != ''">
+			and english_name like CONCAT('%',#{englishName},'%')
+		</if>
+		<if test="state != null">
+			and state=#{state, jdbcType = TINYINT}
+		</if>
+		<if test="custType != null">
+			and cust_type=#{custType, jdbcType = TINYINT}
+		</if>
+		<if test="warehouseType != null">
+			and warehouse_type=#{warehouseType, jdbcType = TINYINT}
+		</if>
+		<if test="supplierType != null">
+			and supplier_type=#{supplierType, jdbcType = TINYINT}
+		</if>
+		<if test="nation != null">
+			and nation=#{nation, jdbcType = TINYINT}
+		</if>
+		<if test="businessUnitCode != null">
+			and business_unit_code=#{businessUnitCode, jdbcType =
+			VARCHAR}
+		</if>
+		<if test="pmsSupplierCode != null">
+			and pms_supplier_code=#{pmsSupplierCode, jdbcType =
+			VARCHAR}
+		</if>
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		order by id desc
+	</select>
+
+	<update id="updateBaseSubject" parameterType="com.scfs.domain.base.entity.BaseSubject">
+		update tb_base_subject
+		<set>
+			<if test="subjectType != null">
+				subject_type=#{subjectType},
+			</if>
+			<if test="abbreviation != null">
+				abbreviation=#{abbreviation},
+			</if>
+			<if test="chineseName != null and chineseName != ''">
+				chinese_name=#{chineseName},
+			</if>
+			<if test="englishName != null and englishName != ''">
+				english_name=#{englishName},
+			</if>
+			<if test="subjectNo != null and subjectNo != ''">
+				subject_no=#{subjectNo},
+			</if>
+			<if test="regPlace != null">
+				reg_place = #{regPlace},
+			</if>
+			<if test="regNo != null">
+				reg_no = #{regNo},
+			</if>
+			<if test="regPhone != null">
+				reg_phone = #{regPhone},
+			</if>
+			<if test="officeAddress != null">
+				office_address = #{officeAddress},
+			</if>
+			<if test="supplierType != null">
+				supplier_type = #{supplierType},
+			</if>
+			<if test="omsSupplierNo != null">
+				oms_supplier_no = #{omsSupplierNo},
+			</if>
+			<if test="custType != null">
+				cust_type = #{custType},
+			</if>
+			<if test="pmsCustNo != null">
+				pms_cust_no = #{pmsCustNo},
+			</if>
+			<if test="warehouseType != null">
+				warehouse_type = #{warehouseType},
+			</if>
+			<if test="warehouseNo != null">
+				warehouse_no = #{warehouseNo},
+			</if>
+			<if test="nation != null">
+				nation = #{nation},
+			</if>
+			<if test="businessUnitCode != null">
+				business_unit_code = #{businessUnitCode},
+			</if>
+			<if test="invoiceQuotaType != null">
+				invoice_quota_type = #{invoiceQuotaType},
+			</if>
+			<if test="pmsSupplierCode != null">
+				pms_supplier_code = #{pmsSupplierCode},
+			</if>
+			<if test="financeManagerId != null">
+				finance_manager_id = #{financeManagerId},
+			</if>
+			<if test="departmentManagerId != null">
+				department_manager_id = #{departmentManagerId}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateSubjectState" parameterType="java.lang.Integer">
+		update
+		tb_base_subject
+		set state=#{state}
+		where id=#{id}
+	</update>
+	<update id="deleteLogicSubject" parameterType="com.scfs.domain.base.entity.BaseSubject">
+		update
+		tb_base_subject
+		set is_delete=#{isDelete} , deleter=#{deleter} ,
+		delete_at=#{deleteAt}
+		where id=#{id}
+	</update>
+	<update id="submitSubject" parameterType="com.scfs.domain.base.entity.BaseSubject">
+		update tb_base_subject
+		<set>
+			<if test="subjectNo != null and subjectNo != ''">
+				subject_no = #{subjectNo},
+			</if>
+			<if test="state != null">
+				state = #{state}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="lockSubject" parameterType="com.scfs.domain.base.entity.BaseSubject">
+		update tb_base_subject
+		set locked_by=#{lockedBy} , state=#{state} , lock_at=#{lockAt}
+		where
+		id=#{id}
+	</update>
+	<update id="unLockSubject" parameterType="com.scfs.domain.base.entity.BaseSubject">
+		update tb_base_subject
+		set locked_by=#{lockedBy} , state=#{state} , lock_at=#{lockAt}
+		where
+		id=#{id}
+	</update>
+
+	<select id="queryAllSubject" resultMap="SubjectResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject
+		<where>
+			<if test="updateAt != null">
+				<![CDATA[
+              AND  update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_subject
+	</select>
+
+
+	<select id="queryUnDividSubjectByUserId" parameterType="com.scfs.domain.base.dto.req.BaseUserSubjectReqDto"
+		resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where is_delete=0
+		<if test="subjectType != null and subjectType != ''">
+			and subject_type &amp; #{subjectType} = #{subjectType}
+		</if>
+		<if test="subjectNo != null and subjectNo != ''">
+			and subject_no like CONCAT('%',#{subjectNo},'%')
+		</if>
+		<if test="abbreviation != null and abbreviation != ''">
+			and abbreviation like CONCAT('%',#{abbreviation},'%')
+		</if>
+		<if test="chineseName != null and chineseName != ''">
+			and chinese_name like CONCAT('%',#{chineseName},'%')
+		</if>
+		AND id NOT IN(SELECT subject_id FROM tb_base_user_subject WHERE
+		user_id=#{userId,jdbcType=BIGINT} AND is_delete=0)
+	</select>
+
+	<select id="querySubjectBySubjectNo" parameterType="java.lang.String"
+		resultMap="SubjectResultMap">
+		select
+		<include refid="detail_subject_column_list" />
+		from tb_base_subject where subject_no=#{subjectNo}
+	</select>
+
+</mapper>

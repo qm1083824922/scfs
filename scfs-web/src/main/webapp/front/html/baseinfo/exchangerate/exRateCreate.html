@@ -1,0 +1,133 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>基础信息</li>
+        <li class="active">汇率</li>
+    </ol>
+    <section class="product-wrap">
+            <div class="box no-margin">
+                <form class="form-horizontal form-inline" id="newRate" data-url="exchangeRate/add">
+                    <div class="box-body">
+                    	<div class="row">
+							<div class="col-md-6">
+                        <input class="form-control js-initform" type="hidden" id="id" name="id">
+                        <table class="table table-bordered table-hover no-margin">
+                            <tr>
+                                <td width="180" class="text-right"><b>银行名称：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <select class="form-control js-select" data-url="BANK_NAME" name="bank"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>原币种：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <select class="form-control js-select" data-url="CURRENCY_BANK" name="currency"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>目标币种：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <select class="form-control js-select" data-url="CURRENCY_BANK_AIM" name="foreignCurrency"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>现钞卖出价：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <input type="text" class="form-control js-initform" id="cashSellingPrice" name="cashSellingPrice">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>现钞买入价：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <input type="text" class="form-control js-initform" id="cashBuyingPrice" name="cashBuyingPrice">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>电汇卖出价：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <input type="text" class="form-control js-initform" id="draftSellingPrice" name="draftSellingPrice">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>电汇买入价：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <input type="text" class="form-control js-initform" id="draftBuyingPrice" name="draftBuyingPrice">
+                                </td>
+                            </tr>
+                            <tr class="gearbest_title"><td class="text-right"><b>发布时间：<em class="text-star">*</em></b></td>
+                                <td class="text-left">
+                                    <input type="text" class="form-control js-initform js_datePicker" id="publishAt" name="publishAt">
+                                </td>
+                            </tr>
+
+                        </table>
+                        	</div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer text-center">
+                        <button type="submit" id="save" data-permissionUrl="/exchangeRate/add" class="btn btn-primary btn-sm" data-url="html/baseinfo/exchangerate/exRateSearch.html">保存</button>
+                        <button type="button" data-url="html/baseinfo/exchangerate/exRateSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                    </div>
+                    <!-- /.box-footer -->
+
+                </form>
+            </div>
+    </section>
+</div>
+
+<script>
+
+
+    options.initPage = function(){
+        $("#newRate").validate({
+            rules: {
+                bank: {
+                    required: true
+                },
+                currency: {
+                    required: true
+                },
+                foreignCurrency: {
+                    required: true
+                },
+                cashSellingPrice: {
+                    required: true,
+                    number: true
+                },
+                cashBuyingPrice: {
+                    required: true,
+                    number: true
+                },
+                draftSellingPrice: {
+                    required: true,
+                    number: true
+                },
+                draftBuyingPrice: {
+                    required: true,
+                    number: true
+                },
+                publishAt: {
+                    required: true
+                }
+            },
+            submitHandler: function() {
+                var saveUrl = $("#newRate").data("url");
+                var formData = $("#newRate").serializeObject();
+                GLOBAL.ajax(saveUrl,formData, function(){
+                    layer.msg("保存成功！", {
+                        icon: 1,
+                        time: 1500
+                    },function(){
+                        var url = $("#save").data("url");
+                        GLOBAL.go(url);
+                    })
+                }, false, $("#save"));
+            }
+        });
+    }
+
+    GLOBAL.goBack();
+
+</script>

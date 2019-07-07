@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>供应链金融</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet"></link>
+<link href="../../css/public.css" rel="stylesheet"></link>
+<link href="../../css/mobile.css" rel="stylesheet"></link>
+<link href="../../css/msg.css" rel="stylesheet"></link>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<div style="display: none" class="advance_dataTable">
+			<h3 class="title mb10 ml5 mt5">
+				<strong>销售日报信息</strong>
+			</h3>
+			<div class="detail-box js_advance_dataTable"></div>
+		</div>
+
+		<script src="../../../js/lib/jquery-1.11.0.min.js"
+			type="text/javascript"></script>
+		<script src="../../js/common.js?v=1.0.0"></script>
+		<script>
+        var id = GLOBAL.getParam("dailyId");
+        $(function() {
+             GLOBAL.ajax("salesDaily/query",{
+            	 id:id
+             },function(e){
+                  var data = e.items;
+                   if (data) {
+                      $(".advance_dataTable").show();
+                          var tabStr = '<div class="detail-item"><p><span class="form-label">日销售额：' + data.dailySales.toThounds() + '</span><span class="form-value">月销售额：' + data.monthSales.toThounds() + '</span></p><p><span class="form-label">日付款额：' + data.dailyPay.toThounds() + '</span><span class="form-value">月付款额：' + data.monthPay.toThounds() + '</span></p><p><span class="form-label">日回款额：' + data.dailyPayment.toThounds() + '</span><span class="form-value">月回款额：' + data.monthPayment.toThounds() + '</span></p><p><span class="form-label">库存数量：' + data.stlNum.toThounds() + '</span><span class="form-value">库存金额：' + data.stlAmount.toThounds() + '</span></p><p><span class="form-label">币种：' + data.currnecyTypeName + '</span></p></div>';
+                  $('.js_advance_dataTable').empty().append(tabStr);
+              } else {
+              }
+             });
+
+        })
+        GLOBAL.initSelect();
+    </script>
+</body>
+
+</html>

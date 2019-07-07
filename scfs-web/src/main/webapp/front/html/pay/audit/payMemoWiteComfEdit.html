@@ -1,0 +1,134 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款水单确认</li>
+			<li class="active">待确认</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="payOrder/detail">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>付款编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payNo" name="payNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款类型：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payTypeName" name="payTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="projectName" name="projectName"></label></td>
+						</tr>
+							<td class="text-right"><b>付款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payerName" name="payerName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款方式：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payWayName" name="payWayName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payeeName" name="payeeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账号开户人：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="subjectName" name="subjectName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账户：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform"
+								id="accountNo" name="accountNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行代码：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankCode" name="bankCode"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行地址：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankAddress" name="bankAddress"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款人电话：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="phoneNumber" name="phoneNumber"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>要求付款日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="requestPayTime" name="requestPayTime"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款金额：</b></td>
+							<td class="text-left"><label style="font-size:20px" class="js-initform toThound"
+								id="payAmount" name="payAmount"></label> <label style="font-size:20px" class="js-initform"
+								id="currnecyTypeName" name="currnecyTypeName"></label></td>
+						</tr>
+						<tr>
+	                      <td class="text-right"><b>水单日期：<em class="text-star">*</em></b></td>
+	                      <td class="text-left">
+	                        <input type="text" class="form-control js-initform js_datePicker" id="memoTime" name="memoTime">
+	                      </td>
+	                    </tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" class="btn btn-default btn-sm" data-permissionUrl="/payOrder/memo/update" id="save">确认</button>
+					<button type="button" id="back" data-url="html/pay/audit/payMemoWiteComf.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+options.initPage = function() {
+	var editData = GLOBAL.getEditData($("#form1"), options.param.id);
+	$("#payAmount").attr("amount" , editData.payAmount);
+};
+
+
+$("#form1").validate({
+    rules: {
+    	memoTime: {
+        	required: true
+        }
+    },
+    submitHandler: function() {
+      var data = $("#form1").serialize();
+      GLOBAL.ajax("payOrder/memo/update",data, function(e){
+    	  if (e.success) {
+        	  layer.msg("确认成功！", {
+                  icon: 1,
+                  time: 1500
+              },function(){
+            	  GLOBAL.go("html/pay/audit/payMemoWiteComf.html");
+              });
+          } else {
+              layer.msg(e.msg);
+          }
+      },false,$("#save"));
+    }
+});
+
+	GLOBAL.goBack();
+</script>

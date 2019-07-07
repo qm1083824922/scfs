@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ReceiveLineReportDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.report.entity.ReceiveLineReport">
+		<result column="expire_date" jdbcType="DATE" property="expireDate" />
+		<result column="check_date" jdbcType="DATE" property="checkDate" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="currency_type" jdbcType="INTEGER" property="currencyType" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_date" jdbcType="DATE" property="billDate" />
+		<result column="fee_id" jdbcType="INTEGER" property="feeId" />
+		<result column="out_store_id" jdbcType="INTEGER" property="outStoreId" />
+	</resultMap>
+
+	<select id="queryResultDetialByCon" parameterType="com.scfs.domain.report.req.ReceiveReportSearchReq"
+		resultMap="BaseResultMap">
+		select a.expire_date, a.check_date, rl.bill_no, rl.bill_type,
+		rl.bill_date, rl.fee_id, rl.out_store_id, a.project_id, a.cust_id,
+		a.currency_type,
+		(rl.amount_check - rl.write_off_amount) as balance,
+		<![CDATA[
+			 IF(DATEDIFF(CURDATE(),a.expire_date)>=1, DATEDIFF(CURDATE(),a.expire_date), 0) as expireDay,
+			 IF(DATEDIFF(a.expire_date,CURDATE())>=0, DATEDIFF(a.expire_date,CURDATE()), 0) as adventDay
+		]]>
+		from tb_fi_rec a
+		left join tb_base_user_project bup
+		on a.project_id =
+		bup.project_id
+		left join tb_base_project bp
+		on a.project_id = bp.id
+		left
+		join tb_fi_rec_line rl
+		on a.id = rl.rec_id
+		<where>
+			rl.amount_check - rl.write_off_amount > 0
+			and bup.user_id = #{userId}
+			and bup.state = 1
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="startCheckDate != null">
+  			<![CDATA[
+				and a.check_date >= #{startCheckDate}
+			]]>
+			</if>
+			<if test="endCheckDate != null">
+  			<![CDATA[
+				and a.check_date <= #{endCheckDate}
+			]]>
+			</if>
+			<if test="departmentList != null">
+				and bp.department_id in (
+				<foreach collection="departmentList" item="departmentId"
+					separator=",">
+					${departmentId}
+				</foreach>
+				)
+			</if>
+			<if test="bizManagerId != null">
+				and bp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="searchType != null and searchType == 1">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=1
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 2">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=1 and DATEDIFF(CURDATE(),a.expire_date)<=7
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 3">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=8 and DATEDIFF(CURDATE(),a.expire_date)<=15
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 4">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>15 
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 5">
+	  		<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>=0 && DATEDIFF(a.expire_date,CURDATE())<=7
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 6">
+  			<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>=8 && DATEDIFF(a.expire_date,CURDATE())<=15
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 7">
+  			<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>15
+  			]]>
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND a.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="querySumByCon" parameterType="com.scfs.domain.report.req.ReceiveReportSearchReq"
+		resultMap="BaseResultMap">
+		select sum(v_table.balance) as balance , v_table.currency_type ,
+		v_table.bill_type
+		from (
+		select rl.bill_type,a.currency_type,
+		(rl.amount_check - rl.write_off_amount) as balance
+		from tb_fi_rec a
+		left join tb_base_user_project bup
+		on a.project_id = bup.project_id
+		left join tb_base_project bp
+		on a.project_id = bp.id
+		left join
+		tb_fi_rec_line rl
+		on a.id = rl.rec_id
+		<where>
+			rl.amount_check - rl.write_off_amount > 0
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="startCheckDate != null">
+  			<![CDATA[
+				and a.check_date >= #{startCheckDate}
+			]]>
+			</if>
+			<if test="endCheckDate != null">
+  			<![CDATA[
+				and a.check_date <= #{endCheckDate}
+			]]>
+			</if>
+			<if test="departmentList != null">
+				and bp.department_id in (
+				<foreach collection="departmentList" item="departmentId"
+					separator=",">
+					${departmentId}
+				</foreach>
+				)
+			</if>
+			<if test="bizManagerId != null">
+				and bp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="searchType != null and searchType == 1">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=1
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 2">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=1 and DATEDIFF(CURDATE(),a.expire_date)<=7
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 3">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>=8 and DATEDIFF(CURDATE(),a.expire_date)<=15
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 4">
+  			<![CDATA[
+  				and DATEDIFF(CURDATE(),a.expire_date)>15 
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 5">
+	  		<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>=0 && DATEDIFF(a.expire_date,CURDATE())<=7
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 6">
+  			<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>=8 && DATEDIFF(a.expire_date,CURDATE())<=15
+  			]]>
+			</if>
+			<if test="searchType != null and searchType == 7">
+  			<![CDATA[
+  				and DATEDIFF(a.expire_date,CURDATE())>15
+  			]]>
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND a.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</where>
+		) as v_table
+		group by v_table.bill_type , v_table.currency_type
+	</select>
+</mapper>

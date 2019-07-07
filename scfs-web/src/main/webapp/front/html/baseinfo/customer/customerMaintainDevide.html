@@ -1,0 +1,62 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>客户维护管理</li>
+			<li class="active">分配跟进人</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="customerMaintain/edit">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+							     <input type="hidden" class="form-control js-initform" id="id" name="id">
+								 <tr>
+				                     <td class="text-right" ><b>跟进人：</b></td>
+				                     <td class="text-left">
+				                     	 <select class="form-control js-initform" data-url="USER" id="fllow"  name="fllow"> </select> 
+				                     </td>
+				                  </tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<!-- <div class="box-footer text-left">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/customerMaintain/update">保存</button>
+				</div> -->
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		/* $("#form1").validate({
+			rules : {
+				fllow : {
+					required : true
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				alert(data);
+				GLOBAL.ajax("/customerMaintain/update", data, function(e) {
+					if (e.success) {
+						layer.msg("保存成功！");
+						GLOBAL.go("html/baseinfo/customer/customerMaintainSearch.html"); 
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		}); */
+	}
+</script>

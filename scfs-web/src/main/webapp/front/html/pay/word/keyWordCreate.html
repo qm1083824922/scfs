@@ -1,0 +1,81 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>关键词</li>
+			<li class="active">新建关键词</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box no-margin">
+					<form class="form-horizontal" id="payForm">
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<table class="table table-bordered table-hover no-margin">
+										<tr>
+											<td class="text-right"><b>关键词：<em class="text-star">*</em></b></td>
+											<td class="text-left">
+												<input type="text" class="form-control" id="word" name="word">
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer text-center">
+							<button type="submit" id="save" data-url="payKeyWord/add" data-permissionUrl="/payKeyWord/add" class="btn btn-primary btn-sm">保存</button>
+							<button type="button" id="js-back" data-url="html/pay/word/keyWordSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+						</div>
+						<!-- /.box-footer -->
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<script>
+	var options = {
+		param : {
+			id : 0,
+			cid : 0,
+		},
+		initPage : function() {
+			$(".hideByRequestPay").hide();
+
+			$("#payForm").validate(
+			{
+				rules : {
+					word : {
+						required : true,
+	                  	maxlength:50
+					}
+				},
+				submitHandler : function() {
+					var data = $("#payForm").serialize();
+					GLOBAL.ajax("payKeyWord/add",data,function(e) {
+					layer.msg(
+						"保存成功！",
+						{
+							icon : 1,
+							time : 1500
+						},
+						function() {
+							options.param.id = e.items;
+							GLOBAL.go("html/pay/word/keyWordEdit.html",options.param);
+						})
+				}, false, $("#save"));
+				}
+			});
+		}
+	};
+
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.invoice.InvoiceDtlInfoDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.invoice.entity.InvoiceDtlInfo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="invoice_id" jdbcType="INTEGER" property="invoiceId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="specification" jdbcType="VARCHAR" property="specification" />
+		<result column="tax_cate_no" jdbcType="VARCHAR" property="taxCateNo" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="num" jdbcType="DECIMAL" property="num" />
+		<result column="price" jdbcType="DECIMAL" property="price" />
+		<result column="rate" jdbcType="DECIMAL" property="rate" />
+		<result column="rate_amount" jdbcType="DECIMAL" property="rateAmount" />
+		<result column="in_rate_amount" jdbcType="DECIMAL" property="inRateAmount" />
+		<result column="ex_rate_amount" jdbcType="DECIMAL" property="exRateAmount" />
+		<result column="discount_rate_amount" jdbcType="DECIMAL"
+			property="discountRateAmount" />
+		<result column="discount_in_rate_amount" jdbcType="DECIMAL"
+			property="discountInRateAmount" />
+		<result column="discount_ex_rate_amount" jdbcType="DECIMAL"
+			property="discountExRateAmount" />
+		<result column="discount" jdbcType="DECIMAL" property="discount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invoice_id, name, type, specification, tax_cate_no,
+		currency_type,
+		exchange_rate,
+		num, price, rate, rate_amount,
+		in_rate_amount, ex_rate_amount,
+		discount_rate_amount,
+		discount_in_rate_amount, discount_ex_rate_amount, discount, remark,
+		creator_id, creator,
+		create_at, update_at,unit
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectByApplyId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_dtl fee
+		where fee.invoice_id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="querySumTaxGroupByInvoiceId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.invoice.dto.resp.InvoiceSumTaxGroup">
+		select rate as taxRate , sum(rate_amount) as rateAmount ,
+		sum(ex_rate_amount) as exRateAmount,
+		sum(discount_rate_amount) as
+		discountRateAmount, sum(discount_ex_rate_amount) as
+		discountExRateAmount
+		from tb_invoice_dtl
+		where invoice_id = #{invoiceId}
+		group by rate
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_invoice_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceDtlInfo">
+		insert into tb_invoice_dtl
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="invoiceId != null">
+				invoice_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="specification != null">
+				specification,
+			</if>
+			<if test="taxCateNo != null">
+				tax_cate_no,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate,
+			</if>
+			<if test="num != null">
+				num,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="rate != null">
+				rate,
+			</if>
+			<if test="rateAmount != null">
+				rate_amount,
+			</if>
+			<if test="inRateAmount != null">
+				in_rate_amount,
+			</if>
+			<if test="exRateAmount != null">
+				ex_rate_amount,
+			</if>
+			<if test="discountRateAmount != null">
+				discount_rate_amount,
+			</if>
+			<if test="discountInRateAmount != null">
+				discount_in_rate_amount,
+			</if>
+			<if test="discountExRateAmount != null">
+				discount_ex_rate_amount,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="unit != null">
+				unit ,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceId != null">
+				#{invoiceId,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="specification != null">
+				#{specification,jdbcType=VARCHAR},
+			</if>
+			<if test="taxCateNo != null">
+				#{taxCateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				#{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="num != null">
+				#{num,jdbcType=DECIMAL},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DECIMAL},
+			</if>
+			<if test="rate != null">
+				#{rate,jdbcType=DECIMAL},
+			</if>
+			<if test="rateAmount != null">
+				#{rateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="inRateAmount != null">
+				#{inRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="exRateAmount != null">
+				#{exRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountRateAmount != null">
+				#{discountRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountInRateAmount != null">
+				#{discountInRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountExRateAmount != null">
+				#{discountExRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="unit != null">
+				#{unit,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceDtlInfo">
+		update tb_invoice_dtl
+		<set>
+			<if test="invoiceId != null">
+				invoice_id = #{invoiceId,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="specification != null">
+				specification = #{specification,jdbcType=VARCHAR},
+			</if>
+			<if test="taxCateNo != null">
+				tax_cate_no = #{taxCateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="num != null">
+				num = #{num,jdbcType=DECIMAL},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DECIMAL},
+			</if>
+			<if test="rate != null">
+				rate = #{rate,jdbcType=DECIMAL},
+			</if>
+			<if test="rateAmount != null">
+				rate_amount = #{rateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="inRateAmount != null">
+				in_rate_amount = #{inRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="exRateAmount != null">
+				ex_rate_amount = #{exRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountRateAmount != null">
+				discount_rate_amount =
+				#{discountRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountInRateAmount != null">
+				discount_in_rate_amount =
+				#{discountInRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountExRateAmount != null">
+				discount_ex_rate_amount =
+				#{discountExRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="unit != null">
+				unit = #{unit,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

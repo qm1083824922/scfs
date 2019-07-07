@@ -1,0 +1,171 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>库存</li>
+    <li class="active">拆分</li>
+  </ol>
+  <section class="product-wrap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="stlSplitForm" data-url="stl/split">
+            <div class="box-header">
+                 <input class="form-control js-initform" type="hidden" id="id" name="id">
+                
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td class="text-right" style="width:15%"><b>项目：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="projectName" name="projectName"></label>                      
+                      </td>
+                      
+                      <td class="text-right" style="width:15%"><b>仓库：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right" style="width:15%"><b>供应商：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="supplierName" name="supplierName"></label>                      
+                      </td>
+                      
+                      <td class="text-right" style="width:15%"><b>客户：</b></td>
+                      <td class="text-left" style="width:35%">
+                        <label class="js-initform" id="customerName" name="customerName"></label>
+                      </td>
+                    </tr>
+                    <tr>                   
+                      <td class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品条码：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsBarCode" name="goodsBarCode"></label>
+                      </td>                     
+                    </tr>
+                  	<tr>
+					  <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                    </tr>
+                    <tr>                                                 
+                      <td class="text-right"><b>库存数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform toThound" id="storeNum" name="storeNum"></label>                      
+                      </td>
+                                 
+                      <td class="text-right"><b>可用库存数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform toThound" id="availableNum" name="availableNum"></label>                     
+                      </td>
+                    </tr>  
+                    <tr>
+                      <td class="text-right"><b>库存状态：</b></td>
+                      <td class="text-left">
+                      	<label class="js-initform" id="goodsStatusName" name="goodsStatusName"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>批次：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="batchNo" name="batchNo"></label>                     
+                      </td>
+                    </tr>       
+                  </table>  
+            </div>
+            <!-- /.box-header -->
+          
+            <div class="box-body">
+	          <table class="table stl-split-table" style="width:25%">
+	              <thead>
+	                  <tr>
+	                  	  <th>序号</th>
+	                      <th>库存数量</th>
+	                  </tr>
+	              </thead>
+	              <tbody>
+	              </tbody>
+	          </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="button" data-permissionUrl="/stl/split/update" id="save" class="btn btn-primary btn-sm" data-url="stl/split/update">保存</button>
+              <button type="button" data-url="html/logistics/stl/stlSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  GLOBAL.getEditData($("#stlSplitForm"), options.param.id);
+  }
+
+  for(var k = 1; k <= 5; k++){
+      var tr = '<tr><td>'+k+'</td>' 
+      + '<td><input type="text" class="form-control" id="storeNum" style="width:100%;" onkeyup="value=value.replace(/[^\\d]/g,\'\');"></td>'
+      $(".stl-split-table tbody").append(tr);
+  }
+  
+  $("#save").click(function(){
+      var saveUrl = $(this).data("url");
+      var $trs = $(".stl-split-table tbody tr");
+      var rows = [];
+      var isValid = true;
+      $trs.each(function(index, data){
+        var storeNum = $(this).find("#storeNum").val();
+        if (storeNum) {
+           	if (!storeNum) {
+           		layer.msg("库存数量必填且正确，请重新输入");
+           		isValid = false;
+                return false; 
+           	}
+           	if (storeNum <= 0) {
+           		layer.msg("库存数量必须大于0，请重新输入");
+           		isValid = false;
+                return false; 
+           	}
+           	rows.push({
+            	"storeNum": storeNum
+            });
+        }
+      });
+      if (isValid) {
+          if (rows.length <= 0) {
+          	layer.msg("请录入库存明细");
+          	return false;
+          }
+          
+          var params = {
+        		id: options.param.id,
+        		stlList : rows
+          }
+          GLOBAL.ajax(saveUrl, JSON.stringify(params),
+            function(e) {
+                if (e.success) {
+                    layer.msg("保存成功！");
+                    GLOBAL.go("html/logistics/stl/stlSearch.html", options.param);
+                } else {
+                    layer.msg(e.msg);
+                }
+            }, true);
+      }
+  });
+
+  GLOBAL.goBack();
+</script>

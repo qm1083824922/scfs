@@ -1,0 +1,108 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金池</li>
+            <li class="active">资金明细</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="fundPool">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                 <li role="presentation"><a class="tab-item" data-url="html/pay/accountPool/accountPoolScan.html">基础信息</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/pay/accountPool/accountDetailScan.html">资金明细</a></li>
+                </ul>
+            </div>
+                   <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="accountPoolFund/detail">
+                </table>
+            </div>
+            <!-- .box-body -->
+             <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/pay/accountPool/accountPoolSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+          </form>
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+   },{
+	     title: '单据编号',
+	     field: 'billNo',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '单据类型',
+	     field: 'billTypeName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '经营单位',
+	     field: 'busiUnitName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '项目',
+	     field: 'projectName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '供应商',
+	     field: 'supplieName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '单据币种',
+	     field: 'currencyTypeName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '单据日期',
+	     field: 'billDate',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '单据金额',
+	     field: 'billAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 }, {
+	     title: '手续费',
+	     field: 'billChargeAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	     }
+	 },{
+	     title: '备注',
+	     field: 'remark',
+	     width: 80,
+	     align: 'center'
+	 }
+];
+options.initPage = function() {
+	options.param.id = options.param.id;
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		poolId : options.param.id
+	});
+};
+GLOBAL.goBack();
+</script>

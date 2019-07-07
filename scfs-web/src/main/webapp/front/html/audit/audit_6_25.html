@@ -1,0 +1,382 @@
+<style>
+	.custom-table tr td {
+		padding:8px;
+		width:33%;
+	}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+  		<!--引入面包屑-->
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>财务</li>
+			<li>凭证</li>
+			<li class="active">财务审核</li>
+		</ol>
+  	</section>
+  	<section class="web-setting-wrap">
+			<form method="post" action="###" class="form-inline" id="voucherForm">
+				<div class="box">
+					<div class="box-header">
+						<div class="row">
+							<div class="col-md-2"></div>
+			                <div class="col-md-8">
+			                <div class="vo-top">
+			                	<div class="form-group-sm">
+			                		<table width="100%" class="custom-table">
+			                			<tbody>
+			                				<tr>
+			                					<td>
+			                						<label class="control-label">凭证编号：</label> 
+													<span  id="voucherNo" name="voucherNo"></span>
+			                					</td>
+			                					<td>
+													<label class="control-label">帐套：</label> 
+													<span  id="accountBookName" name="accountBookName"></span>
+			                					</td>
+			                					<td>
+			                						<label class="control-label">经营单位：</label> 
+													<span id="busiUnitName" name="busiUnitName"></span>
+			                					</td>
+			                				</tr>
+			                				<tr>
+			                					<td>
+			                						<label class="control-label">日期：</label>
+													<span  id="voucherDate" name="voucherDate"></span>
+			                					</td>
+			                					<td>
+			                						<label class="control-label">凭证字：</label> 
+													<span  id="voucherWordName" name="voucherWordName"></span>
+			                					</td>
+			                					<td>
+			                						<label class="control-label">附单据数：</label> 
+													<span  id="attachmentNumber" name="attachmentNumber"></span>
+			                					</td>
+			                				</tr>
+			                				<tr>
+			                					<td colspan="3">
+			                						<label class="control-label">凭证摘要：</label> 
+													<span  id="voucherSummary" name="voucherSummary"></span>
+			                					</td>
+			                				</tr>
+			                			</tbody>
+			                		</table>
+								</div>
+			                </div>
+			                </div>
+			                <div class="col-md-2"></div>
+			            </div>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-1"></div>
+			                <div class="col-md-10">
+			                    <table class="table table-bordered table-hover no-margin" id="js-lineTable">
+			                    	<thead>
+			                    		<th></th>
+			                    		<th>摘要</th>
+			                    		<th>科目</th>
+			                    		<th>辅助项</th>
+			                    		<th>借方金额</th>
+			                    		<th>贷方金额</th>
+			                    		<th>币种</th>
+			                    		<th>本币借方金额</th>
+				                    	<th>本币贷方金额</th>
+				                    	<th>本币币种</th>
+			                    	</thead>
+			                    	<tbody id="js-lineTbody">
+			                    	</tbody>
+			                     </table>
+			                </div>
+			                <div class="col-md-1"></div>
+			            </div>
+			            <div class="col-md-12">
+				            <h4>审核记录</h4>
+					        <table id="js_audit_dataTable" data-permissionUrl="/voucher/auditflow/audit/query" data-url="voucher/auditflow/audit/query">
+					        </table>
+						</div>
+					</div>
+					<div class="box-footer text-center">
+						<div class="form-inline" style="width:500px; margin:auto">
+							<textarea style="margin-bottom: 10px;width:500px" class="form-control js-initform" id="suggestion" 
+								rows="3" name="suggestion" placeholder="审核意见"></textarea>
+							<p class="mt20">
+								<button type="button" data-permissionUrl="/voucher/finance/pass/audit" data-url="voucher/finance/pass/audit"
+									class="btn btn-primary btn-sm"  id="pass">审核通过</button>
+								<button type="button" data-permissionUrl="/voucher/unpass/audit" data-url="voucher/unpass/audit"
+									class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+								<button type="button" data-permissionUrl="/voucher/finance/pass/audit" data-url="voucher/finance/pass/audit"
+									class="btn btn-primary btn-sm"  id="passAndNext">通过并审核下一个</button>
+								<button type="button"
+									class="btn btn-default btn-sm js-back">返回</button>
+							</p>
+							<p class="mt20 psigh" style="display:none">
+							
+					            <label class="control-label pull-rihgt">加签给:</label>
+					            <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+					            <button type="button" data-permissionUrl="/voucher/sigh/audit" data-url="voucher/sigh/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+					        </p>
+					        <p class="mt20 pdeliver" style="display:none">
+					            <label class="control-label pull-rihgt">转交给:</label>
+					            <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+					            <button type="button" data-permissionUrl="/voucher/deliver/audit" data-url="voucher/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+					        </p>
+				        </div>
+					</div>
+				</div>
+			</form>
+	</section>
+</div>
+<script>
+var tabCols = [{
+    title: '序号',
+    field: 'columnsNumber',
+    width: '5%'
+}, {
+    title: '流程节点',
+    field: "stateName",
+    width: '15%'
+},{
+    title: '处理人',
+    field: "dealName",
+    width: '15%'
+},{
+    title: '处理意见',
+    field: "suggestion",
+    width: '25%'
+},{
+    title: '开始时间',
+    field: "createTime",
+    width: '15%'
+},{
+    title: "处理时间",
+    field: "dealTime",
+    width: '15%'
+},{
+    title: "处理状态",
+    field: "auditStateName",
+    width: '10%'
+}];
+	options.initPage = function() {
+		GLOBAL.ajax("voucher/info/audit" , {poId : options.param.poId} , function(e) {
+			if (e.success) {
+				var voucherDetail = e.items;
+				if (voucherDetail) {
+					//1渲染凭证
+					var voucherForm = $("#voucherForm");
+					var voucher = voucherDetail.voucher;
+					for ( var i in voucher) {
+						var value = voucher[i];
+						voucherForm.find("#" + i).text(value);
+					}
+					//1渲染分录
+					var voucherLines = voucherDetail.voucherLines;
+					if (voucherLines != null && voucherLines.length > 0) {
+						var html = [];
+						var totalStandardDebitAmount = 0;
+						var totalStandardCreditAmount = 0;
+						for(var i = 0 ; i < voucherLines.length; i++) {
+							var item = voucherLines[i];
+							var assistDec = "";
+							if (item.needProject == 1 && item.projectName) {
+								assistDec += "项目: " + item.projectName + "</br>";
+							}
+							if (item.needSupplier == 1 && item.supplierName) {
+								assistDec += "供应商: " + item.supplierName + "</br>";
+							}
+							if (item.needCust == 1 && item.custName) {
+								assistDec += "客户: " + item.custName + "</br>";
+							}
+							if (item.needAccount == 1 && item.accountNo) {
+								assistDec += "账号: " + item.accountNo + "</br>";
+							}
+							if (item.needUser == 1 && item.userName) {
+								assistDec += "用户: " + item.userName + "</br>";
+							}
+							if (item.needTaxRate == 1 && item.taxRate != null) {
+								assistDec += "税率: " + item.taxRate + "</br>";
+							}
+							html.push("<tr>");
+							html.push("<td width='3%'>" + (i+1) + "</td>");
+							html.push("<td width='15%'><span name='voucherLineSummary'>" + item.voucherLineSummary + "</span></td>");
+							html.push("<td width='15%'><span name='accountLineName'>" + item.accountLineName + "</span></td>");
+							html.push("<td width='25%'> " + assistDec + "</td>");
+							html.push("<td width='8%'><span name='debitAmount'>" + (item.debitAmount==null?"":item.debitAmount) + "</span></td>");
+							html.push("<td width='8%'><span name='creditAmount'>" + (item.creditAmount==null?"":item.creditAmount) + "</span></td>");
+							html.push("<td width='5%'><span name='currencyTypeName'>" + item.currencyTypeName + "</span></td>");
+							html.push("<td width='8%'><span name='standardDebitAmount'>" + (item.standardDebitAmount==null?"":(item.standardDebitAmount).toThounds()) + "</span></td>");
+							html.push("<td width='8%'><span name='standardCreditAmount'>" + (item.standardCreditAmount==null?"":(item.standardCreditAmount).toThounds()) + "</span></td>");
+							html.push("<td width='5%'><span name='standardCoinName'>" + item.standardCoinName + "</span></td>");
+							html.push("</tr>");
+							
+							totalStandardDebitAmount = totalStandardDebitAmount + item.standardDebitAmount*1;
+							totalStandardCreditAmount = totalStandardCreditAmount + item.standardCreditAmount*1;
+						}
+						var html1 = [];
+						html1.push("<tfoot><tr>");
+						html1.push("<td></td>");
+						html1.push("<td></td>");
+						html1.push("<td></td>");
+						html1.push("<td class='text-right'><strong>合计</strong></td>");
+						html1.push("<td>" + voucher.debitAmount + "</td>");
+						html1.push("<td>" + voucher.creditAmount + "</td>");
+						html1.push("<td></td>");
+						html1.push("<td>" + (totalStandardDebitAmount).toThounds() + "</td>");
+						html1.push("<td>" + (totalStandardCreditAmount).toThounds() + "</td>");
+						html1.push("<td></td>");
+						html1.push("</tr></tfoot>");
+						console.log($('#js-lineTable').find("#js-lineTbody"));
+						$('#js-lineTable').find("tbody").html(html.join(''));
+						$('#js-lineTable').append(html1.join(''));
+					}
+				}
+			} else {
+				layer.msg(e.msg);
+			}
+		});
+		GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+	        voucherId: options.param.poId
+	    }, null, {
+	        pagination: false
+	    });
+		
+		GLOBAL.ajax('audit/id/query', {
+            id: options.param.id
+        }, function(e) {
+        	var data = e.items;
+            if (data) {
+            	if(data.auditType==1||data.auditType==2){
+            		$(".psigh,.pdeliver").show();
+            	}else{
+            		$(".punpass").hide();
+            	}
+            }
+        });
+	}
+
+  	$("#pass").click(function(){
+  		var suggestion = $("#suggestion").val();
+    	var url = $(this).data("url");
+ 	    GLOBAL.ajax(url, {auditId: options.param.id, voucherId: options.param.poId, suggestion: suggestion || ""}, function(e) {
+        	if (e.success) {
+              	layer.msg("审核通过成功！");
+              	if (options.param.entryType == 1) {
+                  	GLOBAL.go("html/entry.html");
+              	} else {
+              		GLOBAL.go("html/audit/audit.html");
+              	}
+            } else {
+                layer.msg(e.msg);
+            }
+        });
+  	})
+  	$("#passAndNext").click(function(){
+  		var suggestion = $("#suggestion").val();
+    	var url = $(this).data("url");
+ 	    GLOBAL.ajax(url, {auditId: options.param.id, voucherId: options.param.poId, suggestion: suggestion || ""}, function(e) {
+        	if (e.success) {
+        		GLOBAL.ajax("/audit/next/query", "", function(e) {
+                    if (e.success) { 
+                    	 if(e.items){
+                    		 var id = e.items.id;
+                             var state = e.items.state;
+                             var poId = e.items.poId;
+                             var poType = e.items.poType;
+                             options.param.id = id;
+                             options.param.poId = poId;  
+                             if (poType && state) { 
+                                 GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+                             }
+                    	 }else{
+                    		 GLOBAL.go("html/entry.html");
+                    	 }  
+                    } else {
+                        layer.msg(e.msg);
+                    }
+                });
+            } else {
+                layer.msg(e.msg);
+            }
+        });
+  	})
+  	$("#unpass").click(function(){
+  		var suggestion = $("#suggestion").val();
+  		if (!suggestion) {
+          	layer.msg("请输入审核意见");
+			return;
+  		}
+    	var url = $(this).data("url");
+ 	    GLOBAL.ajax(url, {auditId: options.param.id, voucherId: options.param.poId, suggestion: suggestion}, function(e) {
+        	if (e.success) {
+              	layer.msg("审核不通过成功！");
+              	if (options.param.entryType == 1) {
+                  	GLOBAL.go("html/entry.html");
+              	} else {
+              		GLOBAL.go("html/audit/audit.html");
+              	}
+            } else {
+                layer.msg(e.msg);
+            }
+        });
+  	})
+	
+	$(".js-back").click(function(){
+      	if (options.param.entryType == 1) {
+          	GLOBAL.go("html/entry.html");
+      	} else {
+      		GLOBAL.go("html/audit/audit.html");
+      	}
+  	})
+  	
+  	$("#sigh").click(function(){
+        var url = $(this).data("url");
+        var sighId = $("#sighId").val();
+        if(sighId){
+          	layer.confirm('确定加签吗？', {
+              	btn: ['确定','取消'] //按钮
+          	}, function(){
+              	GLOBAL.ajax(url, {auditId: options.param.id, pauditorId: sighId}, function(e) {
+		            if (e.success) {
+		                layer.msg("加签成功！");
+		                $("#sighId").val("");
+		                GLOBAL.tableRefresh($('#js_audit_dataTable'), {voucherId: options.param.poId});
+		            } else {
+		                layer.msg(e.msg);
+		            }
+		        });
+          	});
+      	}else{
+          	layer.msg("请选择！");
+          	$("#sighId").focus();
+      	}
+    })
+    
+    $("#deliver").click(function(){
+        var url = $(this).data("url");
+        var deliverId = $("#deliverId").val();
+        if(deliverId){
+	        layer.confirm('确定转交吗？', {
+	            btn: ['确定','取消'] //按钮
+	        }, function(){
+		        GLOBAL.ajax(url, {auditId: options.param.id, pauditorId: deliverId}, function(e) {
+		            if (e.success) {
+		                layer.msg("转交成功！");
+			            $("#deliverId").val("");
+		                if (options.param.entryType == 1) {
+		                    GLOBAL.go("html/entry.html");
+		                } else {
+		                    GLOBAL.go("html/audit/audit.html");
+		                }
+		            } else {
+		                layer.msg(e.msg);
+		            }
+		        });
+	        });
+      	}else{
+          	layer.msg("请选择！");
+          	$("#deliverId").focus();
+      	}
+    })
+
+</script>
+

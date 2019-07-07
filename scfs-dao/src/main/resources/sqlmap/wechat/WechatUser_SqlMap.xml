@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.wechat.WechatUserDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.wechat.entity.WechatUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="openid" property="openid" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="BIT" />
+		<result column="language" property="language" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="headimgurl" property="headimgurl" jdbcType="VARCHAR" />
+		<result column="subscribe_time" property="subscribe_time"
+			jdbcType="TIMESTAMP" />
+		<result column="unionid" property="unionid" jdbcType="VARCHAR" />
+		<result column="groupid" property="groupid" jdbcType="VARCHAR" />
+		<result column="tagid_list" property="tagid_list" jdbcType="VARCHAR" />
+		<result column="subscribe" property="subscribe" jdbcType="BIT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, openid, nickname, sex, language, city, province,
+		country, headimgurl,
+		subscribe_time,
+		unionid, groupid, tagid_list,
+		subscribe, remark, update_at, user_id, real_name
+	</sql>
+	<sql id="Alias_Column_List">
+		twu.id, twu.openid, twu.nickname, twu.sex, twu.language,
+		twu.city,
+		twu.province, twu.country, twu.headimgurl,
+		twu.subscribe_time,
+		twu.unionid, twu.groupid, twu.tagid_list,
+		twu.subscribe, twu.remark,
+		twu.update_at, twu.user_id, twu.real_name
+	</sql>
+
+	<select id="queryWechatUserById" parameterType="INTEGER"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM tb_wechat_user
+		WHERE id=#{id}
+	</select>
+
+	<select id="queryWechatUserByUserId" parameterType="INTEGER"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM tb_wechat_user
+		WHERE user_id=#{userId}
+	</select>
+
+	<select id="queryBindWechatsByUserId" parameterType="INTEGER"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM tb_wechat_user
+		WHERE user_id=#{userId}
+	</select>
+
+	<select id="queryBindWechatsByRoleName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT DISTINCT
+		<include refid="Alias_Column_List"></include>
+		FROM
+		tb_wechat_user twu
+		INNER JOIN tb_base_user tbu
+		ON twu.user_id =
+		tbu.id
+		INNER JOIN tb_base_user_roles tur
+		ON tbu.id = tur.user_id
+		INNER
+		JOIN tb_base_role tr
+		ON tur.role_id = tr.id
+		WHERE tur.is_delete = 0
+		AND
+		tr.is_delete = 0
+		AND tbu.is_delete = 0
+		AND tr.state = 2
+		AND tur.state = 1
+		AND tbu.status = 0
+		AND tr.name = #{roleName}
+	</select>
+
+	<select id="queryWechatUserByCon" parameterType="com.scfs.domain.base.dto.req.BaseUserReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM tb_wechat_user
+		WHERE user_id is null
+		<if test="userName != null and userName != ''">
+			and from_base64(nickname) like CONCAT('%',#{userName},'%')
+		</if>
+		<if test="chineseName != null and chineseName != ''">
+			and real_name like CONCAT('%',#{chineseName},'%')
+		</if>
+		order by id desc
+	</select>
+	<select id="queryWechatUserByOpenId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM tb_wechat_user
+		WHERE openid=#{openId}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.wechat.entity.WechatUser">
+		insert into tb_wechat_user
+		(openid, nickname, sex,
+		language, city, province,
+		country, headimgurl,
+		subscribe_time,
+		unionid, groupid, tagid_list,
+		subscribe, remark
+		)
+		values
+		(#{openid,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+		#{sex,jdbcType=BIT},
+		#{language,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR}, #{headimgurl,jdbcType=VARCHAR},
+		#{subscribe_time,jdbcType=TIMESTAMP},
+		#{unionid,jdbcType=VARCHAR},
+		#{groupid,jdbcType=VARCHAR}, #{tagid_list,jdbcType=VARCHAR},
+		#{subscribe,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.scfs.domain.wechat.entity.WechatUser">
+		UPDATE tb_wechat_user
+		<set>
+			<if test="subscribe != null">
+				subscribe = #{subscribe},
+			</if>
+			<if test="realName != null">
+				real_name = #{realName},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+		</set>
+		WHERE openid=#{openid}
+	</update>
+
+	<update id="bindUser" parameterType="com.scfs.domain.wechat.entity.WechatUser">
+		UPDATE tb_wechat_user
+		SET
+		user_id=#{userId}
+		WHERE id=#{id}
+	</update>
+	<update id="unbindUser" parameterType="com.scfs.domain.wechat.entity.WechatUser">
+		UPDATE tb_wechat_user
+		SET
+		user_id = null
+		WHERE id=#{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.MatterServiceDao">
+	<resultMap id="MatterServiceMap" type="com.scfs.domain.base.entity.MatterService">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="matter_id" property="matterId" jdbcType="BIGINT" />
+		<result column="service_type" property="serviceType" jdbcType="TINYINT" />
+		<result column="service_type_remark" property="serviceTypeRemark"
+			jdbcType="VARCHAR" />
+		<result column="service_explain" property="serviceExplain"
+			jdbcType="VARCHAR" />
+		<result column="account_period" property="accountPeriod"
+			jdbcType="TINYINT" />
+		<result column="account_period_remark" property="accountPeriodRemark"
+			jdbcType="VARCHAR" />
+		<result column="matched_amount" property="matchedAmount"
+			jdbcType="VARCHAR" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="currnecy_type_remark" property="currnecyTypeRemark"
+			jdbcType="VARCHAR" />
+		<result column="deposit_paid" property="depositPaid" jdbcType="TINYINT" />
+		<result column="deposit_amount" property="depositAmount"
+			jdbcType="VARCHAR" />
+		<result column="service_rate_type" property="serviceRateType"
+			jdbcType="TINYINT" />
+		<result column="service_rate" property="serviceRate" jdbcType="VARCHAR" />
+		<result column="rec_fee_type" property="recFeeType" jdbcType="TINYINT" />
+		<result column="rec_fee_remark" property="recFeeRemark"
+			jdbcType="VARCHAR" />
+		<result column="pay_fee_type" property="payFeeType" jdbcType="TINYINT" />
+		<result column="pay_fee_remark" property="payFeeRemark"
+			jdbcType="VARCHAR" />
+		<result column="service_settlement_time" property="serviceSettlementTime"
+			jdbcType="TINYINT" />
+		<result column="service_settlement_remark" property="serviceSettlementRemark"
+			jdbcType="VARCHAR" />
+		<result column="pay_way" property="payWay" jdbcType="TINYINT" />
+		<result column="lend_way" property="lendWay" jdbcType="TINYINT" />
+		<result column="lend_way_remark" property="lendWayRemark"
+			jdbcType="VARCHAR" />
+		<result column="scale" property="scale" jdbcType="VARCHAR" />
+		<result column="turnover_times" property="turnoverTimes"
+			jdbcType="VARCHAR" />
+		<result column="return_rate" property="returnRate" jdbcType="VARCHAR" />
+		<result column="cost_expend_type" property="costExpendType"
+			jdbcType="TINYINT" />
+		<result column="biz_blance" property="bizBlance" jdbcType="VARCHAR" />
+		<result column="blance" property="blance" jdbcType="VARCHAR" />
+		<result column="sign_subject" property="signSubject" jdbcType="VARCHAR" />
+		<result column="project_biz_manager" property="projectBizManager"
+			jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		matter_id,
+		service_type,
+		service_type_remark,
+		service_explain,
+		account_period,
+		account_period_remark,
+		matched_amount,
+		currnecy_type,
+		currnecy_type_remark,
+		deposit_paid,
+		deposit_amount,
+		service_rate_type,
+		service_rate,
+		rec_fee_type,
+		rec_fee_remark,
+		pay_fee_type,
+		pay_fee_remark,
+		service_settlement_time,
+		service_settlement_remark,
+		pay_way,
+		lend_way,
+		lend_way_remark,
+		scale,
+		turnover_times,
+		return_rate,
+		cost_expend_type,
+		biz_blance,
+		blance,
+		sign_subject,
+		project_biz_manager,
+		creator,
+		create_at
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.MatterService"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_matter_service(
+		matter_id,
+		service_type,
+		service_type_remark,
+		service_explain,
+		account_period,
+		account_period_remark,
+		matched_amount,
+		currnecy_type,
+		currnecy_type_remark,
+		deposit_paid,
+		deposit_amount,
+		service_rate_type,
+		service_rate,
+		rec_fee_type,
+		rec_fee_remark,
+		pay_fee_type,
+		pay_fee_remark,
+		service_settlement_time,
+		service_settlement_remark,
+		pay_way,
+		lend_way,
+		lend_way_remark,
+		scale,
+		turnover_times,
+		return_rate,
+		cost_expend_type,
+		biz_blance,
+		blance,
+		sign_subject,
+		project_biz_manager,
+		creator,
+		create_at
+		)
+		values(
+		#{matterId,jdbcType=BIGINT},
+		#{serviceType,jdbcType=TINYINT},
+		#{serviceTypeRemark,jdbcType=VARCHAR},
+		#{serviceExplain,jdbcType=VARCHAR},
+		#{accountPeriod,jdbcType=TINYINT},
+		#{accountPeriodRemark,jdbcType=VARCHAR},
+		#{matchedAmount,jdbcType=VARCHAR},
+		#{currnecyType,jdbcType=TINYINT},
+		#{currnecyTypeRemark,jdbcType=VARCHAR},
+		#{depositPaid,jdbcType=TINYINT},
+		#{depositAmount,jdbcType=VARCHAR},
+		#{serviceRateType,jdbcType=TINYINT},
+		#{serviceRate,jdbcType=VARCHAR},
+		#{recFeeType,jdbcType=TINYINT},
+		#{recFeeRemark,jdbcType=VARCHAR},
+		#{payFeeType,jdbcType=TINYINT},
+		#{payFeeRemark,jdbcType=VARCHAR},
+		#{serviceSettlementTime,jdbcType=TINYINT},
+		#{serviceSettlementRemark,jdbcType=VARCHAR},
+		#{payWay,jdbcType=TINYINT},
+		#{lendWay,jdbcType=TINYINT},
+		#{lendWayRemark,jdbcType=VARCHAR},
+		#{scale,jdbcType=VARCHAR},
+		#{turnoverTimes,jdbcType=VARCHAR},
+		#{returnRate,jdbcType=VARCHAR},
+		#{costExpendType,jdbcType=TINYINT},
+		#{bizBlance,jdbcType=VARCHAR},
+		#{blance,jdbcType=VARCHAR},
+		#{signSubject,jdbcType=VARCHAR},
+		#{projectBizManager,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!-- 修改数据 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_matter_service
+		WHERE matter_id = #{id}
+	</delete>
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.MatterService">
+		update tb_matter_service
+		<set>
+			<if test="serviceType != null">
+				service_type=#{serviceType},
+			</if>
+			service_type_remark=#{serviceTypeRemark},
+			<if test="serviceExplain != null and serviceExplain !=''">
+				service_explain=#{serviceExplain},
+			</if>
+			<if test="accountPeriod != null">
+				account_period=#{accountPeriod},
+			</if>
+			account_period_remark=#{accountPeriodRemark},
+			<if test="matchedAmount != null and matchedAmount !=''">
+				matched_amount=#{matchedAmount},
+			</if>
+			<if test="currnecyType != null">
+				currnecy_type=#{currnecyType},
+			</if>
+			currnecy_type_remark=#{currnecyTypeRemark},
+			<if test="depositPaid != null">
+				deposit_paid=#{depositPaid},
+			</if>
+			deposit_amount=#{depositAmount},
+			<if test="serviceRateType != null">
+				service_rate_type=#{serviceRateType},
+			</if>
+			service_rate=#{serviceRate},
+			<if test="recFeeType != null">
+				rec_fee_type=#{recFeeType},
+			</if>
+			rec_fee_remark=#{recFeeRemark},
+			<if test="payFeeType != null">
+				pay_fee_type=#{payFeeType},
+			</if>
+			pay_fee_remark=#{payFeeRemark},
+			<if test="serviceSettlementTime != null">
+				service_settlement_time=#{serviceSettlementTime},
+			</if>
+			service_settlement_remark=#{serviceSettlementRemark},
+			<if test="payWay != null">
+				pay_way=#{payWay},
+			</if>
+			<if test="lendWay != null">
+				lend_way=#{lendWay},
+			</if>
+			lend_way_remark=#{lendWayRemark},
+			<if test="scale != null and scale !=''">
+				scale=#{scale},
+			</if>
+			<if test="turnoverTimes != null and turnoverTimes !=''">
+				turnover_times=#{turnoverTimes},
+			</if>
+			<if test="returnRate != null and returnRate !=''">
+				return_rate=#{returnRate},
+			</if>
+			<if test="costExpendType != null">
+				cost_expend_type=#{costExpendType},
+			</if>
+			<if test="bizBlance != null and bizBlance !=''">
+				biz_blance=#{bizBlance},
+			</if>
+			<if test="blance != null and blance !=''">
+				blance=#{blance},
+			</if>
+			<if test="signSubject != null and signSubject !=''">
+				sign_subject=#{signSubject},
+			</if>
+			<if test="projectBizManager != null and  projectBizManager !=''">
+				project_biz_manager=#{projectBizManager},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="MatterServiceMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_matter_service
+		where matter_id=#{id}
+	</select>
+
+</mapper>

@@ -1,0 +1,55 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>帐套</li>
+			<li>科目编辑</li>
+			<li class="active">分配</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="get" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<p>
+							<label class="control-label">科目编号：</label> <input
+								class="form-control" id="accountLineNo" name="accountLineNo"></select>
+
+							<label class="control-label ml10">科目名称：</label> <input
+								type="text" class="form-control" id="accountLineName"
+								name="accountLineName"> <label
+								class="control-label ml10">科目分类：</label> <select
+								class="form-control js-select" data-url="ACCOUNT_LINE_TYPE"
+								id="accountLineType" name="accountLineType"></select> <label
+								class="control-label ml10">科目级别：</label> <select
+								class="form-control js-select" data-url="ACCOUNT_LINE_LEVEL"
+								id="accountLineLevel" name="accountLineLevel"></select> <label
+								class="control-label ml10">借贷：</label> <select
+								class="form-control js-select" data-url="DEBIT_OR_CREDIT"
+								id="debitOrCredit" name="debitOrCredit"></select>
+
+							<button type="button" id="btnSearch"
+								class="btn btn-primary btn-sm ml20">查询</button>
+						</p>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+
+				<table id="js_dataTable" data-url="accountBook/divid">
+
+				</table>
+			</div>
+			<div class="box-footer text-center" id="btn_div">
+				<a id="mult-divide" data-url="accountBook/line/rel/batch/add"
+					class="btn btn-primary btn-sm" data-permissionUrl="/accountBook/line/rel/batch/add">分配</a> <a id="back"
+					data-url="html/fi/accountBook/abLineEdit.html"
+					class="btn btn-default btn-sm">返回</a>
+			</div>
+		</div>
+	</section>
+</div>
+<script src="../js/fi/accountBook/abLineDivide.js"></script>

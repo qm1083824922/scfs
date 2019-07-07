@@ -1,0 +1,117 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+	  <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>采购</li>
+	    <li>铺货退货单</li>
+	    <li class="active">铺货退货单明细浏览</li>
+	  </ol>
+  	</section>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+	                  <li role="presentation" ><a class="tab-item" data-url="html/distriReturn/distriReturnBaseInfoScan.html">基础信息</a></li>
+	                  <li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="html/distriReturn/distriReturnDtlScan.html">铺货退货单明细信息</a></li>
+	                  <li role="presentation"><a class="tab-item" data-url="html/distriReturn/attachmentScan.html">附件</a></li>
+	                </ul>
+					<table id="js_dataTable" data-url="/distriReturn/line/query"></table> 
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer text-center">
+                    <button type="button" data-url="html/distriReturn/distriReturnSearch.html" class="btn btn-default btn-sm js-back">返回 </button>
+                </div>
+                <!-- /.box-footer -->
+
+            </form>
+        </div>
+    </section>
+</div>
+<script> 
+/*数据表格*/
+var tabCols = [ 
+	{
+        title: '商品编号',
+        field: 'goodsNo',
+        align: 'center'
+    }, {
+        title: '商品条码',
+        field: "goodsBarCode",
+        align: 'center'
+    }, {
+        title: '名称',
+        field: 'goodsName',
+        align: 'center'
+    }, {
+        title: '型号',
+        field: 'goodsType',
+        align: 'center'
+    },{
+        title: '规格',
+        field: 'specification',
+        align: 'center'
+    }, {
+        title: '退货数量',
+        field: 'goodsNum',
+        align: 'center',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    }, {
+        title: '退货单价',
+        field: 'goodsPrice',
+        width: 70,
+        align: 'center',
+        formatter: function (value, row, index) {
+            return value == null ? "" : value.toThounds();
+        }
+    },{
+        title: '退货金额',
+        field: "goodsAmount",
+        formatter : function(value , row , index) {
+     		return value==null ? "": value.toThounds();
+        }
+    },{
+        title: '预退款金额',
+        field: "refundAmount",
+        formatter : function(value , row , index) {
+     		return value==null ? "": value.toThounds();
+        }
+    },{
+        title: '资金占用服务费',
+        field: "occupyServiceAmount",
+        formatter : function(value , row , index) {
+     		return value==null ? "": value.toThounds();
+        }
+    },{
+        title: '质押比率',
+        field: "pledgeProportion"
+    },{
+        title: '资金占用天数',
+        field: "occupyDay"
+    },{
+        title: '日服务费率',
+        field: "fundMonthRate"
+    }
+];
+
+options.initPage = function () {
+    GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, null,{
+        onLoadSuccess: function(data){
+            if(data.options.totalStr != null){
+                $('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>"+data.options.totalStr+"</b></td></tr>");
+            }
+        }
+    });
+};
+
+$(".tab-item").click(function () {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+GLOBAL.goBack();
+</script>

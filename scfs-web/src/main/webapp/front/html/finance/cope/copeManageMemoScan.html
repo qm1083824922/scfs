@@ -1,0 +1,97 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+        	<li>财务</li>
+        	<li>应付管理</li>
+        	<li>付款水单</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+	                    <li role="presentation"><a class="tab-item"data-url="html/finance/cope/copeManageDtlScan.html">应付明细</a></li>
+						<li role="presentation" class="li-po active"><a class="tab-item" data-url="html/finance/cope/copeManageMemoScan.html">付款水单</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="copeManageMemo/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/finance/cope/copeManageSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+		</div>
+	</section>
+</div>
+
+<script src="../../js/pay/payCommon.js"></script>
+<script>
+/*数据表格*/
+var tabCols = [
+{
+	title : '项目',
+	field : 'projectName',
+	width : 100,
+	align : 'center'
+}, {
+	title : '经营单位',
+	field : 'busiUnitName',
+	width : 100,
+	align : 'center'
+}, {
+	title : '客户',
+	field : 'cusName',
+	width : 100,
+	align : 'center'
+},
+{
+	title : '水单编号',
+	field : 'receiptNo',
+	width : 90,
+	align : 'center'
+},
+{
+	title : '银行流水号',
+	field : 'bankReceiptNo',
+	width : 90,
+	align : 'center'
+},
+{
+	title : '日期',
+	field : 'receiptDate',
+	width : 80,
+	align : 'center'
+},
+{
+	title : '收款账户',
+	field : 'recAccountNoName',
+	width : 100,
+	align : 'center'
+}, {
+	title : '币种',
+	field : 'currencyTypeName',
+	width : 80,
+	align : 'center'
+}, {
+	title : '核销金额',
+	field : 'writeOffAmount',
+	width : 80,
+	align : 'center',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}];
+
+options.initPage = function() {
+GLOBAL.initTable($('#js_dataTable'), tabCols, {
+	copeId : options.param.copeId
+});
+};
+
+GLOBAL.goBack();
+</script>

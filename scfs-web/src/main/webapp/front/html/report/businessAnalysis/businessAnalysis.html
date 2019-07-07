@@ -1,0 +1,421 @@
+<link rel="stylesheet" href="css/bootstrap-table-fixed-columns.css">
+<style>
+    .busiUnit-item, .year-item, .quarter-item, .month-item{
+        display:inline-block;
+        padding: 5px 10px;
+        border:1px solid #ccc;
+        transition:all .09s ease-in-out;
+    }
+
+    .busiUnit-item.active, 
+    .year-item.active, 
+    .quarter-item.active, 
+    .month-item.active{
+        background:#3c88ef;
+        color:#fff;
+    }
+</style>
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>报表</li>
+            <li class="active">经营分析</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a class="">按项目分析</a></li>
+                  <li><a class="">按经营单位</a></li>
+                  <li><a class="">按业务模式</a></li>
+                  <li><a class="">按资金流向</a></li>
+                  <li><a class="">按产品</a></li>
+                  <li><a class="">按业务组织</a></li>
+                </ul>
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label"><strong>经营单位：</strong></label>
+                            <span class="busiUnit-box">
+                            </span>
+                        </div>
+                        <p>
+                            <div class="search-item">
+                                <label class="control-label ml10 pl15"><strong>时间：</strong></label>
+                                <span class="year-box">
+                                    <label class="year-item mr20" onselectstart="return false">2016年<input type="hidden" value="2016"/></label>
+                                    <label class="year-item mr50" onselectstart="return false">2017年<input type="hidden" value="2017"/></label>
+
+                                    <label class="quarter-item mr20" onselectstart="return false">第一季度<input type="hidden" value="1"/></label>
+                                    <label class="quarter-item mr20" onselectstart="return false">第二季度<input type="hidden" value="2"/></label>
+                                    <label class="quarter-item mr20" onselectstart="return false">第三季度<input type="hidden" value="3"/></label>
+                                    <label class="quarter-item mr20" onselectstart="return false">第四季度<input type="hidden" value="4"/></label>
+                                </span>
+                            </div>
+                        </p>
+                        <p>
+                            <div class="search-item">
+                                <label class="control-label ml10 pl10 pr40"></label>
+                                <span class="month-box">
+                                    <label class="month-item mr20" onselectstart="return false">1月<input type="hidden" value="1"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">2月<input type="hidden" value="2"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">3月<input type="hidden" value="3"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">4月<input type="hidden" value="4"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">5月<input type="hidden" value="5"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">6月<input type="hidden" value="6"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">7月<input type="hidden" value="7"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">8月<input type="hidden" value="8"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">9月<input type="hidden" value="9"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">10月<input type="hidden" value="10"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">11月<input type="hidden" value="11"/></label>
+                                    <label class="month-item mr20" onselectstart="return false">12月<input type="hidden" value="12"/></label>
+                                </span>
+                            </div>
+                            <div class="search-item">
+                                <button type="button" id="clearBtn" class="btn btn-success ml10">清空</button>
+                                <button type="button" id="calcBtn" class="btn btn-primary ml20">开始计算</button>
+                            </div>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <p class="mb5"><b>币种：人民币</b></p>
+                <table id="table" data-show-columns="true" data-url="businessAnalysis/query"></table>
+                <p class="mt5"><b>【注】年度业绩量：从1月1日到统计日的最后一天范围内</b></p>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="js/plugins/bootstrap-table/bootstrap-table-fixed-columns.js"></script>
+<script>
+    options.initPage = function(){
+        /*数据表格*/
+        var tabCols = [
+            {  
+                 title: '序号',
+                 field: 'columnsNumber'
+            }, {
+                 title: '项目',
+                 field: 'projectName',
+                 align: 'center'
+             }, {
+                 title: '可用额度',
+                 field: 'availableAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        		     return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '年度业绩量',
+                 field: 'annualPerformance',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '上期业绩',
+                 field: 'priorPeriodPerformance',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '上期回款',
+                 field: 'priorPeriodRefundAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             },{
+                 title: '本期业绩',
+                 field: 'currPeriodPerformance',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '本期回款',
+                 field: 'currPeriodRefundAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '经营利润',
+                 field: 'busiProfit',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			 return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '存货周转天数',
+                 field: 'assetTurnoverDays',
+                 align: 'center'
+             }, {
+                title: '资金周转天数',
+                field: 'fundTurnoverDays',
+                align: 'center'
+            }, {
+                title: '物流费用',
+                field: 'logisticsAmount',
+                align: 'center',
+        	 	formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		}
+            }, {
+                 title: '市场费用',
+                 field: 'marketAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '财务费用',
+                 field: 'financeAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '管理费用',
+                 field: 'manageAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             },{
+                 title: '资金成本',
+                 field: 'fundCostAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '净利润',
+                 field: 'netProfit',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '税负成本',
+                 field: 'raxNegCostAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '绩效利润',
+                 field: 'performanceProfit',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '静态资金占用',
+                 field: 'staticFundAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '应收费用',
+                 field: 'recAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '应收账款',
+                 field: 'recAccountAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '超期应收',
+                 field: 'overDueRecAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '库存',
+                 field: 'storeAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '加权平均库龄',
+                 field: 'weightAvgAge',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '在途库存',
+                 field: 'onwayAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '总额度',
+                 field: 'totalAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '账期天数',
+                 field: 'accountPeriodDays',
+                 align: 'center'
+             }, {
+                 title: '资金池余额',
+                 field: 'unUsedfundPoolAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '开票金额',
+                 field: 'invoiceAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '未开票金额',
+                 field: 'unInvoiceAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '收票金额',
+                 field: 'collectInvoiceAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '未收票金额',
+                 field: 'unCollectInvoiceAmount',
+                 align: 'center',
+         	 	 formatter : function(value , row , index) {
+        			return value==null ? "": new Number(value).toThounds();
+        		 }
+             }, {
+                 title: '风险评级',
+                 field: 'riskRatingName',
+                 align: 'center'
+             }, {
+                title: '项目运作评分',
+                field: 'projectScoreName',
+                align: 'center'
+            }
+        ];
+
+        GLOBAL.ajax('common/selected/query?key=BUSI_UNIT', null, function(e){  
+            var busiUnitHtml = "", i = 0;
+            for(; i < e.items.length; i++){
+                var busiUnitName = e.items[i].code;
+                var busiUnitVal = e.items[i].value;
+                busiUnitHtml += '<label class="busiUnit-item mr20" onselectstart="return false">'+busiUnitVal+'<input type="hidden" value="'+busiUnitName+'"/></label>';                
+            }
+            $(".busiUnit-box").empty().append(busiUnitHtml);
+
+            $(".busiUnit-item").unbind().click(function(){
+                $(this).toggleClass("active");
+            })
+        });
+        
+        $(".year-item").unbind().click(function(e){
+            $(this).siblings(".year-item.active").removeClass("active");
+            $(this).toggleClass("active");
+        })
+        $(".quarter-item").unbind().click(function(){
+            $(".month-item.active").removeClass("active");
+            $(this).siblings(".quarter-item.active").removeClass("active");
+            $(this).toggleClass("active");
+        })
+        $(".month-item").unbind().click(function(){
+            $(".quarter-item.active").removeClass("active");
+            $(this).siblings(".active").removeClass("active");
+            $(this).toggleClass("active");
+        })
+
+        $("#clearBtn").unbind().click(function(){
+            $("#searchForm .active").removeClass("active");
+        });
+
+        $("#calcBtn").unbind().click(function(){
+            var query = getQuery();
+            if (query) {
+                GLOBAL.tableRefresh($('#table'), query);
+            }
+        })
+        
+		var fixedColumnsLen = 4;	//固定列数
+        GLOBAL.reportTable($('#table'), tabCols, fixedColumnsLen, {
+    		onLoadSuccess: function(data){
+    			var footerData = data.options.footer;
+    			if (footerData) {
+        			var $ths = $("#table thead tr:first th");
+                    var $lastRow = $("#table tbody tr:last").clone();
+                    $("#table tbody").append($lastRow);
+                    $ths.each(function(){
+                        var field = $(this).data("field");
+                        var idx = $(this).index();
+                        var value = footerData[field];
+                        if (value && value != '合计：') {
+                        	value = value.toThounds();
+                        }
+                        var showTotal = value == null ? "" : value;
+                        $("#table tbody tr:last").find("td:eq("+idx+")").text(showTotal);
+                    })
+                    var total = '<tr><td></td>';
+                    for(var i = 1; i < fixedColumnsLen; i++){
+                    	var field = $ths.eq(i).data("field");
+                    	var value = footerData[field];
+                        if (value && value != '合计：') {
+                        	value = value.toThounds();
+                        }
+                    	total += '<td>'+value+'</td>';
+                    }
+                    total += '</tr>';
+                    $(".fixed-table-body-columns table tbody").append(total);
+    			}
+    		}
+        });
+    }
+
+    function getQuery(){
+        var busiUnit = [];
+        $(".busiUnit-item.active").each(function(){
+            busiUnit.push($(this).find("input[type='hidden']").val());
+        })
+        var year = $(".year-item.active").length ? $(".year-item.active input[type='hidden']").val() : "",
+            quarter = $(".quarter-item.active").length ? $(".quarter-item.active input[type='hidden']").val() : "",
+            month =  $(".month-item.active").length ? $(".month-item.active input[type='hidden']").val() : "";
+        if (!year) {
+        	layer.msg('请选择年份！');
+        	return;
+        }
+        return {
+            busiUnitIdList: busiUnit.toString(),
+            year: year,
+            quarter: quarter,
+            month: month,
+            queryType: 1
+        }
+    }
+
+</script>

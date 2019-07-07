@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.PayPoRelationDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayPoRelation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="po_id" property="poId" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="discount_amount" property="discountAmount"
+			jdbcType="DECIMAL" />
+		<result column="in_discount_amount" property="inDiscountAmount"
+			jdbcType="DECIMAL" />
+		<result column="duction_money" property="ductionMoney"
+			jdbcType="DECIMAL" />
+		<result column="write_off_flag" property="writeOffFlag" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="queryResultMap" type="com.scfs.domain.pay.entity.PayPoRelationModel">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_id" property="payId" jdbcType="INTEGER" />
+		<result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+		<result column="po_id" property="poId" jdbcType="INTEGER" />
+		<result column="po_line_id" property="poLineId" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="append_no" property="appendNo" jdbcType="VARCHAR" />
+		<result column="order_total_num" property="orderTotalNum"
+			jdbcType="DECIMAL" />
+		<result column="order_total_amount" property="orderTotalAmount"
+			jdbcType="DECIMAL" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="perdict_time" property="perdictTime" jdbcType="TIMESTAMP" />
+		<result column="currency_id" property="currencyId" jdbcType="INTEGER" />
+		<result column="goods_num" property="goodsNum" jdbcType="DECIMAL" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="amount" property="goodsAmount" jdbcType="DECIMAL" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="arrival_amount" property="arrivalAmount"
+			jdbcType="DECIMAL" />
+		<result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="required_send_price" property="requiredSendPrice"
+			jdbcType="DECIMAL" />
+		<result column="discount_amount" property="discountAmount"
+			jdbcType="DECIMAL" />
+		<result column="in_discount_amount" property="inDiscountAmount"
+			jdbcType="DECIMAL" />
+		<result column="duction_money" property="ductionMoney"
+			jdbcType="DECIMAL" />
+		<result column="write_off_flag" property="writeOffFlag" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		pay_id,
+		po_id,
+		po_line_id,
+		pay_amount,
+		creator,
+		creator_id,
+		create_at,
+		is_delete,
+		discount_amount,
+		in_discount_amount,
+		write_off_flag
+	</sql>
+
+	<select id="queryPayPoById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_po_relation
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayPoRelation">
+		insert into tb_pay_po_relation
+		(
+		pay_id,
+		po_line_id,
+		po_id,
+		pay_amount,
+		creator,
+		creator_id,
+		create_at,
+		discount_amount,
+		in_discount_amount,
+		duction_money,
+		write_off_flag
+		)
+		values (
+		#{payId,jdbcType=INTEGER},
+		#{poLineId,jdbcType=INTEGER},
+		#{poId,jdbcType=INTEGER},
+		IFNULL(#{payAmount,jdbcType=DECIMAL},0),
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		IFNULL(#{discountAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{inDiscountAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{ductionMoney,jdbcType=DECIMAL},0),
+		IFNULL(#{writeOffFlag,jdbcType=INTEGER},0)
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayPoRelation">
+		update tb_pay_po_relation
+		<set>
+			id=#{id}
+			<if test=" payId != null">
+				,pay_id = #{payId,jdbcType=INTEGER}
+			</if>
+			<if test="poId != null">
+				,po_id = #{poId,jdbcType=INTEGER}
+			</if>
+			<if test="poLineId != null">
+				,po_line_id = #{poLineId,jdbcType=INTEGER}
+			</if>
+			<if test="payAmount != null">
+				,pay_amount = #{payAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="discountAmount != null">
+				,discount_amount = #{discountAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="inDiscountAmount != null">
+				,in_discount_amount =
+				#{inDiscountAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="writeOffFlag != null">
+				,write_off_flag = #{writeOffFlag,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 查询列表信息 -->
+	<sql id="Query_Column_List">
+		r.id,
+		r.pay_id,
+		r.po_id,
+		r.po_line_id,
+		r.pay_amount,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.is_delete,
+		r.discount_amount,
+		r.in_discount_amount,
+		r.write_off_flag,
+		pot.order_no,
+		pot.append_no,
+		pot.order_time,
+		pot.perdict_time,
+		pot.currency_id,
+		pot.order_total_num,
+		pot.order_total_amount,
+		o.goods_num,
+		o.goods_price,
+		o.amount,
+		o.invoice_amount,
+		o.storage_num * o.goods_price arrival_amount,
+		o.paid_amount,
+		o.goods_id,
+		o.required_send_price,
+		p.pay_no
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayPoRelationReqDto"
+		resultMap="queryResultMap">
+		select
+		<include refid="Query_Column_List" />
+		FROM tb_pay_po_relation r
+		LEFT JOIN tb_pay_order p
+		on r.pay_id = p.id
+		LEFT JOIN tb_purchase_order_line o ON
+		r.po_line_id = o.id
+		LEFT JOIN
+		tb_purchase_order_title pot ON pot.id = o.po_id
+		WHERE r.is_delete = 0
+		<if test="id != null">
+			and r.id = #{id}
+		</if>
+		<if test="payId != null">
+			and r.pay_id=#{payId}
+		</if>
+		<if test="writeOffFlag != null">
+			and r.write_off_flag=#{writeOffFlag}
+		</if>
+		<if test="payIds != null">
+			<foreach collection="payIds" item="payId" open="and r.pay_id in ("
+				separator="," close=")">
+				${payId}
+			</foreach>
+		</if>
+		order by r.id desc
+	</select>
+
+	<select id="queryPayPoListByPayId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM tb_pay_po_relation
+		WHERE pay_id=#{payId} AND is_delete = 0
+	</select>
+
+	<select id="queryTotalOrderNum" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(poLine.goods_num)
+		from tb_pay_order pay
+		left join
+		tb_pay_po_relation poRela
+		on pay.id = poRela.pay_id
+		left join
+		tb_purchase_order_line poLine
+		on poRela.po_line_id = poLine.id
+		where
+		pay.is_delete = 0 and poRela.is_delete = 0 and poLine.is_delete
+		= 0
+		and
+		pay.id = #{payId}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_pay_po_relation
+		where id = #{id}
+	</delete>
+
+	<select id="queryPayPoListByPoId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM tb_pay_po_relation
+		WHERE po_id=#{poId} AND is_delete = 0
+	</select>
+	<select id="queryPayPoByPoLineId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_po_relation
+		where po_line_id=#{poLineId}
+		and is_delete =0
+	</select>
+	
+	<select id="queryFinishedCountPayPoByPoId" resultType="java.lang.Integer">
+		select count(tppr.id)
+		from tb_pay_po_relation tppr
+		left join tb_pay_order tpo
+		on tppr.pay_id = tpo.id
+		where 1=1
+		and tppr.po_id=#{poId}
+		and tppr.is_delete=0
+		and tpo.is_delete=0
+		and tpo.state=6
+	</select>
+
+	<select id="queryTotalPayAmount" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(IFNULL(poRela.pay_amount, 0))
+		from tb_pay_order
+		pay
+		left join
+		tb_pay_po_relation poRela
+		on pay.id = poRela.pay_id
+		where
+		pay.is_delete = 0
+		and poRela.is_delete = 0
+		and pay.id = #{payId}
+	</select>
+
+	<!-- 通过采购单明细id获取付款总金额 -->
+	<select id="queryTotalPayAmountByPoLineId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(IFNULL(pay.pay_amount, 0)) FROM
+		tb_pay_po_relation poRel
+		INNER JOIN tb_pay_order pay ON
+		poRel.pay_id=pay.id
+		WHERE pay.is_delete = 0
+		AND pay.state=6
+		AND
+		poRel.is_delete = 0
+		AND poRel.po_line_id=#{poLineId}
+	</select>
+
+	<!-- 根据采购明细ID查询付款单支付类型 -->
+	<select id="queryPayWayTypeByPoLineId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT pay.pay_way_type FROM
+		tb_pay_po_relation poRel
+		INNER
+		JOIN tb_pay_order pay ON
+		poRel.pay_id=pay.id
+		WHERE pay.is_delete = 0
+		AND
+		pay.state=6
+		AND pay.pay_way_type in (0,1)
+		AND poRel.is_delete = 0
+		AND
+		poRel.po_line_id=#{poLineId}
+	</select>
+</mapper>

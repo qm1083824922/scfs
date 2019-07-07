@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.pay.PayRefundRelationDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayRefundRelation">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pay_id" jdbcType="INTEGER" property="payId" />
+		<result column="refund_im_id" jdbcType="INTEGER" property="refundImId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="receipt_id" jdbcType="INTEGER" property="receiptId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="receipt_at" jdbcType="TIMESTAMP" property="receiptAt" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+		<result column="currency_type" jdbcType="INTEGER" property="currencyType" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pay_id, refund_im_id, creator, creator_id, create_at,
+		receipt_id,
+		project_id,
+		busi_unit, cust_id, receipt_at, is_delete,
+		pay_amount,currency_type
+	</sql>
+	<!-- 查询列表信息 -->
+	<sql id="Query_Column_List">
+		r.id,
+		r.pay_id,
+		r.refund_im_id,
+		r.creator,
+		r.creator_id,
+		r.create_at,
+		r.is_delete,
+		r.pay_amount,
+		r.currency_type,
+		r.receipt_id,
+		r.project_id,
+		r.busi_unit,
+		r.cust_id,
+		r.receipt_at,
+		p.pay_no,
+		o.refund_amount,
+		o.currency_type,
+		o.receipt_date
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_refund_relation
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_pay_refund_relation
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayRefundRelation">
+		insert into
+		tb_pay_refund_relation (id, pay_id, refund_im_id,
+		creator, creator_id,
+		create_at,
+		receipt_id, project_id, busi_unit,
+		cust_id,
+		receipt_at,currency_type,pay_amount)
+		values (#{id,jdbcType=INTEGER},
+		#{payId,jdbcType=INTEGER},
+		#{refundImId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{receiptId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{busiUnit,jdbcType=INTEGER},
+		#{custId,jdbcType=INTEGER},
+		#{receiptAt,jdbcType=TIMESTAMP},#{currencyType,jdbcType=INTEGER},#{payAmount,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.scfs.domain.pay.entity.PayRefundRelation">
+		insert into tb_pay_refund_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="payId != null">
+				pay_id,
+			</if>
+			<if test="refundImId != null">
+				refund_im_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="receiptId != null">
+				receipt_id,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="busiUnit != null">
+				busi_unit,
+			</if>
+			<if test="custId != null">
+				cust_id,
+			</if>
+			<if test="receiptAt != null">
+				receipt_at,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="payAmount != null">
+				pay_amount,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="payId != null">
+				#{payId,jdbcType=INTEGER},
+			</if>
+			<if test="refundImId != null">
+				#{refundImId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiptId != null">
+				#{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit != null">
+				#{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="custId != null">
+				#{custId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptAt != null">
+				#{receiptAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+			<if test="payAmount != null">
+				#{payAmount,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.pay.entity.PayRefundRelation">
+		update tb_pay_refund_relation
+		<set>
+			<if test="payId != null">
+				pay_id = #{payId,jdbcType=INTEGER},
+			</if>
+			<if test="refundImId != null">
+				refund_im_id = #{refundImId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiptId != null">
+				receipt_id = #{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="busiUnit != null">
+				busi_unit = #{busiUnit,jdbcType=INTEGER},
+			</if>
+			<if test="custId != null">
+				cust_id = #{custId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptAt != null">
+				receipt_at = #{receiptAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+			<if test="payAmount != null">
+				pay_amount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.pay.entity.PayRefundRelation">
+		update
+		tb_pay_refund_relation
+		set pay_id = #{payId,jdbcType=INTEGER},
+		refund_im_id = #{refundImId,jdbcType=INTEGER},
+		creator =
+		#{creator,jdbcType=VARCHAR},
+		creator_id =
+		#{creatorId,jdbcType=INTEGER},
+		create_at =
+		#{createAt,jdbcType=TIMESTAMP},
+		receipt_id =
+		#{receiptId,jdbcType=INTEGER},
+		project_id =
+		#{projectId,jdbcType=INTEGER},
+		busi_unit =
+		#{busiUnit,jdbcType=INTEGER},
+		cust_id = #{custId,jdbcType=INTEGER},
+		receipt_at = #{receiptAt,jdbcType=TIMESTAMP},
+		is_delete =
+		#{isDelete,jdbcType=INTEGER},
+		pay_amount =
+		#{payAmount,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryPayRefundLaResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayRefundRelationReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Query_Column_List" />
+		FROM tb_pay_refund_relation r
+		LEFT JOIN tb_pay_order p
+		on r.pay_id =
+		p.id
+		LEFT JOIN tb_refund_information o ON
+		r.refund_im_id = o.id
+		WHERE
+		r.is_delete = 0
+		and o.is_delete=0
+		<if test="id != null">
+			and r.id = #{id}
+		</if>
+		<if test="payId != null">
+			and r.pay_id=#{payId}
+		</if>
+		<if test="payIds != null">
+			<foreach collection="payIds" item="payId" open="and r.pay_id in ("
+				separator="," close=")">
+				${payId}
+			</foreach>
+		</if>
+		order by r.id desc
+	</select>
+
+	<select id="queryPayRefundByfundId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_refund_relation where
+		refund_im_id=#{refundImId,jdbcType=INTEGER}
+	</select>
+</mapper>

@@ -1,0 +1,119 @@
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>项目</li>
+        <li class="active">客户信息编辑</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+          <div class="box no-margin">
+              <form class="form-horizontal">
+                  <div class="box-body">
+                      <ul class="nav nav-tabs">
+                          <li role="presentation"><a class="tab-item" data-url="html/project/projectBaseInfoEdit.html">基础信息</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectVEdit.html">供应商信息</a></li>
+                          <li role="presentation" class="active"><a class="tab-item" data-url="html/project/projectSubjectCEdit.html">客户信息</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/project/projectSubjectWEdit.html">仓库信息</a></li>
+                          <li role="presentation"><a class="tab-item" data-url="html/project/projectGoodsEdit.html">商品信息</a></li>
+                          <li role="presentation"  ><a class="tab-item" data-url="html/project/projectUserEdit.html">用户信息</a></li>
+                          
+                      </ul>
+                      <table id="js_dataTable" data-url="project/subjectc/query">
+                      </table>
+                  </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer text-center">
+                      <button type="button" class="btn btn-danger btn-sm" data-url="project/subjectc/deleteAll" data-permissionUrl="/project/subjectc/deleteAll" id="multDel">批量作废</button>
+                      <button type="button" class="btn btn-primary btn-sm" data-url="html/project/projectSubjectCEditDevide.html" data-permissionUrl="/project/subjectc/dividAll" id="devide">分配</button>
+                      <button type="button" data-url="html/project/projectSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+          </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [{
+    field: 'checkItem',
+    checkbox: true,
+}, {
+    title: '序号',
+    field: 'columnsNumber',
+    width: 10
+}, {
+    title: '已分配客户',
+    field: 'subjectName',
+    width: 210,
+    align: 'center'
+}, {
+    title: '分配人',
+    field: 'creator',
+    width: 80,
+    align: 'center'
+}, {
+    title: '分配日',
+    field: 'createAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '作废人',
+    field: 'deleter',
+    width: 80,
+    align: 'center'
+}, {
+    title: '作废日',
+    field: 'deleteAt',
+    width: 80,
+    align: 'center'
+}, {
+    title: '状态',
+    field: 'status',
+    width: 80,
+    align: 'center'
+}];
+
+options.initPage = function() {
+    console.log(options.param.id);
+    GLOBAL.initTable($('#js_dataTable'), tabCols, {
+        projectId: options.param.id
+    });
+};
+
+$("#devide").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+$("#multDel").click(function() {
+    var id = GLOBAL.selectIds($('#js_dataTable'));
+    var url = $(this).data("url");
+    if (id) {
+        layer.confirm('确定要作废吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                ids: id
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("作废成功！");
+                    $('#js_dataTable').bootstrapTable('refresh', {
+                        query: {
+                            projectId: options.param.id
+                        }
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        }, function() {});
+    }
+})
+
+$(".tab-item").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+
+GLOBAL.goBack();
+</script>

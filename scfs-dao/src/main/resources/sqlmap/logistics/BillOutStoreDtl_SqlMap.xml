@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.logistics.BillOutStoreDtlDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.logistics.entity.BillOutStoreDtl">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_out_store_id" jdbcType="INTEGER" property="billOutStoreId" />
+		<result column="bill_delivery_dtl_id" jdbcType="INTEGER"
+			property="billDeliveryDtlId" />
+		<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		<result column="send_num" jdbcType="DECIMAL" property="sendNum" />
+		<result column="send_price" jdbcType="DECIMAL" property="sendPrice" />
+		<result column="pickup_num" jdbcType="DECIMAL" property="pickupNum" />
+		<result column="stl_id" jdbcType="INTEGER" property="stlId" />
+		<result column="batch_no" jdbcType="VARCHAR" property="batchNo" />
+		<result column="goods_status" jdbcType="TINYINT" property="goodsStatus" />
+		<result column="cost_amount" jdbcType="DECIMAL" property="costAmount" />
+		<result column="po_amount" jdbcType="DECIMAL" property="poAmount" />
+		<result column="assign_stl_flag" jdbcType="INTEGER" property="assignStlFlag" />
+		<result column="customs_declare_num" jdbcType="DECIMAL"
+			property="customsDeclareNum" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="pay_price" jdbcType="DECIMAL" property="payPrice" />
+		<result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+		<result column="po_return_id" jdbcType="INTEGER" property="poReturnId" />
+		<result column="po_return_dtl_id" jdbcType="INTEGER" property="poReturnDtlId" />
+		<result column="pay_rate" jdbcType="DECIMAL" property="payRate" />
+		<result column="pay_real_currency" jdbcType="TINYINT" property="payRealCurrency" />
+		<result column="unpickup_num" jdbcType="DECIMAL" property="unPickupNum" />
+		<result column="fund_back_dtl_amount" jdbcType="DECIMAL"
+			property="fundBackDtlAmount" />
+	</resultMap>
+	<resultMap id="ExtResultMap"
+		type="com.scfs.domain.logistics.entity.BillOutStoreDtlExt" extends="BaseResultMap">
+		<result column="t_bill_no" jdbcType="VARCHAR" property="tBillNo" />
+		<result column="t_bill_type" jdbcType="TINYINT" property="tBillType" />
+		<result column="t_affiliate_no" jdbcType="VARCHAR" property="tAffiliateNo" />
+		<result column="t_project_id" jdbcType="INTEGER" property="tProjectId" />
+		<result column="t_supplier_id" jdbcType="INTEGER" property="tSupplierId" />
+		<result column="t_warehouse_id" jdbcType="INTEGER" property="tWarehouseId" />
+		<result column="t_customer_id" jdbcType="INTEGER" property="tCustomerId" />
+		<result column="t_receive_warehouse_id" jdbcType="INTEGER"
+			property="tReceiveWarehouseId" />
+		<result column="t_status" jdbcType="TINYINT" property="tStatus" />
+		<result column="t_required_send_date" jdbcType="DATE"
+			property="tRequiredSendDate" />
+		<result column="t_send_date" jdbcType="DATE" property="tSendDate" />
+		<result column="t_bill_delivery_id" jdbcType="INTEGER"
+			property="tBillDeliveryId" />
+		<result column="t_send_num" jdbcType="DECIMAL" property="tSendNum" />
+		<result column="t_send_amount" jdbcType="DECIMAL" property="tSendAmount" />
+		<result column="t_pickup_num" jdbcType="DECIMAL" property="tPickupNum" />
+		<result column="t_pickup_amount" jdbcType="DECIMAL" property="tPickupAmount" />
+		<result column="t_cost_amount" jdbcType="DECIMAL" property="tCostAmount" />
+		<result column="t_po_amount" jdbcType="DECIMAL" property="tPoAmount" />
+		<result column="t_customer_address_id" jdbcType="INTEGER"
+			property="tCustomerAddressId" />
+		<result column="t_transfer_mode" jdbcType="TINYINT" property="tTransferMode" />
+		<result column="t_deliver_id" jdbcType="INTEGER" property="tDeliverId" />
+		<result column="t_deliverer" jdbcType="VARCHAR" property="tDeliverer" />
+		<result column="t_deliver_time" jdbcType="TIMESTAMP" property="tDeliverTime" />
+		<result column="t_currency_type" jdbcType="INTEGER" property="tCurrencyType" />
+		<result column="t_exchange_rate" jdbcType="DECIMAL" property="tExchangeRate" />
+		<result column="t_reason_type" jdbcType="INTEGER" property="tReasonType" />
+		<result column="t_wms_status" jdbcType="INTEGER" property="tWmsStatus" />
+		<result column="t_remark" jdbcType="VARCHAR" property="tRemark" />
+		<result column="t_print_num" jdbcType="INTEGER" property="tPrintNum" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, bill_out_store_id, bill_delivery_dtl_id, goods_id,
+		send_num,
+		send_price, pickup_num, stl_id, batch_no,
+		goods_status,
+		cost_amount, po_amount, assign_stl_flag, customs_declare_num, remark,
+		creator_id, creator, create_at, update_at,
+		pay_price, pay_time,
+		po_return_id, po_return_dtl_id,pay_rate,pay_real_currency,
+		fund_back_dtl_amount
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		tbosd.id, tbosd.bill_out_store_id,
+		tbosd.bill_delivery_dtl_id, tbosd.goods_id,
+		tbosd.send_num,
+		tbosd.send_price, tbosd.pickup_num, tbosd.stl_id,
+		tbosd.batch_no,
+		tbosd.goods_status, tbosd.cost_amount, tbosd.po_amount,
+		tbosd.assign_stl_flag,
+		tbosd.customs_declare_num, tbosd.remark,
+		tbosd.creator_id,
+		tbosd.creator, tbosd.create_at, tbosd.update_at,
+		tbosd.pay_price, tbosd.pay_time, tbosd.po_return_id,
+		tbosd.po_return_dtl_id,
+		tbosd.fund_back_dtl_amount
+	</sql>
+	<sql id="BillOutStore_Alias_Base_Column_List">
+		tbos.bill_no t_bill_no, tbos.bill_type t_bill_type,
+		tbos.affiliate_no
+		t_affiliate_no, tbos.project_id t_project_id,
+		tbos.warehouse_id t_warehouse_id, tbos.customer_id t_customer_id,
+		tbos.receive_warehouse_id t_receive_warehouse_id,
+		tbos.status t_status,
+		tbos.required_send_date t_required_send_date,
+		tbos.send_date
+		t_send_date, tbos.bill_delivery_id t_bill_delivery_id,
+		tbos.send_num
+		t_send_num, tbos.send_amount t_send_amount,
+		tbos.pickup_num
+		t_pickup_num, tbos.pickup_amount t_pickup_amount,
+		tbos.cost_amount
+		t_cost_amount, tbos.po_amount t_po_amount,
+		tbos.customer_address_id
+		t_customer_address_id, tbos.transfer_mode
+		t_transfer_mode,
+		tbos.deliver_id t_deliver_id, tbos.deliverer t_deliverer,
+		tbos.deliver_time
+		t_deliver_time, tbos.currency_type t_currency_type,
+		tbos.exchange_rate t_exchange_rate, tbos.reason_type t_reason_type,
+		tbos.wms_status
+		t_wms_status, tbos.remark t_remark,
+		tbos.print_num
+		t_print_num
+	</sql>
+
+	<sql id="condition">
+		<if test="id!=null">
+			AND tbosd.id = #{id}
+		</if>
+		<if test="billOutStoreId!=null">
+			AND tbosd.bill_out_store_id = #{billOutStoreId}
+		</if>
+		<if test="availableFlag!=null and availableFlag==1">
+			AND IFNULL(tbosd.send_num, 0) &gt;
+			IFNULL(tbosd.pickup_num, 0)
+		</if>
+	</sql>
+
+	<sql id="bill_out_store_condition">
+		<if test="businessUnitId!=null">
+			AND tbp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="id!=null">
+			AND tbos.id = #{id}
+		</if>
+		<if test="projectId!=null">
+			AND tbos.project_id = #{projectId}
+		</if>
+		<if test="warehouseId!=null">
+			AND tbos.warehouse_id = #{warehouseId}
+		</if>
+		<if test="customerId!=null">
+			AND tbos.customer_id = #{customerId}
+		</if>
+		<if test="startSendDate!=null">
+			AND tbos.send_date &gt;= #{startSendDate}
+		</if>
+		<if test="endSendDate!=null">
+			AND tbos.send_date &lt;= #{endSendDate}
+		</if>
+		<if test="startRequiredSendDate!=null">
+			AND tbos.required_send_date &gt;= #{startRequiredSendDate}
+		</if>
+		<if test="endRequiredSendDate!=null">
+			AND tbos.required_send_date &lt;= #{endRequiredSendDate}
+		</if>
+		<if test="status!=null">
+			AND tbos.status = #{status}
+		</if>
+		<if test="billType!=null">
+			AND tbos.bill_type = #{billType}
+		</if>
+		<if test="billNo!=null and billNo!=''">
+			AND tbos.bill_no like CONCAT('%',#{billNo},'%')
+		</if>
+		<if test="affiliateNo!=null and affiliateNo!=''">
+			AND tbos.affiliate_no like CONCAT('%',#{affiliateNo},'%')
+		</if>
+		<if test="startDeliverTime!=null and startDeliverTime!=''">
+			AND tbos.deliver_time &gt;= #{startDeliverTime}
+		</if>
+		<if test="endDeliverTime!=null and endDeliverTime!=''">
+			AND tbos.deliver_time &lt;= #{endDeliverTime}
+		</if>
+		<if test="goodsNumber!=null and goodsNumber!=''">
+			AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+		</if>
+		<if test="goodsName!=null and goodsName!=''">
+			AND tbg.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<if test="goodsType!=null and goodsType!=''">
+			AND tbg.type like CONCAT('%',#{goodsType},'%')
+		</if>
+		<if test="goodsBarCode!=null and goodsBarCode!=''">
+			AND tbg.bar_code like CONCAT('%',#{goodsBarCode},'%')
+		</if>
+		<if test="billDeliveryNo!=null and billDeliveryNo!=''">
+			AND tbd.bill_no like CONCAT('%',#{billDeliveryNo},'%')
+		</if>
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_out_store_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_bill_out_store_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<select id="selectList"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreDtlSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_out_store_dtl tbosd
+		where 1=1
+		<include refid="condition" />
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.logistics.entity.BillOutStoreDtl"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_bill_out_store_dtl
+		(id, bill_out_store_id,
+		bill_delivery_dtl_id, goods_id,
+		send_num,
+		send_price, pickup_num,
+		stl_id, batch_no, goods_status,
+		cost_amount,
+		po_amount, assign_stl_flag,
+		remark, creator_id, creator,
+		pay_price,
+		pay_time, po_return_id, po_return_dtl_id,pay_rate,pay_real_currency)
+		values (#{id,jdbcType=INTEGER}, #{billOutStoreId,jdbcType=INTEGER},
+		#{billDeliveryDtlId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
+		#{sendNum,jdbcType=DECIMAL}, #{sendPrice,jdbcType=DECIMAL},
+		#{pickupNum,jdbcType=DECIMAL},
+		#{stlId,jdbcType=INTEGER},
+		#{batchNo,jdbcType=VARCHAR}, #{goodsStatus,jdbcType=TINYINT},
+		#{costAmount,jdbcType=DECIMAL}, #{poAmount,jdbcType=DECIMAL},
+		#{assignStlFlag,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR},
+		#{payPrice,jdbcType=DECIMAL},
+		#{payTime,jdbcType=TIMESTAMP},#{poReturnId,jdbcType=INTEGER},
+		#{poReturnDtlId,jdbcType=INTEGER},
+		#{payRate,jdbcType=DECIMAL},
+		#{payRealCurrency,jdbcType=TINYINT})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.logistics.entity.BillOutStoreDtl">
+		update tb_bill_out_store_dtl
+		<set>
+			<if test="billOutStoreId != null">
+				bill_out_store_id = #{billOutStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="billDeliveryDtlId != null">
+				bill_delivery_dtl_id =
+				#{billDeliveryDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="sendNum != null">
+				send_num = #{sendNum,jdbcType=DECIMAL},
+			</if>
+			<if test="sendPrice != null">
+				send_price = #{sendPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="pickupNum != null">
+				pickup_num = #{pickupNum,jdbcType=DECIMAL},
+			</if>
+			<if test="stlId != null">
+				stl_id = #{stlId,jdbcType=INTEGER},
+			</if>
+			<if test="batchNo != null">
+				batch_no = #{batchNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=TINYINT},
+			</if>
+			<if test="costAmount != null">
+				cost_amount = #{costAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="poAmount != null">
+				po_amount = #{poAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="assignStlFlag != null">
+				assign_stl_flag = #{assignStlFlag,jdbcType=TINYINT},
+			</if>
+			<if test="customsDeclareNum != null">
+				customs_declare_num =
+				#{customsDeclareNum,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="payPrice != null">
+				pay_price = #{payPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="poReturnId != null">
+				po_return_id = #{poReturnId,jdbcType=INTEGER},
+			</if>
+			<if test="poReturnDtlId != null">
+				po_return_dtl_id = #{poReturnDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="fundBackDtlAmount != null">
+				fund_back_dtl_amount =
+				#{fundBackDtlAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreDtlSearchReqDto"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		from tb_bill_out_store_dtl tbosd
+		left join tb_base_goods tbg
+		on
+		tbosd.goods_id = tbg.id
+		where 1=1
+		<include refid="condition" />
+		order by id desc
+	</select>
+
+	<select id="querySumBillOutStoreDtl"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreDtlSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.BillOutStoreDtlSum">
+		select SUM(IFNULL(tbosd.send_num, 0)) as sendNum,
+		SUM(ROUND(IFNULL(tbosd.send_num, 0)*IFNULL(tbosd.send_price, 0), 2))
+		as sendAmount,
+		SUM(tbosd.pickup_num) as pickupNum,
+		SUM(ROUND(IFNULL(tbosd.pickup_num, 0)*IFNULL(tbosd.send_price, 0), 2))
+		as pickupAmount,
+		SUM(IFNULL(tbosd.cost_amount, 0)) as costAmount,
+		SUM(IFNULL(tbosd.po_amount, 0)) as poAmount,
+		tbos.currency_type as
+		currencyType
+		from tb_bill_out_store_dtl tbosd
+		inner join
+		tb_bill_out_store tbos
+		on tbosd.bill_out_store_id = tbos.id
+		where 1=1
+		<include refid="condition" />
+	</select>
+
+	<select id="queryById"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreDtlSearchReqDto"
+		resultMap="BaseResultMap">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		from tb_bill_out_store_dtl tbosd
+		left join tb_base_goods tbg
+		on
+		tbosd.goods_id = tbg.id
+		where tbosd.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="querySumByBillOutStoreId" parameterType="com.scfs.domain.logistics.entity.BillOutStoreDtl"
+		resultType="com.scfs.domain.logistics.entity.BillOutStoreDtlSum">
+		select IFNULL(sum(ROUND(pickup_num*send_price, 2)), 0) as
+		pickupAmount,
+		IFNULL(sum(pickup_num), 0) as pickupNum,
+		IFNULL(sum(ROUND(send_num*send_price, 2)), 0) as sendAmount,
+		IFNULL(sum(send_num), 0) as sendNum,
+		IFNULL(sum(cost_amount), 0) as
+		costAmount,
+		IFNULL(sum(po_amount), 0) as poAmount
+		from
+		tb_bill_out_store_dtl
+		where bill_out_store_id =
+		#{billOutStoreId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryTaxGroupSumByBillOutStoreId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.logistics.entity.BillOutStoreDtlTaxGroupSum">
+		select sum(ROUND(send_num*send_price, 2)) as sendAmount ,
+		goods.tax_rate as
+		taxRate
+		from tb_bill_out_store_dtl outStore
+		left join
+		tb_base_goods goods on goods.id = outStore.goods_id
+		where
+		outStore.bill_out_store_id = #{id}
+		group by goods.tax_rate
+	</select>
+
+	<select id="querySumAmountByBillOutStoreId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select
+		IFNULL(sum(ROUND(outStore.send_num*outStore.send_price, 2)),0) as
+		sendAmount
+		from tb_bill_out_store_dtl outStore
+		where
+		outStore.bill_out_store_id = #{id}
+	</select>
+
+	<select id="queryAvailableResultByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreSearchReqDto"
+		resultType="com.scfs.domain.logistics.dto.resp.BillOutStoreDtlCustomsResDto">
+		select DISTINCT
+		tbosd.id id
+		,tbosd.bill_out_store_id as billOutStoreId
+		,tbosd.goods_id as goodsId
+		,tbosd.send_num as sendNum
+		,tbosd.send_price
+		as sendPrice
+		,tbosd.customs_declare_num as customsDeclareNum
+		,tbos.bill_no as billNo
+		,tbos.affiliate_no as affiliateNo
+		,tbos.warehouse_id as warehouseId
+		,tbos.deliver_time as deliverTime
+		from tb_bill_out_store_dtl tbosd
+		left join tb_bill_out_store tbos
+		on
+		tbosd.bill_out_store_id = tbos.id
+		left join tb_base_goods tbg
+		on
+		tbosd.goods_id = tbg.id
+		where tbos.is_delete = 0
+		and tbos.status = 5
+		and
+		IFNULL(tbosd.customs_declare_num, 0) &lt; IFNULL(tbosd.send_num, 0)
+		and tbos.bill_type = 1
+		<include refid="bill_out_store_condition" />
+		order by tbosd.id desc
+	</select>
+
+	<!-- 导出明细查询 -->
+	<select id="queryResultsByBillOutStoreCon"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreSearchReqDto"
+		resultMap="ExtResultMap">
+		<include refid="queryResultsByBillOutStoreCon_sql" />
+	</select>
+
+	<sql id="queryResultsByBillOutStoreCon_sql">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		,
+		<include refid="BillOutStore_Alias_Base_Column_List" />
+		from tb_bill_out_store_dtl tbosd
+		left join tb_bill_out_store tbos
+		on
+		tbosd.bill_out_store_id = tbos.id
+		left join tb_base_goods tbg
+		on
+		tbosd.goods_id = tbg.id
+		left join tb_bill_delivery tbd
+		on
+		tbos.bill_delivery_id = tbd.id
+		inner join tb_base_user_project bup
+		on
+		tbos.project_id = bup.project_id
+		inner join tb_base_project tbp
+		on
+		tbp.id = bup.project_id
+		where tbos.is_delete = 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<include refid="bill_out_store_condition" />
+		order by tbosd.id desc
+	</sql>
+
+	<select id="queryCountByBillOutStoreCon" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.logistics.dto.req.BillOutStoreSearchReqDto">
+		select count(1) from (
+		<include refid="queryResultsByBillOutStoreCon_sql" />
+		) tmp
+	</select>
+
+	<select id="queryResultsByBillDeliveryDtlId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_out_store_dtl
+		where bill_delivery_id = #{billDeliveryId}
+	</select>
+
+	<select id="queryResultOutStoreID" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_out_store_dtl
+		where bill_out_store_id=#{outID}
+	</select>
+
+	<select id="queryUnFundbackResultsByBillOutStoreId"
+		parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_out_store_dtl
+		where bill_out_store_id=#{billOutStoreId}
+		and (pay_price*send_num) > fund_back_dtl_amount
+		order by
+		fund_back_dtl_amount desc
+	</select>
+	<select id="queryBillOutPrintByBillOutId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.logistics.dto.resp.BillOutStoreDtlResDto">
+		select tbd.bill_no as billNo,tbg.number as
+		goodsNumber,tbg.name as
+		goodsName,
+		tbg.TYPE as goodsType,biot.send_num
+		as sendNum,bios.deliver_time as
+		deliverTime
+		from tb_bill_out_store_dtl
+		biot
+		LEFT JOIN tb_bill_out_store bios ON bios.id=biot.bill_out_store_id
+		LEFT JOIN tb_base_goods tbg on biot.goods_id = tbg.id
+		LEFT JOIN
+		tb_bill_delivery tbd on bios.bill_delivery_id = tbd.id
+		where
+		bios.is_delete=0
+		and bios.STATUS=5
+		and tbd.is_delete=0
+		and tbd.STATUS=5
+		and bios.id=#{billOutStoreId}
+	</select>
+</mapper>

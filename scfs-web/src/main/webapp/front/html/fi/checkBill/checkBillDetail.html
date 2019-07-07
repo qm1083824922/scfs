@@ -1,0 +1,130 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>对账管理</li>
+			<li class="active">对账明细浏览</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="post" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<p>
+							<label class="control-label ml10">单据编号：</label> 
+							<input class="form-control" id="billNo" name="billNo" />
+							<label class="control-label">单据日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startBillDate">-
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endBillDate">
+							<button type="button" id="btnSearch"
+								class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="button" 
+								data-url="html/fi/checkBill/checkBillSearch.html"
+								class="btn btn-default btn-sm ml20 js-back">返回</button>
+						</p>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="form-group-sm"><label style="font-size: 16px;font-weight:bold">待对账列表</label></div>
+				<table id="js_dataTable1" data-url="checkBill/info/detail" data-permissionUrl="/checkBill/info/detail">
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [
+     {
+		field : 'checkItem',
+		checkbox : true,
+		width : '4%'
+     },
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: '4%'
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     width: '15%',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'custName',
+	     width: '15%',
+	     align: 'center'
+	 }, {
+	     title: '经营单位',
+	     field: 'busiUnitName',
+	     width: '15%',
+	     align: 'center'
+	 },  {
+	     title: '单据类型',
+	     field: 'billTypeName',
+	     width: '8%',
+	     align: 'center'
+	 },{
+	     title: '单据编号',
+	     field: 'billNo',
+	     width: '15%',
+	     align: 'center'
+	 }, {
+	     title: '单据日期',
+	     field: 'billDateStr',
+	     width: '9%',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     width: '5%',
+	     align: 'center'
+	 }, {
+	     title: '对账金额',
+	     field: 'amountUnChecked',
+	     width: '10%',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	var baseParam = {
+		projectId : options.param.projectId,
+		custId : options.param.custId,
+		busiUnit : options.param.busiUnit,
+		currencyType : options.param.currencyType
+	}
+	if (options.param.billNo.length > 0) {
+		$("#billNo").val(options.param.billNo);
+	}
+	if (options.param.startBillDate.length > 0) {
+		$("#js_form_datetimeStart").val(options.param.startBillDate);
+	}
+	if (options.param.endBillDate.length > 0) {
+		$("#js_form_datetimeEnd").val(options.param.endBillDate);
+	}
+	var tableOptions = {
+	    pagination: false           		 //是否显示分页（*）
+	}
+	GLOBAL.initTable($('#js_dataTable1'), tabCols, options.param , null , tableOptions);
+	
+	$(".js_datePicker").datetimepicker({
+        format:'Y-m-d',
+    });
+}
+$("#btnSearch").click(function() {
+	var baseParam = {
+		projectId : options.param.projectId,
+		custId : options.param.custId,
+		busiUnit : options.param.busiUnit
+	}
+	var data = $("#searchForm").serializeObject();
+	$.extend(data , baseParam);
+    $('#js_dataTable1').bootstrapTable('refresh', {query: data});
+});
+GLOBAL.goBack();
+</script>

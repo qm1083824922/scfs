@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="feeReceiveList" var="receive"
+			varType="com.scfs.domain.fee.dto.resp.FeeQueryResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">receive.projectName</mapping>
+				<mapping row="2" col="1">receive.custPayerName</mapping>
+				<mapping row="2" col="2">receive.recFeeSpecName</mapping>
+				<mapping row="2" col="3">receive.recTypeName</mapping>
+				<mapping row="2" col="4">receive.recDate</mapping>
+				<mapping row="2" col="5">receive.currencyTypeName</mapping>
+				<mapping row="2" col="6">receive.recAmount</mapping>
+				<mapping row="2" col="7">receive.provideInvoiceTypeName</mapping>
+				<mapping row="2" col="8">receive.provideInvoiceTaxRateStr</mapping>
+				<mapping row="2" col="9">receive.recNote</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

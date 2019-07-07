@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.common.SequenceDao">
+
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.SeqManage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="seq_name" property="seqName" jdbcType="VARCHAR" />
+		<result column="seq_val" property="seqVal" jdbcType="INTEGER" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="getSeqByName" resultType="com.scfs.domain.common.entity.SeqManage"
+		parameterType="String">
+		select seq_val,seq_name,update_at from
+		tb_seq_manage
+		where seq_name = #{seqName ,jdbcType=VARCHAR} for update
+	</select>
+
+	<update id="updateSeqValByName" parameterType="com.scfs.domain.common.entity.SeqManage">
+		update
+		tb_seq_manage set seq_val = #{seqVal},update_at=#{updateAt}
+		where
+		seq_name = #{seqName}
+	</update>
+</mapper>

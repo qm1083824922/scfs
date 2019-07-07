@@ -1,0 +1,292 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">业务目标值</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+            <div class="box">
+                <div class="box-header">
+                    <form method="post" action="###" class="form-inline" id="searchForm">
+                        <div class="form-group-sm">
+                            <div class="search-item">    
+                            	<label class="control-label ml10">业务员：</label>
+	                            <input type="text" class="form-control" id="userName" name="userName">
+	                        </div>
+                            <div class="search-item">	
+				             	 <label class="control-label">月份：</label>
+				                 <input type="text" class="form-control" id="startStatisticsDate" value="" name="startStatisticsDate"> -
+				                 <input type="text" class="form-control" id="endStatisticsDate" value="" name="endStatisticsDate">
+				            </div>
+				            <div class="search-item">    
+	                            <label class="control-label ml10">状态：</label>
+	                            <select class="form-control js-select" data-url="PROFIT_TARGET_STATE" id="state"  name="state"> </select> 
+							</div>
+                            <div class="search-item"> 
+                            	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>             
+								<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button> 
+                                <button type="button" id="btnNew" data-url="html/baseinfo/target/profitTargetCreate.html" data-permissionUrl="/profitTarget/add" class="btn btn-warning btn-sm ml10">新建</button> 
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="js_dataTable" data-url="profitTarget/query">
+                    </table>
+                </div>
+                <!-- .box-body -->
+            </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+		'click .submit': function (e, value, row, index) {
+	    	var id = row.id;
+		    if(id){
+		    	layer.confirm('确定要提交吗？', {
+			        btn: ['确定', '取消'] //按钮
+			    }, function() {
+			         GLOBAL.ajax("profitTarget/submit", {id: id}, function(e) {
+		                if (e.success) {
+		                    layer.msg("提交成功！");
+		                    $("#btnSearch").click();
+		                } else {
+		                    layer.msg(e.msg);
+		                }
+		            });
+			    }, function() {});
+		    }
+	    },
+	    'click .delete': function (e, value, row, index) {
+	        var id = row.id;
+		    layer.confirm('确定要删除吗？', {
+		        btn: ['确定', '取消'] //按钮
+		    }, function() {
+		    	GLOBAL.ajax("profitTarget/delete", {id: id}, function(){
+		    		layer.msg("删除成功", {
+		                icon: 1
+		            })
+		            $("#btnSearch").click();
+		    	})
+		    }, function() {});
+	    },
+	    'click .edit': function(e, value, row, index){
+			options.param.id = row.id;
+			GLOBAL.go("html/baseinfo/target/profitTargetEdit.html", options.param);
+	    },
+	    'click .scan': function(e, value, row, index){
+			options.param.id = row.id;
+			GLOBAL.go("html/baseinfo/target/profitTargetScan.html", options.param);
+	    }
+	};
+	/*数据表格*/
+	var tabCols = [
+			{  
+			     title: '序号',
+			     field: 'columnsNumber',  
+			     width: 10
+	        },{
+			     title: '业务员',
+			     field: 'userIdName',
+			     width: 100,
+			     align: 'center'
+			}, {
+				 title: '期号',
+				 field: 'issue',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '利润目标值',
+				 field: 'targetProfitAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+		    }, {
+				 title: '利润完成值',
+				 field: 'profitAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+		    }, {
+				 title: '利润完成比例',
+				 field: 'profitAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '业务利润目标值',
+				 field: 'targetBizManager',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '业务利润完成值',
+				 field: 'bizManagerAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '业务利润完成比例',
+				 field: 'bizManagerAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '销售毛利润目标值',
+				 field: 'targetSaleBlance',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '销售毛利润完成值',
+				 field: 'saleBlanceAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '销售毛利润完成比例',
+				 field: 'saleBlanceAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '经营收入目标值',
+				 field: 'targetSaleAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '经营收入完成值',
+				 field: 'saleAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '经营收入完成比例',
+				 field: 'saleAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '管理费用目标值',
+				 field: 'targetManageAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '管理费用完成值',
+				 field: 'manageAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '管理费用完成比例',
+				 field: 'manageAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '经营费用目标值',
+				 field: 'targetWarehouseAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '经营费用完成值',
+				 field: 'warehouseAmount',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '经营费用完成比例',
+				 field: 'warehouseAmountRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '资金成本目标值',
+				 field: 'targetFundVost',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '资金成本完成值',
+				 field: 'fundCost',
+				 width: 80,
+				 align: 'center',
+	    		 formatter : function(value , row , index) {
+		    			return value==null ? "": value.toThounds();
+		    	 }
+			}, {
+				 title: '资金成本比例',
+				 field: 'fundCostRateStr',
+				 width: 80,
+				 align: 'center'
+			}, {
+				 title: '状态',
+				 field: 'stateName',
+				 width: 80,
+				 align: 'center'
+			}, {
+			     title: '操作',
+			     field: 'opertaList',
+			     width: 100,
+			     align: 'center',
+			     events: operateEvents
+			 }
+	 ];
+
+
+	options.initPage = function() {
+		var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+		GLOBAL.initTable($('#js_dataTable'), tabCols, null, null , option);
+		//还原查询条件及过滤后的数据
+		GLOBAL.restoreQuery($('#js_dataTable')); 
+	};
+
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject();
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	});   
+
+	$("#btnNew").click(function() {
+	    var url = $(this).data("url");
+	    GLOBAL.go(url, options.param);
+	})
+</script>

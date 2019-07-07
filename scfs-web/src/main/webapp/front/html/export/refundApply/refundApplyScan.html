@@ -1,0 +1,132 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>出口</li>
+            <li class="active">退税基本信息浏览</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal form-inline" id="form1" data-url="refundApply/detail">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a class="tab-item" data-url="html/export/refundApply/refundApplyScan.html">基础信息</a></li>
+                        <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/export/refundApply/refundApplyLineScan.html">退税明细</a></li>
+                    </ul>
+                    <input class="form-control js-initform" type="hidden" id="id" name="id">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td class="text-right"><b>退税申请编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="refundApplyNo" name="refundApplyNo"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退税附属编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="refundAttachNo" name="refundAttachNo"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="180" class="text-right"><b>项目：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectName" name="projectName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退税申请日期：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="refundApplyDate" name="refundApplyDate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>客户：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="cusName" name="cusName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退税金额：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform toThound" id="refundApplyAmount" name="refundApplyAmount"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退税数量：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="refundApplyNum" name="refundApplyNum"></label>
+                            </td>
+                        </tr>
+                        <tr class="gearbest_title">
+                            <td class="text-right"><b>状态：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="stateName" name="stateName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>备注：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="remark" name="remark"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="refund/auditflow/audit/query"></table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                    <button type="button" data-url="html/export/refundApply/refundApplySearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+/*审核数据表格*/
+    var tabColsLog = [{
+        title: '序号',
+        field: 'columnsNumber',
+        width: '5%'
+    }, {
+        title: '流程节点',
+        field: "stateName",
+        width: '15%'
+    }, {
+        title: '处理人',
+        field: "dealName",
+        width: '15%'
+    }, {
+        title: '处理意见',
+        field: "suggestion",
+        width: '25%'
+    }, {
+        title: '开始时间',
+        field: "createTime",
+        width: '15%'
+    }, {
+        title: "处理时间",
+        field: "dealTime",
+        width: '15%'
+    }, {
+        title: "处理状态",
+        field: "auditStateName",
+        width: '10%'
+    }];
+options.initPage = function() {
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+        projectItemId: options.param.id
+    }, null, {
+        pagination: false
+    });
+};
+
+$("#js-back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url);
+})
+</script>

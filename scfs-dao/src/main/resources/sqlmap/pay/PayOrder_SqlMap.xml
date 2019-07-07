@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.PayOrderDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayOrder">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pay_no" property="payNo" jdbcType="VARCHAR" />
+		<result column="pay_type" property="payType" jdbcType="TINYINT" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="busi_unit" property="busiUnit" jdbcType="INTEGER" />
+		<result column="payer" property="payer" jdbcType="INTEGER" />
+		<result column="pay_way" property="payWay" jdbcType="TINYINT" />
+		<result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+		<result column="payee" property="payee" jdbcType="INTEGER" />
+		<result column="pay_account_id" property="payAccountId"
+			jdbcType="INTEGER" />
+		<result column="request_pay_time" property="requestPayTime"
+			jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+
+		<result column="confirmor_at" property="confirmorAt" jdbcType="TIMESTAMP" />
+		<result column="confirmor_id" property="confirmorId" jdbcType="INTEGER" />
+		<result column="confirmor" property="confirmor" jdbcType="VARCHAR" />
+
+		<result column="blance" property="blance" jdbcType="DECIMAL" />
+		<result column="po_blance" property="poBlance" jdbcType="DECIMAL" />
+		<result column="fee_blance" property="feeBlance" jdbcType="DECIMAL" />
+
+		<result column="payment_account" property="paymentAccount"
+			jdbcType="INTEGER" />
+		<result column="bank_charge" property="bankCharge" jdbcType="DECIMAL" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="open_type" property="openType" jdbcType="TINYINT" />
+		<result column="advance_amount" property="advanceAmount"
+			jdbcType="DECIMAL" />
+		<result column="deduction_fee_amount" property="deductionFeeAmount"
+			jdbcType="DECIMAL" />
+		<result column="attachedNumbe" property="attached_numbe"
+			jdbcType="VARCHAR" />
+		<result column="inner_pay_date" property="innerPayDate"
+			jdbcType="TIMESTAMP" />
+		<result column="real_pay_amount" property="realPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="real_currency_type" property="realCurrencyType"
+			jdbcType="TINYINT" />
+		<result column="pay_rate" property="payRate" jdbcType="DECIMAL" />
+		<result column="print_num" property="printNum" jdbcType="INTEGER" />
+		<result column="union_over_identifier" property="unionOverIdentifier"
+			jdbcType="VARCHAR" />
+		<result column="union_print_identifier" property="unionPrintIdentifier"
+			jdbcType="VARCHAR" />
+		<result column="merge_pay_no" property="mergePayNo" jdbcType="VARCHAR" />
+		<result column="discount_amount" property="discountAmount"
+			jdbcType="DECIMAL" />
+		<result column="in_discount_amount" property="inDiscountAmount"
+			jdbcType="DECIMAL" />
+		<result column="pay_way_type" property="payWayType" jdbcType="TINYINT" />
+		<result column="cms_payer" property="cmsPayer" jdbcType="VARCHAR" />
+		<result column="cms_rejecter" property="cmsRejecter" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+
+		<result column="memo_time" property="memoTime" jdbcType="TIMESTAMP" />
+		<result column="none_order_flag" property="noneOrderFlag" jdbcType="TINYINT" />
+		<result column="write_off_flag" property="writeOffFlag" jdbcType="TINYINT" />
+		<result column="check_amount" property="checkAmount" jdbcType="DECIMAL" />	
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		pay_no,
+		pay_type,
+		project_id,
+		busi_unit,
+		payer,
+		pay_way,
+		pay_amount,
+		payee,
+		pay_account_id,
+		request_pay_time,
+		remark,
+		state,
+		create_at,
+		creator_id,
+		creator,
+		is_delete,
+		confirmor_at,
+		confirmor_id,
+		confirmor,
+		blance,
+		po_blance,
+		fee_blance,
+		payment_account,
+		bank_charge,
+		currnecy_type,
+		open_type,
+		advance_amount,
+		deduction_fee_amount,
+		attached_numbe,
+		inner_pay_date,
+		real_pay_amount,
+		real_currency_type,
+		pay_rate,
+		print_num,
+		union_over_identifier,
+		union_print_identifier,
+		merge_pay_no,
+		discount_amount,
+		in_discount_amount,
+		pay_way_type,
+		cms_payer,
+		cms_rejecter,
+		reason,
+		memo_time,
+		none_order_flag,
+		write_off_flag,
+		check_amount
+	</sql>
+	<sql id="Query_Column_List">
+		p.id,
+		p.pay_no,
+		p.pay_type,
+		p.project_id,
+		p.busi_unit,
+		p.payer,
+		p.pay_way,
+		p.pay_amount,
+		p.payee,
+		p.pay_account_id,
+		p.request_pay_time,
+		p.remark,
+		p.state,
+		p.create_at,
+		p.creator_id,
+		p.creator,
+		p.is_delete,
+		p.confirmor_at,
+		p.confirmor_id,
+		p.confirmor,
+		p.blance,
+		p.po_blance,
+		p.fee_blance,
+		p.payment_account,
+		p.bank_charge,
+		p.currnecy_type,
+		p.open_type,
+		p.advance_amount,
+		p.deduction_fee_amount,
+		p.attached_numbe,
+		p.inner_pay_date,
+		p.real_pay_amount,
+		p.real_currency_type,
+		p.pay_rate,
+		p.print_num,
+		p.union_over_identifier,
+		p.union_print_identifier,
+		p.merge_pay_no,
+		p.discount_amount,
+		p.in_discount_amount,
+		p.pay_way_type,
+		p.cms_payer,
+		p.cms_rejecter,
+		p.reason,
+		p.memo_time,
+		p.none_order_flag,
+		p.write_off_flag,
+		p.check_amount
+	</sql>
+
+	<!-- 根据用户下供应商获取信息 -->
+	<sql id="selectSubject">
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p
+		INNER JOIN tb_base_user_subject bus
+		ON
+		p.busi_unit=bus.subject_id
+		INNER JOIN tb_base_project tbp
+		ON
+		p.project_id = tbp.id
+		where p.is_delete=0
+		AND p.project_id IS NULL
+		<if test="userId != null">
+			AND bus.user_id=#{userId}
+		</if>
+
+		<if test="isMergePay !=null">
+			<if test="isMergePay==1">
+				<![CDATA[
+					and (p.merge_pay_no IS NOT NULL && LENGTH(TRIM(p.merge_pay_no))>0)
+				]]>
+			</if>
+			<if test="isMergePay==2">
+				<![CDATA[
+					and (ISNULL(p.merge_pay_no) OR LENGTH(TRIM(p.merge_pay_no))<1)
+				]]>
+			</if>
+		</if>
+
+		<if test="subjectList != null">
+			<foreach collection="subjectList" item="dId"
+				open="AND bus.subject_type in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="busiUnit != null">
+			and p.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null">
+			and p.project_id = #{projectId}
+		</if>
+		<if test="payee != null">
+			and p.payee = #{payee}
+		</if>
+		<if test="payer != null">
+			and p.payer = #{payer}
+		</if>
+		<if test="payAccountId != null">
+			and p.pay_account_id = #{payAccountId}
+		</if>
+		<if test="payType != null">
+			and p.pay_type = #{payType}
+		</if>
+		<if test="payWay != null">
+			and p.pay_way = #{payWay}
+		</if>
+		<if test="payWayType != null">
+			and p.pay_way_type != #{payWayType}
+		</if>
+		<if test="payWayTypeEq != null">
+			and p.pay_way_type = #{payWayTypeEq}
+		</if>
+		<if test="startRequestTime != null ">
+			<![CDATA[
+					and p.request_pay_time >=#{startRequestTime}
+				]]>
+		</if>
+		<if test="endRequestTime != null ">
+			<![CDATA[
+					and p.request_pay_time <=#{endRequestTime}
+				]]>
+		</if>
+		<if test="starConfirmorAt != null ">
+			<![CDATA[
+					and p.confirmor_at >=#{starConfirmorAt}
+				]]>
+		</if>
+		<if test="endConfirmorAt != null ">
+			<![CDATA[
+					and p.confirmor_at <=#{endConfirmorAt}
+				]]>
+		</if>
+		<if test="state != null">
+			and p.state = #{state}
+		</if>
+		<if test="currencyType != null">
+			and p.currnecy_type = #{currencyType}
+		</if>
+		<if test="attachedNumbe != null and attachedNumbe !=''">
+			and p.attached_numbe like CONCAT('%',#{attachedNumbe},'%')
+		</if>
+		<if test="unionOverIdentifier != null and unionOverIdentifier !=''">
+			and p.union_over_identifier like
+			CONCAT('%',#{unionOverIdentifier},'%')
+		</if>
+		<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+			and p.union_print_identifier like
+			CONCAT('%',#{unionPrintIdentifier},'%')
+		</if>
+		<if test="canMerge != null and canMerge == 1">
+			and (p.merge_pay_no is null or p.merge_pay_no = '')
+		</if>
+		<if test="payNo != null and payNo != '' ">
+			and p.pay_no = #{payNo}
+		</if>
+		<if test="payNoList != null">
+			<foreach collection="payNoList" item="no" open="AND ("
+				separator="or" close=")">
+				p.pay_no like CONCAT('%','${no}','%') OR
+				p.merge_pay_no like CONCAT('%','${no}','%')
+			</foreach>
+		</if>
+		<if test="paymentAccount !=null">
+			and p.payment_account=#{paymentAccount}
+		</if>
+		<if test="realCurrencyType !=null">
+			and p.real_currency_type=#{realCurrencyType}
+		</if>
+		<if test="payTypeList !=null">
+			<foreach collection="payTypeList" item="payType" open="AND p.pay_type in("
+				separator="," close=")">
+				${payType}
+			</foreach>
+		</if>
+		<if test="startCreateTime != null ">
+			<![CDATA[
+					and p.create_at >=#{startCreateTime}
+				]]>
+		</if>
+		<if test="endCreateTime != null ">
+			<![CDATA[
+					and p.create_at <=#{endCreateTime}
+				]]>
+		</if>
+		<if test="noneOrderFlag != null">
+			AND p.none_order_flag = #{noneOrderFlag}
+		</if>
+		<if test="writeOffFlag != null">
+			AND p.write_off_flag = #{writeOffFlag}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		group by p.id
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayOrderSearchReqDto"
+		resultMap="BaseResultMap">
+		select tmp.* from(
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project b on
+			p.project_id=b.project_id
+		</if>
+		INNER JOIN tb_base_project tbp
+		ON p.project_id = tbp.id
+		where
+		p.is_delete=0
+		<if test="userId != null">
+			AND b.state=1
+			AND b.user_id=#{userId}
+		</if>
+
+		<if test="isMergePay !=null">
+			<if test="isMergePay==1">
+					<![CDATA[
+						and (p.merge_pay_no IS NOT NULL && LENGTH(TRIM(p.merge_pay_no))>0)
+					]]>
+			</if>
+			<if test="isMergePay==2">
+					<![CDATA[
+						and (ISNULL(p.merge_pay_no) OR LENGTH(TRIM(p.merge_pay_no))<1)
+					]]>
+			</if>
+		</if>
+
+		<if test="subjectList != null">
+			AND p.project_id IS NOT NULL
+		</if>
+		<if test="busiUnit != null">
+			and p.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null">
+			and p.project_id = #{projectId}
+		</if>
+		<if test="payee != null">
+			and p.payee = #{payee}
+		</if>
+		<if test="payer != null">
+			and p.payer = #{payer}
+		</if>
+		<if test="payAccountId != null">
+			and p.pay_account_id = #{payAccountId}
+		</if>
+		<if test="payType != null">
+			and p.pay_type = #{payType}
+		</if>
+		<if test="payWay != null">
+			and p.pay_way = #{payWay}
+		</if>
+		<if test="payWayType != null">
+			and p.pay_way_type != #{payWayType}
+		</if>
+		<if test="payWayTypeEq != null">
+			and p.pay_way_type = #{payWayTypeEq}
+		</if>
+		<if test="startRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time >=#{startRequestTime}
+					]]>
+		</if>
+		<if test="endRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time <=#{endRequestTime}
+					]]>
+		</if>
+		<if test="starConfirmorAt != null ">
+				<![CDATA[
+						and p.confirmor_at >=#{starConfirmorAt}
+					]]>
+		</if>
+		<if test="endConfirmorAt != null ">
+				<![CDATA[
+						and p.confirmor_at <=#{endConfirmorAt}
+					]]>
+		</if>
+		<if test="state != null">
+			and p.state = #{state}
+		</if>
+		<if test="currencyType != null">
+			and p.currnecy_type = #{currencyType}
+		</if>
+		<if test="attachedNumbe != null and attachedNumbe !=''">
+			and p.attached_numbe like CONCAT('%',#{attachedNumbe},'%')
+		</if>
+		<if test="unionOverIdentifier != null and unionOverIdentifier !=''">
+			and p.union_over_identifier like
+			CONCAT('%',#{unionOverIdentifier},'%')
+		</if>
+		<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+			and p.union_print_identifier like
+			CONCAT('%',#{unionPrintIdentifier},'%')
+		</if>
+		<if test="canMerge != null and canMerge == 1">
+			and (p.merge_pay_no is null or p.merge_pay_no = '')
+		</if>
+		<if test="payNo != null and payNo != '' ">
+			and p.pay_no = #{payNo}
+		</if>
+		<if test="payNoList != null">
+			<foreach collection="payNoList" item="no" open="AND ("
+				separator="or" close=")">
+				p.pay_no like CONCAT('%','${no}','%') OR
+				p.merge_pay_no like CONCAT('%','${no}','%')
+			</foreach>
+		</if>
+		<if test="paymentAccount !=null">
+			and p.payment_account=#{paymentAccount}
+		</if>
+		<if test="realCurrencyType !=null">
+			and p.real_currency_type=#{realCurrencyType}
+		</if>
+		<if test="payTypeList !=null">
+			<foreach collection="payTypeList" item="payType" open="AND p.pay_type in("
+				separator="," close=")">
+				${payType}
+			</foreach>
+		</if>
+		<if test="startCreateTime != null ">
+				<![CDATA[
+						and p.create_at >=#{startCreateTime}
+					]]>
+		</if>
+		<if test="endCreateTime != null ">
+				<![CDATA[
+						and p.create_at <=#{endCreateTime}
+					]]>
+		</if>
+		<if test="noneOrderFlag != null">
+			AND p.none_order_flag = #{noneOrderFlag}
+		</if>
+		<if test="writeOffFlag != null">
+			AND p.write_off_flag = #{writeOffFlag}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		group by p.id
+		<if test="subjectList != null">
+			UNION ALL
+			<include refid="selectSubject" />
+		</if>
+		)tmp
+		order by tmp.id desc
+	</select>
+
+	<select id="queryEntityByPayNo" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		p.id,
+		p.pay_no,
+		p.pay_type,
+		p.project_id,
+		p.busi_unit,
+		p.payer,
+		p.pay_way,
+		p.pay_amount,
+		p.payee,
+		p.pay_account_id,
+		p.request_pay_time,
+		p.remark,
+		p.state,
+		p.create_at,
+		p.creator_id,
+		p.creator,
+		p.is_delete,
+		p.confirmor_at,
+		p.confirmor_id,
+		p.confirmor,
+		p.blance,
+		p.po_blance,
+		p.fee_blance,
+		p.payment_account,
+		p.bank_charge,
+		p.currnecy_type,
+		p.open_type,
+		p.advance_amount,
+		p.deduction_fee_amount,
+		p.attached_numbe,
+		p.inner_pay_date,
+		p.real_pay_amount,
+		p.real_currency_type,
+		p.pay_rate,
+		p.print_num,
+		p.union_over_identifier,
+		p.union_print_identifier,
+		p.merge_pay_no,
+		p.discount_amount,
+		p.in_discount_amount,
+		p.pay_way_type,
+		p.cms_payer,
+		p.cms_rejecter,
+		p.reason,
+		p.memo_time,
+		p.none_order_flag,
+		p.write_off_flag,
+		p.check_amount
+		from tb_pay_order p
+		where p.is_delete=0
+		<if test="payNo != null">
+			and p.pay_no = #{payNo}
+		</if>
+	</select>
+	<!-- 统计 -->
+	<select id="sumPayOrder" parameterType="com.scfs.domain.pay.dto.req.PayOrderSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		SUM(p.pay_amount) pay_amount,
+		p.currnecy_type
+		from (
+		select tmp.*
+		from(
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project b on
+			p.project_id=b.project_id
+		</if>
+		INNER JOIN tb_base_project tbp
+		ON p.project_id = tbp.id
+		where
+		p.is_delete=0
+		<if test="userId != null">
+			AND b.state=1
+			AND b.user_id=#{userId}
+		</if>
+
+		<if test="isMergePay !=null">
+			<if test="isMergePay==1">
+					<![CDATA[
+						and (p.merge_pay_no IS NOT NULL && LENGTH(TRIM(p.merge_pay_no))>0)
+					]]>
+			</if>
+			<if test="isMergePay==2">
+					<![CDATA[
+						and (ISNULL(p.merge_pay_no) OR LENGTH(TRIM(p.merge_pay_no))<1)
+					]]>
+			</if>
+		</if>
+
+		<if test="subjectList != null">
+			AND p.project_id IS NOT NULL
+		</if>
+		<if test="busiUnit != null">
+			and p.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null">
+			and p.project_id = #{projectId}
+		</if>
+		<if test="payee != null">
+			and p.payee = #{payee}
+		</if>
+		<if test="payer != null">
+			and p.payer = #{payer}
+		</if>
+		<if test="payAccountId != null">
+			and p.pay_account_id = #{payAccountId}
+		</if>
+		<if test="payType != null">
+			and p.pay_type = #{payType}
+		</if>
+		<if test="payWay != null">
+			and p.pay_way = #{payWay}
+		</if>
+		<if test="payWayType != null">
+			and p.pay_way_type != #{payWayType}
+		</if>
+		<if test="payWayTypeEq != null">
+			and p.pay_way_type = #{payWayTypeEq}
+		</if>
+		<if test="startRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time >=#{startRequestTime}
+					]]>
+		</if>
+		<if test="endRequestTime != null ">
+				<![CDATA[
+						and p.request_pay_time <=#{endRequestTime}
+					]]>
+		</if>
+		<if test="starConfirmorAt != null ">
+				<![CDATA[
+						and p.confirmor_at >=#{starConfirmorAt}
+					]]>
+		</if>
+		<if test="endConfirmorAt != null ">
+				<![CDATA[
+						and p.confirmor_at <=#{endConfirmorAt}
+					]]>
+		</if>
+		<if test="state != null">
+			and p.state = #{state}
+		</if>
+		<if test="currencyType != null">
+			and p.currnecy_type = #{currencyType}
+		</if>
+		<if test="attachedNumbe != null and attachedNumbe !=''">
+			and p.attached_numbe like CONCAT('%',#{attachedNumbe},'%')
+		</if>
+		<if test="unionOverIdentifier != null and unionOverIdentifier !=''">
+			and p.union_over_identifier like
+			CONCAT('%',#{unionOverIdentifier},'%')
+		</if>
+		<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+			and p.union_print_identifier like
+			CONCAT('%',#{unionPrintIdentifier},'%')
+		</if>
+		<if test="canMerge != null and canMerge == 1">
+			and (p.merge_pay_no is null or p.merge_pay_no = '')
+		</if>
+		<if test="payNo != null and payNo != '' ">
+			and p.pay_no = #{payNo}
+		</if>
+		<if test="payNoList != null">
+			<foreach collection="payNoList" item="no" open="AND ("
+				separator="or" close=")">
+				p.pay_no like CONCAT('%','${no}','%') OR
+				p.merge_pay_no like CONCAT('%','${no}','%')
+			</foreach>
+		</if>
+		<if test="paymentAccount !=null">
+			and p.payment_account=#{paymentAccount}
+		</if>
+		<if test="realCurrencyType !=null">
+			and p.real_currency_type=#{realCurrencyType}
+		</if>
+		<if test="payTypeList !=null">
+			<foreach collection="payTypeList" item="payType" open="AND p.pay_type in("
+				separator="," close=")">
+				${payType}
+			</foreach>
+		</if>
+		<if test="startCreateTime != null ">
+				<![CDATA[
+						and p.create_at >=#{startCreateTime}
+					]]>
+		</if>
+		<if test="endCreateTime != null ">
+				<![CDATA[
+						and p.create_at <=#{endCreateTime}
+					]]>
+		</if>
+		<if test="noneOrderFlag != null">
+			AND p.none_order_flag = #{noneOrderFlag}
+		</if>
+		<if test="writeOffFlag != null">
+			AND p.write_off_flag = #{writeOffFlag}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+		group by p.id
+		<if test="subjectList != null">
+			UNION ALL
+			<include refid="selectSubject" />
+		</if>
+		)tmp
+		order by tmp.id desc
+		)p
+		GROUP BY p.currnecy_type
+		order by p.id desc
+	</select>
+
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_order
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<select id="querySumByIds" resultType="java.math.BigDecimal"
+		parameterType="java.util.List">
+		select IFNULL(sum(pay_amount) ,0) as payAmount
+		from tb_pay_order
+		<where>
+			is_delete=0
+			AND id IN
+			<foreach collection="ids" item="id" open="(" separator=","
+				close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<select id="queryListByIds" resultMap="BaseResultMap"
+		parameterType="java.util.List">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_order
+		<where>
+			id IN
+			<foreach collection="ids" item="id" open="(" separator=","
+				close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<select id="queryExpireResults" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_order
+		where CURDATE() = DATE_ADD(DATE_FORMAT(confirmor_at ,
+		'%Y-%m-%D'), INTERVAL open_type DAY)
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_pay_order (
+		pay_no,
+		pay_type,
+		project_id,
+		busi_unit,
+		payer,
+		pay_way,
+		pay_amount,
+		payee,
+		pay_account_id,
+		request_pay_time,
+		remark,
+		create_at,
+		creator_id,
+		creator,
+		blance,
+		po_blance,
+		fee_blance,
+		state,
+		currnecy_type,
+		open_type,
+		advance_amount,
+		deduction_fee_amount,
+		attached_numbe,
+		inner_pay_date,
+		real_pay_amount,
+		real_currency_type,
+		pay_rate,
+		union_over_identifier,
+		union_print_identifier,
+		discount_amount,
+		in_discount_amount,
+		pay_way_type,
+		cms_payer,
+		cms_rejecter,
+		reason,
+		none_order_flag,
+		write_off_flag,
+		check_amount
+		)
+		values (
+		#{payNo,jdbcType=VARCHAR},
+		#{payType,jdbcType=TINYINT},
+		#{projectId,jdbcType=INTEGER},
+		#{busiUnit,jdbcType=INTEGER},
+		#{payer,jdbcType=INTEGER},
+		#{payWay,jdbcType=TINYINT},
+		IFNULL(#{payAmount,jdbcType=DECIMAL},0),
+		#{payee,jdbcType=INTEGER},
+		#{payAccountId,jdbcType=INTEGER},
+		#{requestPayTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{blance,jdbcType=DECIMAL},
+		#{poBlance,jdbcType=DECIMAL},
+		#{feeBlance,jdbcType=DECIMAL},
+		#{state,jdbcType=INTEGER},
+		#{currnecyType,jdbcType=INTEGER},
+		#{openType,jdbcType=TINYINT},
+		IFNULL(#{advanceAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{deductionFeeAmount,jdbcType=DECIMAL},0),
+		#{attachedNumbe,jdbcType=VARCHAR},
+		#{innerPayDate,jdbcType=DATE},
+		IFNULL(#{realPayAmount,jdbcType=DECIMAL},0),
+		#{realCurrencyType,jdbcType=INTEGER},
+		#{payRate,jdbcType=DECIMAL},
+		#{unionOverIdentifier,jdbcType=VARCHAR},
+		#{unionPrintIdentifier,jdbcType=VARCHAR},
+		IFNULL(#{discountAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{inDiscountAmount,jdbcType=DECIMAL},0),
+		#{payWayType,jdbcType=TINYINT},
+		#{cmsPayer,jdbcType=VARCHAR},
+		#{cmsRejecter,jdbcType=VARCHAR},
+		#{reason,jdbcType=VARCHAR},
+		IFNULL(#{noneOrderFlag,jdbcType=TINYINT},0),
+		IFNULL(#{writeOffFlag,jdbcType=TINYINT},0),
+		IFNULL(#{checkAmount,jdbcType=DECIMAL},0)
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayOrder">
+		update tb_pay_order
+		<set>
+			id = #{id}
+			<if test="payNo != null and payNo != ''">
+				,pay_no = #{payNo,jdbcType=TINYINT}
+			</if>
+			<if test="payType != null">
+				,pay_type = #{payType,jdbcType=TINYINT}
+			</if>
+			<if test="projectId != null">
+				,project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="busiUnit != null">
+				,busi_unit = #{busiUnit,jdbcType=INTEGER}
+			</if>
+			<if test="payer != null">
+				,payer = #{payer,jdbcType=INTEGER}
+			</if>
+			<if test="payWay != null">
+				,pay_way = #{payWay,jdbcType=TINYINT}
+			</if>
+			<if test="payAmount != null">
+				,pay_amount = #{payAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="payee != null">
+				,payee = #{payee,jdbcType=INTEGER}
+			</if>
+			<if test="payAccountId != null">
+				,pay_account_id = #{payAccountId,jdbcType=INTEGER}
+			</if>
+			<if test="requestPayTime != null">
+				,request_pay_time = #{requestPayTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="remark != null">
+				,remark = #{remark,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="state != null">
+				,state = #{state,jdbcType=TINYINT}
+			</if>
+
+			<if test="confirmorAt != null">
+				,confirmor_at = #{confirmorAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="confirmorId != null">
+				,confirmor_id = #{confirmorId,jdbcType=INTEGER}
+			</if>
+			<if test="confirmorId == -1">
+				,confirmor_id = null
+			</if>
+			<if test="confirmor != null">
+				,confirmor = #{confirmor,jdbcType=VARCHAR}
+			</if>
+			<if test="blance != null">
+				,blance = #{blance,jdbcType=DECIMAL}
+			</if>
+			<if test="poBlance != null">
+				,po_blance = #{poBlance,jdbcType=DECIMAL}
+			</if>
+			<if test="feeBlance != null">
+				,fee_blance = #{feeBlance,jdbcType=DECIMAL}
+			</if>
+			<if test="paymentAccount != null ">
+				,payment_account = #{paymentAccount,jdbcType=INTEGER}
+			</if>
+			<if test="paymentAccount == -1 ">
+				,payment_account = null
+			</if>
+			<if test="bankCharge != null">
+				,bank_charge = #{bankCharge,jdbcType=DECIMAL}
+			</if>
+			<if test="bankCharge == -1">
+				,bank_charge = null
+			</if>
+			<if test="currnecyType != null">
+				,currnecy_type = #{currnecyType,jdbcType=INTEGER}
+			</if>
+			<if test="openType != null and openType != ''">
+				,open_type =#{openType,jdbcType=TINYINT}
+			</if>
+			<if test="advanceAmount != null">
+				,advance_amount =#{advanceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="deductionFeeAmount != null">
+				,deduction_fee_amount
+				=#{deductionFeeAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="attachedNumbe != null and attachedNumbe != ''">
+				,attached_numbe =#{attachedNumbe,jdbcType=DECIMAL}
+			</if>
+			<if test="innerPayDate != null">
+				,inner_pay_date =#{innerPayDate,jdbcType=DATE}
+			</if>
+			<if test="realCurrencyType != null">
+				,real_currency_type =#{realCurrencyType,jdbcType=INTEGER}
+			</if>
+			<if test="realPayAmount != null">
+				,real_pay_amount =#{realPayAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="payRate != null">
+				,pay_rate =#{payRate,jdbcType=DECIMAL}
+			</if>
+			<if test="printNum != null">
+				,print_num =#{printNum,jdbcType=INTEGER}
+			</if>
+			<if test="unionOverIdentifier != null and unionOverIdentifier != ''">
+				,union_over_identifier =
+				#{unionOverIdentifier,jdbcType=VARCHAR}
+			</if>
+			<if test="unionPrintIdentifier != null and unionPrintIdentifier != ''">
+				,union_print_identifier =
+				#{unionPrintIdentifier,jdbcType=VARCHAR}
+			</if>
+			<if test="mergePayNo != null and mergePayNo != ''">
+				,merge_pay_no = #{mergePayNo,jdbcType=VARCHAR}
+			</if>
+			<if test="mergePayNo != null and mergePayNo == '-1'">
+				,merge_pay_no = null
+			</if>
+			<if test="discountAmount != null">
+				,discount_amount = #{discountAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="inDiscountAmount != null">
+				,in_discount_amount =
+				#{inDiscountAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="payWayType != null">
+				,pay_way_type = #{payWayType,jdbcType=TINYINT}
+			</if>
+			<if test="cmsPayer != null">
+				,cms_payer = #{cmsPayer,jdbcType=VARCHAR}
+			</if>
+			<if test="cmsRejecter != null">
+				,cms_rejecter = #{cmsRejecter,jdbcType=VARCHAR}
+			</if>
+			<if test="reason != null">
+				,reason = #{reason,jdbcType=VARCHAR}
+			</if>
+			<if test="memoTime != null">
+				,memo_time = #{memoTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="noneOrderFlag != null">
+				,none_order_flag = #{noneOrderFlag,jdbcType=TINYINT}
+			</if>
+			<if test="writeOffFlag != null">
+				,write_off_flag = #{writeOffFlag,jdbcType=TINYINT}
+			</if>
+			<if test="checkAmount != null">
+				,check_amount = #{checkAmount,jdbcType=DECIMAL}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryPayIdByPoId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT po.id from tb_pay_order po
+		INNER JOIN
+		tb_pay_po_relation ppr on po.id=ppr.pay_id
+		where ppr.po_id=#{poId} AND
+		po.is_delete=0
+	</select>
+
+
+	<!-- 获取总行数 -->
+	<select id="isOverasyncMaxLine" parameterType="com.scfs.domain.pay.dto.req.PayOrderSearchReqDto"
+		resultType="int">
+		select
+		count(*)
+		from tb_pay_order p
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project b on
+			p.project_id=b.project_id
+		</if>
+		INNER JOIN tb_base_project tbp
+		ON p.project_id = tbp.id
+		where
+		p.is_delete=0
+		<if test="userId != null">
+			AND b.state=1
+			AND b.user_id=#{userId}
+		</if>
+		<if test="busiUnit != null">
+			and p.busi_unit = #{busiUnit}
+		</if>
+		<if test="projectId != null">
+			and p.project_id = #{projectId}
+		</if>
+		<if test="payee != null">
+			and p.payee = #{payee}
+		</if>
+		<if test="payType != null">
+			and p.pay_type = #{payType}
+		</if>
+		<if test="payWay != null">
+			and p.pay_way = #{payWay}
+		</if>
+		<if test="startRequestTime != null ">
+			<![CDATA[
+					and p.request_pay_time >=#{startRequestTime}
+				]]>
+		</if>
+		<if test="endRequestTime != null ">
+			<![CDATA[
+					and p.request_pay_time <=#{endRequestTime}
+				]]>
+		</if>
+		<if test="starConfirmorAt != null ">
+			<![CDATA[
+					and p.confirmor_at >=#{starConfirmorAt}
+				]]>
+		</if>
+		<if test="endConfirmorAt != null ">
+			<![CDATA[
+					and p.confirmor_at <=#{starConfirmorAt}
+				]]>
+		</if>
+		<if test="state != null">
+			and p.state = #{state}
+		</if>
+		<if test="attachedNumbe != null and attachedNumbe !=''">
+			and p.attached_numbe like CONCAT('%',#{attachedNumbe},'%')
+		</if>
+		<if test="unionOverIdentifier != null and unionOverIdentifier !=''">
+			and p.union_over_identifier like
+			CONCAT('%',#{unionOverIdentifier},'%')
+		</if>
+		<if test="unionPrintIdentifier != null and unionPrintIdentifier !=''">
+			and p.union_print_identifier like
+			CONCAT('%',#{unionPrintIdentifier},'%')
+		</if>
+		<if test="payNoList != null">
+			<foreach collection="payNoList" item="no" open="AND ("
+				separator="or" close=")">
+				p.pay_no like CONCAT('%','${no}','%')
+			</foreach>
+		</if>
+		<if test="noneOrderFlag != null">
+			AND p.none_order_flag = #{noneOrderFlag}
+		</if>
+		<if test="writeOffFlag != null">
+			AND p.write_off_flag = #{writeOffFlag}
+		</if>
+		<if test="bizType != null">
+			AND tbp.biz_type = #{bizType}
+		</if>
+	</select>
+	<select id="queryAccounIdByCon" parameterType="com.scfs.domain.pay.dto.resq.PayOrderResDto"
+		resultType="java.lang.Integer">
+		select tba.id from tb_base_account tba inner join tb_base_subject tbs
+		on tba.subject_id = tbs.id
+		WHERE
+		1=1
+		<if test="payer != null and payer !=''">
+			AND tbs.id = #{payer}
+		</if>
+		<if test="paymentAccountName != null and paymentAccountName !=''">
+			AND right(tba.account_no,4) = #{paymentAccountName}
+		</if>
+	</select>
+
+	<select id="queryEntityByAttachedNumbe" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select p.*
+		from tb_pay_order p
+		where p.is_delete=0
+		and p.attached_numbe = #{attachedNumbe}
+	</select>
+	
+	<select id="queryPayRecrAmount" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select sum(real_pay_amount -advance_amount) amount
+		from tb_pay_order where id =#{id}
+	</select>
+	
+	<select id="queryPayOrderPolineID" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p inner join tb_pay_po_relation re
+		on p.id=re.pay_id
+		and p.is_delete=0 and re.is_delete =0
+		and re.po_line_id=#{poLineId}
+	</select>
+
+	<select id="queryPayOrderPolineIDAndType" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p inner join tb_pay_po_relation re
+		on p.id=re.pay_id
+		and p.is_delete=0 and re.is_delete =0
+		and p.state=6 and p.pay_way_type
+		in(0,1) and re.po_line_id=#{poLineId}
+	</select>
+
+	<select id="queryFundUsedByFeeId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		SELECT
+		ROUND(SUM((tpfr.pay_amount/tf.paid_amount)*tf.fund_used*tpo.pay_rate),
+		2) AS fundUsed
+		FROM tb_fee tf
+		INNER JOIN tb_pay_fee_relation tpfr
+		ON tf.id = tpfr.fee_id
+		INNER JOIN tb_pay_order tpo
+		ON tpo.id = tpfr.pay_id
+		WHERE tpfr.fee_id = #{feeId}
+		AND tpo.is_delete = 0
+		AND tpfr.is_delete = 0
+		AND tf.is_delete = 0
+	</select>
+
+	<select id="queryPayRateByQk" parameterType="java.lang.String"
+		resultType="java.math.BigDecimal">
+		select IFNULL(pay_rate, 0)
+		from tb_pay_order
+		where attached_numbe = #{qk}
+		and is_delete = 0
+	</select>
+
+	<select id="queryPayRateByFeeId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		SELECT tpo.pay_rate
+		FROM
+		tb_pay_order tpo
+		INNER JOIN
+		tb_pay_fee_relation tpfr
+		ON tpo.id = tpfr.pay_id
+		INNER JOIN tb_fee tf
+		ON tf.id = tpfr.fee_id
+		WHERE tpfr.fee_id = #{feeId}
+		AND tpo.is_delete = 0
+		AND tpfr.is_delete = 0
+		AND tf.is_delete = 0
+		and tpo.state =6
+		and tf.state=3
+	</select>
+
+	<select id="queryFinishedBillCount" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM tb_pay_order
+		WHERE is_delete = 0
+		AND state = 6
+		AND project_id = #{projectId}
+	</select>
+
+	<select id="queryPayOrderByMergePayId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Query_Column_List" />
+		from tb_pay_order p
+		inner join tb_merge_pay_order_rel mpor
+		on p.id = mpor.pay_id
+		inner join tb_merge_pay_order mpo
+		on mpor.merge_pay_id = mpo.id
+		where p.is_delete = 0
+		and mpo.id = #{mergePayId}
+	</select>
+
+	<select id="queryRefreshReceiptFund" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_order
+		where is_delete = 0
+		and state=6
+		and pay_way_type in (0,1)
+		and pay_type in (1,2,3)
+	</select>
+
+</mapper>

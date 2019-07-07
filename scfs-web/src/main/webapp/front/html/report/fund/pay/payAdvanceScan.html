@@ -1,0 +1,108 @@
+<style>
+	.nav>li.one, .nav>li.two,.nav>li.state{
+		display: none;
+	}
+</style>
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation" ><a class="tab-item" id="orderDtlLink" data-url="payBaseInfoScan.html">基础信息</a></li>
+		                <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="payOrderScn.html">订单信息</a></li>
+		                <li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="payFeeScan.html">费用信息</a></li>
+		                <li role="presentation" class="active"><a class="tab-item"  data-url="payAdvanceScan.html">预收单信息</a></li>
+		                <li role="presentation"><a class="tab-item" data-url="attachmentScan.html">附件</a></li>
+		                <li role="presentation" class="state"><a class="tab-item" data-url="payVoucherScan.html">付款凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="payAdvanRela/query">
+
+					</table>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	window.operateEvents = {
+		'click .edit' : function(e, value, row, index) {
+			options.param.id = row.id;
+			GLOBAL.go("html/pay/payAdvanceEditModify.html");
+		}
+	};
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '项目',
+				field : 'projectName',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '客户',
+				field : 'custName',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '水单日期',
+				field : 'receiptDate',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '经营单位',
+				field : 'busiUnit',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '币种',
+				field : 'currencyTypeName',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '金额',
+				field : 'payAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var tabId = options.param.payType;
+		var tabArr = ["one","two","three"];
+		$(".nav>li." + tabArr[tabId - 1]).show();
+		var stateInt = options.param.stateInt;
+		if(stateInt==6){
+			$(".nav>li.state").show();	
+		}
+		
+		if($("#subjectType").val()==2){
+			$("#warehouseTr").show();
+		}
+		options.param.payId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			payId : options.param.id
+		});
+	};
+
+
+	GLOBAL.goBack();
+</script>

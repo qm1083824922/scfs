@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceOverseasDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceOverseas">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+		<result column="business_unit" property="businessUnit"
+			jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="account_id" property="accountId" jdbcType="TINYINT" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="balance_start_date" property="balanceStartDate"
+			jdbcType="TIMESTAMP" />
+		<result column="balance_end_date" property="balanceEndDate"
+			jdbcType="TIMESTAMP" />
+		<result column="bill_type" property="billType" jdbcType="TINYINT" />
+		<result column="fee_type" property="feeType" jdbcType="TINYINT" />
+		<result column="is_merge" property="isMerge" jdbcType="TINYINT" />
+		<result column="invoice_remark" property="invoiceRemark"
+			jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="print_num" property="printNum" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		apply_no,
+		business_unit,
+		project_id,
+		customer_id,
+		currnecy_type,
+		account_id,
+		print_num,
+		invoice_amount,
+		balance_start_date,
+		balance_end_date,
+		bill_type,
+		fee_type,
+		is_merge,
+		invoice_remark,
+		remark,
+		state,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		o.id,
+		o.apply_no,
+		o.business_unit,
+		o.project_id,
+		o.customer_id,
+		o.currnecy_type,
+		o.account_id,
+		o.print_num,
+		o.invoice_amount,
+		o.balance_start_date,
+		o.balance_end_date,
+		o.bill_type,
+		o.fee_type,
+		o.is_merge,
+		o.invoice_remark,
+		o.remark,
+		o.state,
+		o.creator_id,
+		o.creator,
+		o.create_at,
+		o.is_delete
+		from
+		tb_invoice_overseas o INNER
+		JOIN
+		tb_base_user_project b on
+		o.project_id=b.project_id
+		where o.is_delete=0
+		AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and o.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and o.project_id = #{projectId}
+		</if>
+		<if test="customerId != null">
+			and o.customer_id = #{customerId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and o.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="billType != null">
+			and o.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and o.state = #{state}
+		</if>
+		order by o.id desc
+	</select>
+
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_overseas
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceOverseas"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoice_overseas (
+		apply_no,
+		business_unit,
+		project_id,
+		customer_id,
+		currnecy_type,
+		account_id,
+		print_num,
+		balance_start_date,
+		balance_end_date,
+		bill_type,
+		fee_type,
+		is_merge,
+		invoice_remark,
+		remark,
+		state,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{applyNo,jdbcType=VARCHAR},
+		#{businessUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{currnecyType,jdbcType=TINYINT},
+		#{accountId,jdbcType=TINYINT},
+		#{printNum,jdbcType=TINYINT},
+		#{balanceStartDate,jdbcType=TIMESTAMP},
+		#{balanceEndDate,jdbcType=TIMESTAMP},
+		#{billType,jdbcType=TINYINT},
+		#{feeType,jdbcType=TINYINT},
+		#{isMerge,jdbcType=TINYINT},
+		#{invoiceRemark,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{state,jdbcType=TINYINT},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceCollect">
+		update tb_invoice_overseas
+		<set>
+			id = #{id}
+			<if test="applyNo != null and applyNo != ''">
+				,apply_no = #{applyNo,jdbcType=VARCHAR}
+			</if>
+			<if test="businessUnit != null">
+				, business_unit = #{businessUnit,jdbcType=INTEGER}
+			</if>
+			<if test=" projectId != null ">
+				, project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="customerId != null ">
+				, customer_id = #{customerId,jdbcType=INTEGER}
+			</if>
+			<if test="currnecyType != null">
+				, currnecy_type = #{currnecyType,jdbcType=TINYINT}
+			</if>
+			<if test="accountId != null">
+				, account_id = #{accountId,jdbcType=TINYINT}
+			</if>
+			<if test="printNum != null">
+				, print_num = #{printNum,jdbcType=TINYINT}
+			</if>
+			<if test="invoiceAmount != null">
+				, invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="balanceStartDate != null">
+				, balance_start_date =
+				#{balanceStartDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="balanceEndDate != null">
+				, balance_end_date = #{balanceEndDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="billType != null">
+				, bill_type = #{billType,jdbcType=TINYINT}
+			</if>
+			<if test="feeType != null ">
+				, fee_type = #{feeType,jdbcType=TINYINT}
+			</if>
+			<if test="isMerge != null">
+				, is_merge = #{isMerge,jdbcType=TINYINT}
+			</if>
+			<if test="invoiceRemark != null and invoiceRemark != ''">
+				, invoice_remark = #{invoiceRemark,jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				, remark = #{remark,jdbcType=VARCHAR}
+			</if>
+			<if test="state != null ">
+				, state=#{state,jdbcType=TINYINT}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 获取总行数 -->
+	<select id="isOverasyncMaxLine"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasSearchReqDto"
+		resultType="int">
+		select
+		count(*)
+		from
+		tb_invoice_overseas o INNER
+		JOIN
+		tb_base_user_project
+		b
+		on
+		o.project_id=b.project_id
+		where o.is_delete=0
+		AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and o.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and o.project_id = #{projectId}
+		</if>
+		<if test="customerId != null">
+			and o.customer_id = #{customerId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and o.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="billType != null">
+			and o.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and o.state = #{state}
+		</if>
+	</select>
+</mapper>

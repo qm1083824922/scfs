@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.CustomerMaintainDao">
+	<resultMap id="CustomerMaintainMap" type="com.scfs.domain.base.entity.CustomerMaintain">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="subject_id" property="subjectId" jdbcType="BIGINT" />
+		<result column="customer_no" property="customerNo" jdbcType="VARCHAR" />
+		<result column="customer_type" property="customerType"
+			jdbcType="TINYINT" />
+		<result column="source_channel" property="sourceChannel"
+			jdbcType="TINYINT" />
+		<result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+		<result column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
+		<result column="english_name" property="englishName" jdbcType="VARCHAR" />
+		<result column="reg_place" property="regPlace" jdbcType="VARCHAR" />
+		<result column="reg_no" property="regNo" jdbcType="VARCHAR" />
+		<result column="reg_phone" property="regPhone" jdbcType="VARCHAR" />
+		<result column="office_address" property="officeAddress"
+			jdbcType="VARCHAR" />
+		<result column="guardian" property="guardian" jdbcType="BIGINT" />
+		<result column="fllow" property="fllow" jdbcType="BIGINT" />
+		<result column="contacts" property="contacts" jdbcType="VARCHAR" />
+		<result column="contacts_number" property="contactsNumber"
+			jdbcType="VARCHAR" />
+		<result column="contacts_other_number" property="contactsOtherNumber"
+			jdbcType="VARCHAR" />
+		<result column="stage" property="stage" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="creator_id" property="creatorId" jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		subject_id,
+		customer_no,
+		customer_type,
+		source_channel,
+		abbreviation,
+		chinese_name,
+		english_name,
+		reg_place,
+		reg_no,
+		reg_phone,
+		office_address,
+		guardian,
+		fllow,
+		contacts,
+		contacts_number,
+		contacts_other_number,
+		stage,
+		remark,
+		creator,
+		creator_id,
+		create_at,
+		delete_at,
+		update_at,
+		is_delete
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.CustomerMaintain"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_customer_maintain(
+		subject_id,
+		customer_no,
+		customer_type,
+		source_channel,
+		abbreviation,
+		chinese_name,
+		english_name,
+		reg_place,
+		reg_no,
+		reg_phone,
+		office_address,
+		guardian,
+		fllow,
+		contacts,
+		contacts_number,
+		contacts_other_number,
+		stage,
+		remark,
+		creator,
+		creator_id,
+		create_at,
+		is_delete
+		)
+		values(
+		#{subjectId,jdbcType=BIGINT},
+		#{customerNo,jdbcType=VARCHAR},
+		#{customerType,jdbcType=TINYINT},
+		#{sourceChannel,jdbcType=TINYINT},
+		#{abbreviation,jdbcType=VARCHAR},
+		#{chineseName,jdbcType=VARCHAR},
+		#{englishName,jdbcType=VARCHAR},
+		#{regPlace,jdbcType=VARCHAR},
+		#{regNo,jdbcType=VARCHAR},
+		#{regPhone,jdbcType=VARCHAR},
+		#{officeAddress,jdbcType=VARCHAR},
+		#{guardian,jdbcType=BIGINT},
+		#{fllow,jdbcType=BIGINT},
+		#{contacts,jdbcType=VARCHAR},
+		#{contactsNumber,jdbcType=VARCHAR},
+		#{contactsOtherNumber,jdbcType=VARCHAR},
+		#{stage,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=TINYINT},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+	<!-- 修改数据 -->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_customer_maintain
+		WHERE id = #{id}
+	</delete>
+	<!-- 修改数据 -->
+	<update id="updateById" parameterType="com.scfs.domain.base.entity.CustomerMaintain">
+		update tb_customer_maintain
+		<set>
+			<if test="subjectId != null">
+				subject_id=#{subjectId},
+			</if>
+			<if test="customerNo != null and customerNo !=''">
+				customer_no=#{customerNo},
+			</if>
+			<if test="customerType != null">
+				customer_type=#{customerType},
+			</if>
+			<if test="sourceChannel != null">
+				source_channel=#{sourceChannel},
+			</if>
+			<if test="abbreviation != null and abbreviation !=''">
+				abbreviation=#{abbreviation},
+			</if>
+			<if test="chineseName != null and chineseName !=''">
+				chinese_name=#{chineseName},
+			</if>
+			<if test="englishName != null and chineseName !=''">
+				english_name=#{englishName},
+			</if>
+			<if test="regPlace != null and regPlace !=''">
+				reg_place=#{regPlace},
+			</if>
+			<if test="regNo != null and regNo !=''">
+				reg_no=#{regNo},
+			</if>
+			<if test="regPhone != null and regPhone !=''">
+				reg_phone=#{regPhone},
+			</if>
+			<if test="officeAddress != null and officeAddress !=''">
+				office_address=#{officeAddress},
+			</if>
+			<if test="guardian != null">
+				guardian=#{guardian},
+			</if>
+			<if test="fllow != null">
+				fllow=#{fllow},
+			</if>
+			<if test="contacts != null and contacts !=''">
+				contacts=#{contacts},
+			</if>
+			<if test="contactsNumber != null and contactsNumber !=''">
+				contacts_number=#{contactsNumber},
+			</if>
+			<if test="contactsOtherNumber != null and contactsOtherNumber !=''">
+				contacts_other_number=#{contactsOtherNumber},
+			</if>
+			<if test="stage != null">
+				stage=#{stage},
+			</if>
+			<if test="remark != null and remark !=''">
+				remark=#{remark},
+			</if>
+			<if test="deleteAt != null">
+				delete_at=#{deleteAt},
+			</if>
+			<if test="isDelete != null">
+				is_delete=#{isDelete},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 修改阶段 -->
+	<update id="updateStateById" parameterType="com.scfs.domain.base.entity.CustomerMaintain">
+		update tb_customer_maintain
+		<set>
+			subject_id=#{subjectId},
+			<if test="stage != null">
+				stage=#{stage},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="CustomerMaintainMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_customer_maintain
+		where id=#{id} for update
+	</select>
+
+	<!-- 获取数据 -->
+	<select id="queryResultsByCon" resultMap="CustomerMaintainMap"
+		parameterType="com.scfs.domain.base.dto.req.CustomerMaintainReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_customer_maintain
+		<where>
+			is_delete = 0
+			<if test="customerNo != null and customerNo !=''">
+				and customer_no like CONCAT('%',#{customerNo},'%')
+			</if>
+			<if test="chineseName != null and chineseName !=''">
+				and chinese_name like CONCAT('%',#{chineseName},'%')
+			</if>
+			<if test="sourceChannel !=null">
+				and source_channel=#{sourceChannel}
+			</if>
+			<if test="guardian != null">
+				and guardian=#{guardian}
+			</if>
+			<if test="guardian != null">
+				and fllow=#{fllow}
+			</if>
+			<if test="stage != null">
+				and stage=#{stage}
+			</if>
+			<if test="customerType != null">
+				and customer_type=#{customerType}
+			</if>
+			<if test="startCreateTime != null ">
+			<![CDATA[
+					and create_at >=#{startCreateTime}
+				]]>
+			</if>
+			<if test="endCreateTime != null ">
+				<![CDATA[
+						and create_at <=#{endCreateTime}
+					]]>
+			</if>
+			<if test="userId != null">
+				and fllow=#{userId}
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+</mapper>

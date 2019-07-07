@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.project.ProjectRiskDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.project.entity.ProjectRisk">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="risktype" property="risktype" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="detele_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		project_id,
+		risktype,
+		title,
+		remarks,
+		status,
+		creator,
+		deleter,
+		create_at,
+		update_at,
+		detele_at,
+		is_delete
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayOrderSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		r.id,
+		r.project_id,
+		r.risktype,
+		r.title,
+		r.remarks,
+		r.status,
+		r.creator,
+		r.deleter,
+		r.create_at,
+		r.update_at,
+		r.detele_at,
+		r.is_delete
+		from tb_project_risk r INNER
+		JOIN tb_base_user_project b on
+		r.project_id=b.project_id
+		where
+		r.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			AND r.project_id=#{projectId}
+		</if>
+		<if test="title != null">
+			and r.title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="status != null">
+			and r.status = #{status}
+		</if>
+		order by r.id desc
+	</select>
+
+
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_risk
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectRisk"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_project_risk(
+		project_id,
+		risktype,
+		title,
+		remarks,
+		status,
+		creator,
+		deleter,
+		create_at,
+		update_at,
+		detele_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{projectId,jdbcType=INTEGER},
+		#{risktype,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{remarks,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{deleter,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{deleteAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=INTEGER}
+		)
+	</insert>
+
+
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectRisk">
+		update tb_project_risk
+		<set>
+			id = #{id}
+			<if test="projectId != null ">
+				,project_id = #{projectId,jdbcType=TINYINT}
+			</if>
+			<if test="risktype != null and risktype != ''">
+				,risktype = #{risktype,jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != ''">
+				, title = #{title,jdbcType=VARCHAR}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				, remarks = #{remarks,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null ">
+				, status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="creator != null and creator != ''">
+				, creator = #{creator,jdbcType=VARCHAR}
+			</if>
+			<if test="deleter != null and deleter != ''">
+				, deleter = #{deleter,jdbcType=VARCHAR}
+			</if>
+			<if test="createAt != null ">
+				, create_at = #{createAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateAt != null ">
+				, update_at = #{updateAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="deleteAt != null ">
+				, detele_at = #{deleteAt,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isDelete != null ">
+				, is_delete = #{isDelete,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,308 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+    		<li>报表</li>
+            <li class="active">利润报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+          <div class="box">
+              <div class="box-header">
+                  <form method="post" action="###" class="form-inline" id="searchForm">
+                      <div class="form-group-sm">
+                          <div class="search-item">
+                              <label class="control-label ml10">项目：</label>
+                              <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId" ></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">经营单位：</label>
+                              <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId" ></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">业务类型：</label>
+                              <select class="form-control js-select" data-url="PROJECT_BIZTYPE" id="bizType" name="bizType"></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">单据类型：</label>
+                              <select class="form-control js-select" data-url="PERFORMANCE_BILL_TYPE" id="billType" name="billType"></select>
+                          </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">下单时间：</label>
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startPlaceDate"> -
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endPlaceDate">                                                    
+                          </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">统计时间：</label>
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart2" value="" name="startStatisticsDate"> -
+                              <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd2" value="" name="endStatisticsDate">                                                    
+                          </div>
+                          <div class="search-item">                                         
+                              <label class="control-label">订单编号：</label>
+                              <input type="text" class="form-control" id="orderNo" name="orderNo">                             
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">部门：</label>
+                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">业务员：</label>
+                              <select class="form-control js-select" data-url="DEPARTMENT_USER" id="bizManagerId" name="bizManagerId"></select>
+                          </div>
+                          <div class="search-item">
+                              <label class="control-label ml10">是否合计：</label>
+                              <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>                            	
+                          </div>
+                          <div class="search-item">
+                              <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                              <button type="reset" id="btnClear" onclick="clearSearch();" class="btn btn-success btn-sm ml10 mr10">清空</button>
+                          </div>
+                          <div class="search-item">
+                         	  <!--  
+                         	  <button type="button" id="btnExport" data-permissionUrl="/orderProfitReport/excel/orderProfitReport.xls"
+                           		 data-url="orderProfitReport/excel/orderProfitReport.xls" class="btn btn-warning btn-sm ml10">导出</button>      
+                         	  -->
+                              <button type="button" id="btnExport" data-permissionUrl="/orderProfitReport/excel/orderProfitReport.xls" data-url="orderProfitReport/excel/orderProfitReport.xls" 
+                              	class="btn btn-warning btn-sm ml10">导出</button>                                 	
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <table id="js_dataTable" data-url="orderProfitReport/query">
+                  </table>
+              </div>
+              <!-- .box-body -->
+          </div>
+    </section>
+</div>
+
+<script>
+function clearSearch() {
+	$('#searchForm')[0].reset();
+	$('#departmentId').val('');
+};
+
+function scanForward(row) {
+	if (row.billType == 1 || row.billType == 2 || row.billType == 3) {
+		var	condition = "?id=" + row.id + "&reportFeeType=" + row.billType;
+		window.open("/html/report/receive/feeDetail.html" + condition);
+	} else if (row.billType == 4) {
+		var	condition = "?id=" + row.id;
+		window.open("/html/report/orderProfit/billDeliveryDetail.html" + condition);
+	} else if (row.billType == 6) {
+		var	condition = "?id=" + row.id;
+		window.open("/html/report/orderProfit/feeManage.html" + condition);
+	}
+}
+
+window.operateEvents = {
+    'click .orderNoScan': function (e, value, row, index) {
+    	scanForward(row);
+    }
+};
+
+function orderNoFormatter(value, row, index) {
+	if (null == value) {
+		return;
+	} else {
+		return '<a class="orderNoScan">' + value + '</a>';
+	}
+}
+
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '部门',
+	     field: 'departmentName',
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '经营单位',
+	     field: 'businessUnitName',
+	     align: 'center'
+	 }, {
+	     title: '业务员',
+	     field: 'bizManagerName',
+	     align: 'center'
+	 }, {
+	     title: '业务类型',
+	     field: 'bizTypeName',
+	     align: 'center'
+	 }, {
+	     title: '单据类型',
+	     field: 'billTypeName',
+	     align: 'center'
+	 }, {
+	     title: '内部往来',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'warehouseName',
+	     align: 'center'
+	 }, {
+	     title: '订单编号',
+	     field: 'orderNo',
+	     align: 'center',
+	     events: operateEvents,
+	 	 formatter : orderNoFormatter
+	 }, {
+	     title: '备注',
+	     field: 'remark',
+	     align: 'center'
+	 }, {
+	     title: '单据编号',
+	     field: 'billNo',
+	     align: 'center'
+	 }, {
+	     title: '产品编号',
+	     field: 'productNo',
+	     align: 'center'
+	 }, {
+	     title: '数量',
+	     field: 'num',
+	     align: 'center'
+	 }, {
+	     title: '下单时间',
+	     field: 'placeDate',
+	     align: 'center'
+	 }, {
+	     title: '统计时间',
+	     field: 'statisticsDate',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+	     title: '税率',
+	     field: 'taxRate',
+	     align: 'center'
+	 }, {
+	     title: '销售总价',
+	     field: 'saleAmount',
+	     align: 'center'
+	 }, {
+	     title: '服务收入',
+	     field: 'serviceAmount',
+	     align: 'center'
+	 }, {
+	     title: '综合税金',
+	     field: 'compositeTaxAmount',
+	     align: 'center'
+	 }, {
+	     title: '采购成本',
+	     field: 'purchaseCost',
+	     align: 'center'
+	 }, {
+	     title: '资金成本',
+	     field: 'fundCost',
+	     align: 'center'
+	 }, {
+	     title: '仓储物流费',
+	     field: 'warehouseAmount',
+	     align: 'center'
+	 }, {
+	     title: '市场费用',
+	     field: 'marketAmount',
+	     align: 'center'
+	 }, {
+	     title: '财务费用',
+	     field: 'financeAmount',
+	     align: 'center'
+	 }, {
+	     title: '管理费用',
+	     field: 'manageAmount',
+	     align: 'center'
+	 }, {
+	     title: '人工费用',
+	     field: 'manualAmount',
+	     align: 'center'
+	 }, {
+	     title: '利润',
+	     field: 'profitAmount',
+	     align: 'center'
+	 }, {
+	     title: '利润率',
+	     field: 'profitRateStr',
+	     align: 'center'
+	 }
+];
+
+options.initPage = function(){
+	var datea =  new Date(); 
+	$("#js_form_datetimeEnd2").val(GLOBAL.setDefaultDate(0));
+	$("#js_form_datetimeStart2").val(GLOBAL.setDefaultDate(1-datea.getDate()));
+	
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+
+  	//还原查询条件及过滤后的数据
+  	//GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+$("#btnSearch").click(function() {
+	var startDate = $("#js_form_datetimeEnd2").val();
+	var endDate = $("#js_form_datetimeStart2").val();
+	if (!startDate || !endDate) {
+        layer.msg("请选择查询统计时间范围！");
+		return;
+	}
+	
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#departmentName").change(function() {
+	$("#bizManagerId").empty();
+	GLOBAL.ajax("common/selected/query?key=DEPARTMENT_USER&pId=" + $("#departmentId").val(), null, function(data) {
+        if (data) {
+            var option = "<option value=''>请选择</option>";
+            var items = data.items;
+            if (items) {
+                for (var k = 0; k < items.length; k++) {
+                	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+                }
+                $("#bizManagerId").append(option);
+            }
+        }
+    })
+    $('select').select2({language: "zh-CN"});
+
+});
+
+$("#btnExport").click(function() {
+    var count_url = "orderProfitReport/excel/orderProfitReport/count";
+    var data = $("#searchForm").serializeObject();
+	var url = $(this).data("url");
+    url = url + "?" + $("#searchForm").serialize();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+</script>

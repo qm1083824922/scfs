@@ -1,0 +1,137 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>融资池</li>
+            <li class="active">资产明细</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="fundPoolAssest">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                 <li role="presentation" ><a class="tab-item" data-url="html/pay/fundPool/fundPoolScan.html">基础信息</a></li>
+                  <li role="presentation" ><a class="tab-item" data-url="html/pay/fundPool/fundPoolDtlScan.html">融资池明细</a></li>
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/pay/fundPool/fundPoolAssestScan.html">资产明细</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/pay/fundPool/fundDetailScan.html">资金明细</a></li>
+                </ul>
+            </div>
+                <input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+                   <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="fundPoolAssest/detail">
+                </table>
+            </div>
+            <!-- .box-body -->
+             <div class="box-footer text-center">
+              <button type="button" id="back" data-url="html/pay/fundPool/fundPoolSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+              <button type="button" id="btnExport" data-url="fundPoolAssest/excel/fundPoolAssest.xls" data-permissionUrl="/fundPoolAssest/excel/fundPoolAssest.xls" class="btn btn-warning btn-sm ml10">导出excel</button> 
+            </div>
+          </form>
+        </div>
+    </section>
+</div>
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+   },{
+	     title: '单据编号',
+	     field: 'billNo',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '类型',
+	     field: 'typeName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '单据来源',
+	     field: 'billSourceName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '经营单位',
+	     field: 'businessUnitName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '项目名称',
+	     field: 'projectName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '客户名称',
+	     field: 'customerName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '供应商',
+	     field: 'supplieName',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '单据金额',
+	     field: 'billAmount',
+	     width: 120,
+	     align: 'center'
+	 },{
+	     title: '单据类型',
+	     field: 'billTypeName',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '币种',
+	     field: 'currencyName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '汇率',
+	     field: 'exchangeRate',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '余额CNY',
+	     field: 'billAmountCny',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '记账日期',
+	     field: 'businessDate',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '备注',
+	     field: 'remark',
+	     width: 80,
+	     align: 'center'
+	 }
+];
+options.initPage = function() {
+	options.param.id = options.param.id;
+	$("#id").val(options.param.id);
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		id : options.param.id
+	});
+};
+
+$("#btnExport").click(function() {
+	var count_url = "/fundPoolAssest/excel/export/count";
+	var data = $("#fundPoolAssest").serializeObject();
+	GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	var url = "fundPoolAssest/excel/fundPoolAssest.xls";
+        	url = url + "?" + $("#fundPoolAssest").serialize();
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+}) 
+GLOBAL.goBack();
+</script>

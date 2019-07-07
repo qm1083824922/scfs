@@ -1,0 +1,173 @@
+<style>
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		  <ol class="breadcrumb">
+	          <li>当前位置</li>
+	          <li>发票</li>
+	          <li>收票</li>
+	          <li class="active">浏览</li>
+	      </ol>
+     </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink"  data-url="html/invoice/collect/collectPoScan.html">采购信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/collectApproveScan.html">认证信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/collect/attachmentScan.html">附件</a></li> 
+						<li role="presentation" class="state"><a class="tab-item" id="orderDtlLink" data-url="html/invoice/collect/collectVoucherScan.html">收票凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="invoiceCollectPo/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/invoice/collect/collectInfoSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '采购编号',
+				field : 'orderNo',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '日期',
+				field : 'orderTime',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '商品编号',
+				field : 'goodsNo',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '商品描述',
+				field : 'goodsDescribe',
+				width : 210,
+				align : 'center'
+			},
+			{
+				title : '单位',
+				field : 'unit',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '税率',
+				field : 'taxRate',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '数量',
+				field : 'poNum',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '含税单价',
+				field : 'goodsPrice',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '含税金额',
+				field : 'inRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '未税金额',
+				field : 'exRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '税额',
+				field : 'rateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '含税折扣金额',
+				field : 'discountInRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '未税折扣金额',
+				field : 'discountExRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '折扣税额',
+				field : 'discountRateAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			} ];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			}
+    		}
+		var state = options.param.state;
+		if(state==4){
+			$(".nav>li.state").show();	
+		}
+		options.param.collectId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			collectId : options.param.id
+		}, false, option);
+	};
+
+	GLOBAL.goBack();
+</script>

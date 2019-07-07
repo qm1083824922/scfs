@@ -1,0 +1,127 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>审核</li>
+            <li class="active">我申请的审核中单据</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="PROJECT" id="js_project" name="projectId"></select>
+                        </div>
+                        <div class="search-item">        
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="js_customer" name="customerId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="js_supplier" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据编号：</label>
+                            <input type="text" class="form-control" id="poNo" name="poNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="AUDIT_POTYPE" id="js_supplier" name="poType"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="AUDIT_STATE" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">    
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr10">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="audit/proposer/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+             <div class="box-footer text-center">
+                  <button type="button" data-url="html/entry.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    
+   
+
+    /*数据表格*/
+    var tabCols = [
+        {  
+             title: '序号',
+             field: 'columnsNumber',  
+             width: 10
+         }, {
+             title: '单据编号',
+             field: 'poNo',
+             width: 92,
+             align: 'center'
+         }, {
+             title: '单据类型',
+             field: 'poTypeName',
+             width: 85,
+             align: 'center'
+         }, {
+             title: '项目',
+             field: 'projectName',
+             width: 100,
+             align: 'center'
+         }, {
+             title: '客户',
+             field: 'customerName',
+             width: 100,
+             align: 'center'
+         }, {
+             title: '供应商',
+             field: 'supplierName',
+             width: 100,
+             align: 'center'
+         }, {
+             title: '单据日期',
+             field: 'poDate',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '申请时间',
+             field: 'proposerAt',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '审核人',
+             field: 'auditor',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '状态',
+             field: 'stateName',
+             width: 80,
+             align: 'center'
+         }
+    ];
+
+
+    options.initPage = function(){
+        GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+    }
+
+    $("#btnSearch").click(function() {
+        var data = $("#searchForm").serializeObject();
+        GLOBAL.tableRefresh($('#js_dataTable'), data);
+    })
+
+    GLOBAL.goBack();
+</script>

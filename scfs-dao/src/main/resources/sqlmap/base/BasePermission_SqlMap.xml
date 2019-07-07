@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BasePermissionDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.base.entity.BasePermission">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="type" property="type" jdbcType="TINYINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="menu_level" property="menuLevel" jdbcType="TINYINT" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="ord" property="ord" jdbcType="BIGINT" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, type, name,
+		parent_id,url,menu_level,state,ord,create_at, update_at,
+		delete_at,
+		creator, deleter, is_delete
+	</sql>
+
+	<select id="queryPermissionById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		from tb_base_permission
+		WHERE id=#{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryFisrtPermission" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from tb_base_permission
+		WHERE menu_level=1 AND (parent_id IS NULL OR
+		parent_id=0) AND state= 2 AND
+		is_delete = 0
+	</select>
+
+	<select id="queryPermissions" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_permission
+		<where>
+			is_delete=0
+			<if test="name != null">
+				AND name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="url != null">
+				AND url like CONCAT('%',#{url},'%')
+			</if>
+			<if test="type != null">
+				AND type=#{type}
+			</if>
+			<if test="parentId != null">
+				AND parent_id=#{parentId}
+			</if>
+			<if test="state != null">
+				AND state=#{state}
+			</if>
+			<if test="menuLevel != null">
+				AND menu_level=#{menuLevel}
+			</if>
+
+		</where>
+		ORDER BY id DESC
+	</select>
+
+	<!--根据条件查询所有权限信息 -->
+	<select id="queryAllPermission" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_base_permission
+		<where>
+			is_delete=0
+			<if test="name != null">
+				AND name=#{name}
+			</if>
+			<if test="url != null">
+				AND url=#{url}
+			</if>
+			<if test="type != null">
+				AND type=#{type}
+			</if>
+			<if test="parentId != null">
+				AND parent_id=#{parentId}
+			</if>
+			<if test="state != null">
+				AND state=#{state}
+			</if>
+			<if test="menuLevel != null">
+				AND menu_level=#{menuLevel}
+			</if>
+
+		</where>
+	</select>
+
+
+	<!--查询权限组下面的权限列表 -->
+	<select id="queryPermissionsByGroupId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT pr.id, p.type, p.name,
+		p.parent_id,p.url,p.menu_level,p.state,pr.is_delete
+		from
+		tb_base_permission p INNER JOIN tb_base_permission_relation pr on
+		p.id=pr.permission_id
+		where pr.permission_group_id=#{id}
+		ORDER BY
+		pr.is_delete,p.id DESC
+	</select>
+	<!--查询已完成的权限，不在此权限组下面的权限列表 -->
+	<select id="queryPermissionsNotInGroupId" parameterType="com.scfs.domain.base.dto.req.BasePermissionReqDto"
+		resultMap="BaseResultMap">
+		SELECT DISTINCT p.id, p.type, p.name,
+		p.parent_id,p.url,p.menu_level,p.state,p.is_delete
+		from
+		tb_base_permission p LEFT JOIN tb_base_permission_relation pr on
+		p.id=pr.permission_id
+		where
+		p.is_delete=0 AND p.state=2
+		AND p.id NOT IN
+		(SELECT pr.permission_id FROM tb_base_permission_relation
+		pr where
+		pr.permission_group_id=#{permissionGroupId} AND is_delete=0)
+		<if test="name != null and name != ''">
+			AND p.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="url != null and url != ''">
+			AND p.url like CONCAT('%',#{url},'%')
+		</if>
+		<if test="type != null and type != ''">
+			AND p.type=#{type}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND p.parent_id=#{parentId}
+		</if>
+		<if test="state != null and state != ''">
+			AND p.state=#{state}
+		</if>
+		<if test="menuLevel != null and menuLevel != ''">
+			AND p.menu_level=#{menuLevel}
+		</if>
+		ORDER BY p.id DESC
+	</select>
+
+
+
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BasePermission"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_base_permission
+		(id, type, name, url,menu_level,state,
+		parent_id,ord, create_at,
+		update_at,
+		delete_at, creator, deleter)
+		values (#{id,jdbcType=BIGINT},
+		#{type,jdbcType=TINYINT},
+		#{name,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{menuLevel,jdbcType=TINYINT},
+		#{state,jdbcType=TINYINT},#{parentId,jdbcType=BIGINT},
+		#{ord,jdbcType=BIGINT}, #{createAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{deleteAt,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR}, #{deleter,jdbcType=VARCHAR})
+	</insert>
+	<update id="update" parameterType="com.scfs.domain.base.entity.BasePermission">
+		update tb_base_permission
+		<set>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test=" name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="menuLevel != null">
+				menu_level = #{menuLevel,jdbcType=TINYINT},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="ord != null">
+				ord = #{ord,jdbcType=BIGINT},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT DISTINCT id, type, name, parent_id,url,menu_level,state,ord,
+		is_delete
+		FROM tb_base_permission
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_permission
+	</select>
+
+
+
+	<!--查询角色下所有权限信息 -->
+	<select id="queryPermissionByRoleId" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.base.dto.req.BasePermissionReqDto">
+		SELECT
+		p.id,
+		p.type,
+		p.name,
+		p.parent_id,
+		p.url,
+		p.menu_level,
+		p.state,
+		p.ord,
+		p.create_at,
+		p.update_at,
+		p.delete_at,
+		p.creator,
+		p.deleter,
+		p.is_delete
+		FROM tb_base_permission p LEFT JOIN
+		tb_base_permission_relation r ON p.id=r.permission_id LEFT JOIN
+		tb_base_role_permission_group g
+		ON
+		r.permission_group_id=g.permission_group_id
+		WHERE g.role_id=#{roleId}
+		AND
+		g.is_delete=0 AND r.is_delete=0
+		<if test="name != null and name != ''">
+			AND p.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="url != null and url != '' ">
+			AND p.url like CONCAT('%',#{url},'%')
+		</if>
+		<if test="type != null">
+			AND p.type=#{type}
+		</if>
+		<if test="parentId != null">
+			AND p.parent_id=#{parentId}
+		</if>
+		<if test="state != null">
+			AND p.state=#{state}
+		</if>
+		<if test="menuLevel != null">
+			AND p.menu_level=#{menuLevel}
+		</if>
+		GROUP BY p.id
+		ORDER BY p.id DESC
+	</select>
+
+</mapper>

@@ -1,0 +1,177 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>基础信息</li>
+    <li>用户信息浏览</li>
+    <li class="active">用户分配</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">用户名：</label> 
+							<input type="text" class="form-control" id="userName" name="userName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">中文名：</label>
+							<input type="text" class="form-control" id="chineseName" name="chineseName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">英文名：</label>
+                     		<input type="text" class="form-control" id="englishName" name="englishName">
+                        </div>
+                        <div class="search-item">
+                     		 <label class="control-label">工号：</label>
+                            <input type="text" class="form-control" id="employeeNumber" name="employeeNumber">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">手 机：</label>
+                            <input type="text" class="form-control" id="mobilePhone" name="mobilePhone">
+                        </div>
+                        <div class="search-item">
+							<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+                <table id="js_dataTable" data-url="baseSubject/user/notAssigned/query">                 
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" id="multDevide" class="btn btn-primary btn-sm" data-url="/baseSubject/user/dividAll" data-permissionUrl="/baseSubject/user/dividAll">批量分配</button>
+              <button type="button" data-url="html/subject/subjectUserInfoEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+        </div>
+  </section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [
+		 {
+			 field : 'checkItem',
+			 checkbox : true,
+			 width : '5'
+		 },{  
+		     title: '序号',
+		     field: 'columnsNumber'
+	     },{
+		     title: '工号',
+		     field: 'employeeNumber',
+		     align: 'center'
+		 }, {
+		     title: '用户名',
+		     field: 'userName',
+		     align: 'center'
+		 }, {
+		     title: '中文名',
+		     field: 'chineseName',
+		     align: 'center'
+		 }, {
+		     title: '英文名',
+		     field: 'englishName',
+		     align: 'center'
+		 }, {
+		     title: '手机',
+		     field: 'mobilePhone',
+		     align: 'center'
+		 }, {
+		     title: '邮箱',
+		     field: 'email',
+		     align: 'center'
+		 }, {
+		     title: '用户类别',
+		     field: 'userPropertyValue',
+		     align: 'center'
+		 }, {
+		     title: '创建人',
+		     field: 'creator',
+		     align: 'center'
+		 }, {
+		     title: '创建时间',
+		     field: 'createAt',
+		     align: 'center'
+		 }, {
+		     title: '状态',
+		     field: 'status',
+		     align: 'center'
+		 }, {
+			title : '仓管操作',
+			field : 'opertaList2',
+			align : 'center',
+			formatter : function(value, row, index) {
+				return '<select class="form-control js-select operater" id="operater" width="20px" name="operater"><option value="0" selected="selected">不可操作</option><option value="1">可操作</option></select>';
+			}
+		 }
+	];
+
+    options.initPage = function(){
+    	GLOBAL.initTable($('#js_dataTable'), tabCols, {subjectId: options.param.id});
+    };
+
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url, options.param);
+    })
+    
+    $("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			subjectId : options.param.id
+		});
+	    GLOBAL.tableRefresh($('#js_dataTable'), data);
+	}) 
+
+	$("#multDevide").click(function(){
+		var dtlArr = [];
+		var isValid = true;
+		var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+		if (selectedRows.length == 0) {
+			layer.msg("请选择");
+			isValid = false;
+		} else {
+			for (var i = 0; i < selectedRows.length; i++) {
+				var id = selectedRows[i].id;
+				var $operater = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".operater");
+				var operater = $operater.val();
+				dtlArr.push({
+					"userId" : id,
+					"operater" : operater
+				});
+			}
+		}
+	    var url = $(this).data("url");
+	    
+	    if(isValid){
+	    	var saveData = {
+	   	    	 userSubjectList : dtlArr,
+	   	    	 subjectId:options.param.id
+	   		};
+	   	    GLOBAL.ajax(url, JSON.stringify(saveData),function(e) {
+	           if (e.success) {
+	           		layer.msg("分配成功！", {
+		                   icon: 1,
+		                   time:1500,
+		                 }, function(){
+		                	 GLOBAL.go("html/subject/subjectUserInfoEdit.html");
+		           	     });
+	           } else {
+	        	   layer.msg(e.msg, {
+						icon : 5,
+						time : 1500,
+					});
+	           }
+	       }, true, $("#multDevide"));
+	    }
+	})
+
+    GLOBAL.goBack();
+
+</script>

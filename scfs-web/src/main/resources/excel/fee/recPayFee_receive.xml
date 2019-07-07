@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="recPayFeeList" var="recPay"
+			varType="com.scfs.domain.fee.dto.resp.FeeQueryResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">recPay.projectName</mapping>
+				<mapping row="2" col="1">recPay.custPayerName</mapping>
+				<mapping row="2" col="2">recPay.recFeeSpecName</mapping>
+				<mapping row="2" col="3">recPay.recTypeName</mapping>
+				<mapping row="2" col="4">recPay.recDate</mapping>
+				<mapping row="2" col="5">recPay.currencyTypeName</mapping>
+				<mapping row="2" col="6">recPay.recAmount</mapping>
+				<mapping row="2" col="7">recPay.provideInvoiceTypeName</mapping>
+				<mapping row="2" col="8">recPay.provideInvoiceTaxRateStr</mapping>
+				<mapping row="2" col="9">recPay.recNote</mapping>
+
+				<mapping row="2" col="10">recPay.custReceiverName</mapping>
+				<mapping row="2" col="11">recPay.payFeeSpecName</mapping>
+				<mapping row="2" col="12">recPay.payTypeName</mapping>
+				<mapping row="2" col="13">recPay.payDate</mapping>
+				<mapping row="2" col="14">recPay.currencyTypeName</mapping>
+				<mapping row="2" col="15">recPay.payAmount</mapping>
+				<mapping row="2" col="16">recPay.acceptInvoiceTypeName</mapping>
+				<mapping row="2" col="17">recPay.acceptInvoiceTaxRateStr</mapping>
+				<mapping row="2" col="18">recPay.payNote</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

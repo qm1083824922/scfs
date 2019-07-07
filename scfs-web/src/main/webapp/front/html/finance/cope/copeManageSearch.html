@@ -1,0 +1,155 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>财务</li>
+            <li class="active">应付管理</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">    
+                            <label class="control-label">项目：</label>
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+						</div>
+						<div class="search-item">    
+                            <label class="control-label">客户：</label>
+							<select class="form-control js-select" data-url="BCS" id="customerId"  name="customerId"> </select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label> 
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnitId"  name="busiUnitId"> </select>
+                        </div>
+                        <div class="search-item">	
+							<label class="control-label ml10">币种：</label> 
+							<select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currnecyType" name="currnecyType"></select>
+						</div>
+                        <div class="search-item">
+                        	<label class="control-label">创建日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startCopeTime" value="" name="startCopeTime"> -
+                            <input type="text" class="form-control js_datePicker" id="endCopeTime" value="" name="endCopeTime">
+                        </div>
+                        <div class="search-item">	
+							<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="copeManage/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+
+window.operateEvents = {
+    'click .scan': function(e, value, row, index){
+		options.param.copeId = row.id;
+		GLOBAL.go("html/finance/cope/copeManageDtlScan.html", options.param);
+    }
+    
+};
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '客户',
+	     field: 'customerName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '经营单位',
+	     field: 'busiUnitName',
+	     width: 100,
+	     align: 'center'
+	 },{
+	     title: '币种',
+	     field: 'currnecyTypeName',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '应付金额',
+	     field: 'copeAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '已付金额',
+	     field: 'paidAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '未付金额',
+	     field: 'unpaidAmount',
+	     width: 80,
+	     align: 'center',
+	 	 formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '创建日期',
+	     field: 'createAt',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '操作',
+	     field: 'opertaList',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents
+	 }
+];
+
+options.initPage = function() {
+	GLOBAL.initOptionsParam('id,cid,hip');
+	var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			}
+		}
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null , option);
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable')); 
+	$(".js_datePicker").datetimepicker({
+        format:'Y-m-d',
+    });
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})    
+
+
+
+</script>

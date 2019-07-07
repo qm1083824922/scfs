@@ -1,0 +1,90 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+      <ol class="breadcrumb">
+          <li>当前位置</li>
+          <li class="active">修改密码</li>
+      </ol>
+  </section>
+  <section class="pwd-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal" id="editPwdForm">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <table class="table no-margin">
+                        <tr>
+                          <td width="150" class="text-right"><b>旧密码：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="password" class="form-control" id="oldPwd" name="oldPwd"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>新密码：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="password" class="form-control" id="newPwd" name="newPwd"/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><b>再次输入新密码：<em class="text-star">*</em></b></td>
+                          <td class="text-left">
+                            <input type="password" class="form-control" id="repeatNewPwd" name="repeatNewPwd"/>
+                          </td>
+                        </tr>
+                      </table>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+             
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" id="submitBtn" data-url="" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" data-url="html/entry.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+
+    options.initPage = function(){
+        //验证修改密码输入是否合法
+        $("#editPwdForm").validate({
+            rules: {
+                oldPwd: {
+                    required: true
+                },
+                newPwd: {
+                    required: true
+                },
+                repeatNewPwd: {
+                    required: true
+                }
+            },
+            submitHandler: function() {
+                var loginUrl = "pwd/update";
+                var pwdInfo = $("#editPwdForm").serializeObject();
+                if(pwdInfo.newPwd !== pwdInfo.repeatNewPwd){
+                    layer.msg("两次输入的密码不一致，请检查！", {icon: 2});
+                    return;
+                }
+                delete pwdInfo.repeatNewPwd;
+                GLOBAL.ajax(loginUrl, pwdInfo, function(e){
+                    if (e.success) {
+                        layer.msg("密码修改成功！");
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        layer.msg(e.msg);
+                    }
+                });
+            }
+        })
+    }
+
+    GLOBAL.goBack();
+   
+</script>

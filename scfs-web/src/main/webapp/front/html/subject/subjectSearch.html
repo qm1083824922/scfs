@@ -1,0 +1,69 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li class="active">客户</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <ul class="nav nav-tabs">
+                  <li class="subtype active" data-subjecttype="1"><a class="">经营单位</a></li>
+                  <li class="subtype" data-subjecttype="2"><a class="">仓库</a></li>
+                  <li class="subtype" data-subjecttype="4"><a class="">供应商</a></li>
+                  <li class="subtype" data-subjecttype="8"><a class="">客户</a></li>
+                </ul>
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">编号：</label>
+                            <input type="text" class="form-control" id="subjectNo" name="subjectNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">简称：</label>
+                            <input type="text" class="form-control" id="abbreviation" name="abbreviation">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">中文全称：</label>
+                            <input type="text" class="form-control" id="chineseName" name="chineseName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">英文全称：</label>
+                            <input type="text" class="form-control" id="englishName" name="englishName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="SUBJECT_STATE" name="state">
+                            </select>
+                        </div>
+                        <input type="hidden" value="1" id="subtype" name="subjectType">
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button> 
+                            <div class="btn-group ml10">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">新建 <span class="caret"></span></button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" id="custCreate" data-url="html/subject/custCreate.html" data-permissionUrl="/baseSubject/cust/add">客户</a></li>
+                                <li><a href="javascript:" id="supplierCreate" data-url="html/subject/supplierCreate.html" data-permissionUrl="/baseSubject/supplier/add">供应商</a></li>
+                                <li><a href="javascript:" id="warehouseCreate" data-url="html/subject/warehouseCreate.html" data-permissionUrl="/baseSubject/warehouse/add">仓库</a></li>
+                                <li><a href="javascript:" id="busiUnitCreate" data-url="html/subject/busiUnitCreate.html" data-permissionUrl="/baseSubject/busiUnit/add">经营单位</a></li>
+                                <!-- <li><a href="javascript:" id="mutiSubjectCreate" data-url="html/subject/mutiSubjectCreate.html" data-permissionUrl="/mutiSubject/add">复杂客户</a></li> -->
+                              </ul>
+                            </div> 
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="baseSubject/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/subject/subjectSearch.js"></script>

@@ -1,0 +1,56 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>微信</li>
+            <li class="active">用户</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">用户名：</label>
+                            <input type="text" class="form-control" id="userName" name="userName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">中文名：</label>
+                            <input type="text" class="form-control" id="chineseName" name="chineseName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">英文名：</label>
+                            <input type="text" class="form-control" id="englishName" name="englishName">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">工号：</label>
+                            <input type="text" class="form-control" id="employeeNumber" name="employeeNumber">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">手 机：</label>
+                            <input type="text" class="form-control" id="mobilePhone" name="mobilePhone">
+                            <input type="hidden" class="form-control" id="status" name="status" value="0" />
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="user/query">
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button type="button" id="back" data-url="html/baseinfo/userinfo/newBuildWechat.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../../js/baseinfo/userinfo/wechatUser.js"></script>

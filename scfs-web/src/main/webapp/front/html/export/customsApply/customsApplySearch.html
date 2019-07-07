@@ -1,0 +1,209 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>出口</li>
+            <li class="active">报关申请</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+                <div class="box">
+                    <div class="box-header">
+                        <form method="post" action="###" class="form-inline" id="searchForm">
+                            <div class="form-group-sm">
+                                <div class="search-item">
+                                    <label class="control-label ml10">项目：</label>
+                                    <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                                </div>
+                                <div class="search-item">     
+                                    <label class="control-label ml10">客户：</label>
+                                    <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+                                </div>
+                                <div class="search-item">                                              
+                                    <label class="control-label ml10">报关编号：</label>
+                                    <input type="text" class="form-control" id="applyNo" name="applyNo">   
+                                </div>
+                                <div class="search-item">    
+                                    <label class="control-label ml10">报关附属编号：</label>
+                                    <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">               
+                                </div>
+                                <div class="search-item">    
+                                    <label class="control-label">报关时间：</label>
+                                    <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartSend" value="" name="startCustomsDate"> -
+                                    <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndSend" value="" name="endCustomsDate"> 
+                                </div>
+                                <div class="search-item">                                                                                
+                                    <label class="control-label ml10">代理公司：</label>
+                                    <select class="form-control js-select" data-url="CUSTOMER" id="proxyCompanyId" name="proxyCompanyId"></select>
+                                </div>
+                                <div class="search-item">            
+                                    <label class="control-label ml10">状态：</label>
+                                    <select class="form-control js-select" data-url="CUSTOMS_APPLY_STATUS" id="status" name="status"></select>
+                                </div>
+                                <div class="search-item">
+                                  <label class="control-label ml10">是否合计：</label>
+                                  <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select> 
+                             	  <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                                  <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                                  <button type="button" id="btnNew" data-url="html/export/customsApply/customsApplyCreate.html" data-permissionUrl="/customsApply/add" class="btn btn-warning btn-sm ml10">新建</button>                                                       
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="js_dataTable" data-url="customsApply/query">
+                        </table>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+  	    var id = row.id;
+  	    layer.confirm('确定要删除吗？', {
+  	        btn: ['确定', '取消'] //按钮
+  	    }, function() {
+  	    	GLOBAL.ajax("customsApply/delete", {id: id}, function(){
+  	    		layer.msg("删除成功", {
+  	                icon: 1
+  	            })
+  	            $("#btnSearch").click();
+  	    	})
+  	    }, function() {});
+    },
+    'click .submit': function (e, value, row, index) {
+  		var id = row.id;
+  	    if(id){
+  	    	layer.confirm('确定要提交吗？', {
+  		        btn: ['确定', '取消'] //按钮
+  		    }, function() {
+  		         GLOBAL.ajax("customsApply/submit", {id: id}, function(e) {
+  	                if (e.success) {
+  	                    layer.msg("提交成功！");
+  	                    $("#btnSearch").click();
+  	                } else {
+  	                    layer.msg(e.msg);
+  	                }
+  	            });
+  		    }, function() {});
+  	    }
+    },
+    'click .edit': function (e, value, row, index) {
+  		var id = row.id;
+  		options.param.id = id;
+  		GLOBAL.go("html/export/customsApply/customsApplyEdit.html", options.param);
+    },
+    'click .scan': function (e, value, row, index) {
+    	var id = row.id;
+  		options.param.id = id;
+  		GLOBAL.go("html/export/customsApply/customsApplyScan.html", options.param);
+    },
+    'click .print': function(e, value, row, index){
+		if(row){
+			var id = row.id;
+			window.open("html/export/customsApply/customsApplyPrint.html?id="+id);
+		}
+    }
+};
+
+/*数据表格*/
+var tabCols = [
+	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '报关编号',
+	     field: 'applyNo',
+	     align: 'center'
+	 }, {
+	     title: '报关附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '代理公司',
+	     field: 'proxyCompanyName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+	     title: '税率',
+	     field: 'taxRate',
+	     align: 'center'
+	 }, {
+	     title: '报关数量',
+	     field: 'customsNum',
+	     align: 'center'
+	 }, {
+	     title: '报关含税金额',
+	     field: 'customsAmount',
+	     align: 'center'
+	 }, {
+	     title: '报关税额',
+	     field: 'customsTaxAmount',
+	     align: 'center'
+	 }, {
+	     title: '报关时间',
+	     field: 'customsDate',
+	     align: 'center'
+	 },{
+	     title: '创建人',
+	     field: 'creator',
+	     align: 'center'
+	 }, {
+		 title: '创建时间',
+		 field: 'createAt',
+		 align: 'center'
+	 }, {
+	     title: '状态',
+	     field: 'statusName',
+	     align: 'center'
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents 
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null,null,{
+		onLoadSuccess: function(data){
+			if(data.options.totalAmount != null){
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：报关申请总金额："+data.options.totalAmount+"&nbsp;"+data.options.currency
+						+",&nbsp;报关申请总数量："+data.options.totalNum+"</b></td></tr>");			
+			}
+		}
+	});
+
+  //还原查询条件及过滤后的数据
+  GLOBAL.restoreQuery($('#js_dataTable'));
+}
+
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+      var url = $('#js_dataTable').data("url");
+      GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+
+
+</script>

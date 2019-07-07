@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.ReportProjectDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.ReportProject">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="report_type" jdbcType="TINYINT" property="reportType" />
+		<result column="project_id" jdbcType="TINYINT" property="projectId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, report_type, project_id, create_at, update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_project
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_report_project
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.ReportProject">
+		insert into tb_report_project
+		(id, report_type, project_id)
+		values (#{id,jdbcType=INTEGER},
+		#{reportType,jdbcType=TINYINT},
+		#{projectId,jdbcType=TINYINT})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.ReportProject">
+		update tb_report_project
+		<set>
+			<if test="reportType != null">
+				report_type = #{reportType,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryEntityByProjectId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_project
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByProjectId" parameterType="java.lang.Integer">
+		delete from
+		tb_report_project
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</delete>
+
+	<select id="queryEntityByReportType" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select project_id
+		from tb_report_project
+		where report_type =
+		#{reportType,jdbcType=INTEGER}
+	</select>
+
+
+
+</mapper>

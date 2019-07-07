@@ -1,0 +1,265 @@
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>事项管理</li>
+			<li class="active">新建</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="customerMaintain/detail">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<ul class="nav nav-tabs">
+			                  <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/matter/matterManageCreate.html">基础信息</a></li>
+		                 	</ul>
+							<table class="table table-bordered table-hover no-margin">
+								 <tr>
+									<td class="text-right"><b>事项名称：</b></td>
+									<td class="text-left" colspan="3">
+										<label class="form-control" id="matterNameValue" name="matterNameValue">
+									</td>
+								</tr>
+								 <tr width="280">
+				                     <td class="text-right" ><b>事项描述：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" >
+										<textarea class="form-control" id="matterDescribe" name="matterDescribe"></textarea>
+									 </td>
+									 <td class="text-right"><b>客户类型：<!-- <em class="text-star">*</em> --></b></td>
+				                     <td class="text-left">
+				                     	<label class="form-control" id="matterType" name="matterType">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>所处阶段：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <select class="form-control js-select" data-url="MATTER_STAGE" id="stage" name="stage"></select>
+				                     </td>
+				                     
+				                     <td class="text-right showProject"><b>项目：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left showProject">
+	                                   <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+	                               	 </td>
+	                               	 
+	                               	 <td class="text-right showAbbreviate"><b>客户简称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left showAbbreviate">
+				                     	<input type="text" class="form-control js-initform" id="abbreviation" name="customerAbbreviate">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>客户名称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                     	<input type="text" class="form-control js-initform" id="chineseName" name="customerName">
+				                     </td>
+				                     <td class="text-right"><b>办公地址：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	<input type="text" class="form-control js-initform" id="officeAddress" name="officeAddress">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>香港公司全称：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="hkCompany" name="hkCompany">
+				                     </td>
+				                     <td class="text-right"><b>注册地址：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	<input type="text" class="form-control js-initform" id="regPlace" name="regAddress">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>联系人：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control js-initform" id="contacts" name="contacts">
+				                     </td>
+				                     <td class="text-right"><b>联系电话：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	 <input type="text" class="form-control js-initform" id="contactsNumber" name="contactsNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>企业主营业务：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <input type="text" class="form-control" id="enterpriseBus" name="enterpriseBus">
+				                     </td>
+				                     <td class="text-right"><b>铺货商品：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	 <input type="text" class="form-control" id="disGoods" name="disGoods">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>业务审核人：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <select class="form-control js-select" data-url="USER" id="bizManagerId" name="bizManagerId"></select>
+				                     </td>
+				                     
+				                     <td class="text-right"><b>商务审核人：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   <select class="form-control js-select" data-url="USER" id="businessManagerId" name="businessManagerId"></select>
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>部门主管审核人：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <select class="form-control js-select" data-url="USER" id="departmentId" name="departmentId"></select>
+				                     </td>
+				                     
+				                     <td class="text-right"><b>法务审核人：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   <select class="form-control js-select" data-url="USER" id="justiceId" name="justiceId"></select>
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>财务主管审核人：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <select class="form-control js-select" data-url="USER" id="financeManagerId" name="financeManagerId"></select>
+				                     </td>
+				                     
+				                     <td class="text-right"><b>分控主管审核人：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   <select class="form-control js-select" data-url="USER" id="riskManagerId" name="riskManagerId"></select>
+	                               	 </td>
+				                  </tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left" colspan="3">
+										<textarea class="form-control" id="remark" name="remark"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/matterManage/add">保存</button>
+					<button type="button" id="back" data-url="html/baseinfo/matter/matterManageSearch.html" class="btn btn-default btn-sm js-back showProject">返回</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMatterManage.html" class="btn btn-default btn-sm js-back showAbbreviate">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		var followId;
+		if(options.param.followId){
+			followId = options.param.followId;
+			GLOBAL.getEditData($("#form1"), followId);
+		}
+		
+		
+		var matterName = options.param.matterName;
+		if(matterName==1){
+			$(".showAbbreviate").show();	
+	    	$(".showProject").hide();
+	    	$("#matterNameValue").text("项目导入表");
+	    	$("#matterType").text("客户事项");
+	    }else{
+	    	$(".showProject").show();	
+	    	$(".showAbbreviate").hide();
+	    	$("#matterNameValue").text("项目监控");
+	    	$("#matterType").text("项目事项");
+	    }
+		
+		
+		$("#form1").validate({
+			rules : {
+				matterDescribe : {
+					required : true,
+					maxlength : 200
+				},
+				matterType: {
+					required : true
+				},
+				stage : {
+					required : true
+				},
+				projectId : {
+					required : true
+				},
+				customerAbbreviate : {
+					required : true,
+					maxlength : 50
+				},
+				customerName : {
+					required : true,
+					maxlength : 100
+				},
+				officeAddress : {
+					required : true,
+					maxlength : 500
+				},
+				hkCompany : {
+					required : true,
+					maxlength : 100
+				},
+				regAddress : {
+					required : true,
+					maxlength : 200
+				},
+				contacts : {
+					required : true,
+					maxlength : 50
+				},
+				contactsNumber : {
+					required : true,
+					maxlength : 20
+				},
+				enterpriseBus : {
+					required : true,
+					maxlength : 100
+				},
+				disGoods : {
+					required : true,
+					maxlength : 100
+				},
+				bizManagerId : {
+					required : true
+				},
+				businessManagerId : {
+					required : true
+				},
+				departmentId : {
+					required : true
+				},
+				justiceId : {
+					required : true
+				},
+				financeManagerId : {
+					required : true
+				},
+				riskManagerId : {
+					required : true
+				},
+				remark : {
+					maxlength : 200
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				data.matterName = matterName;
+				data.custMainId = followId;
+				GLOBAL.ajax("matterManage/add", data, function(e) {
+					if (e.success) {
+						layer.msg("新增成功！");
+						if(matterName==1){
+							GLOBAL.go("html/baseinfo/customer/customerMatterManage.html");
+						}else{
+							GLOBAL.go("html/baseinfo/matter/matterManageSearch.html");
+						}
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+	}
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.api.pms.PmsStoreInDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.api.pms.entity.PmsStoreIn">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pms_series_id" jdbcType="INTEGER" property="pmsSeriesId" />
+		<result column="po_id" jdbcType="INTEGER" property="poId" />
+		<result column="purchase_sn" jdbcType="VARCHAR" property="purchase_sn" />
+		<result column="provider_sn" jdbcType="VARCHAR" property="provider_sn" />
+		<result column="account_sn" jdbcType="VARCHAR" property="account_sn" />
+		<result column="currency_type" jdbcType="VARCHAR" property="currency_type" />
+		<result column="sku" jdbcType="VARCHAR" property="sku" />
+		<result column="stockin_num" jdbcType="DECIMAL" property="stockin_num" />
+		<result column="purchase_price" jdbcType="DECIMAL" property="purchase_price" />
+		<result column="stockin_time" jdbcType="TIMESTAMP" property="stockin_time" />
+		<result column="purchase_delivery_sn" jdbcType="VARCHAR"
+			property="purchase_delivery_sn" />
+		<result column="flag" jdbcType="INTEGER" property="flag" />
+		<result column="deal_flag" jdbcType="INTEGER" property="dealFlag" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
+		<result column="deal_msg" jdbcType="VARCHAR" property="dealMsg" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pms_series_id, purchase_sn, provider_sn, currency_type,
+		sku,
+		stockin_num,
+		purchase_price, stockin_time, purchase_delivery_sn,
+		create_at,
+		update_at,flag,msg,deal_flag,deal_msg,po_id,account_sn
+	</sql>
+	<sql id="detail_column_List">
+		tpsi.id, tpsi.pms_series_id, tpsi.purchase_sn,
+		tpsi.provider_sn,
+		tpsi.currency_type, tpsi.sku, tpsi.stockin_num,
+		tpsi.purchase_price, tpsi.stockin_time, tpsi.purchase_delivery_sn,
+		tpsi.create_at,
+		tpsi.update_at,tpsi.flag,tpsi.msg,tpsi.deal_flag,tpsi.deal_msg,tpsi.po_id
+	</sql>
+	<select id="queryPmsStoreIn" resultMap="BaseResultMap">
+		select
+		<include refid="detail_column_List" />
+		from tb_pms_store_in tpsi where tpsi.flag = 0 and tpsi.deal_flag = 1
+		group by tpsi.purchase_sn,tpsi.provider_sn,tpsi.currency_type
+	</select>
+	<select id="queryPmsStoreInByCon" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.po.dto.req.PmsStoreInReqDto">
+		select
+		<include refid="detail_column_List" />
+		from tb_pms_store_in tpsi inner join tb_pms_series tps on
+		tpsi.pms_series_id = tps.id
+		<where>
+			tpsi.flag = 0
+			<if test="dealFlag != null and dealFlag != ''">
+				AND tpsi.deal_flag = #{dealFlag,jdbcType=INTEGER}
+			</if>
+			<if test="purchase_sn != null and purchase_sn != ''">
+				AND tpsi.purchase_sn = #{purchase_sn,jdbcType=VARCHAR}
+			</if>
+			<if test="provider_sn != null and provider_sn != '' ">
+				AND tpsi.provider_sn = #{provider_sn,jdbcType=VARCHAR}
+			</if>
+			<if test="currency_type != null and currency_type !='' ">
+				AND tpsi.currency_type =
+				#{currency_type,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_store_in
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_pms_store_in
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.api.pms.entity.PmsStoreIn">
+		insert into tb_pms_store_in
+		(id, pms_series_id, purchase_sn,
+		provider_sn, currency_type, sku,
+		stockin_num, purchase_price, stockin_time,
+		purchase_delivery_sn,
+		create_at, update_at,flag,msg,deal_flag,deal_msg,account_sn,po_id
+		)
+		values (#{id,jdbcType=INTEGER}, #{pmsSeriesId,jdbcType=INTEGER},
+		#{purchase_sn,jdbcType=VARCHAR},
+		#{provider_sn,jdbcType=VARCHAR},
+		#{currency_type,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR},
+		#{stockin_num,jdbcType=DECIMAL}, #{purchase_price,jdbcType=DECIMAL},
+		#{stockin_time,jdbcType=TIMESTAMP},
+		#{purchase_delivery_sn,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP},
+		#{flag,jdbcType=INTEGER}, #{msg,jdbcType=VARCHAR},
+		#{dealFlag,jdbcType=INTEGER}, #{dealMsg,jdbcType=VARCHAR},
+		#{account_sn,jdbcType=VARCHAR},
+		IFNULL(#{poId,jdbcType=INTEGER}, 0)
+		)
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.api.pms.entity.PmsStoreIn">
+		update tb_pms_store_in
+		<set>
+			<if test="pmsSeriesId != null">
+				pms_series_id = #{pmsSeriesId,jdbcType=INTEGER},
+			</if>
+			<if test="purchase_sn != null">
+				purchase_sn = #{purchase_sn,jdbcType=VARCHAR},
+			</if>
+			<if test="provider_sn != null">
+				provider_sn = #{provider_sn,jdbcType=VARCHAR},
+			</if>
+			<if test="currency_type != null">
+				currency_type = #{currency_type,jdbcType=VARCHAR},
+			</if>
+			<if test="sku != null">
+				sku = #{sku,jdbcType=VARCHAR},
+			</if>
+			<if test="stockin_num != null">
+				stockin_num = #{stockin_num,jdbcType=DECIMAL},
+			</if>
+			<if test="purchase_price != null">
+				purchase_price = #{purchase_price,jdbcType=DECIMAL},
+			</if>
+			<if test="stockin_time != null">
+				stockin_time = #{stockin_time,jdbcType=TIMESTAMP},
+			</if>
+			<if test="purchase_delivery_sn != null">
+				purchase_delivery_sn =
+				#{purchase_delivery_sn,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=INTEGER},
+			</if>
+			<if test="msg != null">
+				msg = #{msg,jdbcType=VARCHAR},
+			</if>
+			<if test="dealFlag != null">
+				deal_flag = #{dealFlag,jdbcType=VARCHAR},
+			</if>
+			<if test="dealMsg != null and dealMsg != ''">
+				deal_msg = #{dealMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="poId != null and poId != ''">
+				po_id = #{poId,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into tb_pms_store_in(id, pms_series_id, purchase_sn,
+		provider_sn, currency_type, sku,
+		stockin_num, purchase_price,
+		stockin_time,
+		purchase_delivery_sn, create_at,
+		update_at,flag,msg,deal_flag,deal_msg)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id,jdbcType=INTEGER},
+			#{item.pmsSeriesId,jdbcType=INTEGER},
+			#{item.purchase_sn,jdbcType=VARCHAR},
+			#{item.provider_sn,jdbcType=VARCHAR},
+			#{item.currency_type,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR},
+			#{item.stockin_num,jdbcType=DECIMAL},
+			#{item.purchase_price,jdbcType=DECIMAL},
+			#{item.stockin_time,jdbcType=TIMESTAMP},
+			#{item.purchase_delivery_sn,jdbcType=VARCHAR},
+			#{item.createAt,jdbcType=TIMESTAMP},
+			#{item.updateAt,jdbcType=TIMESTAMP}
+			, #{item.flag,jdbcType=INTEGER},
+			#{item.msg,jdbcType=VARCHAR},
+			#{item.dealFlag,jdbcType=INTEGER}
+			,
+			#{item.dealMsg,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+	<select id="queryPmsStoreInBySeries" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_store_in where pms_series_id= #{id,jdbcType=INTEGER} and
+		flag=0
+	</select>
+	<!-- 根据pms流水号查询当前入库的失败数据 -->
+	<select id="queryPmsStoreInFailure" resultMap="BaseResultMap"
+		parameterType="com.scfs.domain.interf.dto.PmsDistributionSearchReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pms_store_in where pms_series_id= #{id,jdbcType=INTEGER} and
+		flag=0
+		and deal_flag=2
+	</select>
+
+</mapper>

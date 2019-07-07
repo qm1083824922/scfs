@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.sale.SalesDailyWecharDao">
+	<sql id="SalesDailyWechar_Column_List">
+		id,
+		department_user_id,
+		daily_date,
+		daily_sales,
+		month_sales,
+		daily_pay,
+		month_pay,
+		daily_payment,
+		month_payment,
+		stl_num,
+		stl_amount,
+		currnecy_type,
+		send_state,
+		send_date,
+		create_at,
+		update_at
+	</sql>
+	<resultMap id="SalesDailyWecharResultMap" type="com.scfs.domain.sale.entity.SalesDailyWechar">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="department_user_id" property="departmentUserId"
+			jdbcType="INTEGER" />
+		<result column="daily_date" property="dailyDate" jdbcType="VARCHAR" />
+		<result column="daily_sales" property="dailySales" jdbcType="DECIMAL" />
+		<result column="month_sales" property="monthSales" jdbcType="DECIMAL" />
+		<result column="daily_pay" property="dailyPay" jdbcType="DECIMAL" />
+		<result column="month_pay" property="monthPay" jdbcType="DECIMAL" />
+		<result column="daily_payment" property="dailyPayment"
+			jdbcType="DECIMAL" />
+		<result column="month_payment" property="monthPayment"
+			jdbcType="DECIMAL" />
+		<result column="stl_num" property="stlNum" jdbcType="DECIMAL" />
+		<result column="stl_amount" property="stlAmount" jdbcType="DECIMAL" />
+		<result column="currnecy_type" property="currnecyType"
+			jdbcType="TINYINT" />
+		<result column="send_state" property="sendState" jdbcType="TINYINT" />
+		<result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryResultsByCon" resultMap="SalesDailyWecharResultMap"
+		parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto">
+		select
+		<include refid="SalesDailyWechar_Column_List" />
+		from tb_sales_daily_wechar
+		where 1=1
+		<if test="departmentUserId != null">
+			AND department_user_id=#{departmentUserId}
+		</if>
+		<if test="dailyDate != null and dailyDate !=''">
+			AND dailyDate=#{dailyDate}
+		</if>
+		<if test="dailyDate != null and dailyDate !=''">
+			AND daily_date=#{dailyDate}
+		</if>
+		<if test="sendState != null">
+			AND send_state=#{sendState}
+		</if>
+		<if test="currnecyType != null">
+			AND currnecy_type=#{currnecyType}
+		</if>
+	</select>
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="SalesDailyWecharResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="SalesDailyWechar_Column_List" />
+		from tb_sales_daily_wechar
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.sale.entity.SalesDailyWechar"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_sales_daily_wechar(
+		department_user_id,
+		daily_date,
+		daily_sales,
+		month_sales,
+		daily_pay,
+		month_pay,
+		daily_payment,
+		month_payment,
+		stl_num,
+		stl_amount,
+		<if test="currnecyType != null">
+			currnecy_type,
+		</if>
+		send_state,
+		send_date,
+		create_at
+		)
+		VALUES
+		(
+		#{departmentUserId,jdbcType=INTEGER},
+		#{dailyDate,jdbcType=VARCHAR},
+		#{dailySales,jdbcType=DECIMAL},
+		#{monthSales,jdbcType=DECIMAL},
+		#{dailyPay,jdbcType=DECIMAL},
+		#{monthPay,jdbcType=DECIMAL},
+		#{dailyPayment,jdbcType=DECIMAL},
+		#{monthPayment,jdbcType=DECIMAL},
+		#{stlNum,jdbcType=DECIMAL},
+		#{stlAmount,jdbcType=DECIMAL},
+		<if test="currnecyType != null">
+			#{currnecyType,jdbcType=TINYINT},
+		</if>
+		#{sendState,jdbcType=TINYINT},
+		#{sendDate,jdbcType=TIMESTAMP},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<!-- 修改数据 -->
+	<update id="update" parameterType="com.scfs.domain.sale.entity.SalesDailyWechar">
+		update tb_sales_daily_wechar
+		<set>
+			id = #{id}
+			<if test="sendState !=null">
+				,send_state=#{sendState,jdbcType=DECIMAL}
+			</if>
+			<if test="sendDate !=null">
+				,send_date=#{sendDate,jdbcType=DECIMAL}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!--获取销售额 -->
+	<select id="querySaleAmount" parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto"
+		resultMap="SalesDailyWecharResultMap">
+		SELECT
+		SUM(IFNULL(dtl.required_send_num,0)*IFNULL(dtl.required_send_price,0))
+		AS month_sales,bdl.currency_type AS currnecy_type FROM
+		tb_bill_delivery_dtl dtl
+		INNER JOIN
+		tb_bill_delivery bdl ON
+		dtl.bill_delivery_id=bdl.id
+		INNER JOIN
+		tb_base_user_project bup ON
+		bdl.project_id=bup.project_id
+		WHERE
+		bdl.is_delete=0
+		AND bdl.STATUS=5
+		AND
+		bup.is_delete = 0
+		<if test="departmentUserId != null">
+			AND bup.user_id=#{departmentUserId}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(bdl.required_send_date ,'%Y-%m-%d') &gt;=
+			#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(bdl.required_send_date ,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY bdl.currency_type;
+	</select>
+	<!-- 获取付款金额 -->
+	<select id="queryPayAmount" parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto"
+		resultMap="SalesDailyWecharResultMap">
+		SELECT SUM(IFNULL(pay.real_pay_amount,0)) AS
+		month_pay,pay.real_currency_type AS currnecy_type FROM
+		tb_pay_order pay
+		INNER JOIN tb_base_user_project bup ON
+		pay.project_id=bup.project_id
+		WHERE pay.is_delete=0
+		AND pay.state=6
+		AND
+		bup.is_delete = 0
+		<if test="departmentUserId != null">
+			AND bup.user_id=#{departmentUserId}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(pay.confirmor_at ,'%Y-%m-%d') &gt;=
+			#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(pay.confirmor_at ,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY pay.real_currency_type;
+	</select>
+	<!-- 获取回款金额 -->
+	<select id="queryPayment" parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto"
+		resultMap="SalesDailyWecharResultMap">
+		select sum(ifnull(bank.actual_receipt_amount,0)) as
+		month_payment,bank.currency_type AS currnecy_type from
+		tb_fi_bank_receipt bank
+		INNER JOIN
+		tb_base_user_project bup ON
+		bank.project_id=bup.project_id
+		where
+		bank.is_delete=0
+		and bank.state=3
+		AND bup.is_delete = 0
+		<if test="departmentUserId != null">
+			AND bup.user_id=#{departmentUserId}
+		</if>
+		<if test="startDate != null and startDate !=''">
+			AND DATE_FORMAT(bank.receipt_date ,'%Y-%m-%d') &gt;=
+			#{startDate}
+		</if>
+		<if test="endDate != null and endDate !=''">
+			AND DATE_FORMAT(bank.receipt_date ,'%Y-%m-%d') &lt;=
+			#{endDate}
+		</if>
+		GROUP BY bank.currency_type
+	</select>
+	<!-- 获取库存数量 -->
+	<select id="queryStlNum" parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT
+		SUM(IFNULL(stl.store_num,0)-IFNULL(lock_num,0)-IFNULL(sale_lock_num,0))
+		AS blance_num FROM tb_stl stl
+		INNER JOIN tb_base_user_project bup ON
+		stl.project_id=bup.project_id
+		WHERE bup.is_delete = 0
+		<if test="departmentUserId != null">
+			AND bup.user_id=#{departmentUserId}
+		</if>
+	</select>
+	<!-- 获取库存金额 -->
+	<select id="queryStlAmount" parameterType="com.scfs.domain.sale.dto.req.SalesDailyWecharReqDto"
+		resultMap="SalesDailyWecharResultMap">
+		SELECT
+		SUM((IFNULL(stl.store_num,0)-IFNULL(lock_num,0)-IFNULL(sale_lock_num,0))
+		* IFNULL(cost_price,0)) AS stl_amount,stl.currency_type AS
+		currnecy_type FROM tb_stl stl
+		INNER JOIN
+		tb_base_user_project bup ON
+		stl.project_id=bup.project_id
+		WHERE
+		bup.is_delete = 0
+		AND
+		bup.user_id=12545
+		<if test="departmentUserId != null">
+			AND bup.user_id=#{departmentUserId}
+		</if>
+		GROUP BY stl.currency_type
+	</select>
+	<!-- 获取所有部门负责人 -->
+	<select id="queryUserByRole" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT
+		user_id
+		FROM tb_base_user_roles
+		WHERE is_delete = 0
+		AND
+		role_id =#{roleId}
+	</select>
+</mapper>

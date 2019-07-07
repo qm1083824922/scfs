@@ -1,0 +1,494 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>发票申请</li>
+            <li class="active">财务审核</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+            <div class="box no-margin">
+                <form class="form-horizontal" id="form1" data-url="invoice/finance/audit">
+                    <div class="box-header">
+                        <h3 class="mb5">财务主管审核</h3>
+                        <table class="table table-bordered table-hover no-margin">
+                            <tr>
+                                <td width="180" class="text-right"><b>申请编号：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="applyNo"></label>
+                                </td>
+                                <td width="180" class="text-right"><b>单据类别：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="billTypeName"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="180" class="text-right"><b>项目：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="projectName"></label>
+                                </td>
+                                <td class="text-right"><b>客户：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="customerName"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>票据类型：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="invoiceTypeName"></label>
+                                </td>
+                                <td class="text-right"><b>电子普通发票：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="isElecInvoiceValue"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right"><b>申请总额：</b></td>
+                                <td class="text-left">
+                                    <label class="js-initform" id="applyAmount"></label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- .box-body -->
+                    <div class="box-body">
+                        <div id="saleSelect">
+                            <h3 class="one mt10 mb5">已选销售明细</h3>
+                            <table id="js_invoiceSaleInfo"></table>
+                        </div>
+                        <div id="feeSelect">
+                            <h3 class="one">已选费用</h3>
+                            <table id="js_invoiceFeeInfo"> </table>
+                        </div>
+                        <div class="box-header">
+                            <h3>发票信息</h3>
+                            <div id="invoiceInfo"></div>
+                        </div>
+                    </div>
+                    <!-- /.box-footer -->
+                    <div class="box-body">
+                    	<h4 class="mt10 mb5">附件</h4>
+          				<table id="js_dataTable"></table>
+                        <p class="text-center mt10">
+                            <button type="button" data-url="invoiceApplyFileList/downLoad" class="btn btn-primary btn-sm attachment-down">批量下载</button>
+                        </p>
+                        <h4 class="mt20 mb5">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="/invoice/auditflow/audit/query" style="width:100%;"></table>
+                    </div>
+                    <!-- .box-body -->
+                    <div class="box-footer text-center">
+                        <div class="form-inline" style="width:500px; margin:auto">
+                            <textarea style="margin-bottom: 10px; width:500px" class="form-control js-initform" id="suggestion" rows="3" name="suggestion" placeholder="审核意见"></textarea>
+                            <p class="mt20">
+                                <button type="button" data-url="invoice/financePass2/audit" data-permissionUrl="/invoice/financePass2/audit" class="btn btn-primary btn-sm" id="pass">审核通过</button>
+                                <button type="button" data-url="invoice/financeunPass/audit" data-permissionUrl="/invoice/financeunPass/audit" class="btn btn-primary btn-sm punpass" id="unpass">审核不通过</button>
+                                <button type="button" data-url="invoice/financePass2/audit" data-permissionUrl="/invoice/financePass2/audit" class="btn btn-primary btn-sm" id="passAndNext">通过并审核下一个</button>
+                                <button type="button" class="btn btn-default btn-sm js-back">返回</button>
+                            </p>
+                            <p class="mt20 psigh" style="display:none">
+                                <label class="control-label pull-rihgt">加签给:</label>
+                                <select class="form-control js-select" data-url="USER" id="sighId" name="sighId"></select>
+                                <button type="button" data-url="/invoice/sign/audit" data-permissionUrl="/invoice/sign/audit" class="btn btn-primary btn-sm" id="sigh">加签</button>
+                            </p>
+                            <p class="mt20 pdeliver" style="display:none">
+                                <label class="control-label pull-rihgt">转交给:</label>
+                                <select class="form-control js-select" data-url="USER" id="deliverId" name="deliverId"></select>
+                                <button type="button" data-url="/invoice/deliver/audit" data-permissionUrl="/invoice/deliver/audit" class="btn btn-primary btn-sm" id="deliver">转交</button>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </section>
+</div>
+<script>
+options.initPage = function() {
+
+    /*数据表格*/
+    var tabCols = [
+        {
+            title: '序号',
+            field: 'columnsNumber',
+            width: '5%'
+        }, {
+            title: '流程节点',
+            field: "stateName",
+            width: '15%'
+        }, {
+            title: '处理人',
+            field: "dealName",
+            width: '15%'
+        }, {
+            title: '处理意见',
+            field: "suggestion",
+            width: '25%'
+        }, {
+            title: '开始时间',
+            field: "createTime",
+            width: '15%'
+        }, {
+            title: "处理时间",
+            field: "dealTime",
+            width: '15%'
+        }, {
+            title: "处理状态",
+            field: "auditStateName",
+            width: '10%'
+        }
+    ];
+    var feeTabCols = [
+        {
+            title: '序号',
+            field: 'columnsNumber',
+            width: 10
+        }, {
+            title: '费用编号',
+            field: 'feeNo',
+            width: 92,
+            align: 'center'
+        }, {
+            title: '费用类型',
+            field: 'feeTypeName',
+            width: 85,
+            align: 'center'
+        }, {
+            title: '费用日期',
+            field: 'feeDate',
+            width: 80,
+            align: 'center'
+        }, {
+            title: '费用金额',
+            field: 'provideInvoiceAmount',
+            width: 100,
+            align: 'center'
+        }
+    ];
+    var saleTabCols = [
+        {
+            title: '序号',
+            field: 'columnsNumber',
+            width: 10
+        }, {
+            title: '销售/退货单编号',
+            field: 'billNo',
+            width: 92,
+            align: 'center'
+        }, {
+            title: '单据日期',
+            field: 'billDate',
+            width: 85,
+            align: 'center'
+        }, {
+            title: '商品编号',
+            field: 'number',
+            width: 80,
+            align: 'center'
+        }, {
+            title: '商品描述',
+            field: 'name',
+            width: 100,
+            align: 'center'
+        }, {
+            title: '数量',
+            field: 'provideInvoiceNum',
+            width: 100,
+            align: 'center'
+        }, {
+            title: '金额',
+            field: 'provideInvoiceAmount',
+            width: 100,
+            align: 'center'
+        }
+    ];
+    window.operateEvents = {
+    		'click .download': function(e, value, row, index){
+    			options.param.id = row.id;
+    			var url = GLOBAL.host + "invoiceApplyFile/downLoad?fileId="+row.id;
+    			GLOBAL.preview({type: row.type, url: url});
+    	    },
+        
+    };
+    /*数据表格*/
+    var fileCols = [
+           {
+    		 field: 'checkItem',
+    		 checkbox: true,
+           },{  
+    	     title: '序号',
+    	     field: 'columnsNumber',  
+    	     width: 10
+         },{
+    	     title: '文件名称',
+    	     field: 'name',
+    	     width: 92,
+    	     align: 'center'
+    	 },  {
+    	     title: '文件类型',
+    	     field: 'type',
+    	     width: 80,
+    	     align: 'center'
+    	 },{
+    	     title: '上传人',
+    	     field: 'creator',
+    	     width: 80,
+    	     align: 'center'
+    	 },  {
+    	     title: '上传时间',
+    	     field: 'createAt',
+    	     width: 80,
+    	     align: 'center'
+    	 }, {
+    	     title: '操作',
+    	     field: 'operta',
+    	     width: 100,
+    	     align: 'center',
+    	     events: operateEvents,
+             formatter: operateFormatter
+    	 } 
+    ];
+
+    function operateFormatter(value, row, index) {
+        return [
+                '<a class="download" href="javascript:void(0)">',
+                '<span class="btn btn-primary btn-sm">下载</span>',
+                '</a>  '
+            ].join('');
+    }
+    var $from = $("#form1");
+    var url = $from.data("url");
+    GLOBAL.ajax(url, {
+        poId: options.param.poId
+    }, function(e) {
+        if (e.success) {
+            if (e.items) {
+                var data = e.items.invoiceApplyManager;
+                if (data) {
+                    $(".js-initform", $from).each(function() {
+                        var $this = $(this);
+                        var id = $this.attr("id");
+                        data[id] = data[id] == null ? "" : data[id];
+                        if (this.nodeName.toLowerCase() == "label") {
+                            if (data[id] ) {
+                                $this.text(data[id]);
+                            }
+                        } else {
+                            $this.val(data[id]);
+                        }
+                    });
+                }
+                var dtls = e.items.invoiceFeeManagerList;
+                if (dtls) {
+                    GLOBAL.initTable($('#js_invoiceFeeInfo'), feeTabCols, null, dtls, {
+                        pagination: false
+                    });
+                    $("#saleSelect").hide();
+                }
+                var saledtls = e.items.invoiceSaleManagerList;
+                if (saledtls) {
+                    GLOBAL.initTable($('#js_invoiceSaleInfo'), saleTabCols, null, saledtls, {
+                        pagination: false
+                    });
+                    $("#feeSelect").hide();
+                }
+                var fileAttachList = e.items.projectItemFileAttachList;
+                if(fileAttachList){
+                	 GLOBAL.initTable($('#js_dataTable'), fileCols, null, fileAttachList, {pagination: false});
+                }
+                var simulationdtl = e.items.invoiceInfoDtl;
+                if (simulationdtl) {
+                    var invoiceInfo = "";
+                    for (var i = 0; i < simulationdtl.length; i++) {
+                        var invoiceInfoList = simulationdtl[i].invoiceInfoList;
+                        var invoiceDtlInfoList = simulationdtl[i].invoiceDtlInfoList;
+                        for (var k in invoiceInfoList) {
+                            if (invoiceInfoList[k] == null) {
+                                invoiceInfoList[k] = '';
+                            }
+                        }
+                        invoiceInfo += '<section class="invoiceNo mt10"><input class="js-initform" type="hidden" id="id" name="id" /><p></p><h4 class="pull-left mt10 mb10">发票编号：' + invoiceInfoList.invoiceNo + '</h4><div class="pull-right"></div><p></p><table class="table table-bordered table-hover no-margin"><tbody><tr><td width="180" class="text-right"><b>发票号：</b></td><td class="text-left"><label class="js-initform" id="orderNo">' + invoiceInfoList.invoiceCode + '</label></td><td width="180" class="text-right"><b>含税金额：</b></td><td class="text-left"><label class="js-initform" id="supplierName">' + invoiceInfoList.inRateAmount + '</label></td></tr><tr><td class="text-right"><b>客户全称：</b></td><td class="text-left"><label class="js-initform" id="projectName">' + invoiceInfoList.customerName + '</label></td><td width="180" class="text-right"><b>未税金额：</b></td><td class="text-left"><label class="js-initform" id="customerName">' + invoiceInfoList.exRateAmount + '</label></td></tr><tr><td class="text-right"><b>纳税人识别号：</b></td><td class="text-left"><label class="js-initform" id="warehouseName">' + invoiceInfoList.taxPay + '</label></td><td class="text-right"><b>税额：</b></td><td class="text-left"><label class="js-initform" id="perdictTime">' + invoiceInfoList.rateAmount + '</label></td></tr><tr><td class="text-right"><b>开户银行：</b></td><td class="text-left"><label class="js-initform" id="orderTime">' + invoiceInfoList.bankName + '</label></td><td class="text-right"><b>折扣含税金额：</b></td><td class="text-left"><label class="js-initform" id="discountInRateAmount">' + invoiceInfoList.discountInRateAmount + '</label></td></tr><tr><td class="text-right"><b>开户账号：</b></td><td class="text-left"><label class="js-initform" id="wareAddrName">' + invoiceInfoList.accountNo + '</label></td><td class="text-right"><b>折扣未税金额：</b></td><td class="text-left"><label class="js-initform" id="availAmount">' + invoiceInfoList.discountExRateAmount + '</label></td></tr><tr><td class="text-right"><b>开票地址：</b></td><td class="text-left"><label class="js-initform" id="orderTotalAmount">' + invoiceInfoList.address + '</label></td><td class="text-right"><b>折扣税额：</b></td><td class="text-left"><label class="js-initform" id="">' + invoiceInfoList.discountRateAmount + '</label></td></tr><tr><td class="text-right"><b>开票电话：</b></td><td class="text-left"><label class="js-initform" id="useAmount">' + invoiceInfoList.phoneNumber + '</label></td><td class="text-right"><b>开票含税金额：</b></td><td class="text-left"><label class="js-initform" id="">' + invoiceInfoList.invoiceInAmount + '</label></td></tr><tr><td class="text-right"><b>开票未税金额：</b></td><td class="text-left"><label class="js-initform" id="useAmount" >' + invoiceInfoList.invoiceExAmount + '</label></td><td class="text-right"><b>开票税额：</b></td><td class="text-left"><label class="js-initform" id="ivnoiceAmount" >' + invoiceInfoList.invoiceRateAmount + '</label></td></tr><tr><td class="text-right"><b>开票日期：</b></td><td class="text-left"><label class="js-initform" id="isRequestPayName">' + invoiceInfoList.invoiceDate + '</label></td><td class="text-right"><b>票据备注：</b></td><td class="text-left"><label class="js-initform" id="isRequestPayName">' + invoiceInfoList.invoiceRemark + '</label></td></tr></tbody></table><table class="table mt20"><thead><tr><th>序号</th><th>名称</th><th>规格型号</th><th>税收分类</th><th>单位</th><th>数量</th><th>单价</th><th>税率</th><th>含税金额</th><th>未税金额</th><th>税额</th><th>折扣金额</th><th>折扣未税金额</th><th>折扣税额</th><th>折扣率</th></tr></thead><tbody> '
+                        for (var j = 0; j < invoiceDtlInfoList.length; j++) {
+                            for (var m in invoiceDtlInfoList[j]) {
+                                if (invoiceDtlInfoList[j][m] == null) {
+                                    invoiceDtlInfoList[j][m] = '';
+                                }
+                            }
+                            invoiceInfo += '<tr><td>' + (j + 1) + '</td><td>' + invoiceDtlInfoList[j].name + '</td><td>' + invoiceDtlInfoList[j].type + '</td><td>' + invoiceDtlInfoList[j].taxCateNo + '</td><td>' + invoiceDtlInfoList[j].unit + '</td><td>' + invoiceDtlInfoList[j].num + '</td><td>' + invoiceDtlInfoList[j].price + '</td><td>' + invoiceDtlInfoList[j].rate + '</td><td>' + invoiceDtlInfoList[j].inRateAmount + '</td><td>' + invoiceDtlInfoList[j].exRateAmount + '</td><td>' + invoiceDtlInfoList[j].rateAmount + '</td><td>' + invoiceDtlInfoList[j].discountInRateAmount + '</td><td>' + invoiceDtlInfoList[j].discountExRateAmount + '</td><td>' + invoiceDtlInfoList[j].discountRateAmount + '</td><td>' + invoiceDtlInfoList[j].discount + '</td></tr>';
+                        }
+                        invoiceInfo += '</tbody></table></section>';
+                    }
+                    $("#invoiceInfo").append(invoiceInfo);
+                }
+                GLOBAL.initTable($('#js_audit_dataTable'), tabCols, {
+                    InvoiceApplyId: options.param.poId
+                }, null, {
+                    pagination: false
+                });
+                GLOBAL.ajax('audit/id/query', {
+                    id: options.param.id
+                }, function(e) {
+                    var data = e.items;
+                    if (data) {
+                        if (data.auditType == 1 || data.auditType == 2) {
+                            $(".psigh,.pdeliver").show();
+                        } else {
+                            $(".punpass").hide();
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+
+$("#pass").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        InvoiceApplyId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+$("#passAndNext").click(function() {
+    var suggestion = $("#suggestion").val();
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        InvoiceApplyId: options.param.poId,
+        suggestion: suggestion || ""
+    }, function(e) {
+    	if (e.success) {
+        	GLOBAL.ajax("/audit/next/query", "", function(e) {
+                if (e.success) { 
+                	 var id = e.items.id;
+                     var state = e.items.state;
+                     var poId = e.items.poId;
+                     var poType = e.items.poType;
+                     options.param.id = id;
+                     options.param.poId = poId;  
+                     if (poType && state) { 
+                         GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+                     } 
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+}) 
+$("#unpass").click(function() {
+    var suggestion = $("#suggestion").val();
+    if (!suggestion) {
+        layer.msg("请输入审核意见");
+        return;
+    }
+    var url = $(this).data("url");
+    GLOBAL.ajax(url, {
+        auditId: options.param.id,
+        InvoiceApplyId: options.param.poId,
+        suggestion: suggestion
+    }, function(e) {
+        if (e.success) {
+            layer.msg("审核不通过成功！");
+            if (options.param.entryType == 1) {
+                GLOBAL.go("html/entry.html");
+            } else {
+                GLOBAL.go("html/audit/audit.html");
+            }
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+$(".js-back").click(function() {
+    if (options.param.entryType == 1) {
+        GLOBAL.go("html/entry.html");
+    } else {
+        GLOBAL.go("html/audit/audit.html");
+    }
+})
+
+$("#sigh").click(function() {
+    var url = $(this).data("url");
+    var sighId = $("#sighId").val();
+
+    if (sighId) {
+        layer.confirm('确定加签吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: sighId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("加签成功！");
+                    $("#sighId").val("");
+                    GLOBAL.tableRefresh($('#js_audit_dataTable'), {
+                        InvoiceApplyId: options.param.poId
+                    });
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#sighId").focus();
+    }
+})
+
+$("#deliver").click(function() {
+    var url = $(this).data("url");
+    var deliverId = $("#deliverId").val();
+
+    if (deliverId) {
+        layer.confirm('确定转交吗？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            GLOBAL.ajax(url, {
+                auditId: options.param.id,
+                pauditorId: deliverId
+            }, function(e) {
+                if (e.success) {
+                    layer.msg("转交成功！");
+                    $("#deliverId").val("");
+                    if (options.param.entryType == 1) {
+                        GLOBAL.go("html/entry.html");
+                    } else {
+                        GLOBAL.go("html/audit/audit.html");
+                    }
+                } else {
+                    layer.msg(e.msg);
+                }
+            });
+        });
+    } else {
+        layer.msg("请选择！");
+        $("#deliverId").focus();
+    }
+})
+
+$(".attachment-down").click(function(){
+    var ids = GLOBAL.selectIds($("#js_dataTable"));
+    if(ids){
+        var url = GLOBAL.host + $(this).data("url") + "?ids="+ids;
+        window.open(url); 
+    }
+})
+
+</script>

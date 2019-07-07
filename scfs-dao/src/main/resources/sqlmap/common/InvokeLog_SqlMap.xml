@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.InvokeLogDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.InvokeLog">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="invoke_type" jdbcType="INTEGER" property="invokeType" />
+		<result column="invoke_mode" jdbcType="INTEGER" property="invokeMode" />
+		<result column="module_type" jdbcType="TINYINT" property="moduleType" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_date" jdbcType="TIMESTAMP" property="billDate" />
+		<result column="provider" jdbcType="TINYINT" property="provider" />
+		<result column="consumer" jdbcType="TINYINT" property="consumer" />
+		<result column="is_success" jdbcType="TINYINT" property="isSuccess" />
+		<result column="return_msg" jdbcType="VARCHAR" property="returnMsg" />
+		<result column="try_num" jdbcType="TINYINT" property="tryNum" />
+		<result column="exception_msg" jdbcType="VARCHAR" property="exceptionMsg" />
+		<result column="try_again_flag" jdbcType="TINYINT" property="tryAgainFlag" />
+		<result column="deal_flag" jdbcType="TINYINT" property="dealFlag" />
+		<result column="deal_num" jdbcType="TINYINT" property="dealNum" />
+		<result column="deal_msg" jdbcType="VARCHAR" property="dealMsg" />
+		<result column="deal_again_flag" jdbcType="TINYINT" property="dealAgainFlag" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invoke_type, invoke_mode, module_type, bill_type,
+		bill_id, bill_no,
+		bill_date, provider, consumer, is_success,
+		return_msg, try_num, exception_msg, try_again_flag, deal_flag,
+		deal_num,
+		deal_msg, deal_again_flag, content, remark, create_at,
+		update_at
+	</sql>
+
+	<sql id="condition">
+		<if test="invokeType!=null">
+			AND invoke_type = #{invokeType}
+		</if>
+		<if test="moduleType!=null">
+			AND module_type = #{moduleType}
+		</if>
+		<if test="billType!=null">
+			AND bill_type = #{billType}
+		</if>
+		<if test="billNo!=null and billNo!=''">
+			AND bill_no like CONCAT('%',#{billNo},'%')
+		</if>
+		<if test="startBillDate!=null and startBillDate!=''">
+			AND bill_date &gt;= #{startBillDate}
+		</if>
+		<if test="endBillDate!=null and endBillDate!=''">
+			AND bill_date &lt;= #{endBillDate}
+		</if>
+		<if test="startCreateAt!=null and startCreateAt!=''">
+			AND create_at &gt;= #{startCreateAt}
+		</if>
+		<if test="endCreateAt!=null and endCreateAt!=''">
+			AND create_at &lt;= #{endCreateAt}
+		</if>
+		<if test="isSuccess!=null">
+			AND is_success = #{isSuccess}
+		</if>
+		<if test="provider!=null">
+			AND provider = #{provider}
+		</if>
+		<if test="consumer!=null">
+			AND consumer = #{consumer}
+		</if>
+		<if test="dealFlag!=null">
+			AND deal_flag = #{dealFlag}
+		</if>
+	</sql>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoke_log
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoke_log
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_invoke_log
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.InvokeLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_invoke_log (id,
+		invoke_type, invoke_mode, module_type,
+		bill_type, bill_id, bill_no,
+		bill_date, provider, consumer,
+		is_success, return_msg, exception_msg,
+		try_again_flag, content, remark
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{invokeType,jdbcType=INTEGER},
+		#{invokeMode,jdbcType=INTEGER},
+		#{moduleType,jdbcType=TINYINT},
+		#{billType,jdbcType=TINYINT},
+		#{billId,jdbcType=INTEGER},
+		#{billNo,jdbcType=VARCHAR},
+		#{billDate,jdbcType=TIMESTAMP}, #{provider,jdbcType=TINYINT},
+		#{consumer,jdbcType=TINYINT},
+		#{isSuccess,jdbcType=TINYINT},
+		#{returnMsg,jdbcType=VARCHAR},
+		#{exceptionMsg,jdbcType=VARCHAR},
+		#{tryAgainFlag,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.InvokeLog">
+		update tb_invoke_log
+		<set>
+			<if test="invokeType != null">
+				invoke_type = #{invokeType,jdbcType=INTEGER},
+			</if>
+			<if test="invokeMode != null">
+				invoke_mode = #{invokeMode,jdbcType=INTEGER},
+			</if>
+			<if test="moduleType != null">
+				module_type = #{moduleType,jdbcType=TINYINT},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billDate != null">
+				bill_date = #{billDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="provider != null">
+				provider = #{provider,jdbcType=TINYINT},
+			</if>
+			<if test="consumer != null">
+				consumer = #{consumer,jdbcType=TINYINT},
+			</if>
+			<if test="isSuccess != null">
+				is_success = #{isSuccess,jdbcType=TINYINT},
+			</if>
+			<if test="returnMsg != null">
+				return_msg = #{returnMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="tryNum != null">
+				try_num = #{tryNum,jdbcType=TINYINT},
+			</if>
+			<if test="exceptionMsg != null">
+				exception_msg = #{exceptionMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="tryAgainFlag != null">
+				try_again_flag = #{tryAgainFlag,jdbcType=TINYINT},
+			</if>
+			<if test="dealFlag != null">
+				deal_flag = #{dealFlag,jdbcType=TINYINT},
+			</if>
+			<if test="dealNum != null">
+				deal_num = #{dealNum,jdbcType=TINYINT},
+			</if>
+			<if test="dealMsg != null">
+				deal_msg = #{dealMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="dealAgainFlag != null">
+				deal_again_flag = #{dealAgainFlag,jdbcType=TINYINT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.common.dto.req.InvokeLogSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoke_log
+		where 1=1
+		<include refid="condition" />
+		order by id desc
+	</select>
+
+
+	<select id="queryExcResults" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoke_log
+		where 1=1
+		and invoke_mode = 2
+		and consumer = 1
+		and
+		is_success in (0, 1)
+		and try_again_flag = 1
+		and try_num &lt;= 3
+		and
+		(content is not null and content != '')
+		order by id desc
+	</select>
+</mapper>

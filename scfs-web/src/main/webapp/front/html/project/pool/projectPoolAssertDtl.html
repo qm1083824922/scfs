@@ -1,0 +1,36 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>项目</li>
+			<li class="active">资产明细</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<!-- /.box-header -->
+			<div class="box-body">
+				<ul class="nav nav-tabs">
+					<li role="presentation"><a class="tab-item"
+						data-url="projectPoolBaseInfo.html">基本信息</a></li>
+					<li role="presentation"><a class="tab-item" id="fundDtl"
+						data-url="projectPoolFundDtl.html">资金明细</a></li>
+					<li role="presentation" class="active"><a class="tab-item"
+						id="assertDtl" data-url="projectPoolAssertDtl.html">资产明细</a></li>
+				</ul>
+				<table id="js_dataTable" data-url="projectPoolAssertDtl/query">
+				</table>
+			</div>
+			<!-- .box-body -->
+			<div class="box-footer text-center">
+				<button type="button" id="closeWin" class="btn btn-default btn-sm">关闭</button>
+			</div>
+		</div>
+	</section>
+</div>
+<script src="../../../js/project/projectPoolAssert.js"></script>
+<script>
+	$("#closeWin").click(function() {
+		window.close();
+	});
+</script>

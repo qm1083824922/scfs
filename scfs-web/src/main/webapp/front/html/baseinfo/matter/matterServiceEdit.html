@@ -1,0 +1,560 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>事项管理</li>
+			<li class="active">编辑</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="matterService/edit">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6" style="width: 70%;">
+							<ul class="nav nav-tabs">
+			                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/matter/matterManageEdit.html">基础信息</a></li>
+			                  <li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/matter/matterServiceEdit.html">服务需求</a></li> 
+			                  <li role="presentation"><a class="tab-item" data-url="html/baseinfo/matter/attachment.html">附件</a></li> 
+		                  </ul>
+							<input class="form-control js-initform" type="hidden" id="id" name="id">
+							<table class="table table-bordered table-hover no-margin">
+								 <tr>
+				                     <td class="text-center" rowspan="11"><b>结算条款信息</b></td>
+				                     <td class="text-center"><b>服务类型：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left" colspan="3">
+	                                    <input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="1"  onclick="check(this)">&nbsp;保理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="2"  onclick="check(this)">&nbsp;待采&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="3"  onclick="check(this)">&nbsp;待销&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="4"  onclick="check(this)">&nbsp;物流分包&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="5"  onclick="check(this)">&nbsp;进口（代理、自营）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="6"  onclick="check(this)">&nbsp;融通铺货&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	                                   	<input type="checkbox" class="serviceType" id="serviceType" name="serviceType" value="7"  onclick="check(this)">&nbsp;其他&nbsp;
+	                                   	<input type="text" class="form-control js-initform" id="serviceTypeRemark" name="serviceTypeRemark">
+	                               	 </td>
+				                 </tr>
+				                 <tr>
+				                     <td class="text-center"><b>业务模型说明（项目流程）：<em class="text-star">*</em></b></td>
+				                     <td class="text-left"  colspan="3">
+										<textarea style="width:100%" class="form-control js-initform" id="serviceExplain" name="serviceExplain"></textarea>
+									 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>合作账期：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+					                     	<input type="checkbox" class=" accountPeriod" id="accountPeriod" name="accountPeriod" value="1" onclick="checkAccount(this)">&nbsp;现款&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+		                                   	<input type="checkbox" class=" accountPeriod" id="accountPeriod" name="accountPeriod" value="2" onclick="checkAccount(this)">&nbsp;周结&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      
+		                                   	<input type="checkbox" class=" accountPeriod" id="accountPeriod" name="accountPeriod" value="3" onclick="checkAccount(this)">&nbsp;半月结&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+		                                   	<input type="checkbox" class=" accountPeriod" id="accountPeriod" name="accountPeriod" value="4" onclick="checkAccount(this)">&nbsp;月结&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+		                                   	<input type="checkbox" class=" accountPeriod" id="accountPeriod" name="accountPeriod" value="5" onclick="checkAccount(this)">&nbsp;其他&nbsp;
+		                                   	<input type="text" class="form-control js-initform" id="accountPeriodRemark" name="accountPeriodRemark">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>现配套资金申请金额：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                     	<input type="text" class="form-control js-initform" id="matchedAmount" name="matchedAmount">
+				                     </td>
+				                     <td class="text-center"><b>结算币种：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left">
+	                                   	<input type="checkbox" class=" currnecyType" id="currnecyType" name="currnecyType" value="1" onclick="checkCurrnecy(this)">&nbsp; RMB&nbsp;&nbsp;
+	                                   	<input type="checkbox" class=" currnecyType" id="currnecyType" name="currnecyType" value="2" onclick="checkCurrnecy(this)">&nbsp; USD&nbsp;&nbsp;
+	                                   	<input type="checkbox" class=" currnecyType" id="currnecyType" name="currnecyType" value="3" onclick="checkCurrnecy(this)">&nbsp;其他&nbsp;
+	                                   	<input type="text" class="form-control js-initform" id="currnecyTypeRemark" name="currnecyTypeRemark">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>收取待采定金：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="checkbox" class=" depositPaid" id="depositPaid" name="depositPaid" value="1" onclick="checkPaid(this)">&nbsp;订金&nbsp;待采金额
+				                     	<input type="text" class="form-control js-initform" id="depositAmount" name="depositAmount">&nbsp; %&nbsp;&nbsp;&nbsp;&nbsp;
+	                                   	<input type="checkbox" class=" depositPaid" id="depositPaid" name="depositPaid" value="2" onclick="checkPaid(this)">&nbsp; 不收订金&nbsp;&nbsp;
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>服务费率：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="checkbox" class=" serviceRateType" id="serviceRateType" name="serviceRateType" value="1" onclick="checkRate(this)">按单<input type="text" class="form-control js-initform" id="serviceRatePo" name="serviceRatePo">%
+				                     	<input type="checkbox" class=" serviceRateType" id="serviceRateType" name="serviceRateType" value="2" onclick="checkRate(this)">按天（实际占用）<input type="text" class="form-control js-initform" id="serviceRateDay" name="serviceRateDay">%
+				                     	<input type="checkbox" class=" serviceRateType" id="serviceRateType" name="serviceRateType" value="3" onclick="checkRate(this)">按月<input type="text"  class="form-control js-initform" id="serviceRateMounth" name="serviceRateMounth">%
+				                     	<input type="checkbox" class=" serviceRateType" id="serviceRateType" name="serviceRateType" value="4" onclick="checkRate(this)">其他<input type="text" class="form-control js-initform" id="serviceRateOther" name="serviceRateOther">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-center"><b>应收费用：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="1" onclick="checkRec(this)">&nbsp;操作费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+	                                   	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="2" onclick="checkRec(this)">&nbsp;仓储费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+	                                   	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="3" onclick="checkRec(this)">&nbsp;运输&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="4" onclick="checkRec(this)">&nbsp;装卸&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+	                                   	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="5" onclick="checkRec(this)">&nbsp;报关&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" recFeeType" id="recFeeType" name="recFeeType" value="6" onclick="checkRec(this)">&nbsp;其他&nbsp;
+	                                   	<input type="text" class="form-control js-initform" id="recFeeRemark" name="recFeeRemark">
+				                     </td>
+				                  </tr>
+								<tr>
+				                     <td class="text-center"><b>应付费用：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="1" onclick="checkPay(this)">&nbsp;操作费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+	                                   	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="2" onclick="checkPay(this)">&nbsp;仓储费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+	                                   	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="3" onclick="checkPay(this)">&nbsp;运输&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="4" onclick="checkPay(this)">&nbsp;装卸&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+	                                   	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="5" onclick="checkPay(this)">&nbsp;报关&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" payFeeType" id="payFeeType" name="payFeeType" value="6" onclick="checkPay(this)">&nbsp;其他&nbsp;
+	                                   	<input type="text" class="form-control js-initform" id="payFeeRemark" name="payFeeRemark">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>服务费结算时间：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     		<input type="checkbox" class=" serviceSettlementTime" id="serviceSettlementTime" name="serviceSettlementTime" value="1" onclick="checkTime(this)">&nbsp;次结&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+		                                   	<input type="checkbox" class=" serviceSettlementTime" id="serviceSettlementTime" name="serviceSettlementTime" value="2" onclick="checkTime(this)">&nbsp;月结&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+		                                   	<input type="checkbox" class=" serviceSettlementTime" id="serviceSettlementTime" name="serviceSettlementTime" value="3" onclick="checkTime(this)">&nbsp;其他&nbsp;
+		                                   	<input type="text" class="form-control js-initform" id="serviceSettlementRemark" name="serviceSettlementRemark">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>付款方式：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     		<input type="checkbox" class=" payWay" id="payWay" name="payWay" value="1" onclick="checkWay(this)">&nbsp;T/T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+		                                   	<input type="checkbox" class=" payWay" id="payWay" name="payWay" value="2" onclick="checkWay(this)">&nbsp;L/C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+		                                   	<input type="checkbox" class=" payWay" id="payWay" name="payWay" value="3" onclick="checkWay(this)">&nbsp;银行承兑&nbsp;
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>放贷方式：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     		<input type="checkbox" class=" lendWay" id="lendWay" name="lendWay" value="1" onclick="checkLend(this)">&nbsp;付全款放贷&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+		                                   	<input type="checkbox" class=" lendWay" id="lendWay" name="lendWay" value="2" onclick="checkLend(this)">&nbsp;无条件放贷&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+		                                   	<input type="checkbox" class=" lendWay" id="lendWay" name="lendWay" value="3" onclick="checkLend(this)">&nbsp;其他&nbsp;
+		                                   	<input type="text" class="form-control js-initform" id="lendWayRemark" name="lendWayRemark">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center" rowspan="6"><b>项目盈利预测</b></td>
+				                     <td class="text-center"><b>预计年度垫资规模：<em class="text-star">*</em></b></td>
+	                                 <td class="text-left" colspan="3">
+	                                     <input type="text" width="100%" class="form-control js-initform" id="scale" name="scale">
+	                               	 </td>
+				                 </tr>
+				                 <tr>
+				                     <td class="text-center"><b>预计资金周转次数（/年）：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="turnoverTimes" name="turnoverTimes">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计资金回报率（/年）：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="returnRate" name="returnRate">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>成本支出项：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="1" onclick="checkCost(this)">&nbsp;操作费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+	                                   	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="2" onclick="checkCost(this)">&nbsp;仓储费&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+	                                   	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="3" onclick="checkCost(this)">&nbsp;运输&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="4" onclick="checkCost(this)">&nbsp;装卸&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+	                                   	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="5" onclick="checkCost(this)">&nbsp;报关&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	                                   	<input type="checkbox" class=" costExpendType" id="costExpendType" name="costExpendType" value="6" onclick="checkCost(this)">&nbsp;其他&nbsp;
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计年度业务毛利：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="bizBlance" name="bizBlance">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>预计年度业务净利：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="blance" name="blance">
+				                     </td>
+				                </tr>
+				                <tr>
+				                     <td class="text-center"><b>我司签约主体：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="2">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="signSubject" name="signSubject">
+				                     </td>
+				                     <td class="text-center"><b>项目导入业务员：<em class="text-star">*</em></b></td>
+				                     <td class="text-left" colspan="2">
+				                     	<input type="text" width="100%" class="form-control js-initform" id="projectBizManager" name="projectBizManager">
+				                     </td>
+				                </tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/matterService/update" >保存</button>
+					<button type="button" id="back" data-url="html/baseinfo/matter/matterManageSearch.html" class="btn btn-default btn-sm js-back returnProject">返回</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMatterManage.html" class="btn btn-default btn-sm js-back returnAbbreviate">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	function check(obj) {
+	    $('.serviceType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkAccount(obj) {
+	    $('.accountPeriod').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkCurrnecy(obj) {
+	    $('.currnecyType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkPaid(obj) {
+	    $('.depositPaid').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkRate(obj) {
+	    $('.serviceRateType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkRate(obj) {
+	    $('.serviceRateType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkRec(obj) {
+	    $('.recFeeType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkPay(obj) {
+	    $('.payFeeType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkTime(obj) {
+	    $('.serviceSettlementTime').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkWay(obj) {
+	    $('.payWay').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkLend(obj) {
+	    $('.lendWay').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	function checkCost(obj) {
+	    $('.costExpendType').prop('checked', false);//清空所有复选框
+	    $(obj).prop('checked', true);//给当前对象赋值
+	};
+	
+	
+	options.initPage = function() {
+		var matterName = options.param.matterName;
+		if(matterName==1){
+			$(".showAbbreviate").show();	
+	    	$(".showProject").hide();
+	    	$(".nav>li.one").show();
+	    }else{
+	    	$(".showProject").show();	
+	    	$(".showAbbreviate").hide();
+	    }
+		var show = options.param.show;
+		if(show==1){
+	    	$(".returnProject").show();	
+	    	$(".returnAbbreviate").hide();
+		}else{
+			$(".returnAbbreviate").show();	
+	    	$(".returnProject").hide();
+		}
+		
+		
+		var data = GLOBAL.getEditData($("#form1"), options.param.id);
+		if(data){
+			$('input:checkbox[name="serviceType"]').each(function(index,domEle){  
+				 if($(this).val()==data.serviceType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   $('input:checkbox[name="accountPeriod"]').each(function(index,domEle){  
+				 if($(this).val()==data.accountPeriod){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   $('input:checkbox[name="currnecyType"]').each(function(index,domEle){  
+				 if($(this).val()==data.currnecyType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   $('input:checkbox[name="depositPaid"]').each(function(index,domEle){  
+				 if($(this).val()==data.depositPaid){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   
+		   $('input:checkbox[name="serviceRateType"]').each(function(index,domEle){  
+				 if($(this).val()==data.serviceRateType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   if(data.serviceRateType=="1"){
+				$("#serviceRatePo").val(data.serviceRate);
+			}else if(data.serviceRateType=="2"){
+				$("#serviceRateDay").val(data.serviceRate);
+			}else if(data.serviceRateType=="3"){
+				("#serviceRateMounth").val(data.serviceRate);
+			}else if(data.serviceRateType=="4"){
+				$("#serviceRateOther").val(data.serviceRate);
+			}
+		   
+		   $('input:checkbox[name="recFeeType"]').each(function(index,domEle){  
+				 if($(this).val()==data.recFeeType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   $('input:checkbox[name="payFeeType"]').each(function(index,domEle){  
+				 if($(this).val()==data.payFeeType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   
+		   $('input:checkbox[name="serviceSettlementTime"]').each(function(index,domEle){  
+				 if($(this).val()==data.serviceSettlementTime){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   
+		   $('input:checkbox[name="payWay"]').each(function(index,domEle){  
+				 if($(this).val()==data.payWay){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   
+		   $('input:checkbox[name="lendWay"]').each(function(index,domEle){  
+				 if($(this).val()==data.lendWay){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		   
+		   $('input:checkbox[name="costExpendType"]').each(function(index,domEle){  
+				 if($(this).val()==data.costExpendType){
+					 $(this).prop('checked', true);
+				 }
+		   });
+		}
+		$("#form1").validate({
+			rules : {
+				serviceType : {
+					required : true
+				},
+				serviceExplain : {
+					required : true,
+					maxlength : 200
+				},
+				accountPeriod : {
+					required : true
+				},
+				matchedAmount : {
+					required : true,
+					maxlength : 50
+				},
+				currnecyType : {
+					required : true
+				},
+				depositPaid : {
+					required : true
+				},
+				serviceRateType : {
+					required : true
+				},
+				recFeeType : {
+					required : true
+				},
+				payFeeType : {
+					required : true
+				},
+				serviceSettlementTime : {
+					required : true
+				},
+				payWay : {
+					required : true
+				},
+				lendWay : {
+					required : true
+				},
+				scale : {
+					required : true,
+					maxlength : 200
+				},
+				turnoverTimes : {
+					required : true,
+					maxlength : 50
+				},
+				returnRate : {
+					required : true,
+					maxlength : 50
+				},
+				costExpendType : {
+					required : true
+				},
+				bizBlance : {
+					required : true,
+					maxlength : 50
+				},
+				blance : {
+					required : true,
+					maxlength : 50
+				},
+				signSubject : {
+					required : true,
+					maxlength : 100
+				},
+				projectBizManager : {
+					required : true,
+					maxlength : 50
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				data.matterId = options.param.id;
+				var isValid = true;
+				var serviceRate="";
+				if(data.serviceType=="7"){
+					var $typeRemark=$("#serviceTypeRemark");
+					if(!$typeRemark.val()){
+						layer.msg("不能为空");
+						$typeRemark.focus();
+						isValid = false;
+					}
+				}
+				if(isValid){
+					if(data.accountPeriod=="5"){
+						var $periodRemark=$("#accountPeriodRemark");
+						if($periodRemark.val()==""){
+							layer.msg("不能为空");
+							$periodRemark.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.currnecyType=="3"){
+						var $currnecyTypeRemark=$("#currnecyTypeRemark");
+						if($currnecyTypeRemark.val()==""){
+							layer.msg("不能为空");
+							$currnecyTypeRemark.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.depositPaid=="1"){
+						var $depositAmount=$("#depositAmount");
+						if($depositAmount.val()==""){
+							layer.msg("不能为空");
+							$depositAmount.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.serviceRateType=="1"){
+						var $serviceRatePo=$("#serviceRatePo");
+						serviceRate = $serviceRatePo.val();
+						if(!$serviceRatePo.val()){
+							layer.msg("不能为空");
+							$serviceRatePo.focus();
+							isValid = false;
+						}
+					}else if(data.serviceRateType=="2"){
+						var $serviceRateDay=$("#serviceRateDay");
+						serviceRate = $serviceRateDay.val();
+						if($serviceRateDay.val()==""){
+							layer.msg("不能为空");
+							$serviceRateDay.focus();
+							isValid = false;
+						}
+					}else if(data.serviceRateType=="3"){
+						var $serviceRateMounth=$("#serviceRateMounth");
+						serviceRate = $serviceRateMounth.val();
+						if($serviceRateMounth.val()==""){
+							layer.msg("不能为空");
+							$serviceRateMounth.focus();
+							isValid = false;
+						}
+					}else if(data.serviceRateType=="4"){
+						var $serviceRateOther=$("#serviceRateOther");
+						serviceRate = $serviceRateOther.val();
+						if($serviceRateOther.val()==""){
+							layer.msg("不能为空");
+							$serviceRateOther.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.recFeeType=="6"){
+						var $recFeeRemark=$("#recFeeRemark");
+						if($recFeeRemark.val()==""){
+							layer.msg("不能为空");
+							$recFeeRemark.focus();
+							isValid = false;
+						}
+					}	
+				}
+				
+				if(isValid){
+					if(data.payFeeType=="6"){
+						var $payFeeRemark=$("#payFeeRemark");
+						if($payFeeRemark.val()==""){
+							layer.msg("不能为空");
+							$payFeeRemark.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.serviceSettlementTime=="3"){
+						var $timeRemark=$("#serviceSettlementRemark");
+						if($timeRemark.val()==""){
+							layer.msg("不能为空");
+							$timeRemark.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if(isValid){
+					if(data.lendWay=="3"){
+						var $lendWayRemark=$("#lendWayRemark");
+						if($lendWayRemark.val()==""){
+							layer.msg("不能为空");
+							$lendWayRemark.focus();
+							isValid = false;
+						}
+					}
+				}
+				
+				if (isValid) {
+					data.serviceRate=serviceRate;
+					GLOBAL.ajax("matterService/update", data, function(e) {
+						if (e.success) {
+							layer.msg("保存成功！");
+							GLOBAL.go("html/baseinfo/matter/matterManageSearch.html");
+						} else {
+							layer.msg(e.msg);
+						}
+					}, false, $("#save"));
+				}
+			}
+		});
+	}
+	GLOBAL.goBack();
+</script>

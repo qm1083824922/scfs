@@ -1,0 +1,371 @@
+<style>
+	.nav>li.one, .nav>li.two{
+		display: none;
+	}
+</style>
+<div class="wrapper"> 
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票申请</li>
+            <li class="active">编辑发票</li>
+        </ol>
+    </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="invoiceService/edit">
+            <div class="box-body">  
+             	  <ul class="nav nav-tabs">
+                	<li role="presentation" class="active"><a class="tab-item" data-url="html/invoice/makeinvoice/InvoiceEdit.html">基本信息</a></li> 
+                    <li  class="one" role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/saleInfoSearch.html">销售信息</a></li> 
+                  	<li  class="two" role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/feeInfoSearch.html">费用信息</a></li> 
+                    <li role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/invoiceInfo.html">发票信息</a></li> 
+                    <li role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/attachment.html">附件</a></li> 
+                  </ul>
+                  <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      	<td width="180" class="text-right"><b>申请编号：<em class="text-star">*</em></b></td> 
+                        <td class="text-left">
+                           <input class="form-control js-initform" id="applyNo"  name="applyNo" readonly="readonly"> 
+                        </td> 
+                    </tr>
+                  	<tr>
+                      	<td width="180" class="text-right"><b>项目：<em class="text-star">*</em></b></td> 
+                        <td class="text-left">
+                           <input class="form-control js-initform" id="projectName"  name="projectName" readonly="readonly"> 
+						</td> 
+                    </tr>
+                    <tr>
+                        <td class="text-right"><b>客户：<em class="text-star">*</em></b></td> 
+                        <td class="text-left"> 
+                            <input class="form-control js-initform" id="customerName"  name="customerName" readonly="readonly">  
+                        </td>
+                    </tr>
+                    
+                     <tr>
+                      <td class="text-right"><b>票据类型：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                            <select class="form-control js-initform" data-url="INVOICE_TYPE" id="invoiceType"  name="invoiceType" 
+                            > </select>
+                       </td>
+                    </tr>
+                    <tr id="isElecInvoice1" style="display: none;">
+                      <td class="text-right"><b>电子普通发票：</b></td> 
+                       <td class="text-left">
+							<input type="radio" id= "isElecInvoice" name="isElecInvoice" value="1"  />是 
+							<input type="radio" id= "isElecInvoice" name="isElecInvoice" value="0" />否
+                       </td> 
+                    </tr>
+                    <tr id="baseInvoiceId1" >
+                      <td class="text-right"><b>开票信息    ： </b></td> 
+                      <td class="text-left">
+                            <select class="form-control js-initform" id="baseInvoiceId"  name="baseInvoiceId"> </select>
+                       </td>
+                    </tr>
+                    <tr id="identifyNumber1" >
+                      <td class="text-right"><b>纳税人识别号    ： <em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="identifyNumber" name="identifyNumber" readonly="readonly">
+                       </td>
+                    </tr>
+                    <tr id="bankDeposite1" >
+                      <td class="text-right"><b>开户银行    ： <em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="bankDeposite" name="bankDeposite" readonly="readonly">
+                       </td>
+                    </tr>
+                    <tr  id="accountOpen1">
+                      <td class="text-right"><b>开户帐号    ：<em class="text-star">*</em> </b></td> 
+                      <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="accountOpen" name="accountOpen"readonly="readonly">
+                       </td>
+                    </tr>
+                    <tr id="billAddress1">
+                      <td class="text-right"><b>开票地址    ： <em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="billAddress" name="billAddress"readonly="readonly">
+                       </td>
+                    </tr>
+                    <tr id="billMobile1" >
+                      <td class="text-right"><b>开票电话    ： <em class="text-star">*</em></b></td> 
+                      <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="billMobile" name="billMobile" readonly="readonly">
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>单据类别：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                            <select class="form-control js-initform" data-url="DOCUMENT_TYPE" id="billType"  name="billType" disabled="disabled"> </select> 
+                       </td>
+                    </tr>
+                    <tr id="billDetail1" style="display: none;">
+                      <td class="text-right"><b>开票明细：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                            <select class="form-control js-initform" data-url="BILL_DETAIL" id="feeType"  name="feeType" disabled="disabled"> </select> 
+                       </td>
+                    </tr>
+                    <tr id="billRate1" style="display: none;">
+                      <td class="text-right"><b>开票税率：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+                            <select class="form-control js-initform" data-url="PROVIDE_INVOICE_TAX_RATE" id="invoiceTaxRateValue"  name="invoiceTaxRateValue" disabled="disabled" > </select> 
+                       </td>
+                    </tr> 
+                    <tr id="taxCateNo1" style="display: none;">
+                      <td class="text-right"><b>税收分类编码：</b></td> 
+                       <td class="text-left">
+                            <input type="text" class="form-control js-initform" id="taxCateNo" name="taxCateNo">
+                       </td>
+                    </tr>
+                     <tr id= "isGoodsMerge1" style="display: none;">
+                        <td class="text-right"><b>同品合并：<em class="text-star">*</em></b></td> 
+                        <td class="text-left">
+							<input type="radio" id= "isGoodsMerge" name="isGoodsMerge" value="1" />是 
+							<input type="radio" id= "isGoodsMerge" name="isGoodsMerge" value="0" />否                       
+						</td>
+                    </tr>
+                    <tr id= "isDisplayDiscount1" style="display: none;" >
+                      <td class="text-right"><b>显示折扣：<em class="text-star">*</em></b></td> 
+                       <td class="text-left">
+							<input type="radio" id= "isDisplayDiscount" name="isDisplayDiscount" value="1" />是 
+							<input type="radio" id= "isDisplayDiscount" name="isDisplayDiscount" value="0"/>否                       
+						</td>
+                    </tr>
+                    <tr id="discount1" style="display: none;">
+                      <td class="text-right"><b>固定折扣率：<em class="text-star">*</em></b></td> 
+                       <td class="text-left"> 
+                           <input type="text" class="form-control js-initform" id="discount" name="discount">%             
+						</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>票据备注：</b></td> 
+                      <td class="text-left">
+                        	 <textarea class="form-control js-initform" id="invoiceRemark" cols="50" rows="5" name="invoiceRemark"></textarea>
+                       </td>
+                    </tr> 
+                     <tr>
+                         <td class="text-right"><b>单据备注：</b></td> 
+                         <td class="text-left">
+                        	<textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>
+                         </td>
+                     </tr> 
+                  </table>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="submit" id="save" data-url="html/invoice/makeinvoice/invoiceSearch.html"data-permissionUrl="/invoiceService/update"  class="btn btn-primary btn-sm">保存</button> 
+              <button type="button"  data-url="html/invoice/makeinvoice/invoiceSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function(){
+	 var tabId = options.param.billType;
+	 var tabArr = ["one","two"];
+	 $(".nav>li." + tabArr[tabId-1]).show();  
+	var editData =  GLOBAL.getEditData($("#form1"), options.param.id);
+	
+	var opt =  "<option value=''>请选择</option>";   
+	 $("input:radio[name='isDisplayDiscount'][value='"+editData.isDisplayDiscount+"']").attr("checked",true);   
+     $("input:radio[name='isGoodsMerge'][value='"+editData.isGoodsMerge+"']").attr("checked",true);  
+     $("input:radio[name='isElecInvoice'][value='"+editData.isElecInvoice+"']").attr("checked",true);   
+	 if(editData.baseInvoiceId){
+		 GLOBAL.ajax("baseSubject/invoice/query", {id : editData.customerId} , 
+			function(e){ 
+				 if(e.items){
+					 for(var k = 0; k < e.items.length; k++){ 
+			        	  opt += '<option value="'+e.items[k].id +'">'+e.items[k].taxPayer+'</option>';
+			         } 
+				 }
+		         $("#baseInvoiceId").empty().append(opt).val(editData.baseInvoiceId);
+		         GLOBAL.ajax("baseSubject/invoiceById/query",{id : editData.baseInvoiceId} , function(e){   
+		        	 if(e.items){
+		        		 $("#identifyNumber").val(e.items.taxPayer);
+				         $("#bankDeposite").val(e.items.bankName );
+				         $("#accountOpen").val(e.items.accountNo );
+				         $("#billAddress").val(e.items.address );
+				         $("#billMobile").val(e.items.phoneNumber );
+		        	 }
+		       });
+	     	}
+		)
+	 } else{ 
+		 GLOBAL.ajax("baseSubject/invoice/query", {id : editData.customerId} , 
+			function(e){
+				  for(var k = 0; k < e.items.length; k++){ 
+				     opt += '<option value="'+e.items[k].id +'">'+e.items[k].taxPayer+'</option>';
+				  } 
+		 $("#baseInvoiceId").empty().append(opt).val(editData.baseInvoiceId);
+		 $("#identifyNumber1").hide(); 
+		 $("#bankDeposite1").hide(); 
+		 $("#accountOpen1").hide(); 
+		 $("#billAddress1").hide(); 
+		 $("#billMobile1").hide(); 
+		 });
+	 }
+	 
+	 if($("#invoiceType").val() == 2){	  
+	  		$("#isElecInvoice1").hide(); 
+	   }else if($("#invoiceType").val() == 3){  
+			$("#isElecInvoice1").show(); 
+	  }
+	 if($("#billType").val() == 1){	  
+		 $("#billDetail1").hide().find("#billDetail").val("");
+	  	 $("#billRate1").hide().find("#billRate").val(""); 
+	  	 $("#taxCateNo1").hide().find("#taxCateNo").val("");  
+	  	 $("#isGoodsMerge1").show(); 
+	  	 $("#isDisplayDiscount1").show(); 
+	  	 $("#discount1").show();  
+	   }else if($("#billType").val() == 2){  
+		 $("#billDetail1").show();
+  	  	 $("#billRate1").show(); 
+  	  	 $("#taxCateNo1").show(); 
+  	  	 $("#isGoodsMerge1").hide().find("#isGoodsMerge").val("");   
+  	  	 $("#isDisplayDiscount1").hide().find("#isDisplayDiscount").val("");   
+  	  	 $("#discount1").hide().find("#discount").val("");  
+	  } 
+	  $("#baseInvoiceId").change(function(){ 
+ 		var subjectId = $("#baseInvoiceId").val();
+   		
+   		$("#identifyNumber1").show(); 
+   		$("#bankDeposite1").show(); 
+   		$("#accountOpen1").show(); 
+   		$("#billAddress1").show(); 
+   		$("#billMobile1").show();
+   		if(subjectId){ 
+   			var data = {id : subjectId}; 
+   			GLOBAL.ajax("baseSubject/invoiceById/query",data , function(e){    
+            		$("#identifyNumber").val(e.items.taxPayer);
+            		$("#bankDeposite").val(e.items.bankName );
+            		$("#accountOpen").val(e.items.accountNo );
+            		$("#billAddress").val(e.items.address );
+            		$("#billMobile").val(e.items.phoneNumber );
+          });
+   		}else{
+   			$("#identifyNumber1").hide(); 
+       		$("#bankDeposite1").hide(); 
+       		$("#accountOpen1").hide(); 
+       		$("#billAddress1").hide(); 
+       		$("#billMobile1").hide();
+   		}
+	    });
+	  $("#billType").change(function(){ 
+		     var id = $("#billType").val(); 
+		  if(id == 1){ 
+				$("#billDetail1").hide().find("#billDetail").val("");
+	  			$("#billRate1").hide().find("#billRate").val(""); 
+	  			$("#taxCateNo1").hide().find("#taxCateNo").val("");
+				$("#isGoodsMerge1").show(); 
+	  			$("#isDisplayDiscount1").show(); 
+	  	    	$("#discount1").show();   
+	  	    	$("#isGoodsMerge").rules("add", {  required: true }); 
+	  	    	$("#isDisplayDiscount").rules("add", {  required: true }); 
+	  	    	$("#discount").rules("add", {  required: true }); 
+    	     }else if(id == 2){  
+    	    	$("#isGoodsMerge").rules("remove");  
+    	    	$("#isDisplayDiscount").rules("remove");  
+    	    	$("#discount").rules("remove");  
+    	    	$("#billDetail1").show();
+    	  		$("#billRate1").show(); 
+    	  		$("#taxCateNo1").show(); 
+    	  		$("#isGoodsMerge1").hide().find("[name='isGoodsMerge']:checked").prop("checked", false); 
+    	  		$("#isDisplayDiscount1").hide().find("[name='isDisplayDiscount']:checked").prop("checked", false); 
+    	  	    $("#discount1").hide().find("#discount").val("");   
+    	    	
+    	     }else if(id == ""){
+    	    	$("#isGoodsMerge").rules("remove");  
+     	    	$("#isDisplayDiscount").rules("remove");  
+    	    	$("#billDetail1").hide().find("#billDetail").val("");
+    	  		$("#billRate1").hide().find("#billRate").val(""); 
+    	  		$("#taxCateNo1").hide().find("#taxCateNo").val(""); 
+    	  		$("#isGoodsMerge1").hide().find("[name='isGoodsMerge']:checked").prop("checked", false); 
+    	  		$("#isDisplayDiscount1").hide().find("[name='isDisplayDiscount']:checked").prop("checked", false); 
+	  	    	$("#discount1").hide().find("#discount").val(""); 
+    	     }
+	    }); 
+	  $("#invoiceType").change(function(){ 
+    		 var id = $("#invoiceType").val(); 
+    		 if(id == 2){
+    			$("#baseInvoiceId").rules("add", {  required: true }); 
+    	  		$("#isElecInvoice1").hide().find("[name='isElecInvoice']:checked").prop("checked", false); 
+	  			$("#baseInvoiceId").val(" ");
+    	  		$("#identifyNumber1").hide().find("#identifyNumber").val("");
+    	  		$("#bankDeposite1").hide().find("#bankDeposite").val(""); 
+    	  		$("#accountOpen1").hide().find("#accountOpen").val(""); 
+    	  		$("#billAddress1").hide().find("#billAddress").val("");   
+	  			$("#billMobile1").hide().find("#billMobile").val("");
+    	     }else if(id == 3){ 
+    	    	$("#baseInvoiceId").rules("remove");  
+    	  		$("#isElecInvoice1").show(); 
+    			$("#isElecInvoice").rules("add", {  required: true });
+	  			$("#baseInvoiceId").val("");
+    	  		$("#identifyNumber1").hide().find("#identifyNumber").val("");
+    	  		$("#bankDeposite1").hide().find("#bankDeposite").val(""); 
+    	  		$("#accountOpen1").hide().find("#accountOpen").val(""); 
+    	  		$("#billAddress1").hide().find("#billAddress").val("");   
+	  			$("#billMobile1").hide().find("#billMobile").val("");
+    	     }else{ 
+    	    	$("#identifyNumber1").hide().find("#identifyNumber").val("");
+    	  		$("#bankDeposite1").hide().find("#bankDeposite").val(""); 
+    	  		$("#accountOpen1").hide().find("#accountOpen").val(""); 
+    	  		$("#billAddress1").hide().find("#billAddress").val("");   
+	  			$("#billMobile1").hide().find("#billMobile").val("");    
+	  			$("#baseInvoiceId").val("");
+    	  		$("#isElecInvoice1").hide().find("[name='isElecInvoice']:checked").prop("checked", false); 
+    	     }
+	    });
+	 $("#form1").validate({
+		 rules: {
+			 customerId: {
+                 required: true
+               },
+               projectId: {
+                   required: true 
+               },
+               invoiceType: {
+                   required: true 
+               },
+               billType: {
+                   required: true 
+               },
+               discount: {
+                   required: true 
+               } 
+         	},
+	        submitHandler: function() { 
+	        	if($("#discount").val() < 0 || $("#discount").val() > 50){
+	        		layer.msg("固定折扣率在0-50之间！");
+	        		return false;
+	        	}
+	          var data = $("#form1").serialize();
+	          GLOBAL.ajax("invoiceService/update",data, function(e){
+	        	  if (e.success) {
+	            	  layer.msg("更新成功！", {
+	                      icon: 1,
+	                      time: 1500
+	                  },function(){
+	                	  GLOBAL.go("html/invoice/makeinvoice/InvoiceEdit.html");
+	                  })
+	              } else {
+	                  layer.msg(e.msg);
+	              }
+	          });
+	        }
+	    });
+  };
+ 
+  $(".tab-item").click(function(){
+      var url = $(this).data("url");
+      GLOBAL.go(url, options.param);
+  }) 
+  $("#js-back").click(function(){
+	    var url = $(this).data("url");
+	    options.param.id=options.param.cid;
+	    GLOBAL.go(url, options.param);
+  })
+</script> 
+	 

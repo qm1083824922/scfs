@@ -1,0 +1,106 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>出口</li>
+    <li class="active">编辑退税申请</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="refundApply/edit">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                  <li role="presentation" class="active"><a class="tab-item" data-url="html/export/refundApply/refundApplyEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/export/refundApply/refundApplyLineEdit.html">退税明细</a></li>
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table class="table table-bordered table-hover no-margin">
+                 		<tr>
+							<td class="text-right"><b>退税申请编号：</b></td>
+							<td class="text-left">
+								<label class="js-initform"  id="refundApplyNo" name="refundApplyNo"></label>
+							</td>
+						</tr>
+                 		<tr>
+							<td width="180" class="text-right"><b>客户：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="cusName" name="cusName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left">
+								<label class="js-initform"  id="projectName" name="projectName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>退税附属编号：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control js-initform" id="refundAttachNo" name="refundAttachNo">
+							</td>
+						</tr>
+						<tr class="gearbest_title">
+							<td class="text-right"><b>退税申请日期：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text"class="form-control js_datePicker js-initform" id="refundApplyDate"name="refundApplyDate">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left">
+								<textarea class="form-control js-initform"	id="remark" cols="50" rows="5" name="remark"></textarea>
+							</td>
+						</tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+             <div class="box-footer text-center">
+              <button type="submit" id="save" class="btn btn-primary btn-sm" data-url="refundApply/update" data-permissionUrl="/refundApply/update">保存</button>
+              <button type="button" id="back" data-url="html/export/refundApply/refundApplySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function(){
+    GLOBAL.getEditData($("#form1"), options.param.id);
+    
+    $("#form1").validate({
+        rules: {
+        	refundAttachNo: {
+                required: true,
+                maxlength : 50
+            },
+            refundApplyDate: {
+                required: true
+            },
+			remark: {
+            	maxlength : 200
+            }
+        },
+        submitHandler: function() {
+          var data = $("#form1").serialize();
+          GLOBAL.ajax("refundApply/update",data, function(e){
+        	  if (e.success) {
+            	  layer.msg("保存成功！", {
+                      icon: 1,
+                      time: 1500
+                  },function(){
+                	  //GLOBAL.go("html/pay/paySearch.html");
+                  });
+              } else {
+                  layer.msg(e.msg);
+              }
+          });
+        }
+    });
+    
+};
+
+GLOBAL.goBack();
+  
+</script>

@@ -1,0 +1,56 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+    <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li class="active">权限组浏览</li>
+   </ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="permissionGroup/detail">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                	<li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupScan.html">基本信息</a></li>
+                   	<li role="presentation"><a class="tab-item" id="authorityGroup" data-url="html/baseinfo/authorityGroup/authorityScan.html">权限信息</a></li> 
+                     <li role="presentation"  ><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupRoleScan.html">角色信息</a></li>
+                    <li role="presentation"  ><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupUserScan.html">用户信息</a></li>
+                 </ul> 
+                 <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>权限名：</b></td> 
+                       <td class="text-left"> 
+                        	 <label class="js-initform" id="name" name="name"></label>
+                       </td>
+                    </tr> 
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center"> 
+              <button type="button" id="back" data-url="html/baseinfo/authorityGroup/authorityGroupSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function() {
+	GLOBAL.getEditData($("#form1"), options.param.id);
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+	
+}
+</script>

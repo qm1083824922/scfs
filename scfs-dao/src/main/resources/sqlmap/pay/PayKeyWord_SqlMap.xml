@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.pay.PayKeyWordDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.pay.entity.PayKeyWord">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="word" property="word" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="deleter_id" property="deleterId" jdbcType="INTEGER" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		word,
+		creator,
+		creator_id,
+		create_at,
+		is_delete,
+		deleter,
+		deleter_id,
+		delete_at
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.pay.dto.req.PayKeyWordReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		tb_pay_keyword
+		where is_delete=0
+		<if test="word != null and word !=''">
+			and word like CONCAT('%',#{word},'%')
+		</if>
+		order by id desc
+	</select>
+
+
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_pay_keyword
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.pay.entity.PayKeyWord"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_pay_keyword(
+		word,
+		creator,
+		creator_id,
+		create_at,
+		is_delete,
+		deleter,
+		deleter_id,
+		delete_at
+		)
+		VALUES
+		(
+		#{word,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT},
+		#{deleter,jdbcType=VARCHAR},
+		#{deleterId,jdbcType=VARCHAR},
+		#{deleteAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+
+	<update id="updateById" parameterType="com.scfs.domain.pay.entity.PayKeyWord">
+		update tb_pay_keyword
+		<set>
+			id = #{id}
+			<if test="word != null and word != ''">
+				,word = #{word,jdbcType=VARCHAR}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+			<if test="creator != null and creator != ''">
+				,creator = #{creator,jdbcType=VARCHAR}
+			</if>
+			<if test="creatorId != null">
+				,creator_id=#{creatorId,jdbcType=INTEGER}
+
+			</if>
+			<if test="createAt != null">
+				,create_at=#{createAt,jdbcType=TIMESTAMP}
+
+			</if>
+			<if test="isDelete != null">
+				,is_delete=#{isDelete,jdbcType=TINYINT}
+
+			</if>
+			<if test="deleter != null and deleter !=''">
+				,deleter=#{deleter,jdbcType=VARCHAR}
+			</if>
+			<if test="deleterId != null ">
+				,deleter_id=#{deleterId,jdbcType=VARCHAR}
+			</if>
+			<if test="deleteAt != null ">
+				,delete_at=#{deleteAt,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,234 @@
+<style>
+	.nav>li.one, .nav>li.two,.nav>li.state{
+		display: none;
+	}
+</style>
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="payOrder/detail">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="payBaseInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="payOrderScn.html">订单信息</a></li>
+						<li role="presentation" class="two"><a class="tab-item" id="orderDtlLink" data-url="payFeeScan.html">费用信息</a></li>
+						<li role="presentation" ><a class="tab-item"  data-url="payAdvanceScan.html">预收单信息</a></li>.
+						<li role="presentation"><a class="tab-item" data-url="attachmentScan.html">附件</a></li>
+						<li role="presentation" class="state"><a class="tab-item" data-url="payVoucherScan.html">付款凭证</a></li>
+					</ul>
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>附属编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="attachedNumbe" name="attachedNumbe"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款编号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payNo" name="payNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>付款类型：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payTypeName" name="payTypeName"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>项目：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="projectName" name="projectName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payerName" name="payerName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款方式：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payWayName" name="payWayName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>币种：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="currnecyTypeName" name="currnecyTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款金额：</b></td>
+							<td class="text-left"><label class="js-initform toThound"
+								id="payAmount" name="payAmount" ></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>预收金额：</b></td>
+							<td class="text-left"><label class="js-initform toThound"
+								id="advanceAmount" name="advanceAmount" ></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款单位：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payeeName" name="payeeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账户：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="accountNo" name="accountNo"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开户行：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankName" name="bankName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行地址：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankAddress" name="bankAddress"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款账号开户人：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="subjectName" name="subjectName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>收款银行代码：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankCode" name="bankCode"></label></td>
+						</tr><tr>
+							<td class="text-right"><b>收款人电话：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="phoneNumber" name="phoneNumber"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款银行账号：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="paymentAccountName" name="paymentAccountName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款手续费：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="bankCharge" name="bankCharge"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款订单总额：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="poBlance" name="poBlance"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>付款费用总额：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="feeBlance" name="feeBlance"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>汇率：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="payRate" name="payRate"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>实际付款币种：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="realCurrencyTypeName" name="realCurrencyTypeName"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>实际付款金额：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="realPayAmount" name="realPayAmount"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>要求付款日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="requestPayTime" name="requestPayTime"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>预计内部打款日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="innerPayDate" name="innerPayDate"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>确认日期：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="confirmorAt" name="confirmorAt"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开立类型：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="openType" name="openType"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left"><label class="js-initform"
+								id="remark" name="remark"></label></td>
+						</tr>
+					</table>
+					<div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="payOrder/auditflow/audit/query"></table>
+                    </div>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		/*数据表格*/
+		var tabColsLog = [{
+		    title: '序号',
+		    field: 'columnsNumber',
+		    width: '5%'
+		}, {
+		    title: '流程节点',
+		    field: "stateName",
+		    width: '15%'
+		}, {
+		    title: '处理人',
+		    field: "dealName",
+		    width: '15%'
+		}, {
+		    title: '处理意见',
+		    field: "suggestion",
+		    width: '25%'
+		}, {
+		    title: '开始时间',
+		    field: "createTime",
+		    width: '15%'
+		}, {
+		    title: "处理时间",
+		    field: "dealTime",
+		    width: '15%'
+		}, {
+		    title: "处理状态",
+		    field: "auditStateName",
+		    width: '10%'
+		}];
+
+		GLOBAL.getEditData($("#form1"), options.param.id);
+
+		GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+	        projectItemId: options.param.id
+	    }, null, {
+	        pagination: false
+	    });
+		
+		var tabId = options.param.payType;
+	    var tabArr = ["one","two","three"];
+	    $(".nav>li." + tabArr[tabId - 1]).show();
+	    var stateInt = options.param.stateInt;
+		if(stateInt==6){
+			$(".nav>li.state").show();	
+		}
+	};
+
+	GLOBAL.goBack();
+</script>

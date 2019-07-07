@@ -1,0 +1,122 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>物流</li>
+    <li>入库单</li>
+    <li>收货明细</li>
+    <li class="active">编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="billInStoreDtlEditModifyForm" data-url="billInStoreDtl/edit">
+            <div class="box-body">
+                 <input class="js-initform" type="hidden" id="id" name="id">
+                
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td width="180" class="text-right"><b>订单编号：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="orderNo" name="orderNo"></label>                      
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="180" class="text-right"><b>订单附属编号：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="appendNo" name="appendNo"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>商品条码：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsBarCode" name="goodsBarCode"></label>
+                      </td>
+                    </tr>
+                  	<tr>
+                      <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>可入库数量：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="unStorageNum" name="unStorageNum"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b><em class="text-star">*</em>收货数量：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="receiveNum" name="receiveNum">                      
+                      </td>
+                    </tr>                
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/billInStoreDtl/update" id="save" class="btn btn-primary btn-sm">保存</button>
+              <button type="button" data-url="html/logistics/billInStore/billInStoreDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  	options.initPage = function(){
+ 	    GLOBAL.getEditData($("#billInStoreDtlEditModifyForm"), options.param.cid);
+ 	    var receiveNum = $("#receiveNum").val();
+ 	    if (receiveNum) {
+ 	    	$("#receiveNum").val(receiveNum.replace(/,/g, ""));
+ 	    }
+ 	    
+	  	$("#billInStoreDtlEditModifyForm").validate({
+	        rules: {
+	            receiveNum: {
+	            	required: true,
+	            	number: true,
+	            	min: 0
+	            }
+	        },
+	        submitHandler: function() {
+	        	 var receiveNum = $("#receiveNum").val() || 0;
+	        	 if (receiveNum*1 == 0) {
+	        		 layer.msg("收货数量不能为零，请重新输入");
+	        		 return;
+	        	 }
+	        	 var rows = new Array();
+	             var formData = $("#billInStoreDtlEditModifyForm").serializeObject();
+	             rows.push(formData);
+	             var params = {
+	                 id: options.param.id,
+	           	     billInStoreDtlList : rows
+	             }
+	             GLOBAL.ajax("billInStoreDtl/update", JSON.stringify(params), function(e) {
+	                   if (e.success) {
+	                       layer.msg("保存成功！");
+	                       GLOBAL.go("html/logistics/billInStore/billInStoreDtlEdit.html", options.param);
+	                   } else {
+	                       layer.msg(e.msg);
+	                   }
+	               }, true);
+	        }
+	    });
+  	}
+
+  	GLOBAL.goBack();
+
+</script>

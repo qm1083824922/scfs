@@ -1,0 +1,58 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>费用</li>
+            <li class="active">人工费用</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	 <div class="search-item">	
+							<label class="control-label ml10">单据号：</label> 
+							<input  type="text"class="form-control  id = "feeManageNo"  name="feeManageNo"/>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">项目：</label> 
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+						</div>
+						<div class="search-item">
+                        	<label class="control-label">所属部门：</label>
+                        	<input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                        </div>
+						<div class="search-item">
+                        	<label class="control-label">日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startDate" value="" name="startDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endDate" value="" name="endDate">
+                        </div>
+                        <!-- <div class="search-item">	 -->
+                            <label class="control-label ml10">状态：</label> 
+							<select class="form-control js-select" data-url="FEE_MANAGE_STATE" id="state"  name="state"> </select>
+							<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <label class="control-label ml10">是否分摊：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needShare" name="needShare"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/fee/artificialFee/artificialFeeCreate.html" data-permissionUrl="/fee/artificial/add"  class="btn btn-warning btn-sm ml10">新建</button>
+                            <button type="button" id="import" data-url="html/fee/artificialFee/artificialFeeImport.html" data-permissionUrl="/fee/artificial/import" class="btn btn-warning btn-sm ml10">导入</button> 
+                            <button type="button" id="btnExport" data-url="fee/excel/artificial.xls" data-permissionUrl="/fee/excel/artificial.xls" class="btn btn-warning btn-sm ml10">导出excel</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-permissionUrl="/fee/artificial/submitAll" id="multSubmit">批量提交</button> 
+                            <button type="button" id="artFeeConformityShare" data-url="html/fee/artificialFee/artFeeConformityShare.html" data-permissionUrl="/fee/artificial/addShare"  class="btn btn-warning btn-sm ml10">分摊</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="fee/artificial/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/fee/manageFee/feeArtificialSearch.js"></script>

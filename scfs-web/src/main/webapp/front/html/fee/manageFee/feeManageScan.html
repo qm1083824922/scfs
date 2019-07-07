@@ -1,0 +1,127 @@
+<style>
+.nav>li.one,
+.nav>li.two,.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>费用管理</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="fee/manage/detail">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						  <li role="presentation" class="active"><a class="tab-item" data-url="html/fee/manageFee/feeManageScan.html">基础信息</a></li>
+                          <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/fee/manageFee/feeManageShareScan.html">分摊信息</a></li>
+                          <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/fee/manageFee/attachmentScan.html">附件</a></li>
+					</ul>
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>编号：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="feeManageNo" name="feeManageNo"></label>
+							</td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>部门：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="departmentName" name="departmentName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="projectName" name="projectName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>人员：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="userName" name="userName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>客户：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="custName" name="custName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>管理费用科目：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="feeSpecName" name="feeSpecName"></label>
+							</td>
+						</tr> 
+						<tr>
+							<td class="text-right"><b>应付方式：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="recTypeName" name="recTypeName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>日期：</b></td>
+							<td class="text-left"> 
+								<label class="js-initform" id="date" name="date"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>币种：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="currnecyTypeName" name="currnecyTypeName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>管理费用金额：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="amount" name="amount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>状态：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="stateName" name="stateName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>备注：</b></td>
+							<td class="text-left">
+								 <label class="js-initform" id="remark" name="remark"></label>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+                <div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/fee/manageFee/feeManageSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		var state = options.param.state;
+		if(state==2){
+			$(".nav>li.one").show();	
+		}
+	}
+	
+	$("#closeWin").click(function(){
+		window.close();
+	});
+	
+	GLOBAL.goBack();
+</script>

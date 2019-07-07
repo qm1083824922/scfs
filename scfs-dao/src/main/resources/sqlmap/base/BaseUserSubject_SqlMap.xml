@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseUserSubjectDao">
+
+	<resultMap id="BaseUserSubjectMap" type="com.scfs.domain.base.entity.BaseUserSubject">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="user_id" property="userId" jdbcType="BIGINT" />
+		<id column="subject_id" property="subjectId" jdbcType="BIGINT" />
+		<id column="subject_type" property="subjectType" jdbcType="TINYINT" />
+		<id column="operater" property="operater" jdbcType="TINYINT" />
+		<id column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<id column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<id column="deleter_id" property="deleterId" jdbcType="BIGINT" />
+		<id column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<id column="state" property="state" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		user_id,
+		subject_id,
+		subject_type,
+		operater,
+		creator_id,
+		assigner_id,
+		deleter_id,
+		create_at,
+		assign_at,
+		update_at,
+		delete_at,
+		state,
+		is_delete
+	</sql>
+
+	<insert id="insertUserSubject" parameterType="com.scfs.domain.base.entity.BaseUserSubject">
+		insert into
+		tb_base_user_subject(
+		user_id,
+		subject_id,
+		subject_type,
+		operater,
+		state,
+		creator_id,
+		create_at
+		)
+		values(
+		#{userId,jdbcType=BIGINT},
+		#{subjectId,jdbcType=BIGINT},
+		#{subjectType,jdbcType=TINYINT},
+		#{operater,jdbcType=TINYINT},
+		#{state,jdbcType=TINYINT},
+		#{creatorId,jdbcType=BIGINT},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateUserSubject" parameterType="com.scfs.domain.base.entity.BaseUserSubject">
+		update tb_base_user_subject
+		<set>
+			<if test="deleterId != null">deleter_id=#{deleterId,jdbcType=BIGINT},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="updateAt != null">update_at=#{updateAt,jdbcType=TIMESTAMP},</if>
+			<if test="operater != null">operater=#{operater,jdbcType=TINYINT},</if>
+			<if test="state != null">state=#{state,jdbcType=TINYINT},</if>
+			<if test="assignerId != null">assigner_id=#{assignerId,jdbcType=BIGINT},</if>
+			<if test="assignAt != null">assign_at=#{assignAt,jdbcType=TIMESTAMP},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<select id="queryUserSubjectById" parameterType="Integer"
+		resultMap="BaseUserSubjectMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_subject
+		WHERE id = #{id}
+	</select>
+
+	<select id="queryUserSubjectByCon" parameterType="com.scfs.domain.base.dto.req.BaseUserSubjectReqDto"
+		resultMap="BaseUserSubjectMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_subject
+		WHERE is_delete = 0
+		<if test="userId != null">
+			AND user_id =#{userId}
+		</if>
+		<if test="subjectId != null">
+			AND subject_id =#{subjectId}
+		</if>
+		<if test="subjectType != null">
+			AND subject_type =#{subjectType}
+		</if>
+	</select>
+
+	<update id="deleteUserSubject" parameterType="com.scfs.domain.base.entity.BaseUserSubject">
+		update tb_base_user_subject
+		<set>
+			<if test="deleterId != null">deleter_id=#{deleterId,jdbcType=BIGINT},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="operater != null">operater=#{operater,jdbcType=TINYINT},</if>
+			<if test="state != null">state=#{state,jdbcType=TINYINT},</if>
+			<if test="assignerId != null">assigner_id=#{assignerId,jdbcType=BIGINT},</if>
+			<if test="assignAt != null">assign_at=#{assignAt,jdbcType=TIMESTAMP},</if>
+		</set>
+		WHERE is_delete = 0
+		<if test="userId != null">
+			AND user_id =#{userId}
+		</if>
+		<if test="subjectId != null">
+			AND subject_id =#{subjectId}
+		</if>
+		<if test="subjectType != null">
+			AND subject_type =#{subjectType}
+		</if>
+	</update>
+
+</mapper>

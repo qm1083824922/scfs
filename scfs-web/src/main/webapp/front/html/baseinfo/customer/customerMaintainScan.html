@@ -1,0 +1,152 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>客户维护管理</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="customerMaintain/detail">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								  <tr>
+				                     <td class="text-right"><b>客户编号：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     		<label class=" js-initform" id="customerNo" name="customerNo">
+				                     </td>
+				                 </tr>
+								 <tr width="280">
+				                     <td class="text-right" ><b>客户简称：</b></td>
+				                     <td class="text-left">
+				                       <label class="js-initform" id="abbreviation" name="abbreviation">
+				                     </td>
+				                     <td class="text-right"><b>来源渠道：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="sourceChannelName" name="sourceChannelName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>中文全称：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="chineseName" name="chineseName">
+				                     </td>
+				                     <td class="text-right"><b>维护人：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="guardianName" name="guardianName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>英文全称：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="englishName" name="englishName">
+				                     </td>
+				                     <td class="text-right"><b>跟进人：</b></td>
+	                                 <td class="text-left">
+	                                 	 <label class="js-initform" id="fllowName" name="fllowName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册地：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="regPlace" name="regPlace">
+				                     </td>
+				                     <td class="text-right"><b>联系人：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="contacts" name="contacts">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册号：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="regNo" name="regNo">
+				                     </td>
+				                     <td class="text-right"><b>联系电话：</b></td>
+	                                 <td class="text-left">
+	                                 	<label class="js-initform" id="contactsNumber" name="contactsNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>注册电话：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="regPhone" name="regPhone">
+				                     </td>
+				                     <td class="text-right"><b>其他联系方式：</b></td>
+	                                 <td class="text-left">
+	                                 	  <label class="js-initform" id="contactsOtherNumber" name="contactsOtherNumber">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>办公地址：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     	<label class="js-initform" id="officeAddress" name="officeAddress">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>客户类型：</b></td>
+				                     <td class="text-left" colspan="3">
+				                     		<label class="js-initform" id="customerTypeName" name="customerTypeName">
+				                     </td>
+				                  </tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left" colspan="3">
+										<label class="js-initform" id="remark" name="remark">
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="mt15">
+	                        <table id="js_follow_dataTable" data-url="customerFollow/query"></table>
+                    </div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerMaintainSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		/*数据表格*/
+		var tabColsLog = [ {
+		    title: 'ID',
+		    field: "id",
+		    width: '5%'
+		}, {
+		    title: '跟进日期',
+		    field: "createAt",
+		    width: '25%'
+		}, {
+		    title: '所处阶段',
+		    field: "stageName",
+		    width: '15%'
+		}, {
+		    title: '跟进人',
+		    field: "fllowName",
+		    width: '15%'
+		}, {
+		    title: "跟进内容",
+		    field: "content",
+		    width: '25%'
+		}];
+		GLOBAL.initTable($('#js_follow_dataTable'), tabColsLog, {
+			customerId: options.param.id
+	    }, null, {
+	        pagination: false
+	    });
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+	}
+	GLOBAL.goBack();
+</script>

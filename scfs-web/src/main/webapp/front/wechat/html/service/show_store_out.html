@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>供应链金融</title>
+<script src="../../js/lib/flexible.js" type="text/javascript"></script>
+<link href="../../css/base.css" rel="stylesheet"></link>
+<link href="../../css/public.css" rel="stylesheet"></link>
+<link href="../../css/mobile.css" rel="stylesheet"></link>
+<link href="../../css/msg.css" rel="stylesheet"></link>
+</head>
+
+<body>
+	<div class="wrapper mb20">
+		<div style="display: none" class="advance_dataTable">
+			<h3 class="title mb10 ml5 mt5">
+				<strong>供应商销售信息</strong>
+			</h3>
+			<div class="detail-box js_advance_dataTable"></div>
+		</div>
+
+		<script src="../../../js/lib/jquery-1.11.0.min.js"
+			type="text/javascript"></script>
+		<script src="../../js/common.js?v=1.0.0"></script>
+		<script>
+        var id = GLOBAL.getParam("supplierId");
+        var type = GLOBAL.getParam("type");
+        var sendTime = GLOBAL.getParam("sendTime");
+        $(function() {
+             GLOBAL.ajax("pmsStoreOut/query",{
+            	 supplierId:id,
+            	 type : type,
+            	 sendTime : sendTime
+             },function(e){
+                  var data = e.items;
+                   if (data.length !== 0) {
+                      $(".advance_dataTable").show();
+                          var tabStr = "";
+                          for (var i = 0; i < data.length; i++) {
+                              tabStr += '<div class="detail-item"><p><span class="form-label" style="display:block;width: 100%;font-size: 12px;">商品编号：' + data[i].sku + '</span></p><p><span class="form-label" style="display:block;width: 100%;font-size: 12px;">商品型号：' + data[i].goodsType + '</span></p><p><span class="form-label">昨日入库数量：' + data[i].dailyStockinNum.toThounds() + '</span><span class="form-value">当月入库数量：' + data[i].stockinNum.toThounds() + '</span></p><p><span class="form-label">昨日销售数量：' + data[i].dailySalseNum.toThounds() + '</span><span class="form-value">当月销售数量：' + data[i].salseNum.toThounds() + '</span></p><p><span class="form-label">可用库存数量：' + data[i].remainSendNum.toThounds() + '</span></p></div>';
+                  }
+                  $('.js_advance_dataTable').empty().append(tabStr);
+              } else {
+              }
+             });
+
+        })
+        GLOBAL.initSelect();
+    </script>
+</body>
+
+</html>

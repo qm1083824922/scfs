@@ -1,0 +1,131 @@
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>费用</li>
+		<li>应收费用</li>
+		<li>应付费用</li>
+		<li class="active">添加</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form method="post" action="###" class="form-inline" id="searchForm">
+                <div class="form-group-sm">
+                    <div class="search-item">
+                        <label class="control-label ml10">应付费用编号：</label>
+                        <input type="text" class="form-control" id="feeNo" name="feeNo">
+                    </div>
+                    <div class="search-item">
+                        <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                        <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                    </div>
+            </form>
+            <form class="form-horizontal form-inline" id="poOrderDtlEditAddForm" data-url="fee/spec/pay/divid">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="recFeeId" name="id">
+					<table id="js_dataTable" data-url="fee/spec/pay/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/fee/spec/pay/add" data-url="fee/spec/pay/add">保存</button>
+					<button type="button" data-url="html/fee/recFee/recFeePayEdit.html" class="back-item btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+/*数据表格*/
+var tabCols = [ {
+	field : 'checkItem',
+	checkbox : true,
+	width : '1%'
+},
+{
+	title : '费用编号',
+	field : 'feeNo',
+	align : 'center',
+	width : '8%'
+},{
+	title : '经营单位',
+	field : 'busiUnitNameNo',
+	align : 'center',
+	width : '10%'
+},{
+	title : '项目',
+	field : 'projectName',
+	align : 'center',
+	width : '10%'
+},{
+	title : '应付客户',
+	field : 'custReceiverName',
+	align : 'center',
+	width : '10%'
+},{
+	title : '应付费用科目',
+	field : 'payFeeSpecName',
+	align : 'center',
+	width : '7%'
+},{
+	title : '应付费用类型',
+	field : 'payFeeTypeName',
+	align : 'center',
+	width : '7%'
+},{
+	title : '应付日期',
+	field : 'payDate',
+	align : 'center',
+	width : '6%'
+},{
+	title : '币种',
+	field : 'currencyTypeName',
+	align : 'center',
+	width : '3%'
+},{
+	title : '应付金额',
+	field : 'payAmount',
+	align : 'center',
+	width : '4%',
+	formatter : function(value , row , index) {
+		return value==null ? "": value.toThounds();
+    }
+}];
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    $.extend(data, {
+        id: options.param.id
+    });
+    $('#js_dataTable').bootstrapTable('refresh', {
+        query: data
+    });
+})
+options.initPage = function() {
+	GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+		id : options.param.id
+	}, null);
+};
+
+$("#save").click(function() {
+	var ids = GLOBAL.selectIds($('#js_dataTable'));
+	if(ids){
+		GLOBAL.ajax("fee/spec/pay/add", {
+			recFeeId  : options.param.id,
+			ids : ids
+		}, function(e) {
+			layer.msg("保存成功！", {
+				icon : 1,
+				time : 1500,
+			}, function() {
+				GLOBAL.go("html/fee/recFee/recFeePayEdit.html");
+			});
+		}, false);
+    }
+})
+GLOBAL.goBack();
+</script>

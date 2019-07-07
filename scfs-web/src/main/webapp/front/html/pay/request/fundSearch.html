@@ -1,0 +1,73 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">请款</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">               
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">收款单位：</label>
+                            <select class="form-control js-select" data-url="PROJECT_CS"  pid="projectId"  id="payee" name="payee"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款编号：</label>
+                            <input style="width:300px;" type="text" class="form-control" id="payNo" name="payNo" placeholder="多个付款编号之间用,隔开">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款附属编号：</label>
+                            <input type="text" class="form-control" id="attachedNumbe" name="attachedNumbe">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款类型：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_TYPE" id="payType" name="payType"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">付款方式：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_WAY" id="payWay" name="payWay"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">批量确认流水：</label>
+                            <input class="form-control"  id="unionOverIdentifier" name="unionOverIdentifier">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">批量打印流水：</label>
+                            <input class="form-control"  id="unionPrintIdentifier" name="unionPrintIdentifier">
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <!-- <button type="button" id="btnRefresh" class="btn btn-primary btn-sm ml20">刷新</button> -->
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/pay/request/fundCreate.html"  data-permissionUrl="/payOrder/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <button type="button" id="btnExport" data-url="/payOrder/excel/collectApprove.xls" data-permissionUrl="/payOrder/excel/collectApprove.xls" class="btn btn-warning btn-sm ml10">导出excel</button>
+<!--                         	<button type="button" id="btnBatchPrint" data-url="html/pay/payBatchPrint.html" data-permissionUrl="/payOrder/preBatch/print" class="btn btn-warning btn-sm ml10">批量打印</button>
+ -->                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="payOrder/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/pay/fundSearch.js"></script>

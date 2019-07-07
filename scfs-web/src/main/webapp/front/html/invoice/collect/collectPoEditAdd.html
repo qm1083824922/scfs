@@ -1,0 +1,401 @@
+
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+        <li>发票</li>
+        <li>收票</li>
+		<li>采购信息</li>
+		<li class="active">新增</li>
+	</ol>
+	<section class="product-wrap">
+		<div class="box">
+		<div class="box-body">
+			<form method="post" action="###" class="form-inline"
+				id="searchForm">
+				<div class="form-group-sm">
+					<p>
+						<label class="control-label ml10">采购编号：</label> 
+						<input type="text" class="form-control" id="orderNo" name="orderNo">
+						
+						<label class="control-label ml10">商品编号：</label> 
+						<input type="text" class="form-control" id="goodsNo" name="goodsNo">
+						
+						<label class="control-label ml10">商品名称：</label> 
+						<input type="text" class="form-control" id="goodsName" name="goodsName">
+						
+						</select> <label class="control-label">日期：</label>
+						<input type="text" class="form-control js_datePicker" id="startOrderTime" value="" name="startOrderTime">- 
+						<input type="text" class="form-control js_datePicker" id="endOrderTime" value="" name="endOrderTime">
+
+						<button type="button" id="btnSearch"
+							class="btn btn-primary btn-sm ml20">查询</button>
+					</p>
+				</div>
+			</form>
+
+			<form class="form-horizontal form-inline"
+				id="poOrderDtlEditAddForm" data-url="invoiceCollectPo/add">
+				<div class="box-body">
+					<input class="form-control" type="hidden" id="collectId" name="id">
+					<table id="js_dataTable" data-url="invoiceCollectPo/divid">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceCollectPo/add" data-url="invoiceCollectPo/add">保存</button>
+					<button type="button" data-url="html/invoice/collect/collectPoEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>	
+		</div>
+	</section>
+</div>
+
+<script>
+	/*数据表格*/
+	var tabCols = [ {
+		field : 'checkItem',
+		checkbox : true,
+	},
+	{
+		title : '采购编号',
+		field : 'orderNo',
+		width : 80,
+		align : 'center'
+	},
+	{
+		title : '日期',
+		field : 'orderTime',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '商品编号',
+		field : 'goodsNo',
+		width : 100,
+		align : 'center'
+	},
+	{
+		title : '商品描述',
+		field : 'goodsName',
+		width : 210,
+		align : 'center'
+	},
+	{
+		title : '单位',
+		field : 'unit',
+		width : 70,
+		align : 'center'
+	},
+	{
+		title : '税率',
+		field : 'taxRate',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<span class="taxRate">'+value+'</span>';
+		}
+	},
+	{
+		title : '可收票数量',
+		field : 'blanceNum',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<span class="blanceNum">'+value+'</span>';
+		}
+	},
+	{
+		title : '数量',
+		field : 'poNum',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<input type="text"class="form-control po-num" value="'+row.blanceNum+'">';
+		}
+	},
+	{
+		title : '含税单价',
+		field : 'goodsPrice',
+		width : 70,
+		align : 'center'
+	},
+	{
+		title : '可收票金额',
+		field : 'blanceAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<span class="blanceAmount">'+value+'</span>';
+		}
+	}, {
+		title : '含税金额',
+		field : 'inRateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<input type="text"class="form-control rate-price" value="'+row.blanceAmount+'">';
+		}
+	},{
+		title : '未税金额',
+		field : 'exRateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			var exRateAmount = (row.blanceAmount / ( 1 + row.taxRate)).toFixed(2);
+			return '<span class="exRateAmount">'+exRateAmount+'</span>';
+		}
+	},{
+		title : '税额',
+		field : 'rateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			var rateAmount = (row.blanceAmount / ( 1 + row.taxRate) * row.taxRate).toFixed(2);
+			return '<span class="rateAmount">'+rateAmount+'</span>';
+		}
+	},{
+		title : '含税折扣金额',
+		field : 'discountInRateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			return '<input type="text"class="form-control discount-price" value="'+row.discountAmount+'">';
+		}
+	},{
+		title : '未税折扣金额',
+		field : 'discountExRateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			var discountExRateAmount = (row.discountAmount / ( 1 + row.taxRate)).toFixed(2);
+			return '<span class="discountExRateAmount">' + discountExRateAmount + '</span>';
+		}
+	},{
+		title : '折扣税额',
+		field : 'discountRateAmount',
+		width : 70,
+		align : 'center',
+		formatter : function(value, row, index) {
+			var discountRateAmount = (row.discountAmount / ( 1 + row.taxRate) * row.taxRate).toFixed(2);
+			return '<span class="discountRateAmount">' + discountRateAmount + '</span>';
+		}
+	}];
+
+	options.initPage = function() {
+		GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+			id : options.param.id
+		}, null, {
+			onLoadSuccess : function(data) {
+				balance = data.options.totalAmount;
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>数量：<span class='select-sum'>0</span> &nbsp;&nbsp; 含税金额：<span class='select-price'>0.00</span>&nbsp;&nbsp; 未税金额：<span class='select-exRateAmount'>0.00</span>&nbsp;&nbsp; 税额：<span class='select-rateAmount'>0.00</span>&nbsp;&nbsp; 含税折扣金额：<span class='select-discount'>0.00</span>&nbsp;&nbsp; 未税折扣金额：<span class='select-discountExRateAmount'>0.00</span>&nbsp;&nbsp; 折扣税额：<span class='select-discountRateAmount'>0.00</span>");
+			},
+			onCheck: function(row, $ele){
+				getSelectData();
+			},
+			onUncheck: function(row, $ele){
+				getSelectData();
+			},
+			onCheckAll: function(){
+				getSelectData();
+			},
+			onUncheckAll: function(){
+				getSelectData();
+			},
+		});
+		
+		function getSelectData(){
+			var num = 0;
+			var price=0;
+			var exRateAmount = 0;
+			var rateAmount = 0;
+			var discount = 0;
+			var discountExRateAmount = 0;
+			var discountRateAmount = 0;
+			$('#js_dataTable tbody input[type="checkbox"]:checked').each(function(){
+				var value = $(this).closest("tr").find(".po-num").val();				
+				num = num + parseFloat(value);
+				
+				var priceValue = $(this).closest("tr").find(".rate-price").val();
+				price = price + parseFloat(priceValue);
+				
+				var exRateAmountValue = $(this).closest("tr").find(".exRateAmount").text();
+				exRateAmount = exRateAmount + parseFloat(exRateAmountValue);
+				var rateAmountValue = $(this).closest("tr").find(".rateAmount").text();
+				rateAmount = rateAmount + parseFloat(rateAmountValue);
+				
+				var discountValue = $(this).closest("tr").find(".discount-price").val();
+				discount = discount + parseFloat(discountValue);
+				
+				var discountExRateAmountValue = $(this).closest("tr").find(".discountExRateAmount").text();
+				discountExRateAmount = discountExRateAmount + parseFloat(discountExRateAmountValue);
+				var discountRateAmountValue = $(this).closest("tr").find(".discountRateAmount").text();
+				discountRateAmount = discountRateAmount + parseFloat(discountRateAmountValue);
+			})
+			$("#js_dataTable .select-sum").text(num.toThounds());
+			$("#js_dataTable .select-price").text(price.toThounds());
+			$("#js_dataTable .select-exRateAmount").text(parseFloat(exRateAmount.toFixed(2)).toThounds());
+			$("#js_dataTable .select-rateAmount").text(parseFloat(rateAmount.toFixed(2)).toThounds());
+			$("#js_dataTable .select-discount").text(discount.toThounds());
+			$("#js_dataTable .select-discountExRateAmount").text(parseFloat(discountExRateAmount.toFixed(2)).toThounds());
+			$("#js_dataTable .select-discountRateAmount").text(parseFloat(discountRateAmount.toFixed(2)).toThounds());
+		}
+		
+		$('#js_dataTable').on("input",".po-num",function(){
+			getSelectData();
+		});
+		
+		$('#js_dataTable').on("input",".rate-price",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			var $tr = $(this).closest("tr");
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($tr.find(".taxRate").text());
+				var exRateAmount = (inRateAmount / ( 1 + rateAmount)).toFixed(2);
+				var rateAmount = (inRateAmount / ( 1 + rateAmount) * rateAmount).toFixed(2);
+				$tr.find(".exRateAmount").text(exRateAmount);
+				$tr.find(".rateAmount").text(rateAmount);
+			}else{
+				$(this).val("");
+				$tr.find(".exRateAmount").text("0");
+				$tr.find(".rateAmount").text("0");
+			}
+			getSelectData();
+		});
+		
+		$('#js_dataTable').on("input",".discount-price",function(){
+			var inRateAmount = $(this).val();
+			var reg = /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+			var $tr = $(this).closest("tr");
+			if(reg.test(inRateAmount)){
+				var rateAmount = parseFloat($tr.find(".taxRate").text());
+				var discountExRateAmount = (inRateAmount / ( 1 + rateAmount)).toFixed(2);
+				var discountRateAmount = (inRateAmount / ( 1 + rateAmount) * rateAmount).toFixed(2);
+				$tr.find(".discountExRateAmount").text(discountExRateAmount);
+				$tr.find(".discountRateAmount").text(discountRateAmount);
+			}else{
+				$(this).val("");
+				$tr.find(".discountExRateAmount").text("0");
+				$tr.find(".discountRateAmount").text("0");
+			}
+			getSelectData();
+		});
+	};
+
+	$("#btnSearch").click(function() {
+	    var data = $("#searchForm").serializeObject();
+		$.extend(data, {
+			id : options.param.id
+		});
+		$('#js_dataTable').bootstrapTable('refresh', {
+			query : data
+		});
+	})
+	
+	$("#save").click(
+			function() {
+				var saveUrl = $(this).data("url");
+				var dtlArr = [];
+				var isValid = true;
+		
+				var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+				if (selectedRows.length == 0) {
+					layer.msg("请选择");
+					isValid = false;
+				} else {
+					for (var i = 0; i < selectedRows.length; i++) {
+						var id = selectedRows[i].id;
+						var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;//金额校验
+						var $tr = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]'); 
+						var $inRateAmount = $tr.find(".rate-price");
+						var $discountInRateAmount = $tr.find(".discount-price");
+						var $poNum = $tr.find(".po-num");
+						var inRateAmount = $inRateAmount.val();
+						var discountInRateAmount = $discountInRateAmount.val();
+						var poNum = $poNum.val();
+						var rateAmount = parseFloat($tr.find(".taxRate").text());
+						//获取可用数量与余额
+						var blanceNum = parseFloat($tr.find(".blanceNum").text());
+						var blanceAmount = parseFloat($tr.find(".blanceAmount").text());
+						
+						if(poNum==""){
+							layer.msg("数量不能为空");
+							$poNum.focus();
+							isValid = false;
+						}
+						if (!pattern.test(poNum)) {
+							layer.msg("请输入正确格式");
+							$poNum.focus();
+							isValid = false;
+						}
+						if(poNum > blanceNum){
+							layer.msg("数量不足！");
+							$poNum.focus();
+							isValid = false;
+						}
+						if (inRateAmount == "") {
+							layer.msg("含税金额不能为空");
+							$inRateAmount.focus();
+							isValid = false;
+						}
+						if (!pattern.test(inRateAmount)) {
+							layer.msg("请输入正确格式");
+							$inRateAmount.focus();
+							isValid = false;
+						} 
+						if(inRateAmount>blanceAmount){
+							layer.msg("余额不足！");
+							$inRateAmount.focus();
+							isValid = false;
+						}
+						if(discountInRateAmount==""){
+							layer.msg("含税折扣金额不能为空");
+							$discountInRateAmount.focus();
+							isValid = false;
+						}
+						if (!pattern.test(discountInRateAmount)) {
+							layer.msg("请输入正确格式");
+							$discountInRateAmount.focus();
+							isValid = false;
+						} else {
+							dtlArr.push({  
+								"inRateAmount" : inRateAmount,
+								"discountInRateAmount" : discountInRateAmount,
+								"poNum" : poNum,
+								"taxRate" : rateAmount,
+								"poId":selectedRows[i].id
+							});
+						}
+					}
+				}
+
+				if (isValid) {
+					var saveData = {
+							colRel : dtlArr,
+						collectId : options.param.id
+					};
+					var setContentType = false;
+					console.log(saveData);
+					GLOBAL.ajax(saveUrl, JSON.stringify(saveData), function(e) {
+						if (e.success) {
+							layer.msg("保存成功！", {
+								icon : 1,
+								time : 1500,
+							}, function() {
+								options.param.id=options.param.id; 
+								GLOBAL.go("html/invoice/collect/collectPoEdit.html",options.param);
+							});
+						} else {
+							layer.msg(e.msg, {
+								icon : 5,
+								time : 1500,
+							});
+						}
+					}, true);
+				}
+			});
+
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,239 @@
+<div class="wrapper">
+  <section class="content-header my-content-header">
+  	<ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>基础信息</li>
+	    <li>铺货商品</li>
+	    <li class="active">浏览</li>
+  	</ol>
+  </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="distributeGoods/detail">
+            <div class="box-body">  
+                 <ul class="nav nav-tabs">
+                  	<li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/distribute/distributeGoodsScan.html">铺货商品信息</a></li>
+                  	<li role="presentation"><a class="tab-item" data-url="html/baseinfo/distribute/attachmentScan.html">附件</a></li> 
+                 </ul>
+                 
+                  <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td class="text-right"><b>部门：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="departmentName" name="departmentName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应商：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="supplierName" name="supplierName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>质押比例：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="pledge" name="pledge"></label>
+                       </td>
+                    </tr>
+                  	<tr>
+                      <td width="180" class="text-right"><b>编号：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="number" name="number"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>名称：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="name" name="name"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>品牌：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="brand" name="brand"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>型号：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="type" name="type"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>条码：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="barCode" name="barCode"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>规格：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="specification" name="specification"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>税收分类：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="taxClassification" name="taxClassification"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>国内税率：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="taxRate" name="taxRate"></label>
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>单位：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="unit" name="unit"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>高：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="volume" name="volume"></label>cm
+                       </td>
+                    </tr> 
+                       <tr>
+                      <td class="text-right"><b>长：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="grow" name="grow"></label>cm
+                       </td>
+                    </tr> 
+                       <tr>
+                      <td class="text-right"><b>宽：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="broad" name="broad"></label>cm
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>毛重：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="grossWeight" name="grossWeight"></label>kg
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>净重：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="netWeight" name="netWeight"></label>kg
+                       </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>采购指导价：</b></td> 
+                       <td class="text-left"> 
+                        	<label class="js-initform" id="purchasePrice" ></label>
+                            <label class="js-initform" id="purCurrencyTypeName" ></label>
+                        	
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>销售指导价：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="salePrice"></label>
+                        	<label class="js-initform" id="saleCurrencyTypeName" ></label>
+                        	
+                       </td>
+                    </tr>  
+                    
+                    <tr>
+                      <td class="text-right"><b>事业部主管：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="careerName" name="careerName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>采购部专员：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="purchaseName" name="purchaseName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应链小组：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="supplyChainGroupName" name="supplyChainGroupName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>供应链服务：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="supplyChainServiceName" name="supplyChainServiceName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>风控专员：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="riskName" name="riskName"></label>
+                       </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>状态：</b></td> 
+                      <td class="text-left"> 
+                        	<label class="js-initform" id="statusName" name="statusName"></label>
+                       </td>
+                    </tr>
+                  </table>
+                  
+                  <div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="distributeGoods/auditflow/audit/query"></table>
+                    </div>
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center"> 
+              <button type="button"  data-url="html/baseinfo/distribute/distributeGoodsSearch.html"id="js-back" class="btn btn-default btn-sm">返回</button> 
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+<script>
+options.initPage = function() {
+	/*数据表格*/
+	var tabColsLog = [{
+	    title: '序号',
+	    field: 'columnsNumber',
+	    width: '5%'
+	}, {
+	    title: '流程节点',
+	    field: "stateName",
+	    width: '15%'
+	}, {
+	    title: '处理人',
+	    field: "dealName",
+	    width: '15%'
+	}, {
+	    title: '处理意见',
+	    field: "suggestion",
+	    width: '25%'
+	}, {
+	    title: '开始时间',
+	    field: "createTime",
+	    width: '15%'
+	}, {
+	    title: "处理时间",
+	    field: "dealTime",
+	    width: '15%'
+	}, {
+	    title: "处理状态",
+	    field: "auditStateName",
+	    width: '10%'
+	}];
+	
+	
+	GLOBAL.getEditData($("#form1"), options.param.id);
+	
+	GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+        projectItemId: options.param.id
+    }, null, {
+        pagination: false
+    });
+
+	$("#js-back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}   
+</script>

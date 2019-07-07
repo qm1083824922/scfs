@@ -1,0 +1,218 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+		    <li>出口</li>
+		    <li>报关申请</li>  
+		    <li>报关明细</li>
+            <li class="active">选择出库明细</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                       <div class="search-item">                                      
+                            <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">                                            
+                            <label class="control-label ml10">出库编号：</label>
+                            <input type="text" class="form-control" id="billNo" name="billNo">   
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">出库附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">    
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">出库时间：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartSend" value="" name="startDeliverTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndSend" value="" name="endDeliverTime">                                               
+                        </div>
+                        <div class="search-item">                                                                          
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">   
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">   
+                        </div>
+                        <div class="search-item">                                                                                           
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">  
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>                                    
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="billOutStoreDtl/available/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+      			<button type="button" data-permissionUrl="/customsApplyLine/add" class="btn btn-primary btn-sm" id="batchAdd">选择出库明细</button> 
+      			<button type="button" data-url="html/export/customsApply/customsApplyLineEdit.html" class="btn btn-default btn-sm js-back">返回</button> 
+    		</div>
+    		<!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+
+<script>
+
+function customsNumFormatter(value, row, index) {
+    return "<input type='number' class='customsNum' style='text-align:center;color:red' value=" + row.customsNum + "></input>";
+}
+
+function customsPriceFormatter(value, row, index) {
+    return "<input type='number' class='customsPrice' style='text-align:center;color:red' value=" + row.customsPrice + "></input>";
+}
+
+/*数据表格*/
+var tabCols = [
+   	{
+         field: 'checkItem',
+         checkbox: true,
+    },{  
+ 	     title: '序号',
+ 	     field: 'columnsNumber',  
+ 	     width: 10
+     }, {
+	     title: '商品编号',
+	     field: 'goodsNumber',
+	     align: 'center'
+	 }, {
+	     title: '商品名称',
+	     field: 'goodsName',
+	     align: 'center'
+	 }, {
+	     title: '商品型号',
+	     field: 'goodsType',
+	     align: 'center'
+	 }, {
+ 	     title: '仓库',
+ 	     field: 'warehouseName',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '出库编号',
+ 	     field: 'billNo',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '出库附属编号',
+ 	     field: 'affiliateNo',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '出库时间',
+ 	     field: 'deliverTime',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '出库单价',
+ 	     field: 'sendPrice',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '剩余报关数量',
+ 	     field: 'availableCustomsDeclareNum',
+ 	     align: 'center'
+ 	 }, {
+ 	     title: '报关数量',
+ 	     field: 'customsNum',
+ 	     align: 'center',
+         formatter: customsNumFormatter
+ 	 }, {
+ 	     title: '报关含税单价',
+ 	     field: 'customsPrice',
+ 	     align: 'center',
+         formatter: customsPriceFormatter
+ 	 }, {
+ 	     title: '税率',
+ 	     field: 'taxRate',
+ 	     align: 'center'
+ 	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+		customsApplyId : options.param.id
+	});
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	$.extend(data, {
+		customsApplyId : options.param.id
+	});
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#batchAdd").click(function() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    if (idsLen == 0) {
+      	layer.msg("请选择！");
+      	return;
+    }
+    var rows = [];
+    for (var i = 0; i < idsLen; i++) {
+    	var row = new Object();
+    	var id = selectedRows[i].id;
+    	row.billDtlId = id;
+    	row.billId = selectedRows[i].billOutStoreId;
+    	row.billNo = selectedRows[i].billNo;
+    	row.billAffiliateNo = selectedRows[i].affiliateNo;
+    	row.goodsId = selectedRows[i].goodsId;
+    	row.taxRate = selectedRows[i].taxRate;
+    	
+    	var customsNum = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".customsNum").val();
+    	var customsPrice = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".customsPrice").val();
+    	if (!customsNum) {
+    		layer.msg("报关数量必填且正确，请重新输入");
+    		return;
+    	}
+    	if (customsNum*1 <= 0) {
+    		layer.msg("报关数量不能为负数和零，请重新输入");
+    		return;
+    	}
+    	if (!customsPrice) {
+    		layer.msg("报关单价必填且正确，请重新输入");
+    		return;
+    	}
+    	if (customsPrice*1 < 0) {
+    		layer.msg("报关单价不能为负数，请重新输入");
+    		return;
+    	}
+    	var availableCustomsDeclareNum = selectedRows[i].availableCustomsDeclareNum;
+    	if (customsNum*1 > availableCustomsDeclareNum*1) {
+    		layer.msg("报关数量大于剩余报关数量，请重新输入");
+    		return;
+    	}
+    	row.customsNum = customsNum;
+    	row.customsPrice = customsPrice;
+    	rows.push(row);
+    }
+    add(rows);
+})
+
+function add(rows) {
+	var params = {
+		id: options.param.id,
+		customsApplyLineList: rows
+	}
+	GLOBAL.ajax("customsApplyLine/add", JSON.stringify(params), function(e){
+        if (e.success) {
+       		layer.msg("选择出库明细成功", {
+               icon: 1
+         	});
+         	$("#btnSearch").click();
+        } else {
+           layer.msg(e.msg);
+        } 		
+  	}, true)
+}
+
+GLOBAL.goBack();
+
+</script>

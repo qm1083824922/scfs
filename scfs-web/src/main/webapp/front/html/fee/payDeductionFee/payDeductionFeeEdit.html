@@ -1,0 +1,143 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>费用</li>
+		<li>应付抵扣费用</li>
+		<li class="active">编辑</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1" data-url="fee/pay/deduction/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id" name="id">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td width="180" class="text-right"><b>费用编号：</b></td>
+									<td class="text-left">
+										<label class="form-control js-initform" id="feeNo" name="feeNo"></label>
+									</td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+									<td class="text-left"><label
+										class="form-control js-initform"
+										id="projectName" name="projectName"></label></td>
+								</tr>
+								<tr>
+								<td class="text-right"><b>抵扣类型：<em class="text-star">*</em></b></td>
+								<td class="text-left"><label
+									class="form-control js-initform"
+									id="deductionTypeName" name="deductionTypeName"></label></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应付客户：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-initform" data-url="PROJECT_BCS"
+										pid="projectId" id="custReceiver" name="custReceiver"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应付抵扣科目：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-initform" data-url="PAY_FEE_SPEC"
+										id="payFeeSpec" name="payFeeSpec"></select></td>
+								</tr> 
+								<tr>
+									<td class="text-right"><b>应付抵扣方式：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-initform" data-url="PAY_TYPE"
+										id="payType" name="payType"></select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应付抵扣日期：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input
+										class="form-control js-initform js_datePicker" id="payDate"
+										name="payDate"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>币种：<em class="text-star">*</em></b></td>
+									<td class="text-left"><select
+										class="form-control js-initform"
+										data-url="DEFAULT_CURRENCY_TYPE" id="currencyType"
+										name="currencyType"><select></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>应付抵扣金额：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input
+										class="form-control js-initform" id="payAmount"
+										name="payAmount"></td>
+								</tr>
+								<tr>
+									<td class="text-right"><b>备注：</b></td>
+									<td class="text-left"><textarea
+											class="form-control js-initform" id="payNote" name="payNote"></textarea></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/fee/pay/deduction/add">保存</button>
+					<button type="button" id="back" data-url="html/fee/payDeductionFee/payDeductionFeeSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+			</form>
+		</div>
+</section>
+</div>
+<script >
+	
+options.initPage = function() {
+	GLOBAL.getEditData($("#form1"), options.param.id);
+
+	$("#form1").validate({
+		rules : {
+			projectId : {
+				required : true
+			},
+			deductionType : {
+				required : true
+			},
+			custReceiver : {
+				required : true
+			},
+			payFeeSpec : {
+				required : true
+			},
+			payType : {
+				required : true
+			},
+			payDate : {
+				required : true
+			},
+			currencyType : {
+				required : true
+			},
+			payAmount : {
+				required : true,
+				number : true
+			},
+		},
+		submitHandler : function() {
+			var data = $("#form1").serializeObject();
+			GLOBAL.ajax("fee/pay/deduction/update", data, function(e) {
+				if (e.success) {
+					layer.msg("新增成功！");
+					GLOBAL.go("html/fee/payDeductionFee/payDeductionFeeSearch.html");
+				} else {
+					layer.msg(e.msg);
+				}
+			}, false, $("#save"));
+		}
+	});
+	$(".js_datePicker").datetimepicker({
+        format:'Y-m-d'
+    });
+}
+$("#projectId").change(function(){
+	$("#custReceiver").val('');
+});
+GLOBAL.goBack();
+</script>

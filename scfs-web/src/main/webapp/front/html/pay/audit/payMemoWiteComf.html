@@ -1,0 +1,208 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>资金</li>
+            <li class="active">付款水单确认</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">收款单位：</label>
+                            <select class="form-control js-select" data-url="BCS" id="payee" name="payee"></select>
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款编号：</label>
+                            <input style="width:300px;" type="text" class="form-control" id="payNo" name="payNo" placeholder="多个付款编号之间用,隔开">
+						</div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款类型：</label>
+                            <select class="form-control js-select" data-url="PAY_ORDER_TYPE" id="payType" name="payType"></select>
+                            
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">要求付款日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startRequestTime" value="" name="startRequestTime"> -
+                            <input type="text" class="form-control js_datePicker" id="endRequestTime" value="" name="endRequestTime">
+                        	
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="box-body">
+					<input class="form-control" type="hidden" id="id" name="id">
+					<table id="js_dataTable" data-url="payOrder/over/query">
+
+					</table>
+				</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+	      'click .modify': function(e, value, row, index){
+	          options.param.id = row.id;
+	          GLOBAL.go("html/pay/audit/payMemoWiteComfEdit.html");
+	   },     
+  };
+
+function operateFormatter(value, row, index) {
+	    return [
+	            
+	            '<a class="modify" href="javascript:void(0)">',
+	            '<span class="btn btn-primary btn-xs" data-permissionUrl="/payOrder/detail">确认</span>',
+	            '</a>  ',
+	        ].join('');
+	}
+/*数据表格*/
+var tabCols = [
+	 {
+		field : 'checkItem',
+		checkbox : true,
+		width : '1%'
+	 },	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '付款编号',
+	     field: 'payNo',
+	     width: 85,
+	     align: 'center'
+     }, {
+	     title: '合并付款编号',
+	     field: 'mergePayNo',
+	     width: 85,
+	     align: 'center'
+     },{
+	     title: '附属编号',
+	     field: 'attachedNumbe',
+	     width: 92,
+	     align: 'center'
+     }, {
+	     title: '经营单位',
+	     field: 'busiUnit',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '项目',
+	     field: 'projectName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '付款类型',
+	     field: 'payTypeName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currnecyTypeName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '付款方式',
+	     field: 'payWayName',
+	     width: 70,
+	     align: 'center'
+	 }, {
+	     title: '付款金额',
+	     field: 'payAmount',
+	     width: 70,
+	     align: 'center',
+	 	formatter : function(value , row , index) {
+			return value==null ? "": value.toThounds();
+	    }
+	 }, {
+	     title: '收款单位',
+	     field: 'payeeName',
+	     width: 120,
+	     align: 'center'
+	 }, {
+	     title: '水单日期',
+	     field: 'memoTime',
+	     width: 90,
+	     align: 'center'
+	 }, {
+         title: '操作',
+         field: 'opertaList2',
+         width: 60,
+         align: 'center',
+         events: operateEvents,
+         formatter: operateFormatter
+	 }];
+	$("#btnSearch").click(function() {
+		var data = $("#searchForm").serializeObject(); 
+		if(data){
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+		GLOBAL.tableRefresh($('#js_dataTable'), data);
+	})
+	options.initPage = function(){
+		var sumPayAmount = 0;
+		var option = {
+			onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+				}
+			},
+			onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            },
+            onCheck: function(row , element){
+				sumPayAmount = sumPayAmount.add(row.payAmount);
+				$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+				$('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+            },
+            onUncheck: function(row) {
+			    sumPayAmount = sumPayAmount.subtract(row.payAmount);
+			    $('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+			    var selections = $('#js_dataTable').bootstrapTable('getSelections');
+			    if (selections.length > 0) {
+				    $('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+			    }
+            },
+            onCheckAll: function(rows) {
+            	sumPayAmount = 0;
+		    	for (var index=0 ; index < rows.length; index++) {
+		    		sumPayAmount = sumPayAmount.add(rows[index].payAmount);
+		    	}
+		    	$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+				$('#js_dataTable tbody').append("<tr id='sumPayAmountTr'><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>确认付款总金额：<span id='sumPayAmount'>" + sumPayAmount + "</span></td></tr>");
+		    },
+		    onUncheckAll: function(rows) {
+		    	sumPayAmount = 0;
+		    	$('#js_dataTable tbody').find("#sumPayAmountTr").remove();
+		    }
+		}
+		
+	   GLOBAL.initTable($('#js_dataTable'), tabCols, null, false,option);
+	   //还原查询条件及过滤后的数据
+	   GLOBAL.restoreQuery($('#js_dataTable'));
+	   $("#startRequestTime,#endRequestTime").datetimepicker({format:"Y-m-d", timepicker:false});
+	};
+
+
+	 
+</script>

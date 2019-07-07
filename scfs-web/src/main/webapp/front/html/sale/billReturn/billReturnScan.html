@@ -1,0 +1,203 @@
+<style>
+	.state{
+		display: none;
+	}
+</style>
+<div class="wrapper">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>销售</li>
+        <li>销售退货单</li>
+        <li class="active">基本信息浏览</li>
+    </ol>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal" id="billReturnScanForm" data-url="billReturn/detail">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a class="tab-item" data-url="html/sale/billReturn/billReturnScan.html">基础信息</a></li>
+                        <li role="presentation"><a class="tab-item" data-url="html/sale/billReturn/billReturnDtlScan.html">退货明细</a></li>
+                        <li role="presentation"><a class="tab-item" data-url="html/sale/billReturn/attachmentScan.html">附件</a></li>
+                    </ul>
+                    <input class="js-initform" type="hidden" id="id" name="id">
+                    <table class="table table-bordered table-hover no-margin">
+                        <tr>
+                            <td width="180" class="text-right"><b>退货编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="billNo" name="billNo"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="180" class="text-right"><b>退货附属编号：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="affiliateNo" name="affiliateNo"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>项目：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="projectName" name="projectName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退货仓库：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="warehouseName" name="warehouseName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>客户：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="customerName" name="customerName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>客户地址：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="customerAddress" name="customerAddress"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>币种：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="currencyTypeName" name="currencyTypeName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>退货日期：</b></td>
+                            <td class="text-left">
+                                <label type="text" class="js-initform" id="requiredSendDate" name="requiredSendDate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>运输方式：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="transferModeName" name="transferModeName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+	                      <td class="text-right"><b>签收标准：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="signStandardName" name="signStandardName"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>签收人：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="certificateName" name="certificateName"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>身份证：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="certificateId" name="certificateId"></label>
+	                      </td>
+	                    </tr>
+	                    <tr>
+	                      <td class="text-right"><b>公章：</b></td>
+	                      <td class="text-left">
+	                        <label class="js-initform" id="officialSeal" name="officialSeal"></label>
+	                      </td>
+	                    </tr>
+                        <tr>
+                            <td class="text-right"><b>状态：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="statusName" name="statusName"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>回款时间：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="returnTime"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>创建人：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="creator"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>创建时间：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="createAt"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right"><b>备注：</b></td>
+                            <td class="text-left">
+                                <label class="js-initform" id="remark" name="remark"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="billReturn/auditflow/audit/query"></table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                	<button type="button" class="btn btn-primary btn-sm state" data-url="html/sale/billReturn/billReturnScanPrint.html" id="print">退货合同打印</button>
+                    <button type="button" data-url="html/sale/billReturn/billReturnSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+<script>
+var auditTabCols = [{
+      title: '序号',
+      field: 'columnsNumber',
+      width: '5%'
+  }, {
+      title: '流程节点',
+      field: "stateName",
+      width: '15%'
+  }, {
+      title: '处理人',
+      field: "dealName",
+      width: '15%'
+  }, {
+      title: '处理意见',
+      field: "suggestion",
+      width: '25%'
+  }, {
+      title: '开始时间',
+      field: "createTime",
+      width: '15%'
+  }, {
+      title: "处理时间",
+      field: "dealTime",
+      width: '15%'
+  }, {
+      title: "处理状态",
+      field: "auditStateName",
+      width: '10%'
+  }];
+options.initPage = function() {
+	var status = options.param.status;
+	if(status==5){
+		$(".state").show();	
+		$("#print").data('data-permissionUrl','/billReturnScan/print');
+	}
+	
+    GLOBAL.getEditData($("#billReturnScanForm"), options.param.id);
+    
+    GLOBAL.initTable($('#js_audit_dataTable'), auditTabCols, {
+    	billDeliveryId: options.param.id
+    }, null, {
+        pagination: false
+    });
+    
+    $("#print").click(function() {
+    	var url = $(this).data("url");
+    	var id = options.param.id;
+    	window.open(url+"?id="+id);
+    })
+}
+
+
+GLOBAL.goBack();
+</script>

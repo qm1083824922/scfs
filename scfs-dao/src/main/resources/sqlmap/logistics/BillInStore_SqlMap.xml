@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.logistics.BillInStoreDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.logistics.entity.BillInStore">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="affiliate_no" jdbcType="VARCHAR" property="affiliateNo" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="receive_date" jdbcType="DATE" property="receiveDate" />
+		<result column="receive_num" jdbcType="DECIMAL" property="receiveNum" />
+		<result column="receive_amount" jdbcType="DECIMAL" property="receiveAmount" />
+		<result column="tally_num" jdbcType="DECIMAL" property="tallyNum" />
+		<result column="tally_amount" jdbcType="DECIMAL" property="tallyAmount" />
+		<result column="acceptor_id" jdbcType="INTEGER" property="acceptorId" />
+		<result column="acceptor" jdbcType="VARCHAR" property="acceptor" />
+		<result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
+		<result column="bill_out_store_id" jdbcType="INTEGER" property="billOutStoreId" />
+		<result column="currency_type" jdbcType="INTEGER" property="currencyType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="wms_status" jdbcType="INTEGER" property="wmsStatus" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="print_num" jdbcType="INTEGER" property="printNum" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deleter_id" jdbcType="INTEGER" property="deleterId" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+		<result column="bill_delivery_id" jdbcType="INTEGER" property="billDeliveryId" />
+		<result column="fly_order_flag" jdbcType="INTEGER" property="flyOrderFlag" />
+
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="append_no" jdbcType="VARCHAR" property="appendNo" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_no, bill_type, affiliate_no, project_id,
+		supplier_id,
+		warehouse_id, customer_id,
+		status, receive_date,
+		receive_num, receive_amount, tally_num, tally_amount,
+		acceptor_id,
+		acceptor, accept_time, bill_out_store_id, currency_type,
+		exchange_rate,
+		wms_status, remark,
+		print_num, creator_id, creator,
+		create_at,
+		update_at, deleter_id, deleter, is_delete, delete_at,
+		pay_amount,
+		bill_delivery_id,
+		fly_order_flag
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		tbis.id, tbis.bill_no, tbis.bill_type, tbis.affiliate_no,
+		tbis.project_id,
+		tbis.supplier_id, tbis.warehouse_id, tbis.customer_id,
+		tbis.status, tbis.receive_date, tbis.receive_num, tbis.receive_amount,
+		tbis.tally_num, tbis.tally_amount, tbis.acceptor_id,
+		tbis.acceptor,
+		tbis.accept_time, tbis.bill_out_store_id, tbis.currency_type,
+		tbis.exchange_rate, tbis.wms_status, tbis.remark,
+		tbis.print_num,
+		tbis.creator_id, tbis.creator, tbis.create_at,
+		tbis.update_at,
+		tbis.deleter_id, tbis.deleter, tbis.is_delete, tbis.delete_at,
+		tbis.pay_amount, tbis.bill_delivery_id, tbis.fly_order_flag
+	</sql>
+
+	<sql id="condition">
+		<if test="businessUnitId!=null">
+			AND tbp.business_unit_id = #{businessUnitId}
+		</if>
+		<if test="projectId!=null">
+			AND tbis.project_id = #{projectId}
+		</if>
+		<if test="supplierId!=null">
+			AND tbis.supplier_id = #{supplierId}
+		</if>
+		<if test="warehouseId!=null">
+			AND tbis.warehouse_id = #{warehouseId}
+		</if>
+		<if test="customerId!=null">
+			AND tbis.customer_id = #{customerId}
+		</if>
+		<if test="startReceiveDate!=null">
+			AND tbis.receive_date &gt;= #{startReceiveDate}
+		</if>
+		<if test="endReceiveDate!=null">
+			AND tbis.receive_date &lt;= #{endReceiveDate}
+		</if>
+		<if test="status!=null">
+			AND tbis.status = #{status}
+		</if>
+		<if test="billType!=null">
+			AND tbis.bill_type = #{billType}
+		</if>
+		<if test="billNo!=null and billNo!=''">
+			AND tbis.bill_no like CONCAT('%',#{billNo},'%')
+		</if>
+		<if test="affiliateNo!=null and affiliateNo!=''">
+			AND tbis.affiliate_no like CONCAT('%',#{affiliateNo},'%')
+		</if>
+		<if test="billOutStoreId!=null">
+			AND tbis.bill_out_store_id = #{billOutStoreId}
+		</if>
+		<if test="isDelete!=null">
+			AND tbis.is_delete = #{isDelete}
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			AND tpot.order_no like CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="appendNo!=null and appendNo!=''">
+			AND tpot.append_no like CONCAT('%',#{appendNo},'%')
+		</if>
+		<if test="goodsNumber!=null and goodsNumber!=''">
+			AND tbg.number like CONCAT('%',#{goodsNumber},'%')
+		</if>
+		<if test="goodsName!=null and goodsName!=''">
+			AND tbg.name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<if test="goodsType!=null and goodsType!=''">
+			AND tbg.type like CONCAT('%',#{goodsType},'%')
+		</if>
+		<if test="goodsBarCode!=null and goodsBarCode!=''">
+			AND tbg.bar_code like CONCAT('%',#{goodsBarCode},'%')
+		</if>
+		<if test="flyOrderFlag!=null">
+			AND tbis.fly_order_flag = #{flyOrderFlag}
+		</if>
+	</sql>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_bill_in_store
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<select id="selectList"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store tbis
+		where 1=1
+		<include refid="condition" />
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.logistics.entity.BillInStore"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_bill_in_store (id,
+		bill_no, bill_type,
+		affiliate_no, project_id, supplier_id,
+		warehouse_id, customer_id, status,
+		receive_date, receive_num,
+		receive_amount,
+		tally_num, tally_amount, acceptor_id,
+		acceptor,
+		accept_time, bill_out_store_id,
+		currency_type, exchange_rate,
+		remark,
+		creator_id, creator,
+		pay_amount, bill_delivery_id, fly_order_flag
+		)
+		values
+		(#{id,jdbcType=INTEGER}, #{billNo,jdbcType=VARCHAR},
+		#{billType,jdbcType=TINYINT},
+		#{affiliateNo,jdbcType=VARCHAR},
+		#{projectId,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER},
+		#{warehouseId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER},
+		#{status,jdbcType=TINYINT},
+		#{receiveDate,jdbcType=DATE},
+		#{receiveNum,jdbcType=DECIMAL}, #{receiveAmount,jdbcType=DECIMAL},
+		#{tallyNum,jdbcType=DECIMAL}, #{tallyAmount,jdbcType=DECIMAL},
+		#{acceptorId,jdbcType=INTEGER},
+		#{acceptor,jdbcType=VARCHAR},
+		#{acceptTime,jdbcType=TIMESTAMP}, #{billOutStoreId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=INTEGER}, #{exchangeRate,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{payAmount,jdbcType=DECIMAL},
+		#{billDeliveryId,jdbcType=INTEGER},
+		IFNULL(#{flyOrderFlag,jdbcType=INTEGER},0)
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		update tb_bill_in_store
+		<set>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+			<if test="affiliateNo != null">
+				affiliate_no = #{affiliateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="receiveDate != null">
+				receive_date = #{receiveDate,jdbcType=DATE},
+			</if>
+			<if test="receiveNum != null">
+				receive_num = #{receiveNum,jdbcType=DECIMAL},
+			</if>
+			<if test="receiveAmount != null">
+				receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="tallyNum != null">
+				tally_num = #{tallyNum,jdbcType=DECIMAL},
+			</if>
+			<if test="tallyAmount != null">
+				tally_amount = #{tallyAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="acceptorId != null">
+				acceptor_id = #{acceptorId,jdbcType=INTEGER},
+			</if>
+			<if test="acceptor != null">
+				acceptor = #{acceptor,jdbcType=VARCHAR},
+			</if>
+			<if test="acceptTime != null">
+				accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billOutStoreId != null">
+				bill_out_store_id = #{billOutStoreId,jdbcType=INTEGER},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=INTEGER},
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="wmsStatus != null">
+				wms_status = #{wmsStatus,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleterId != null">
+				deleter_id = #{deleterId,jdbcType=INTEGER},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payAmount != null">
+				pay_amount = #{payAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billDeliveryId != null">
+				bill_delivery_id = #{billDeliveryId,jdbcType=INTEGER},
+			</if>
+			<if test="flyOrderFlag != null">
+				fly_order_flag = #{flyOrderFlag,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto"
+		resultMap="BaseResultMap">
+		<include refid="queryResultsByCon_sql" />
+	</select>
+
+	<sql id="queryResultsByCon_sql">
+		select DISTINCT
+		<include refid="Alias_Base_Column_List" />
+		from tb_bill_in_store tbis
+		left join tb_bill_in_store_dtl tbisd
+		on
+		tbis.id = tbisd.bill_in_store_id
+		left join tb_purchase_order_title tpot
+		on tbisd.po_id = tpot.id
+		left join tb_base_goods tbg
+		on tbisd.goods_id =
+		tbg.id
+		inner join tb_base_user_project bup
+		on tbis.project_id =
+		bup.project_id
+		inner join tb_base_project tbp on
+		tbp.id = bup.project_id
+		where 1=1
+		and tbis.is_delete = 0
+		<if test="userSubject != null">
+			<foreach collection="userSubject" item="dId"
+				open="AND tbis.warehouse_id in(" separator="," close=")">
+				${dId.subjectId}
+			</foreach>
+		</if>
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<include refid="condition" />
+		order by id desc
+	</sql>
+
+	<select id="queryCountByCon" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto">
+		select count(1) from (
+		<include refid="queryResultsByCon_sql" />
+		) tmp
+	</select>
+
+	<select id="querySumBillInStore"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto"
+		resultType="com.scfs.domain.logistics.entity.BillInStoreSum">
+		select SUM(receive_num) as totalReceiveNum,
+		SUM(receive_amount) as
+		totalReceiveAmount,
+		SUM(tally_num) as totalTallyNum,
+		SUM(tally_amount)
+		as totalTallyAmount,
+		currency_type as currencyType
+		from (
+		select DISTINCT
+		tbis.id, IFNULL(tbis.receive_num, 0) as receive_num,
+		IFNULL(tbis.receive_amount, 0) as receive_amount,
+		IFNULL(tbis.tally_num, 0) as tally_num, IFNULL(tbis.tally_amount, 0)
+		as tally_amount, tbis.currency_type
+		from tb_bill_in_store tbis
+		left join
+		tb_bill_in_store_dtl tbisd
+		on tbis.id = tbisd.bill_in_store_id
+		left join
+		tb_purchase_order_title tpot
+		on tbisd.po_id = tpot.id
+		left join
+		tb_base_goods tbg
+		on tbisd.goods_id = tbg.id
+		inner join
+		tb_base_user_project bup
+		on tbis.project_id = bup.project_id
+		inner join
+		tb_base_project tbp on
+		tbp.id = bup.project_id
+		where 1=1
+		and
+		tbis.is_delete = 0
+		<if test="userId!=null">
+			AND bup.user_id = #{userId}
+			AND bup.state = 1
+		</if>
+		<include refid="condition" />
+		) as tmp GROUP BY tmp.currency_type
+	</select>
+
+	<select id="queryEntityById"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_bill_in_store tbis
+		where tbis.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryDtlsCount" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		select count(1) from tb_bill_in_store_dtl
+		where
+		bill_in_store_id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryTallyDtlsCount" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		select count(1) from tb_bill_in_store_tally_dtl
+		where
+		bill_in_store_id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryDtlsTotalInfo" resultType="com.scfs.domain.logistics.entity.BillInStore"
+		parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		select IFNULL(sum(receive_num), 0) receiveNum,
+		IFNULL(sum(tally_num), 0)
+		tallyNum
+		from tb_bill_in_store_dtl
+		where
+		bill_in_store_id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryTallyDtlsTotalInfo" resultType="com.scfs.domain.logistics.entity.BillInStore"
+		parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		select IFNULL(sum(tally_num), 0) tallyNum
+		from
+		tb_bill_in_store_tally_dtl
+		where bill_in_store_id =
+		#{id,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateBillInStoreInfo" parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		update
+		tb_bill_in_store
+		set receive_num = #{receiveNum,jdbcType=DECIMAL},
+		receive_amount = #{receiveAmount,jdbcType=DECIMAL},
+		tally_num =
+		#{tallyNum,jdbcType=DECIMAL},
+		tally_amount =
+		#{tallyAmount,jdbcType=DECIMAL},
+		pay_amount =
+		#{payAmount,jdbcType=DECIMAL},
+		currency_type =
+		#{currencyType,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryByBillDeliveryId" resultType="com.scfs.domain.logistics.entity.BillInStore"
+		parameterType="com.scfs.domain.logistics.entity.BillInStore">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store
+		where bill_delivery_id =
+		#{billDeliveryId,jdbcType=INTEGER}
+		<if test="isDelete != null">
+			AND is_delete = #{isDelete,jdbcType=TINYINT}
+		</if>
+	</select>
+
+	<!-- 获取信息 -->
+	<select id="queryEntityByParam"
+		parameterType="com.scfs.domain.logistics.dto.req.BillInStoreSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_bill_in_store tbis
+		where tbis.is_delete=0
+		<if test="id != null">
+			and tbis.id = #{id}
+		</if>
+		<if test="affiliateNo != null and affiliateNo !=''">
+			and tbis.affiliate_no = #{affiliateNo}
+		</if>
+	</select>
+
+	<select id="queryFinishedBillInStoreByAffiliateNo"
+		parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store
+		where affiliate_no = #{affiliateNo}
+		and is_delete
+		= 0
+		and status = 2
+	</select>
+
+	<select id="queryRefreshProjectPoolResults" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store
+		where is_delete = 0
+		and status = 2
+	</select>
+
+	<select id="queryPayAmountByPayRate" resultType="java.math.BigDecimal">
+		SELECT
+		IFNULL(SUM(tbisd.pay_price*tbisd.receive_num*tbisd.pay_rate), 0) AS
+		payAmount
+		FROM tb_bill_in_store_dtl tbisd
+		INNER JOIN tb_bill_in_store
+		tbis
+		ON tbis.id = tbisd.bill_in_store_id
+		INNER JOIN tb_pay_po_relation
+		tppr
+		ON tppr.po_line_id = tbisd.po_dtl_id
+		INNER JOIN tb_pay_order tpo
+		ON
+		tpo.id = tppr.pay_id
+		WHERE tppr.is_delete = 0
+		AND tpo.is_delete = 0
+		AND
+		tbis.is_delete = 0
+		AND tbis.bill_no = #{billNo}
+		AND tpo.pay_way_type in
+		(0, 1)
+	</select>
+
+	<select id="queryRefreshReceiptPoolResults" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_bill_in_store
+		where is_delete = 0
+		and bill_type=1
+		and status = 2
+	</select>
+</mapper>

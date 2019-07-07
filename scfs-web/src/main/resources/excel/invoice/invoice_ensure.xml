@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="invoiceEnsureList" var="invoice"
+			varType="com.scfs.domain.invoice.dto.resp.InvoiceApplyManagerResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">invoice.applyNo</mapping>
+				<mapping row="2" col="1">invoice.invoiceNo</mapping>
+				<mapping row="2" col="2">invoice.projectName</mapping>
+				<mapping row="2" col="3">invoice.businessUnitName</mapping>
+				<mapping row="2" col="4">invoice.customerName</mapping>
+				<mapping row="2" col="5">invoice.invoiceTypeName</mapping>
+				<mapping row="2" col="6">invoice.billTypeName</mapping>
+				<mapping row="2" col="7">invoice.applyAmount</mapping>
+				<mapping row="2" col="8">invoice.invoiceCode</mapping>
+				<mapping row="2" col="9">invoice.invoiceDate</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

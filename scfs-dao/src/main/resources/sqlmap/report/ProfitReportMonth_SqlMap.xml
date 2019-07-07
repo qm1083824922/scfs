@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ProfitReportMonthDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.report.entity.MounthProfitReport">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="biz_type" jdbcType="TINYINT" property="bizType" />
+		<result column="sale_amount" jdbcType="DECIMAL" property="saleAmount" />
+		<result column="sale_blance_amount" jdbcType="DECIMAL"
+			property="saleBlanceAmount" />
+		<result column="purchase_cost" jdbcType="DECIMAL" property="purchaseCost" />
+		<result column="fund_cost" jdbcType="DECIMAL" property="fundCost" />
+		<result column="warehouse_amount" jdbcType="DECIMAL" property="warehouseAmount" />
+		<result column="manage_amount" jdbcType="DECIMAL" property="manageAmount" />
+		<result column="profit_amount" jdbcType="DECIMAL" property="profitAmount" />
+		<result column="biz_manager_amount" jdbcType="DECIMAL"
+			property="bizManagerAmount" />
+		<result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+		<result column="sale_blance_rate" jdbcType="DECIMAL" property="saleBlanceRate" />
+		<result column="biz_manager_rate" jdbcType="DECIMAL" property="bizManagerRate" />
+		<result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+		<result column="biz_special_id" jdbcType="INTEGER" property="bizSpecialId" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		issue,
+		project_id,
+		biz_type,
+		sale_amount,
+		sale_blance_amount,
+		purchase_cost,
+		fund_cost,
+		warehouse_amount,
+		manage_amount,
+		profit_amount,
+		biz_manager_amount,
+		profit_rate,
+		sale_blance_rate,
+		biz_manager_rate,
+		tax_rate,
+		creator_id,
+		creator,
+		create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_profit_report_mounth
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_profit_report_mounth
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.MounthProfitReport"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_profit_report_mounth (
+		issue,
+		project_id,
+		biz_type,
+		sale_amount,
+		sale_blance_amount,
+		purchase_cost,
+		fund_cost,
+		warehouse_amount,
+		manage_amount,
+		profit_amount,
+		biz_manager_amount,
+		profit_rate,
+		sale_blance_rate,
+		biz_manager_rate,
+		tax_rate,
+		creator_id,
+		creator
+		)
+		values
+		(
+		#{issue,jdbcType=VARCHAR},
+		#{projectId,jdbcType=INTEGER},
+		#{bizType,jdbcType=TINYINT},
+		#{saleAmount,jdbcType=DECIMAL},
+		#{saleBlanceAmount,jdbcType=DECIMAL},
+		#{purchaseCost,jdbcType=DECIMAL},
+		#{fundCost,jdbcType=DECIMAL},
+		#{warehouseAmount,jdbcType=DECIMAL},
+		#{manageAmount,jdbcType=DECIMAL},
+		#{profitAmount,jdbcType=DECIMAL},
+		#{bizManagerAmount,jdbcType=DECIMAL},
+		#{profitRate,jdbcType=DECIMAL},
+		#{saleBlanceRate,jdbcType=DECIMAL},
+		#{bizManagerRate,jdbcType=DECIMAL},
+		#{taxRate,jdbcType=DECIMAL},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.MounthProfitReport">
+		update tb_profit_report_mounth
+		<set>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="bizType != null">
+				biz_type = #{bizType,jdbcType=TINYINT},
+			</if>
+			<if test="saleAmount != null">
+				sale_amount = #{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="saleBlanceAmount != null">
+				sale_blance_amount =
+				#{saleBlanceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="purchaseCost != null">
+				purchase_cost = #{purchaseCost,jdbcType=DECIMAL},
+			</if>
+			<if test="fundCost != null">
+				fund_cost = #{fundCost,jdbcType=DECIMAL},
+			</if>
+			<if test="warehouseAmount != null">
+				warehouse_amount = #{warehouseAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="manageAmount != null">
+				manage_amount = #{manageAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitAmount != null">
+				profit_amount = #{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="bizManagerAmount != null">
+				biz_manager_amount =
+				#{bizManagerAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="profitRate != null">
+				profit_rate = #{profitRate,jdbcType=DECIMAL},
+			</if>
+			<if test="saleBlanceRate != null">
+				sale_blance_rate = #{saleBlanceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="bizManagerRate != null">
+				biz_manager_rate = #{bizManagerRate,jdbcType=DECIMAL},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultMap="BaseResultMap">
+		select
+		rm.id,
+		rm.issue,
+		rm.project_id,
+		rm.biz_type,
+		rm.sale_amount,
+		rm.sale_blance_amount,
+		rm.purchase_cost,
+		rm.fund_cost,
+		rm.warehouse_amount,
+		rm.manage_amount,
+		rm.profit_amount,
+		rm.biz_manager_amount,
+		rm.profit_rate,
+		rm.sale_blance_rate,
+		rm.biz_manager_rate,
+		rm.tax_rate,
+		rm.creator_id,
+		rm.creator,
+		rm.create_at,
+		rm.update_at
+		<if test="userId != null">
+			,bp.biz_special_id
+		</if>
+		from tb_profit_report_mounth rm
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project pro ON
+			rm.project_id=pro.project_id
+			INNER JOIN tb_base_project bp ON
+			pro.project_id=bp.id
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND pro.user_id=#{userId}
+			AND pro.state = 1
+			<if test="departmentId != null">
+				AND bp.department_id=#{departmentId}
+			</if>
+			<if test="bizSpecialId != null">
+				AND bp.biz_special_id=#{bizSpecialId}
+			</if>
+			<if test="businessManagerId != null">
+				AND bp.business_manager_id=#{businessManagerId}
+			</if>
+		</if>
+		<if test="id != null">
+			AND rm.id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="projectId !=null">
+			AND rm.project_id = #{projectId}
+		</if>
+		<if test="bizType !=null">
+			AND rm.biz_type = #{bizType}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND rm.issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND rm.issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND rm.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="queryProfitReportMounthCount" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="java.lang.Integer">
+		select count(*)
+		from tb_profit_report_mounth rm
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project pro ON
+			rm.project_id=pro.project_id
+			INNER JOIN tb_base_project bp ON
+			pro.project_id=bp.id
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND pro.user_id=#{userId}
+			AND pro.state = 1
+			<if test="departmentId != null">
+				AND bp.department_id=#{departmentId}
+			</if>
+			<if test="bizSpecialId != null">
+				AND bp.biz_special_id=#{bizSpecialId}
+			</if>
+			<if test="businessManagerId != null">
+				AND bp.business_manager_id=#{businessManagerId}
+			</if>
+		</if>
+		<if test="id != null">
+			AND rm.id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="projectId !=null">
+			AND rm.project_id = #{projectId}
+		</if>
+		<if test="bizType !=null">
+			AND rm.biz_type = #{bizType}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND rm.issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND rm.issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND rm.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+
+	<delete id="deleteReportMounth" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto">
+		delete from
+		tb_profit_report_mounth
+		where 1=1
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+	</delete>
+
+	<!-- 获取首页统计报表 -->
+	<select id="queryProfitReportMounthSum" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		SUM(m.profit_amount) AS profitAmount,
+		SUM(m.biz_manager_amount)
+		AS
+		bizManagerAmount,
+		SUM(m.sale_blance_amount) AS saleBlanceAmount,
+		SUM(m.sale_amount) AS saleAmount,
+		SUM(m.manage_amount)AS manageAmount,
+		SUM(m.warehouse_amount) AS warehouseAmount,
+		SUM(m.purchase_cost) AS
+		purchaseCost,
+		SUM(m.fund_cost) AS fundCost
+		FROM tb_profit_report_mounth
+		m
+		<if test="userId != null">
+			INNER JOIN tb_base_user_project p ON
+			m.project_id=p.project_id
+			<if test="bizSpecialId != null">
+				INNER JOIN tb_base_project tbp ON p.project_id=tbp.id
+			</if>
+		</if>
+		where 1=1
+		<if test="userId != null">
+			AND p.state=1
+			AND p.user_id=#{userId}
+		</if>
+		<if test="projectId != null">
+			AND m.project_id=#{projectId}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND m.issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND m.issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="bizSpecialId != null">
+			AND tbp.status=2
+			AND tbp.is_delete=0
+			AND
+			tbp.biz_special_id=#{bizSpecialId}
+		</if>
+	</select>
+
+	<!-- 获取类型分组信息 -->
+	<select id="queryMounthProfitSum" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		biz_type AS bizType,
+		SUM(profit_amount) AS profitAmount,
+		SUM(biz_manager_amount) AS bizManagerAmount,
+		SUM(sale_blance_amount) AS
+		saleBlanceAmount,
+		SUM(sale_amount) AS saleAmount,
+		SUM(manage_amount)AS
+		manageAmount,
+		SUM(warehouse_amount) AS warehouseAmount,
+		SUM(purchase_cost) AS purchaseCost,
+		SUM(sale_blance_rate) AS
+		saleBlanceRate,
+		SUM(fund_cost) AS fundCost
+		FROM tb_profit_report_mounth
+		where
+		1=1
+		<if test="codeList != null">
+			<foreach collection="codeList" item="dId" open="AND project_id in("
+				separator="," close=")">
+				${dId.code}
+			</foreach>
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+		GROUP BY biz_type
+	</select>
+
+	<!-- 获取项目月度指标相关数据 -->
+	<select id="queryProjectMonth" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		project_id AS projectId,
+		biz_type AS bizType,
+		SUM(profit_amount)
+		AS profitAmount,
+		SUM(biz_manager_amount) AS bizManagerAmount,
+		SUM(sale_blance_amount) AS
+		saleBlanceAmount,
+		SUM(sale_amount) AS
+		saleAmount,
+		SUM(manage_amount)AS
+		manageAmount,
+		SUM(warehouse_amount) AS
+		warehouseAmount,
+		SUM(purchase_cost) AS purchaseCost,
+		SUM(fund_cost) AS
+		fundCost
+		FROM
+		tb_profit_report_mounth
+		where
+		1=1
+		<if test="codeList != null">
+			<foreach collection="codeList" item="dId" open="AND project_id in("
+				separator="," close=")">
+				${dId.code}
+			</foreach>
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+		<if test="type != null">
+			AND biz_type=#{type}
+		</if>
+		GROUP BY project_id
+	</select>
+
+
+	<!-- 获取项目月份数据 -->
+	<select id="querySumProjectByCon" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+
+		project_id AS projectId,
+		biz_type AS bizType,
+		SUM(sale_amount) AS
+		saleAmount,
+		SUM(purchase_cost) AS purchaseCost,
+		SUM(sale_blance_amount)
+		AS
+		saleBlanceAmount,
+		SUM(biz_manager_amount) AS bizManagerAmount,
+		SUM(profit_amount) AS profitAmount,
+		SUM(manage_amount)AS manageAmount,
+		SUM(warehouse_amount) AS warehouseAmount,
+		SUM(fund_cost) AS fundCost
+
+		from tb_profit_report_mounth
+		where
+		project_id=#{projectId}
+		<if test="issue != null and issue !=''">
+			AND issue=#{issue}
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+
+	<select id="mounthProfitReportByUserId" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		bb.project_id AS projectId,
+		bb.profit_amount AS profitAmount
+		from
+		tb_profit_report_mounth bb
+		where bb.profit_amount>0
+		<if test="userId != null">
+			and bb.project_id in
+			(SELECT project.id FROM
+			tb_base_project project LEFT JOIN tb_base_user_project userProject ON
+			project.id =
+			userProject.project_id
+			LEFT JOIN tb_base_user user ON
+			user.id = userProject.user_id WHERE
+			user.id = #{userId} and
+			project.is_delete =0 and
+			userProject.is_delete =0)
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+
+	<!-- 获取项目月份数据 -->
+	<select id="mounthProfitReportByDepartmentId" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		bb.project_id AS projectId,
+		bb.profit_amount AS profitAmount
+		from
+		tb_profit_report_mounth bb
+		where bb.profit_amount>0
+		<if test="departmentId != null">
+			and bb.project_id in (
+			SELECT userProject.project_id FROM
+			tb_base_project project LEFT JOIN
+			tb_base_user_project userProject ON
+			project.id =
+			userProject.project_id LEFT JOIN
+			tb_base_user user ON
+			user.id = userProject.user_id WHERE user.id in (SELECT bu.id
+			FROM
+			tb_base_user bu
+			INNER JOIN tb_base_user_roles ur ON bu.id = ur.user_id
+			INNER JOIN
+			tb_base_role r ON ur.role_id = r.id
+			WHERE ur.is_delete = 0
+			AND r.is_delete = 0
+			AND r.state = 2
+			AND ur.state = 1
+			AND r. NAME ='业务专员'
+			AND bu.department_id = #{departmentId}))
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+	<!-- 获取项目月份数据 -->
+	<select id="mounthProfitReportByFeeDeptId" parameterType="com.scfs.domain.report.req.ProfitReportReqMonthDto"
+		resultType="com.scfs.domain.report.entity.MounthProfitReport">
+		select
+		bb.project_id AS projectId,
+		bb.profit_amount AS profitAmount
+		from
+		tb_profit_report_mounth bb
+		where bb.profit_amount>0
+		<if test="departmentId != null">
+			and bb.project_id in
+			(select id from tb_base_project pp
+			where pp.department_id=#{departmentId}
+			and pp.is_delete =0)
+		</if>
+		<if test="startStatisticsDate!=null and startStatisticsDate!=''">
+			AND issue &gt;= #{startStatisticsDate}
+		</if>
+		<if test="endStatisticsDate!=null and endStatisticsDate!=''">
+			AND issue &lt;= #{endStatisticsDate}
+		</if>
+	</select>
+
+</mapper>

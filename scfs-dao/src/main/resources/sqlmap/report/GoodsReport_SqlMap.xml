@@ -1,0 +1,1192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.GoodsReportDto">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.GoodsReport">
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="cust_id" jdbcType="INTEGER" property="customerId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
+		<result column="currency_id" jdbcType="TINYINT" property="currencyId" />
+		<result column="sku" jdbcType="VARCHAR" property="sku" />
+		<result column="before_number" jdbcType="DECIMAL" property="beforeNumber" />
+		<result column="in_number" jdbcType="DECIMAL" property="inNumber" />
+		<result column="sale_number" jdbcType="DECIMAL" property="saleNumber" />
+		<result column="return_number" jdbcType="DECIMAL" property="returnNumber" />
+		<result column="after_number" jdbcType="DECIMAL" property="afterNumber" />
+		<result column="please_number" jdbcType="DECIMAL" property="pleaseNumber" />
+	</resultMap>
+	<sql id="groupCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tmp.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tmp.projectId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tmp.projectId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tmp.customerId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tmp.projectId,tmp.customerId,tmp.supplierId,
+		</if>
+	</sql>
+	<sql id="selectCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			pot.project_id projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			pot.supplier_id supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			pot.customer_id customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			pot.project_id projectId,pot.supplier_id supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			pot.project_id projectId,pot.customer_id customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			pot.customer_id customerId,pot.supplier_id supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			pot.customer_id customerId,pot.supplier_id
+			supplierId,pot.project_id projectId,
+		</if>
+	</sql>
+
+	<sql id="selectBeforeAsNumberCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tmp.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tmp.projectId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tmp.projectId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tmp.customerId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tmp.customerId,tmp.supplierId,tmp.projectId,
+		</if>
+		IFNULL(SUM(IFNULL(tmp.number,0)),0) as number,tmp.sku sku
+	</sql>
+
+
+	<sql id="selectBeforeCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tmp.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tmp.projectId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tmp.projectId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tmp.customerId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tmp.customerId,tmp.supplierId,tmp.projectId,
+		</if>
+		IFNULL(SUM(IFNULL(tmp.number,0)),0) as beforeNumber ,tmp.sku sku,
+		0 as
+		afterNumber, 0 as inNumber,0 as saleNumber, 0 as returnNumber,0 as
+		pleaseNumber
+	</sql>
+	<sql id="selectAfterCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tm.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tm.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tm.projectId,tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tm.projectId,tm.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tm.customerId,tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tm.customerId,tm.supplierId,tm.projectId,
+		</if>
+		0 AS beforeNumber,tm.sku sku,IFNULL(SUM(IFNULL(tm.number, 0)), 0) AS
+		afterNumber,
+		0 as inNumber,0 as saleNumber,0 as returnNumber,0 as
+		pleaseNumber
+	</sql>
+	<sql id="selectNumberCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tmp.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tmp.projectId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tmp.projectId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tmp.customerId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tmp.customerId,tmp.supplierId,tmp.projectId,
+		</if>
+		IFNULL(SUM(IFNULL(tmp.number,0)),0) as number,tmp.sku sku
+	</sql>
+	<sql id="groupTmCondition">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tm.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tm.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tm.projectId,tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tm.projectId,tm.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tm.customerId,tm.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tm.projectId,tm.customerId,tm.supplierId,
+		</if>
+	</sql>
+
+	<sql id="selectBeforeSql">
+		<!--查询出期初的数量 -->
+		SELECT
+		<include refid="selectBeforeCondition" />
+		from (
+		<!-- 计算月初时间的入库 -->
+		SELECT
+		<include refid="selectCondition" />
+		IFNULL(SUM(IFNULL(pms.stockin_num,0)),0)as number,pms.sku sku
+		from
+		tb_pms_store_in pms
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pms.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		AND
+		DATE_FORMAT(pms.stockin_time,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pms.sku
+
+		UNION ALL
+
+		<!-- 查询月初时间出库的数据 -->
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(psr.out_number,0)),0) * -1)as number,pso.sku
+		from
+		tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel psr on
+		pso.id=psr.pms_out_id
+		INNER JOIN tb_purchase_order_title pot on
+		psr.po_id=pot.id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pso.sku
+
+		UNION ALL
+
+		<!-- 本月月初退货数据 -->
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(pol.return_num,0)),0) * -1)as number ,pmt.number
+		sku
+		FROM tb_base_goods pmt
+		INNER JOIN tb_purchase_order_line pol ON
+		pol.goods_id=pmt.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=4
+		AND
+		pmt.status=2 and pmt.good_type=1
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pmt.number
+		) tmp
+	</sql>
+
+
+
+	<sql id="selectBeforeAsNumberSql">
+		<!--查询出期初的数量 -->
+		SELECT
+		<include refid="selectBeforeAsNumberCondition" />
+		from (
+		<!-- 计算月初时间的入库 -->
+		SELECT
+		<include refid="selectCondition" />
+		IFNULL(SUM(IFNULL(pms.stockin_num,0)),0)as number,pms.sku sku
+		from
+		tb_pms_store_in pms
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pms.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		AND
+		DATE_FORMAT(pms.stockin_time,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pms.sku
+
+		UNION ALL
+
+		<!-- 查询月初时间出库的数据 -->
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(psr.out_number,0)),0) * -1)as number,pso.sku
+		from
+		tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel psr on
+		pso.id=psr.pms_out_id
+		INNER JOIN tb_purchase_order_title pot on
+		psr.po_id=pot.id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pso.sku
+
+		UNION ALL
+
+		<!-- 本月月初退货数据 -->
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(pol.return_num,0)),0) * -1)as number ,pmt.number
+		sku
+		FROM tb_base_goods pmt
+		INNER JOIN tb_purchase_order_line pol ON
+		pol.goods_id=pmt.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=4
+		AND
+		pmt.status=2 and pmt.good_type=1
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d") &lt;#{startCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		GROUP BY pmt.number
+		) tmp
+	</sql>
+
+	<sql id="queryData">
+		<if test="statisticsDimension  !=null and statisticsDimension == 1">
+			tmp.projectId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 2">
+			tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 3">
+			tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 4">
+			tmp.projectId,tmp.supplierId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 5">
+			tmp.projectId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 6">
+			tmp.supplierId,tmp.customerId,
+		</if>
+		<if test="statisticsDimension  !=null and statisticsDimension == 7">
+			tmp.supplierId,tmp.customerId,tmp.projectId,
+		</if>
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.GoodsReportReqDto"
+		resultMap="BaseResultMap">
+
+		SELECT
+		<include refid="queryData" />
+		IFNULL(sum(tmp.beforeNumber),0) as beforeNumber,tmp.sku as
+		sku,IFNULL(sum(tmp.afterNumber),0) as afterNumber,
+		IFNULL(sum(tmp.inNumber),0) as
+		inNumber,IFNULL(sum(tmp.saleNumber),0)as
+		saleNumber,IFNULL(sum(tmp.returnNumber),0) as returnNumber,
+		IFNULL(SUM(tmp.pleaseNumber),0) AS pleaseNumber from (
+		<!-- 查詢期初的數據 -->
+		<include refid="selectBeforeSql" />
+		GROUP BY
+		<include refid="groupCondition" />
+		tmp.sku
+		UNION ALL
+		<!-- 期末 -->
+
+		SELECT
+		<include refid="selectAfterCondition" />
+		from (
+		<include refid="selectBeforeAsNumberSql" />
+		GROUP BY tmp.sku
+		UNION all
+		<!-- 算出当前本期的出入库数据 -->
+		SELECT
+		<include refid="selectNumberCondition" />
+		from (
+		<!-- 本期入库的 -->
+		SELECT
+		<include refid="selectCondition" />
+		IFNULL(SUM(IFNULL(pms.stockin_num,0)),0) as number ,pms.sku sku
+		from
+		tb_pms_store_in pms
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pms.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pms.sku like CONCAT('%',#{goodsCode},'%')
+		</if>
+		AND DATE_FORMAT(pms.stockin_time,"%Y-%m-%d") &gt;=#{startCheckDate}
+		AND DATE_FORMAT( pms.stockin_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		GROUP BY pms.sku
+
+		UNION ALL
+
+		<!-- 本期出库的 -->
+
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(psr.out_number,0)),0) * -1)as number,pso.sku
+		from
+		tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel psr on
+		pso.id=psr.pms_out_id
+		INNER JOIN tb_purchase_order_title pot on
+		psr.po_id=pot.id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		and
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&gt;=#{startCheckDate}
+		and
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pso.sku like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pso.sku
+
+		UNION ALL
+		<!-- 退货的 -->
+		SELECT
+		<include refid="selectCondition" />
+		(IFNULL(SUM(IFNULL(pol.return_num,0)),0) * -1)as number,pmt.number sku
+		FROM tb_base_goods pmt
+		INNER JOIN tb_purchase_order_line pol ON
+		pol.goods_id=pmt.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=4
+		AND
+		pmt.status=2 and pmt.good_type=1
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pmt.number like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pmt.number
+		) tmp
+		GROUP BY
+		<include refid="groupCondition" />
+		tmp.sku
+		) tm
+		GROUP BY
+		<include refid="groupTmCondition" />
+		tm.sku
+		UNION ALL
+
+		<!--入库显示数据 -->
+
+		SELECT
+		<include refid="selectCondition" />
+		0 AS beforeNumber,pms.sku sku,0 as afterNumber,
+		IFNULL(SUM(IFNULL(pms.stockin_num, 0)),0) AS inNumber,0 as
+		saleNumber,0
+		as returnNumber,0 as pleaseNumber
+		from tb_pms_store_in pms
+		INNER JOIN tb_purchase_order_title pot ON pot.id=pms.po_id
+		INNER JOIN
+		tb_base_project tbp ON pot.project_id = tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where
+		pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		and
+		DATE_FORMAT(pms.stockin_time,"%Y-%m-%d")&gt;=#{startCheckDate}
+		and
+		DATE_FORMAT(pms.stockin_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pms.sku like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pms.sku
+		UNION ALL
+
+		<!-- 出库显示数据 -->
+		SELECT
+		<include refid="selectCondition" />
+		0 AS beforeNumber,pso.sku sku,0 as afterNumber,0 AS inNumber,
+		IFNULL(SUM(IFNULL(psr.out_number, 0)),0) AS saleNumber,0 as
+		returnNumber,0 as pleaseNumber
+		from tb_pms_store_out pso
+		INNER JOIN
+		tb_pms_out_po_rel psr on pso.id=psr.pms_out_id
+		INNER JOIN
+		tb_purchase_order_title pot on psr.po_id=pot.id
+		INNER JOIN
+		tb_base_project tbp ON pot.project_id = tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where
+		pot.is_delete=0 and pot.state=5 and pot.order_type=2
+		and
+		DATE_FORMAT(pso.sales_date, "%Y-%m-%d")&gt;=#{startCheckDate}
+		and
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pso.sku like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pso.sku
+		UNION ALL
+		<!-- 退货的 -->
+		SELECT
+		<include refid="selectCondition" />
+		0 AS beforeNumber,pmt.number sku,0 as afterNumber,0 AS inNumber,0 AS
+		saleNumber,
+		IFNULL(SUM(IFNULL(pol.return_num, 0)),0) AS returnNumber,0
+		as pleaseNumber
+		FROM tb_base_goods pmt
+		INNER JOIN tb_purchase_order_line
+		pol ON pol.goods_id=pmt.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where pot.is_delete=0 and pot.state=5 and pot.order_type=4
+		AND
+		pmt.status=2 and pmt.good_type=1
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pmt.number like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pmt.number
+
+		UNION ALL
+
+		<!-- 请款数据 -->
+		select
+		<include refid="selectCondition" />
+		0 AS beforeNumber,pmd.sku sku,0 as afterNumber,0 AS inNumber,0 AS
+		saleNumber,
+		0 AS returnNumber,IFNULL(SUM(IFNULL(pmp.pay_quantity,
+		0)),0) AS
+		pleaseNumber
+		from tb_pms_pay pms
+		INNER JOIN tb_pms_pay_dtl pmd
+		on pmd.pms_pay_id =pms.id
+		INNER JOIN tb_pms_pay_po_rel pmp on
+		pmp.pms_pay_dtl_id= pmd.id
+		INNER JOIN tb_purchase_order_title pot on
+		pot.id=pmp.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN tb_base_user_project tbup ON tbp.id = tbup.project_id
+		INNER JOIN tb_pay_order pay on pay.attached_numbe =pms.pay_sn
+		where
+		pay.state =6 and pay.is_delete=0
+		and pay.pay_way_type=2 and
+		pot.is_delete=0 and pot.state=5
+		AND
+		DATE_FORMAT(pay.confirmor_at,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pay.confirmor_at,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCode != null and goodsCode !=''">
+			AND pmd.sku like CONCAT('%',#{goodsCode},'%')
+		</if>
+		GROUP BY pmd.sku
+		)tmp GROUP BY tmp.sku ORDER BY tmp.sku
+	</select>
+
+	<!-- 查询PMS入库详情数据 -->
+	<select id="queryPmsInBySku" resultType="com.scfs.domain.report.entity.GoodsInRepot"
+		parameterType="com.scfs.domain.report.req.GoodsReportReqDto">
+		select
+		pmi.sku as goodsCode,pot.supplier_id as
+		supplierId,pot.customer_id as customerId,pot.project_id as projectId,
+		pmi.id as id,pmi.purchase_sn as
+		purchaseSn,pmi.purchase_delivery_sn as
+		purchaseDeliverySn,
+		IFNULL(pmi.stockin_num,0) as
+		stockinNum,IFNULL(pmi.purchase_price,0)
+		as
+		purchasePrice,pmi.stockin_time as
+		stockinTime,(IFNULL(pmi.stockin_num,0) * IFNULL(pmi.purchase_price,0))
+		as stockinAmount,
+		pot.id as poId,pot.state as poState,pot.order_no as
+		poOrderNo,
+		IFNULL((
+		SELECT
+		SUM(pol.remain_send_num) AS remainSendNum
+		FROM
+		tb_purchase_order_line pol
+		INNER JOIN tb_purchase_order_title potm
+		ON
+		pol.po_id = potm.id
+		WHERE potm.id = pot.id
+		AND pol.is_delete = 0
+		),0) AS
+		remainSendNum,
+		IFNULL((
+		select
+		SUM(IFNULL(psr.out_number, 0)) AS
+		wmsOutStockin
+		from tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel psr
+		ON pso.id = psr.pms_out_id
+		INNER JOIN tb_purchase_order_title potm ON
+		psr.po_id = potm.id
+		INNER JOIN tb_base_project tbp ON potm.project_id =
+		tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		WHERE potm.is_delete = 0 AND potm.state = 5 AND potm.order_type = 2
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&gt;=#{startCheckDate,jdbcType=VARCHAR}
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&lt;=#{endCheckDate,jdbcType=VARCHAR}
+		AND potm.order_no=pot.order_no
+		<if test="goodsCode !=null and goodsCode !=''">
+			AND pso.sku=#{goodsCode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierId !=null">
+			AND potm.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId !=null">
+			AND potm.customer_id=#{customerId}
+		</if>
+		<if test="projectId !=null">
+			AND potm.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCodeList !=null">
+			<foreach collection="goodsCodeList" item="goodsCodeOne" open="AND pso.sku in("
+				separator="," close=")">
+				${goodsCodeOne}
+			</foreach>
+		</if>
+		<if test="supplierIdList !=null">
+			<foreach collection="supplierIdList" item="supplierIdOne"
+				open="AND potm.supplier_id in(" separator="," close=")">
+				${supplierIdOne}
+			</foreach>
+		</if>
+		<if test="customerIdList !=null">
+			<foreach collection="customerIdList" item="customerIdOne"
+				open="AND potm.customer_id in(" separator="," close=")">
+				${customerIdOne}
+			</foreach>
+		</if>
+		<if test="projectIdList !=null">
+			<foreach collection="projectIdList" item="projectIdOne"
+				open="AND potm.project_id in(" separator="," close=")">
+				${projectIdOne}
+			</foreach>
+		</if>
+		),0) AS wmsOutStockin,
+		CASE IFNULL((
+		SELECT
+		SUM(pol.remain_send_num) AS
+		remainSendNum
+		FROM
+		tb_purchase_order_line pol
+		INNER JOIN
+		tb_purchase_order_title potm
+		ON pol.po_id = potm.id
+		WHERE potm.id =
+		pot.id
+		AND pol.is_delete = 0
+		),0)
+		WHEN 0 THEN 0
+		ELSE
+		DATEDIFF(NOW(),pmi.stockin_time)
+		END AS stlAge
+
+		from tb_pms_store_in pmi
+		INNER JOIN tb_purchase_order_title pot ON pot.id =
+		pmi.po_id
+		INNER JOIN
+		tb_base_project tbp ON pot.project_id = tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where
+		pot.is_delete = 0 AND pot.state = 5 AND pot.order_type = 2
+		AND
+		DATE_FORMAT(pmi.stockin_time,"%Y-%m-%d")&gt;=#{startCheckDate,jdbcType=VARCHAR}
+		AND
+		DATE_FORMAT(pmi.stockin_time,"%Y-%m-%d")&lt;=#{endCheckDate,jdbcType=VARCHAR}
+		<if test="goodsCode !=null and goodsCode !=''">
+			AND pmi.sku=#{goodsCode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierId !=null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId !=null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId !=null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId !=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCodeList !=null">
+			<foreach collection="goodsCodeList" item="goodsCode" open="AND pmi.sku in("
+				separator="," close=")">
+				${goodsCode}
+			</foreach>
+		</if>
+		<if test="supplierIdList !=null">
+			<foreach collection="supplierIdList" item="supplierId"
+				open="AND pot.supplier_id in(" separator="," close=")">
+				${supplierId}
+			</foreach>
+		</if>
+		<if test="customerIdList !=null">
+			<foreach collection="customerIdList" item="customerId"
+				open="AND pot.customer_id in(" separator="," close=")">
+				${customerId}
+			</foreach>
+		</if>
+		<if test="projectIdList !=null">
+			<foreach collection="projectIdList" item="projectId"
+				open="AND pot.project_id in(" separator="," close=")">
+				${projectId}
+			</foreach>
+		</if>
+		order by stlAge DESC
+	</select>
+
+	<!-- 查询PMS出库详情数据 -->
+	<select id="queryPmsOutReport" resultType="com.scfs.domain.report.entity.GoodsOutReport"
+		parameterType="com.scfs.domain.report.req.GoodsReportReqDto">
+		select
+		pso.sku as goodsCode,pot.supplier_id as
+		supplierId,pot.customer_id as
+		customerId,pot.project_id as projectId,
+		pso.id as id,pso.purchase_sn as purchaseSn,pso.currency_type as
+		currencyType,
+		IFNULL(psr.out_number,0) as
+		wmsOutStockin,IFNULL(pso.purchase_price,0) as
+		purchasePrice,pso.sales_date as salesDate,
+		(IFNULL(psr.out_number,0) *
+		IFNULL(pso.purchase_price,0)) as salesAmount,pot.order_no as
+		orderNo
+		from tb_pms_store_out pso
+		INNER JOIN tb_pms_out_po_rel psr ON pso.id =
+		psr.pms_out_id
+		INNER JOIN tb_purchase_order_title pot ON psr.po_id =
+		pot.id
+		INNER JOIN tb_base_project tbp ON pot.project_id = tbp.id
+		INNER
+		JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		WHERE
+		pot.is_delete = 0 AND pot.state = 5 AND pot.order_type = 2
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pso.sales_date,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="goodsCode !=null and goodsCode != ''">
+			AND pso.sku=#{goodsCode}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCodeList != null">
+			<foreach collection="goodsCodeList" item="goodsCode" open="AND pso.sku in("
+				separator="," close=")">
+				${goodsCode}
+			</foreach>
+		</if>
+		<if test="supplierIdList != null">
+			<foreach collection="supplierIdList" item="supplierId"
+				open="AND pot.supplier_id in(" separator="," close=")">
+				${supplierId}
+			</foreach>
+		</if>
+		<if test="customerIdList != null">
+			<foreach collection="customerIdList" item="customerId"
+				open="AND pot.customer_id in(" separator="," close=")">
+				${customerId}
+			</foreach>
+		</if>
+		<if test="projectIdList != null">
+			<foreach collection="projectIdList" item="projectId"
+				open="AND pot.project_id in(" separator="," close=")">
+				${projectId}
+			</foreach>
+		</if>
+		<if test="orderNo != null and orderNo !=''">
+			AND pot.order_no=#{orderNo}
+		</if>
+		order by pso.sales_date
+	</select>
+
+	<select id="queryPmsPlReport" resultType="com.scfs.domain.report.entity.GoodsPlReport"
+		parameterType="com.scfs.domain.report.req.GoodsReportReqDto">
+		select
+		pmd.sku as goodsCode,pot.supplier_id as
+		supplierId,pot.customer_id as
+		customerId,pot.project_id as projectId,
+		pot.order_no as orderNo,pot.append_no as appendNo,pay.pay_no as
+		payNo,pay.attached_numbe as payAppendNo,
+		pay.currnecy_type as
+		currencyType,IFNULL(pal.pay_amount,0) as
+		payAmount,IFNULL(pmp.pay_quantity,0) as
+		payNumber,pay.real_currency_type as realCurrencyType,
+		(IFNULL(pal.pay_amount,0) * IFNULL(pay.pay_rate,0))as
+		realPayAmount,pay.confirmor_at as paydate,pay.id as payId,pay.pay_type
+		as payType,pay.state as payState,
+		pot.id as poId,pot.state as poState
+		from tb_pms_pay pms
+		INNER JOIN tb_pms_pay_dtl pmd ON pmd.pms_pay_id =
+		pms.id
+		INNER JOIN tb_pms_pay_po_rel pmp ON pmp.pms_pay_dtl_id = pmd.id
+		INNER JOIN tb_purchase_order_line pol ON pol.id=pmp.py_po_line_id
+		INNER JOIN tb_purchase_order_title pot on pot.id=pol.po_id
+		INNER JOIN
+		tb_base_project tbp ON pot.project_id = tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		INNER JOIN
+		tb_pay_po_relation pal ON pal.po_line_id=pol.id
+		INNER JOIN tb_pay_order
+		pay on pay.attached_numbe=pms.pay_sn
+		where pay.state =6 and
+		pay.is_delete=0 and pal.is_delete=0
+		and pay.pay_way_type=2 and
+		pot.is_delete=0 and pot.state=5
+		AND
+		DATE_FORMAT(pay.confirmor_at,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pay.confirmor_at,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="goodsCode !=null and goodsCode !=''">
+			AND pmd.sku=#{goodsCode}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCodeList != null">
+			<foreach collection="goodsCodeList" item="goodsCode" open="AND pmd.sku in("
+				separator="," close=")">
+				${goodsCode}
+			</foreach>
+		</if>
+		<if test="supplierIdList != null">
+			<foreach collection="supplierIdList" item="supplierId"
+				open="AND pot.supplier_id in(" separator="," close=")">
+				${supplierId}
+			</foreach>
+		</if>
+		<if test="customerIdList != null">
+			<foreach collection="customerIdList" item="customerId"
+				open="AND pot.customer_id in(" separator="," close=")">
+				${customerId}
+			</foreach>
+		</if>
+		<if test="projectIdList != null">
+			<foreach collection="projectIdList" item="projectId"
+				open="AND pot.project_id in(" separator="," close=")">
+				${projectId}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="queryPmsRtReport" resultType="com.scfs.domain.report.entity.GoodsRtReport"
+		parameterType="com.scfs.domain.report.req.GoodsReportReqDto">
+		select
+		goods.number as goodsCode,pot.supplier_id as
+		supplierId,pot.customer_id as
+		customerId,pot.project_id as projectId,
+		pot.order_no as returnOrder,pot.append_no as
+		returnAppenNo,pot.order_type as
+		orderType,
+		pot.currency_id as
+		currencyId,pol.return_num as
+		returnNumber,pol.return_amount as
+		returnAmount,pot.perdict_time as
+		returnDate,
+		pot.id as poId,pot.state as
+		poState
+		from tb_base_goods goods
+		INNER JOIN tb_purchase_order_line pol
+		ON pol.goods_id=goods.id
+		INNER
+		JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN
+		tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where
+		goods.status=2 and goods.good_type=1
+		and pot.is_delete=0 and
+		pot.state=5
+		and pot.order_type=4
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="goodsCode !=null and goodsCode !=''">
+			AND goods.number=#{goodsCode}
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="goodsCodeList != null">
+			<foreach collection="goodsCodeList" item="goodsCode"
+				open="AND goods.number in(" separator="," close=")">
+				${goodsCode}
+			</foreach>
+		</if>
+		<if test="supplierIdList != null">
+			<foreach collection="supplierIdList" item="supplierId"
+				open="AND pot.supplier_id in(" separator="," close=")">
+				${supplierId}
+			</foreach>
+		</if>
+		<if test="customerIdList != null">
+			<foreach collection="customerIdList" item="customerId"
+				open="AND pot.customer_id in(" separator="," close=")">
+				${customerId}
+			</foreach>
+		</if>
+		<if test="projectIdList != null">
+			<foreach collection="projectIdList" item="projectId"
+				open="AND pot.project_id in(" separator="," close=")">
+				${projectId}
+			</foreach>
+		</if>
+		order by pot.order_time
+	</select>
+
+	<select id="queryStlReport" resultType="com.scfs.domain.report.entity.GoodsStlReport"
+		parameterType="com.scfs.domain.report.req.GoodsReportReqDto">
+		select pot.project_id as projectId,pot.supplier_id as
+		supplierId,pot.warehouse_id as customerId,
+		goods.number as
+		goodsCode,IFNULL(pol.remain_send_num,0) as
+		stlNum,IFNULL(pol.cost_price,0) as costPrice,
+		(IFNULL(pol.remain_send_num,0) *IFNULL(pol.cost_price,0))as
+		stlAmount,pot.currency_id as currencyId,
+		pol.batch_num as
+		batchNum,pot.order_no as orderNo,pot.order_time as storeInDate
+		from
+		tb_base_goods goods
+		INNER JOIN tb_purchase_order_line pol ON
+		pol.goods_id=goods.id
+		INNER JOIN tb_purchase_order_title pot ON
+		pot.id=pol.po_id
+		INNER JOIN tb_base_project tbp ON pot.project_id =
+		tbp.id
+		INNER JOIN
+		tb_base_user_project tbup ON tbp.id = tbup.project_id
+		where goods.status=2 and goods.good_type=1 and pot.is_delete=0 and
+		pot.state=5 and pot.order_type=2
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&gt;=#{startCheckDate}
+		AND
+		DATE_FORMAT(pot.order_time,"%Y-%m-%d")&lt;=#{endCheckDate}
+		<if test="goodsCode !=null and goodsCode !=''">
+			AND goods.number=#{goodsCode}
+		</if>
+		<if test="goodsCodeList != null">
+			<foreach collection="goodsCodeList" item="goodsCode"
+				open="AND goods.number in(" separator="," close=")">
+				${goodsCode}
+			</foreach>
+		</if>
+		<if test="supplierId != null">
+			AND pot.supplier_id=#{supplierId}
+		</if>
+		<if test="customerId != null">
+			AND pot.customer_id=#{customerId}
+		</if>
+		<if test="projectId != null">
+			AND pot.project_id=#{projectId}
+		</if>
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		order by pot.order_time
+	</select>
+</mapper>

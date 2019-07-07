@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.CapitalTurnoverDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.CapitalTurnover">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="sale_amount" jdbcType="DECIMAL" property="saleAmount" />
+		<result column="begin_amount" jdbcType="DECIMAL" property="beginAmount" />
+		<result column="end_amount" jdbcType="DECIMAL" property="endAmount" />
+		<result column="turnover_rate" jdbcType="DECIMAL" property="turnoverRate" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		department_id,
+		project_id,
+		sale_amount,
+		begin_amount,
+		end_amount,
+		turnover_rate,
+		currency_type,
+		issue,
+		creator_id,
+		creator,
+		create_at,
+		update_at
+	</sql>
+	<!-- 获取详情 -->
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_capital_turnover
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_capital_turnover
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.CapitalTurnover"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_capital_turnover
+		(
+		department_id,
+		project_id,
+		sale_amount,
+		begin_amount,
+		end_amount,
+		turnover_rate,
+		issue,
+		creator_id,
+		creator,
+		create_at)
+		values
+		(
+		#{departmentId,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{saleAmount,jdbcType=DECIMAL},
+		#{beginAmount,jdbcType=DECIMAL},
+		#{endAmount,jdbcType=DECIMAL},
+		#{turnoverRate,jdbcType=DECIMAL},
+		#{issue,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.CapitalTurnover">
+		update tb_capital_turnover
+		<set>
+			<if test="departmentId != null">
+				department_id = #{departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="saleAmount != null">
+				sale_amount = #{saleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="beginAmount != null">
+				begin_amount = #{beginAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="endAmount != null">
+				end_amount = #{endAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="turnoverRate != null">
+				turnover_rate = #{turnoverRate,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=DECIMAL},
+			</if>
+			<if test="issue != null and issue !=''">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.CapitalTurnoverReqDto"
+		resultMap="BaseResultMap">
+		select
+		ct.id,
+		ct.department_id,
+		ct.project_id,
+		ct.sale_amount,
+		ct.begin_amount,
+		ct.end_amount,
+		ct.turnover_rate,
+		ct.currency_type,
+		ct.issue,
+		ct.creator_id,
+		ct.creator,
+		ct.create_at,
+		ct.update_at
+		from
+		tb_capital_turnover ct
+		<if test="userId!=null">
+			INNER JOIN tb_base_user_project tbup
+			ON ct.project_id =
+			tbup.project_id
+		</if>
+		where 1=1
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="projectId != null">
+			and ct.project_id = #{projectId}
+		</if>
+		<if test="issue != null">
+			and ct.issue = #{issue}
+		</if>
+		<if test="startTime != null and startTime !=''">
+			and ct.issue &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime !=''">
+			and ct.issue &lt;= #{endTime}
+		</if>
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND ct.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ct.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="queryAllResultsByCon" parameterType="com.scfs.domain.report.req.CapitalTurnoverReqDto"
+		resultMap="BaseResultMap">
+		SELECT
+		rf.department_id,
+		rf.issue,
+		rf.project_id,
+		SUM(
+		rf.begin_balance *
+		(
+		SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = rf.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(concat(substring(rf.issue, 1, 4), '-', substring(rf.issue, 5, 2), '-01'), '%Y-%m-%d')
+		)
+		) AS begin_amount,
+		SUM(
+		rf.balance *
+		(SELECT MAX(tcer.cash_buying_price) FROM tb_base_exchange_rate tcer
+		WHERE tcer.bank = '2' 
+		AND tcer.currency = '1' 
+		AND tcer.foreign_currency = rf.currency_type
+		AND DATE_FORMAT(tcer.create_at, '%Y-%m-%d') = DATE_FORMAT(concat(substring(rf.issue, 1, 4), '-', substring(rf.issue, 5, 2), '-01'), '%Y-%m-%d')
+		)
+		) AS end_amount,
+
+		(SELECT
+		SUM(pr.sale_amount)
+		FROM
+		tb_profit_report pr
+		WHERE pr.issue = rf.issue
+		AND pr.project_id = rf.project_id) AS sale_amount
+		FROM
+		tb_report_fund rf
+		WHERE rf.issue &gt;=#{startTime} AND rf.issue &lt;=#{endTime}
+		GROUP BY
+		rf.department_id,rf.issue,
+		rf.project_id
+	</select>
+	<!-- 获取资金周转率 -->
+	<select id="queryRurnoverRate" parameterType="com.scfs.domain.report.req.CapitalTurnoverReqDto"
+		resultType="java.math.BigDecimal">
+		SELECT
+			<![CDATA[
+		 IF((SUM(ct.begin_amount+ct.end_amount)/2)>0,SUM(ct.sale_amount)/(SUM(ct.begin_amount+ct.end_amount)/2),0)
+		 ]]>
+		FROM
+		tb_capital_turnover ct
+		<if test="userId!=null">
+			INNER JOIN tb_base_user_project tbup
+			ON ct.project_id =
+			tbup.project_id
+		</if>
+		where 1=1
+		<if test="userId!=null">
+			AND tbup.user_id = #{userId}
+			AND tbup.state = 1
+		</if>
+		<if test="projectId != null">
+			and ct.project_id = #{projectId}
+		</if>
+		<if test="issue != null">
+			and ct.issue = #{issue}
+		</if>
+		<if test="startTime != null and startTime !=''">
+			and ct.issue &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime !=''">
+			and ct.issue &lt;= #{endTime}
+		</if>
+		<if test="departmentId != null">
+			<foreach collection="departmentId" item="dId"
+				open="AND ct.department_id in(" separator="," close=")">
+				${dId}
+			</foreach>
+		</if>
+		<if test="excludeProjectIdList!=null">
+			<foreach collection="excludeProjectIdList" item="pId"
+				open="AND ct.project_id not in(" separator="," close=")">
+				${pId}
+			</foreach>
+		</if>
+	</select>
+</mapper>

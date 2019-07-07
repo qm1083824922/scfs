@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ReceiveReportDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.ReceiveReport">
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_date" jdbcType="DATE" property="billDate" />
+		<result column="fee_id" jdbcType="INTEGER" property="feeId" />
+		<result column="out_store_id" jdbcType="INTEGER" property="outStoreId" />
+	</resultMap>
+	<sql id="groupCondition">
+		<if test="statisticsDimension != null and statisticsDimension == 1">
+			v_table.project_id, v_table.currency_type
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 2">
+			v_table.cust_id, v_table.currency_type
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 3">
+			v_table.project_id, v_table.cust_id, v_table.currency_type
+		</if>
+		<if test="statisticsDimension == null">
+			v_table.project_id, v_table.currency_type
+		</if>
+	</sql>
+	<sql id="selectCondition">
+		<if test="statisticsDimension != null and statisticsDimension == 1">
+			v_table.project_id,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 2">
+			v_table.cust_id,
+		</if>
+		<if test="statisticsDimension != null and statisticsDimension == 3">
+			v_table.project_id,v_table.cust_id,
+		</if>
+		<if test="statisticsDimension == null">
+			v_table.project_id,
+		</if>
+	</sql>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.ReceiveReportSearchReq"
+		resultMap="BaseResultMap">
+		select
+		<include refid="selectCondition" />
+		v_table.currency_type, sum(v_table.balance) as balance
+		,sum(v_table.expireAmount1) as expireAmount1
+		,sum(v_table.expireAmount2) as expireAmount2,
+		sum(v_table.expireAmount3) as expireAmount3, sum(expireAmount1 +
+		expireAmount2 + expireAmount3) as expireRecAmount, sum(adventAmount1)
+		adventAmount1,
+		sum(adventAmount2) adventAmount2, sum(adventAmount3)
+		adventAmount3
+		from(select a.expire_date, a.project_id, a.cust_id,
+		a.currency_type,
+		(a.amount_receivable - a.amount_received) as balance,
+		a.amount_receivable, a.amount_received,
+				<![CDATA[
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>=1 && DATEDIFF(CURDATE(),a.expire_date)<=7, (a.amount_receivable - a.amount_received) , 0) as expireAmount1,
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>=8 && DATEDIFF(CURDATE(),a.expire_date)<=15, (a.amount_receivable - a.amount_received) , 0) as expireAmount2,
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>15, (a.amount_receivable - a.amount_received) , 0) as expireAmount3,
+
+					 IF(DATEDIFF(a.expire_date,CURDATE())>=0 && DATEDIFF(a.expire_date,CURDATE())<=7, (a.amount_receivable - a.amount_received) , 0) as adventAmount1,
+					 IF(DATEDIFF(a.expire_date,CURDATE())>=8 && DATEDIFF(a.expire_date,CURDATE())<=15, (a.amount_receivable - a.amount_received) , 0) as adventAmount2,
+					 IF(DATEDIFF(a.expire_date,CURDATE())>15, (a.amount_receivable - a.amount_received) , 0) as adventAmount3	
+				]]>
+		from tb_fi_rec a
+		left join tb_base_user_project bup
+		on a.project_id =
+		bup.project_id
+		left join tb_base_project bp
+		on a.project_id = bp.id
+		<where>
+			bup.user_id = #{userId}
+			and bup.state = 1
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="startCheckDate != null">
+	  			<![CDATA[
+					and a.check_date >= #{startCheckDate}
+				]]>
+			</if>
+			<if test="endCheckDate != null">
+	  			<![CDATA[
+					and a.check_date <= #{endCheckDate}
+				]]>
+			</if>
+			<if test="departmentList != null">
+				and bp.department_id in (
+				<foreach collection="departmentList" item="departmentId"
+					separator=",">
+					${departmentId}
+				</foreach>
+				)
+			</if>
+			<if test="bizManagerId != null">
+				and bp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND a.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</where>
+		) as v_table
+		group by
+		<include refid="groupCondition" />
+		having balance > 0
+	</select>
+
+	<select id="querySumByCon" parameterType="com.scfs.domain.report.req.ReceiveReportSearchReq"
+		resultMap="BaseResultMap">
+		select v_table.currency_type, sum(v_table.balance) as balance
+		,sum(v_table.expireAmount1) as expireAmount1
+		,sum(v_table.expireAmount2) as expireAmount2,
+		sum(v_table.expireAmount3) as expireAmount3, sum(expireAmount1 +
+		expireAmount2 + expireAmount3) as expireRecAmount, sum(adventAmount1)
+		adventAmount1,
+		sum(adventAmount2) adventAmount2, sum(adventAmount3)
+		adventAmount3
+		from(select a.expire_date, a.project_id, a.cust_id,
+		a.currency_type,
+		(a.amount_receivable - a.amount_received) as balance,
+		a.amount_receivable, a.amount_received,
+				<![CDATA[
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>=1 && DATEDIFF(CURDATE(),a.expire_date)<=7, (a.amount_receivable - a.amount_received) , 0) as expireAmount1,
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>=8 && DATEDIFF(CURDATE(),a.expire_date)<=15 , (a.amount_receivable - a.amount_received) , 0) as expireAmount2,
+					 IF(DATEDIFF(CURDATE(),a.expire_date)>15 , (a.amount_receivable - a.amount_received) , 0) as expireAmount3,
+
+					 IF(DATEDIFF(a.expire_date,CURDATE())>=0 && DATEDIFF(a.expire_date,CURDATE())<=7, (a.amount_receivable - a.amount_received) , 0) as adventAmount1,
+					 IF(DATEDIFF(a.expire_date,CURDATE())>=8 && DATEDIFF(a.expire_date,CURDATE())<=15 , (a.amount_receivable - a.amount_received) , 0) as adventAmount2,
+					 IF(DATEDIFF(a.expire_date,CURDATE())>15 , (a.amount_receivable - a.amount_received) , 0) as adventAmount3	
+				]]>
+		from tb_fi_rec a
+		left join tb_base_user_project bup
+		on a.project_id =
+		bup.project_id
+		left join tb_base_project bp
+		on a.project_id = bp.id
+		<where>
+			a.amount_receivable - a.amount_received > 0
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="projectId != null">
+				and a.project_id = #{projectId}
+			</if>
+			<if test="custId != null">
+				and a.cust_id = #{custId}
+			</if>
+			<if test="currencyType != null">
+				and a.currency_type = #{currencyType}
+			</if>
+			<if test="startCheckDate != null">
+	  			<![CDATA[
+					and a.check_date >= #{startCheckDate}
+				]]>
+			</if>
+			<if test="endCheckDate != null">
+	  			<![CDATA[
+					and a.check_date <= #{endCheckDate}
+				]]>
+			</if>
+			<if test="departmentList != null">
+				and bp.department_id in (
+				<foreach collection="departmentList" item="departmentId"
+					separator=",">
+					${departmentId}
+				</foreach>
+				)
+			</if>
+			<if test="bizManagerId != null">
+				and bp.biz_special_id = #{bizManagerId}
+			</if>
+			<if test="excludeProjectIdList!=null">
+				<foreach collection="excludeProjectIdList" item="pId"
+					open="AND a.project_id not in(" separator="," close=")">
+					${pId}
+				</foreach>
+			</if>
+		</where>
+		) as v_table
+		group by v_table.currency_type
+	</select>
+</mapper>

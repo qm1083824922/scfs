@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectPoolDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.project.entity.ProjectPool">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_amount" jdbcType="DECIMAL" property="projectAmount" />
+		<result column="project_amount_cny" jdbcType="DECIMAL"
+			property="projectAmountCny" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="used_fund_amount" jdbcType="DECIMAL" property="usedFundAmount" />
+		<result column="used_fund_amount_cny" jdbcType="DECIMAL"
+			property="usedFundAmountCny" />
+		<result column="remain_fund_amount" jdbcType="DECIMAL"
+			property="remainFundAmount" />
+		<result column="remain_fund_amount_cny" jdbcType="DECIMAL"
+			property="remainFundAmountCny" />
+		<result column="used_asset_amount" jdbcType="DECIMAL" property="usedAssetAmount" />
+		<result column="used_asset_amount_cny" jdbcType="DECIMAL"
+			property="usedAssetAmountCny" />
+		<result column="remain_asset_amount" jdbcType="DECIMAL"
+			property="remainAssetAmount" />
+		<result column="remain_asset_amount_cny" jdbcType="DECIMAL"
+			property="remainAssetAmountCny" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		pool.id, pool.project_id, pool.project_amount,
+		pool.project_amount_cny,
+		pool.currency_type, pool.used_fund_amount,
+		pool.used_fund_amount_cny, pool.remain_fund_amount,
+		pool.remain_fund_amount_cny,
+		pool.used_asset_amount,
+		pool.used_asset_amount_cny, pool.remain_asset_amount,
+		pool.remain_asset_amount_cny, pool.remark,
+		pool.creator_id,
+		pool.creator, pool.create_at, pool.update_at
+	</sql>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_pool pool
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectPool">
+		insert into tb_project_pool
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="projectAmount != null">
+				project_amount,
+			</if>
+			<if test="projectAmountCny != null">
+				project_amount_cny,
+			</if>
+			<if test="currencyType != null">
+				currency_type,
+			</if>
+			<if test="usedFundAmount != null">
+				used_fund_amount,
+			</if>
+			<if test="usedFundAmountCny != null">
+				used_fund_amount_cny,
+			</if>
+			<if test="remainFundAmount != null">
+				remain_fund_amount,
+			</if>
+			<if test="remainFundAmountCny != null">
+				remain_fund_amount_cny,
+			</if>
+			<if test="usedAssetAmount != null">
+				used_asset_amount,
+			</if>
+			<if test="usedAssetAmountCny != null">
+				used_asset_amount_cny,
+			</if>
+			<if test="remainAssetAmount != null">
+				remain_asset_amount,
+			</if>
+			<if test="remainAssetAmountCny != null">
+				remain_asset_amount_cny,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="projectAmount != null">
+				#{projectAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="projectAmountCny != null">
+				#{projectAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				#{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="usedFundAmount != null">
+				#{usedFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="usedFundAmountCny != null">
+				#{usedFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmount != null">
+				#{remainFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmountCny != null">
+				#{remainFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="usedAssetAmount != null">
+				#{usedAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="usedAssetAmountCny != null">
+				#{usedAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmount != null">
+				#{remainAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmountCny != null">
+				#{remainAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectPool">
+		update tb_project_pool
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="projectAmount != null">
+				project_amount = #{projectAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="projectAmountCny != null">
+				project_amount_cny =
+				#{projectAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="usedFundAmount != null">
+				used_fund_amount = #{usedFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="usedFundAmountCny != null">
+				used_fund_amount_cny =
+				#{usedFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmount != null">
+				remain_fund_amount =
+				#{remainFundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainFundAmountCny != null">
+				remain_fund_amount_cny =
+				#{remainFundAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="usedAssetAmount != null">
+				used_asset_amount = #{usedAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="usedAssetAmountCny != null">
+				used_asset_amount_cny =
+				#{usedAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmount != null">
+				remain_asset_amount =
+				#{remainAssetAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remainAssetAmountCny != null">
+				remain_asset_amount_cny =
+				#{remainAssetAmountCny,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryProjectPoolResultsByCon" parameterType="com.scfs.domain.project.entity.ProjectPool"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_pool pool left join tb_base_user_project userPro on
+		pool.project_id = userPro.project_id
+		where 1=1
+		<if test="userId != null">
+			AND userPro.user_id = #{userId}
+			AND userPro.state = 1
+		</if>
+		<if test="id != null">
+			AND pool.id =#{id}
+		</if>
+		<if test="projectId != null">
+			AND pool.project_id =#{projectId}
+		</if>
+		order by create_at desc
+	</select>
+
+	<select id="queryProjectPoolByProjectId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_pool pool
+		where pool.project_id =#{projectId} for
+		update
+	</select>
+
+	<select id="queryFundSumByProjectId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select sum(project_pool_dtl.project_amount) as
+		usedFundAmount,
+		sum(project_pool_dtl.cny_amount) as usedFundAmountCny
+		from (
+		select
+		project_amount*unit as project_amount, cny_amount*unit as
+		cny_amount
+		from (
+		select project_amount,cny_amount, if(type=1, 1, -1) as
+		unit from
+		tb_project_pool_fund_dtl
+		where project_id =#{projectId}
+		) as
+		tmp
+		) as project_pool_dtl
+	</select>
+
+	<select id="queryAssertSumByProjectId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select sum(project_pool_dtl.project_amount) as
+		usedAssetAmount,
+		sum(project_pool_dtl.cny_amount) as usedAssetAmountCny
+		from (
+		select
+		project_amount*unit as project_amount, cny_amount*unit as
+		cny_amount
+		from (
+		select project_amount,cny_amount, if(type=1, 1, -1) as
+		unit from
+		tb_project_pool_asset_dtl
+		where project_id =#{projectId}
+		) as
+		tmp
+		) as project_pool_dtl
+	</select>
+
+	<delete id="deleteExculdeOfSunyou">
+		delete from tb_project_pool
+		where project_id not in
+		(2)
+	</delete>
+
+	<select id="queryProjectPoolDtlsCountByProjectId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT SUM(tmp.num) num
+		FROM (
+		SELECT COUNT(1) AS num
+		FROM
+		tb_project_pool_asset_dtl ppad
+		WHERE ppad.project_id = 1
+		UNION ALL
+		SELECT COUNT(1) AS num
+		FROM tb_project_pool_fund_dtl ppfd
+		WHERE
+		ppfd.project_id = 1
+		) tmp
+	</select>
+
+	<!-- 获取资金池统计数据 (用于首页 2017-08-10) -->
+	<select id="querySumProjectPool" resultMap="BaseResultMap">
+		select
+		id,
+		project_id,
+		SUM(project_amount) AS project_amount,
+		SUM(project_amount_cny) AS
+		project_amount_cny,
+		currency_type,
+		SUM(used_fund_amount) AS
+		used_fund_amount,
+		SUM(used_fund_amount_cny) AS used_fund_amount_cny,
+		SUM(remain_fund_amount) AS remain_fund_amount,
+		SUM(remain_fund_amount_cny) AS remain_fund_amount_cny,
+		SUM(used_asset_amount) AS used_asset_amount,
+		SUM(used_asset_amount_cny) AS used_asset_amount_cny,
+		SUM(remain_asset_amount) AS remain_asset_amount ,
+		SUM(remain_asset_amount_cny) AS remain_asset_amount_cny,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		update_at
+		from tb_project_pool pool
+		GROUP
+		BY currency_type
+	</select>
+
+</mapper>

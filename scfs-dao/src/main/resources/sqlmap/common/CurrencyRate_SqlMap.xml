@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.CurrencyRateDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.common.entity.CurrencyRate">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="currency" jdbcType="VARCHAR" property="currency" />
+		<result column="cny_rate" jdbcType="DECIMAL" property="cnyRate" />
+		<result column="hkd_rate" jdbcType="DECIMAL" property="hkdRate" />
+		<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="the_month_cd" jdbcType="VARCHAR" property="theMonthCd" />
+		<result column="usd_rate" jdbcType="DECIMAL" property="usdRate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, currency, cny_rate, hkd_rate, create_user,
+		create_time,
+		update_user, update_time,
+		status, the_month_cd, usd_rate
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_currency_rate
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryCountByTheMonthCd" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(1)
+		from b_currency_rate
+		where the_month_cd =
+		#{theMonthCd,jdbcType=VARCHAR}
+		AND status = 1
+	</select>
+
+	<select id="queryByTheMonthCd" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from b_currency_rate
+		where currency = #{currency,jdbcType=VARCHAR}
+		AND
+		the_month_cd = #{theMonthCd,jdbcType=VARCHAR}
+		AND status = 1
+	</select>
+
+	<select id="queryRateByTheMonthCd" resultType="java.math.BigDecimal">
+		SELECT CASE
+		WHEN
+		#{targetCurrencyType,jdbcType=INTEGER} = 1
+		THEN cny_rate
+		WHEN
+		#{targetCurrencyType,jdbcType=INTEGER} = 2
+		THEN usd_rate
+		WHEN
+		#{targetCurrencyType,jdbcType=INTEGER} = 3
+		THEN hkd_rate
+		END AS
+		currency_rate
+		FROM b_currency_rate
+		WHERE currency =
+		#{originCurrency,jdbcType=VARCHAR}
+		AND the_month_cd =
+		#{theMonthCd,jdbcType=VARCHAR}
+		AND status = 1
+	</select>
+
+</mapper>

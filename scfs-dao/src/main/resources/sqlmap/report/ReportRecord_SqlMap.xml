@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.report.ReportRecordDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.report.entity.ReportRecord">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="report_type" jdbcType="TINYINT" property="reportType" />
+		<result column="issue" jdbcType="VARCHAR" property="issue" />
+		<result column="is_success" jdbcType="TINYINT" property="isSuccess" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, report_type, issue, is_success, msg, creator_id,
+		creator, create_at,
+		update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_record
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_report_record
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.report.entity.ReportRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_report_record (id,
+		report_type, issue,
+		is_success, msg, creator_id,
+		creator)
+		values
+		(#{id,jdbcType=INTEGER}, #{reportType,jdbcType=TINYINT},
+		#{issue,jdbcType=VARCHAR},
+		#{isSuccess,jdbcType=TINYINT},
+		#{msg,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.report.entity.ReportRecord">
+		update tb_report_record
+		<set>
+			<if test="reportType != null">
+				report_type = #{reportType,jdbcType=TINYINT},
+			</if>
+			<if test="issue != null">
+				issue = #{issue,jdbcType=VARCHAR},
+			</if>
+			<if test="isSuccess != null">
+				is_success = #{isSuccess,jdbcType=TINYINT},
+			</if>
+			<if test="msg != null">
+				msg = #{msg,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryResultsByCon" parameterType="com.scfs.domain.report.req.ReportRecordReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_record
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="reportType != null">
+			AND report_type = #{reportType,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null and issue != ''">
+			AND issue = #{issue,jdbcType=INTEGER}
+		</if>
+		<if test="startIssue!=null and startIssue!=''">
+			AND issue &gt;= #{startIssue}
+		</if>
+		<if test="endIssue!=null and endIssue!=''">
+			AND issue &lt;= #{endIssue}
+		</if>
+		<if test="isSuccess != null">
+			AND is_success = #{isSuccess,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="queryReportRecordCount" parameterType="com.scfs.domain.report.req.ReportRecordReqDto"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_report_record
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="issue != null">
+			AND issue = #{issue,jdbcType=VARCHAR}
+		</if>
+		<if test="reportType != null">
+			AND report_type = #{reportType,jdbcType=INTEGER}
+		</if>
+		<if test="startIssue!=null and startIssue!=''">
+			AND issue &gt;= #{startIssue}
+		</if>
+		<if test="endIssue!=null and endIssue!=''">
+			AND issue &lt;= #{endIssue}
+		</if>
+	</select>
+
+	<select id="queryReportRecordByIssue" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_report_record
+		where 1=1
+		AND report_type =
+		#{reportType,jdbcType=INTEGER}
+		AND issue = #{issue,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

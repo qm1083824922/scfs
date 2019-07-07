@@ -1,0 +1,136 @@
+<style>
+    .website-box{
+        margin-bottom:20px;
+    }
+    .website-url{
+        display: inline-block;
+        margin:15px 15px 0 0;
+        box-shadow: 0 0 2px 1px rgba(100,100,100, .3);
+        padding:10px;
+        cursor:pointer;
+    }
+    #websiteFrame{
+        width:100%;
+        height:1000px;
+    }
+    .website-url.active{
+        background: #367fa9;
+        color:#fff;
+    }
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li class="active">项目申请</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header">
+                         <h1 id="project-title" class="project-title text-center fl">恒丰事宜</h1>
+                            <button id="d_clip_button" class="btn btn-xs btn-warning mt20 ml20 fl" data-clipboard-target="project-title" data-clipboard-text="Default clipboard text from attribute">复制</button>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <form method="post" action="###" id="">
+                            <p class="text-right">
+                              <button type="button" class="btn btn-lg btn-primary">提交</button>
+                            </p>
+                            
+                            <div class="form-group">
+                                <label for="">企业描述</label>
+                                <textarea rows="6" class="form-control" id="" placeholder=""></textarea> 
+                            </div>
+                            <div class="form-group">
+                                <label for="">法律条款</label>
+                                <textarea rows="6" class="form-control" id="" placeholder=""></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="">xxxxxx</label>
+                                <textarea rows="6" class="form-control" id="" placeholder=""></textarea> 
+                            </div>
+                            <div class="form-group">
+                                <label for="">xxxxxxx</label>
+                                <textarea rows="6" class="form-control" id="" placeholder=""></textarea>
+                            </div>
+                            <div class="website-box">
+                                <span class="website-url active" data-url="http://www.qichacha.com">企查查官网</span>
+                                <span class="website-url" data-url="http://zhixing.court.gov.cn/search/">全国被执行人</span>
+                                <span class="website-url" data-url="http://zhengxin.ca-sme.org/admin/index/login.html">失信被执行人</span>
+                                <span class="website-url" data-url="http://old.chinacourt.org/cpws/">法院判决文书</span>
+                                <span class="website-url" data-url="http://shixin.court.gov.cn/waf_verify.htm">中国执行信息</span>
+                                <span class="website-url" data-url="http://wenshu.court.gov.cn/waf_verify.htm">中国判决文书</span>
+                                <span class="website-url" data-url="http://www.qichacha.com">地方信用网站</span>
+                                <span class="website-url" data-url="http://www.riskdot.com/index.php?c=content&a=list&catid=667">查国地税发票</span>
+                                <span class="website-url" data-url="">中国纳税信用</span>
+                                <span class="website-url" data-url="">openlaw查诉讼</span>
+                                <span class="website-url" data-url="">信用中国</span>
+                                <span class="website-url" data-url="">中登网</span>
+                                <span class="website-url" data-url="">水滴信用</span>
+                                <span class="website-url" data-url="">应收融资服务</span>
+                                <span class="website-url" data-url="">个人银行征信</span>
+                                <span class="website-url" data-url="">法律图书馆</span>
+                                <span class="website-url" data-url="">全国行业信用</span>
+                                <span class="website-url" data-url="">中国产业洞察</span>
+                                <span class="website-url" data-url="">中国行业研究</span>
+                                <span class="website-url" data-url="">中国产经信息</span>
+                                <span class="website-url" data-url="">海关信息网</span>
+                                <span class="website-url" data-url="">法院公告信息</span>
+                                <span class="website-url" data-url="">企业质量信用</span>
+                                <span class="website-url" data-url="">全国律师查询</span>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <iframe src="http://www.qichacha.com" id="websiteFrame" noborder sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin  allow-scripts"></iframe>
+                    </div>
+                    <!-- .box-body -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+
+   options.initPage = function(){
+        var clip = new ZeroClipboard($('#d_clip_button'));
+
+        clip.on('ready', function() {
+            debugstr('Flash 已经准备完成。');
+
+            this.on('aftercopy', function(event) {
+                layer.msg('已经复制剪贴板：' + event.data['text/plain']);
+            });
+        });
+
+        clip.on('error', function(event) {
+            $('.demo-area').hide();
+            debugstr('error[name="' + event.name + '"]: ' + event.message);
+            ZeroClipboard.destroy();
+        });
+
+        // jquery stuff (optional)
+        function debugstr(text) {
+            console.log(text);
+        }
+   };
+
+   $(".website-url").click(function(){
+        var url = $(this).data("url");
+        if(url){
+            $(this).siblings(".active").removeClass("active");
+            $(this).addClass("active");
+            $("#websiteFrame").attr("src", url);
+        }
+   })
+</script>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>打印demo--供应链金融</title>
+<script language="javascript" src="../js/LodopFuncs.js"></script>
+</head>
+
+<object id="LODOP_OB"
+	classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+	<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+<div id="printDiv">
+	<button type="button" id="btnView" onclick="print_preview()">打印预览</button>
+	<button type="button" id="btnPrint" onclick="print()">打印</button>
+	<button type="button" id="btnDesign" onclick="print_design()">打印设计</button>
+	<a href="http://www.lodop.net/demolist/PrintSampIndex.html"
+		target="_blank">官方文档</a> <a
+		href="http://blog.sina.com.cn/s/blog_721e77e50100q45u.html"
+		target="_blank">官方博客</a>
+</div>
+
+</html>
+<!--</object>-->
+<script language="javascript">
+
+    //    PRINT_INIT(strPrintTaskName)打印初始化
+    //    SET_PRINT_PAGESIZE(intOrient,intPageWidth,intPageHeight,strPageName)设定纸张大小
+    //    ADD_PRINT_HTM(intTop,intLeft,intWidth,intHeight,strHtml)增加超文本项
+    //    ADD_PRINT_TEXT(intTop,intLeft,intWidth,intHeight,strContent)增加纯文本项
+    //    ADD_PRINT_TABLE(intTop,intLeft,intWidth,intHeight,strHtml)增加表格项
+    //    ADD_PRINT_SHAPE(intShapeType,intTop,intLeft,intWidth,intHeight,intLineStyle,intLineWidth,intColor)画图形
+    //    SET_PRINT_STYLE(strStyleName, varStyleValue)设置对象风格
+    //    PREVIEW打印预览
+    //    PRINT直接打印
+    //    PRINT_SETUP打印维护
+    //    PRINT_DESIGN打印设计
+
+
+    var LODOP; //声明为全局变量
+    //打印预览
+    function print_preview() {
+        CreateOneFormPage();
+        LODOP.PREVIEW();
+    };
+
+    function CreateOneFormPage(){
+        LODOP=getLodop();
+        LODOP.PRINT_INIT("打印控件功能演示");//打印初始化
+//        LODOP.SET_PRINT_PAGESIZE(0,210,297,"A4")//设定纸张大小 A4 210×297
+        LODOP.SET_PRINT_STYLE("FontSize",18);//"FontSize"是系统关键字，表示设置字体大小，11是字体大小值，单位是pt。
+        LODOP.SET_PRINT_STYLE("Bold",1);//边框
+        LODOP.ADD_PRINT_HTML(50,230,260,30,document.getElementById("printDiv").innerHTML);//内容离纸张顶端50px、距左边180px、260、高30px、内容为“填充打印内容”
+        //html 
+//        LODOP.ADD_PRINT_HTM(88,200,350,600,document.getElementById("id").innerHTML);
+    };
+    //打印
+    function print() {
+        CreateOneFormPage();
+        LODOP.PRINT();
+    };
+    //选择打印机
+    function selectPrint() {
+        CreateOneFormPage();
+        LODOP.PRINTA();
+    };
+
+    function print_design() {
+        CreateOneFormPage();
+        LODOP.PRINT_DESIGN();
+    };
+
+
+</script>
+

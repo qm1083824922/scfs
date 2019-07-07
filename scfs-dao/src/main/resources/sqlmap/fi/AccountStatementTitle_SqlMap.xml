@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.AccountStatementTitleDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.fi.entity.AccountStatementTitle">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_attach_no" jdbcType="VARCHAR" property="billAttachNo" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="ast_start_date" jdbcType="DATE" property="astStartDate" />
+		<result column="ast_end_date" jdbcType="DATE" property="astEndDate" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+		<result column="project_amount" jdbcType="DECIMAL" property="projectAmount" />
+		<result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+		<result column="in_use_amount" jdbcType="DECIMAL" property="inUseAmount" />
+		<result column="in_store_amount" jdbcType="DECIMAL" property="inStoreAmount" />
+		<result column="on_way_amount" jdbcType="DECIMAL" property="onWayAmount" />
+		<result column="lend_amount" jdbcType="DECIMAL" property="lendAmount" />
+		<result column="state" jdbcType="TINYINT" property="state" />
+		<result column="note" jdbcType="VARCHAR" property="note" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, project_id, bill_no, bill_attach_no, cust_id,
+		ast_start_date,
+		ast_end_date, currency_type,
+		project_amount,
+		total_amount, in_use_amount, in_store_amount, on_way_amount,
+		lend_amount,
+		state, note, creator_id, creator, create_at, update_at
+	</sql>
+	<sql id="Alias_Base_Column_List">
+		ast.id, ast.project_id, ast.bill_no, ast.bill_attach_no,
+		ast.cust_id,
+		ast.ast_start_date, ast.ast_end_date, ast.currency_type,
+		ast.project_amount, ast.total_amount, ast.in_use_amount,
+		ast.in_store_amount, ast.on_way_amount, ast.lend_amount,
+		ast.state,
+		ast.note, ast.creator_id, ast.creator, ast.create_at, ast.update_at
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_account_statement_title
+		where id = #{id,jdbcType=INTEGER} for
+		update
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_account_statement_title
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.AccountStatementTitle"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_account_statement_title (project_id, bill_no,
+		bill_attach_no,
+		cust_id, ast_start_date,
+		ast_end_date, currency_type, project_amount,
+		total_amount, in_use_amount, in_store_amount,
+		on_way_amount,
+		lend_amount, state,
+		note, creator_id, creator)
+		values
+		(#{projectId,jdbcType=INTEGER}, #{billNo,jdbcType=VARCHAR},
+		#{billAttachNo,jdbcType=VARCHAR}, #{custId,jdbcType=INTEGER},
+		#{astStartDate,jdbcType=DATE},
+		#{astEndDate,jdbcType=DATE},
+		#{currencyType,jdbcType=TINYINT},
+		IFNULL(#{projectAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{totalAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{inUseAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{inStoreAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{onWayAmount,jdbcType=DECIMAL},0),
+		IFNULL(#{lendAmount,jdbcType=DECIMAL},0), #{state,jdbcType=TINYINT},
+		#{note,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR})
+	</insert>
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.fi.dto.req.AccountStatementSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_account_statement_title ast
+		left join tb_base_user_project bup
+		on ast.project_id = bup.project_id
+		<where>
+			<if test="userId != null">
+				and bup.user_id = #{userId}
+				and bup.state = 1
+			</if>
+			<if test="projectId != null">
+				and ast.project_id = #{projectId}
+			</if>
+			<if test="custId != null">
+				and ast.cust_id = #{custId}
+			</if>
+			<if test="busiUnit != null">
+				and exists (select 1 from tb_base_project tbp where
+				tbp.id =
+				ast.project_id and tbp.business_unit_id = #{busiUnit})
+			</if>
+			<if test="billNo != null">
+				and ast.bill_no like CONCAT('%', #{billNo} , '%')
+			</if>
+			<if test="state != null">
+				and ast.state = #{state}
+			</if>
+		</where>
+	</select>
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.AccountStatementTitle">
+		update tb_account_statement_title
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billAttachNo != null">
+				bill_attach_no = #{billAttachNo,jdbcType=VARCHAR},
+			</if>
+			<if test="custId != null">
+				cust_id = #{custId,jdbcType=INTEGER},
+			</if>
+			<if test="astStartDate != null">
+				ast_start_date = #{astStartDate,jdbcType=DATE},
+			</if>
+			<if test="astEndDate != null">
+				ast_end_date = #{astEndDate,jdbcType=DATE},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+			<if test="projectAmount != null">
+				project_amount = #{projectAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="inUseAmount != null">
+				in_use_amount = #{inUseAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="inStoreAmount != null">
+				in_store_amount = #{inStoreAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="onWayAmount != null">
+				on_way_amount = #{onWayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="lendAmount != null">
+				lend_amount = #{lendAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=TINYINT},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

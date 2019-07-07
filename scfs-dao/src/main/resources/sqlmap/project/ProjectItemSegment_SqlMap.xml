@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectItemSegmentDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.project.entity.ProjectItemSegment">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="project_item_id" jdbcType="INTEGER" property="projectItemId" />
+		<result column="segment_day" jdbcType="INTEGER" property="segmentDay" />
+		<result column="segment_fund_month_rate" jdbcType="DECIMAL"
+			property="segmentFundMonthRate" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="deleter" jdbcType="VARCHAR" property="deleter" />
+		<result column="delete_at" jdbcType="TIMESTAMP" property="deleteAt" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, project_item_id, segment_day, segment_fund_month_rate,
+		creator_id,
+		creator, create_at, update_at,
+		deleter, delete_at, is_delete
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item_segment
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.project.entity.ProjectItemSegment"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_project_item_segment (id, project_item_id, segment_day,
+		segment_fund_month_rate, creator_id, creator)
+		values
+		(#{id,jdbcType=INTEGER}, #{projectItemId,jdbcType=INTEGER},
+		#{segmentDay,jdbcType=INTEGER},
+		#{segmentFundMonthRate,jdbcType=DECIMAL},
+		#{creatorId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.project.entity.ProjectItemSegment">
+		update tb_project_item_segment
+		<set>
+			<if test="projectItemId != null">
+				project_item_id = #{projectItemId,jdbcType=INTEGER},
+			</if>
+			<if test="segmentDay != null">
+				segment_day = #{segmentDay,jdbcType=INTEGER},
+			</if>
+			<if test="segmentFundMonthRate != null">
+				segment_fund_month_rate =
+				#{segmentFundMonthRate,jdbcType=DECIMAL},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="deleter != null">
+				deleter = #{deleter,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteAt != null">
+				delete_at = #{deleteAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryNeedToDeleteResults"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSegmentReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item_segment
+		where 1=1
+		and project_item_id =
+		#{projectItemId,jdbcType=INTEGER}
+		and is_delete = 0
+		<foreach collection="ids" item="id" open="AND id not in("
+			separator="," close=")">
+			#{id,jdbcType=INTEGER}
+		</foreach>
+	</select>
+
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSegmentReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item_segment
+		where 1=1
+		<if test="projectItemId != null">
+			and project_item_id = #{projectItemId,jdbcType=INTEGER}
+		</if>
+		<if test="isDelete != null">
+			and is_delete = #{isDelete,jdbcType=TINYINT}
+		</if>
+	</select>
+
+	<select id="querySegmentBySegmentDay"
+		parameterType="com.scfs.domain.project.dto.req.ProjectItemSegmentReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item_segment
+		where 1=1
+		and project_item_id =
+		#{projectItemId,jdbcType=INTEGER}
+		and segment_day &gt;= #{segmentDay}
+		and is_delete = 0
+		ORDER BY segment_day ASC
+		limit 0, 1
+	</select>
+
+	<select id="queryMaxSegmentBySegmentDay" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_item_segment
+		where 1=1
+		and project_item_id =
+		#{projectItemId,jdbcType=INTEGER}
+		and segment_day = (
+		select
+		max(segment_day) from tb_project_item_segment tpis
+		where
+		tpis.project_item_id = #{projectItemId,jdbcType=INTEGER}
+		and
+		tpis.is_delete = 0
+		)
+		and is_delete = 0
+	</select>
+
+
+</mapper>

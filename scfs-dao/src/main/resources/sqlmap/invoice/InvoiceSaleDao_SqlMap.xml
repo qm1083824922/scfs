@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.invoice.InvoiceSaleDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceSaleManager">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="invoice_apply_id" jdbcType="INTEGER" property="invoiceApplyId" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_dtl_id" jdbcType="INTEGER" property="billDtlId" />
+		<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		<result column="provide_invoice_num" jdbcType="DECIMAL"
+			property="provideInvoiceNum" />
+		<result column="provide_invoice_price" jdbcType="DECIMAL"
+			property="provideInvoicePrice" />
+		<result column="provide_invoice_amount" jdbcType="DECIMAL"
+			property="provideInvoiceAmount" />
+		<result column="discount_in_rate_amount" jdbcType="DECIMAL"
+			property="discountInRateAmount" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="bill_date" jdbcType="DATE" property="billDate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, invoice_apply_id, bill_id, bill_no, bill_dtl_id,
+		goods_id,
+		provide_invoice_num, provide_invoice_price,
+		provide_invoice_amount, discount_in_rate_amount, remark, creator_id,
+		creator, create_at,
+		update_at, bill_date
+	</sql>
+	<select id="selectByInvoiceId" parameterType="Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_apply_sale sale
+		where sale.invoice_apply_id =
+		#{invoiceApplyId,jdbcType=INTEGER}
+	</select>
+	<select id="querySaleAmountByAppId" parameterType="Integer"
+		resultType="DECIMAL">
+		select sum(provide_invoice_amount) from
+		tb_invoice_apply_sale
+		where invoice_apply_id =
+		#{invoiceApplyId,jdbcType=INTEGER}
+	</select>
+
+	<select id="querySaleFee" parameterType="com.scfs.domain.invoice.entity.InvoiceSaleManager"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_apply_sale
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="queryAndLockById" parameterType="com.scfs.domain.invoice.entity.InvoiceSaleManager"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_apply_sale
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<delete id="deleteByCon" parameterType="Integer">
+		delete from
+		tb_invoice_apply_sale
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByInvoiceAppId" parameterType="Integer">
+		delete from
+		tb_invoice_apply_sale
+		where invoice_apply_id =
+		#{invoiceApplyId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceSaleManager">
+		insert into tb_invoice_apply_sale
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="invoiceApplyId != null">
+				invoice_apply_id,
+			</if>
+			<if test="billId != null">
+				bill_id,
+			</if>
+			<if test="billNo != null">
+				bill_no,
+			</if>
+			<if test="billDtlId != null">
+				bill_dtl_id,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="provideInvoiceNum != null">
+				provide_invoice_num,
+			</if>
+			<if test="provideInvoicePrice != null">
+				provide_invoice_price,
+			</if>
+			<if test="provideInvoiceAmount != null">
+				provide_invoice_amount,
+			</if>
+			<if test="discountInRateAmount != null">
+				discount_in_rate_amount,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="billDate != null">
+				bill_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceApplyId != null">
+				#{invoiceApplyId,jdbcType=INTEGER},
+			</if>
+			<if test="billId != null">
+				#{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo != null">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billDtlId != null">
+				#{billDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="provideInvoiceNum != null">
+				#{provideInvoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoicePrice != null">
+				#{provideInvoicePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoiceAmount != null">
+				#{provideInvoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountInRateAmount != null">
+				#{discountInRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billDate != null">
+				#{billDate,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceSaleManager">
+		update tb_invoice_apply_sale
+		<set>
+			<if test="invoiceApplyId != null">
+				invoice_apply_id = #{invoiceApplyId,jdbcType=INTEGER},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billDtlId != null">
+				bill_dtl_id = #{billDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="provideInvoiceNum != null">
+				provide_invoice_num =
+				#{provideInvoiceNum,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoicePrice != null">
+				provide_invoice_price =
+				#{provideInvoicePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="provideInvoiceAmount != null">
+				provide_invoice_amount =
+				#{provideInvoiceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="discountInRateAmount != null">
+				discount_in_rate_amount =
+				#{discountInRateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billDate != null">
+				bill_date = #{billDate,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

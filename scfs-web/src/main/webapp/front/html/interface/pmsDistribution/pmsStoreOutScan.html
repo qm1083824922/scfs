@@ -1,0 +1,87 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>接口</li>
+		<li class="active">pms出库单明细</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<div class="box-body">
+						<table id="js_dataTable" data-url="pmsDistributionSearch/detail">
+						</table>
+					</div>
+				</div>
+				<div class="box-footer text-center">
+				<button type="button" id="pmsStoreOutFlag" data-url="html/interface/pmsDistribution/pmsDistributionSearch.html"
+					class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+			</form>
+		</div>
+	</section>
+<script>
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: '2%'
+     }, {
+	     title: '采购单号',
+	     field: 'purchase_sn',
+	     align: 'center',
+	     width: '20%'
+	 }, {
+	     title: '供应商编号',
+	     field: 'provider_sn',
+	     align: 'center',
+	     width: '20%'
+	 }, {
+	     title: '币种名称',
+	     field: 'currencyName',
+	     align: 'center',
+	     width: '10%'
+	 }, {
+	     title: '销售数量',
+	     field: 'wms_out_stockin',
+	     align: 'center',
+	     width: '9%'
+	 }, {
+	     title: '销售价格',
+	     field: 'purchase_price',
+	     align: 'center',
+	     width: '9%'
+	 }, {
+	     title: '商品编号',
+	     field: 'sku',
+	     align: 'center',
+	     width: '9%'
+	 }, {
+	     title: '销售编号',
+	     field: 'sku_id',
+	     align: 'center',
+	     width: '9%'
+	 }, {
+  	     title: '处理结果',
+  	     field: 'dealFlagName',
+  	     align: 'center',
+  	     width: '9%'
+  	 },{
+	     title: '描述',
+	     field: 'msg',
+	     align: 'center',
+	   	 width: '30%'
+	 }
+];
+
+options.initPage = function(){
+	var dealflag=options.param.dealflag;
+	if(dealflag==3){
+		$("#pmsStoreOutFlag").attr("data-url","html/interface/pmsDistribution/pmsDistributionSuccessSearch.html");
+	}
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {id : options.param.id,type:options.param.type});
+}
+GLOBAL.goBack();
+</script>

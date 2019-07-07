@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.ReceiptPoolAssestDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.ReceiptPoolAssest">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_source" jdbcType="TINYINT" property="billSource" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="customer_id" jdbcType="INTEGER" property="customerId" />
+		<result column="business_unit_id" jdbcType="INTEGER" property="businessUnitId" />
+		<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="business_date" jdbcType="DATE" property="businessDate" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="bill_amount" jdbcType="DECIMAL" property="billAmount" />
+		<result column="bill_currency_type" jdbcType="TINYINT"
+			property="billCurrencyType" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_type" jdbcType="TINYINT" property="billType" />
+		<result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+		<result column="amount_cny" jdbcType="DECIMAL" property="amountCny" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, type, bill_no, bill_source, project_id, customer_id,
+		business_unit_id, supplier_id,
+		business_date, create_at, bill_amount,
+		bill_currency_type, remark, creator_id,
+		creator,
+		update_at, bill_id,
+		bill_type,exchange_rate,amount_cny
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_receipt_pool_assest_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_receipt_pool_assest_dtl
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.ReceiptPoolAssest">
+		insert into
+		tb_receipt_pool_assest_dtl (id, type, bill_no,
+		bill_source, project_id,
+		customer_id,
+		business_unit_id, supplier_id, business_date,
+		create_at,
+		bill_amount, bill_currency_type,
+		remark, creator_id, creator,
+		update_at, bill_id,
+		bill_type)
+		values (#{id,jdbcType=INTEGER},
+		#{type,jdbcType=TINYINT},
+		#{billNo,jdbcType=VARCHAR},
+		#{billSource,jdbcType=TINYINT}, #{projectId,jdbcType=INTEGER},
+		#{customerId,jdbcType=INTEGER},
+		#{businessUnitId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER},
+		#{businessDate,jdbcType=DATE},
+		#{createAt,jdbcType=TIMESTAMP}, #{billAmount,jdbcType=DECIMAL},
+		#{billCurrencyType,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{updateAt,jdbcType=TIMESTAMP}, #{billId,jdbcType=INTEGER},
+		#{billType,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.scfs.domain.fi.entity.ReceiptPoolAssest">
+		insert into tb_receipt_pool_assest_dtl
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="billNo != null">
+				bill_no,
+			</if>
+			<if test="billSource != null">
+				bill_source,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="customerId != null">
+				customer_id,
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id,
+			</if>
+			<if test="supplierId != null">
+				supplier_id,
+			</if>
+			<if test="businessDate != null">
+				business_date,
+			</if>
+			<if test="createAt != null">
+				create_at,
+			</if>
+			<if test="billAmount != null">
+				bill_amount,
+			</if>
+			<if test="billCurrencyType != null">
+				bill_currency_type,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="updateAt != null">
+				update_at,
+			</if>
+			<if test="billId != null">
+				bill_id,
+			</if>
+			<if test="billType != null">
+				bill_type,
+			</if>
+			<if test="exchangeRate != null">
+				exchange_rate,
+			</if>
+			<if test="amountCny != null">
+				amount_cny,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				#{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billSource != null">
+				#{billSource,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				#{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				#{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				#{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="businessDate != null">
+				#{businessDate,jdbcType=DATE},
+			</if>
+			<if test="createAt != null">
+				#{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billAmount != null">
+				#{billAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billCurrencyType != null">
+				#{billCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				#{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billId != null">
+				#{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=TINYINT},
+			</if>
+			<if test="exchangeRate != null">
+				#{exchangeRate,jdbcType=DECIMAL},
+			</if>
+			<if test="amountCny != null">
+				#{amountCny,jdbcType=DECIMAL},
+			</if>
+
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.scfs.domain.fi.entity.ReceiptPoolAssest">
+		update tb_receipt_pool_assest_dtl
+		<set>
+			<if test="type != null">
+				type = #{type,jdbcType=TINYINT},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billSource != null">
+				bill_source = #{billSource,jdbcType=TINYINT},
+			</if>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="customerId != null">
+				customer_id = #{customerId,jdbcType=INTEGER},
+			</if>
+			<if test="businessUnitId != null">
+				business_unit_id = #{businessUnitId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierId != null">
+				supplier_id = #{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="businessDate != null">
+				business_date = #{businessDate,jdbcType=DATE},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billAmount != null">
+				bill_amount = #{billAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="billCurrencyType != null">
+				bill_currency_type =
+				#{billCurrencyType,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billType != null">
+				bill_type = #{billType,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.scfs.domain.fi.entity.ReceiptPoolAssest">
+		update
+		tb_receipt_pool_assest_dtl
+		set type = #{type,jdbcType=TINYINT},
+		bill_no
+		= #{billNo,jdbcType=VARCHAR},
+		bill_source =
+		#{billSource,jdbcType=TINYINT},
+		project_id =
+		#{projectId,jdbcType=INTEGER},
+		customer_id =
+		#{customerId,jdbcType=INTEGER},
+		business_unit_id =
+		#{businessUnitId,jdbcType=INTEGER},
+		supplier_id =
+		#{supplierId,jdbcType=INTEGER},
+		business_date =
+		#{businessDate,jdbcType=DATE},
+		create_at =
+		#{createAt,jdbcType=TIMESTAMP},
+		bill_amount =
+		#{billAmount,jdbcType=DECIMAL},
+		bill_currency_type =
+		#{billCurrencyType,jdbcType=TINYINT},
+		remark =
+		#{remark,jdbcType=VARCHAR},
+		creator_id = #{creatorId,jdbcType=INTEGER},
+		creator = #{creator,jdbcType=VARCHAR},
+		update_at =
+		#{updateAt,jdbcType=TIMESTAMP},
+		bill_id = #{billId,jdbcType=INTEGER},
+		bill_type = #{billType,jdbcType=TINYINT}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryFundPoolAssestResults" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_receipt_pool_assest_dtl
+		where 1=1
+		<if test="currencyType!=null">
+			and bill_currency_type= #{currencyType}
+		</if>
+		<if test="businessUnitId!=null">
+			and business_unit_id= #{businessUnitId}
+		</if>
+		order by business_date desc
+	</select>
+	<delete id="deleteAllPoolAssest">
+		delete from tb_receipt_pool_assest_dtl
+	</delete>
+
+	<select id="isOverasyncMaxLine" parameterType="com.scfs.domain.fi.dto.req.FundPoolReqDto"
+		resultType="java.lang.Integer">
+		select
+		count(*)
+		from tb_receipt_pool_assest_dtl
+		where 1=1
+		<if test="currencyType!=null">
+			and bill_currency_type= #{currencyType}
+		</if>
+		<if test="businessUnitId!=null">
+			and business_unit_id= #{businessUnitId}
+		</if>
+		order by business_date desc
+	</select>
+</mapper>

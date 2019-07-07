@@ -1,0 +1,345 @@
+.main-header #navBar .dropdown:hover .dropdown-menu, .main-header .no-login:hover .user-info-dropdown,
+	.main-header .user-info:hover .user-info-dropdown {
+	display: block
+}
+
+body {
+	overflow-x: auto;
+	font-size: 12px
+}
+
+.wrapper {
+	min-width: 1200px;
+	overflow: visible !important
+}
+
+.main-header {
+	background-color: #3c88ef;
+	position: fixed;
+	width: 100%
+}
+
+.main-header .logo {
+	/*background: url(../images/logo.png) center no-repeat #3c88ef;*/
+	background: url(../images/logo.png) center no-repeat #0b50c0;
+	border-bottom: 1px solid #3c88ef !important;
+	position: absolute;
+	left: 0;
+	top: 0;
+	float: none
+}
+
+.main-header #navBar .dropdown.open>a, .main-header .no-login:hover,
+	.main-header .user-info:hover {
+	background: #549dff
+	/**background: #0b50c0**/
+}
+
+.main-header #navBar {
+	margin: 0
+}
+
+.main-header #navBar .dropdown {
+	margin: 0 3px;
+	float: left
+}
+
+.main-header #navBar .dropdown>a {
+	color: #fff;
+	font-size: 14px;
+	padding-top: 15px
+}
+
+.main-header #navBar .dropdown>a:focus, .main-header #navBar .dropdown>a:hover
+	{
+	color: #fff;
+	background: #549dff
+}
+
+.main-header #navBar .dropdown .dropdown-menu {
+	box-shadow: 0 0 5px rgba(100, 100, 100, .3) !important;
+	border-radius: 0;
+	border: 0
+}
+
+.main-header .no-login, .main-header .user-info {
+	width: auto;
+	color: #fff;
+	padding: 15px;
+	height: 50px;
+	margin-right: 0px;
+	text-align: right;
+	position: relative;
+	/*background: #549dff*/
+	background: #0b50c0
+}
+
+.main-header .no-login .user-info-dropdown, .main-header .user-info .user-info-dropdown
+	{
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 50px;
+	width: 100%;
+	background: #3c88ef;
+	text-align: left
+}
+
+.main-header .no-login .user-info-dropdown li, .main-header .user-info .user-info-dropdown li
+	{
+	height: 35px;
+	line-height: 35px;
+	/*background: #549dff*/
+	background: #eef1f6;
+}
+
+.main-header .no-login .user-info-dropdown li:hover, .main-header .user-info .user-info-dropdown li:hover
+	{
+	background: #2274e4
+}
+
+.main-header .no-login .user-info-dropdown li a, .main-header .user-info .user-info-dropdown li a
+	{
+	display: inline-block;
+	padding: 0 15px;
+	width: 100%;
+	cursor: pointer
+}
+
+.main-header .no-login a, .main-header .user-info a {
+	padding: 10px;
+	/*color: #fff;*/
+	color: #000;
+	cursor: default
+}
+
+.main-header .no-login a.user-chanese-name, .main-header .user-info a.user-chanese-name
+	{
+	padding: 10px 0
+}
+
+.main-header .no-login a.opt-item, .main-header .user-info a.opt-item {
+	cursor: pointer
+}
+
+.main-header .no-login a.opt-item:hover, .main-header .user-info a.opt-item:hover
+	{
+	text-decoration: underline
+}
+
+.head-sub-nav {
+	min-width: 340px
+}
+
+.head-sub-nav dt {
+	border-bottom: 1px solid #eee;
+	padding: 0 5px
+}
+
+.head-sub-nav dd {
+	padding: 0 5px
+}
+
+.head-sub-nav dd a {
+	display: inline-block;
+	min-width: 100px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 5px
+}
+
+.dropdown-menu {
+	box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
+}
+
+.btn[data-permissionurl], .fixed-table-toolbar {
+	display: none
+}
+
+.search-item {
+	display: inline-block;
+	margin-right: 10px;
+	margin-top: 15px
+}
+
+table.print-table {
+	table-layout: fixed
+}
+
+table.print-table td, table.print-table th {
+	word-wrap: break-word !important;
+	word-break: break-all !important
+}
+
+table.print-table thead th .th-inner {
+	text-overflow: initial;
+	white-space: initial;
+	word-break: break-all
+}
+
+@media screen and (max-width:767px) {
+	.navbar-left, .navbar-right {
+		display: none
+	}
+}
+
+.rowStyle {
+	color: red
+}
+
+#treeBox {
+	border: 1px solid #ccc;
+	background: #fff
+}
+
+.preview-box {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(50, 50, 50, .5);
+	display: none;
+	z-index: 99999999;
+	overflow: hidden
+}
+
+.preview-box img.preview-img {
+	position: absolute;
+	width: 600px;
+	top: 50px;
+	-moz-transition: all .3s ease;
+	transition: all .3s ease;
+	-webkit-transform-origin: center 40%;
+	-moz-transform-origin: center 40%;
+	-ms-transform-origin: center 40%;
+	transform-origin: center 40%;
+	cursor: move
+}
+
+.preview-box .toolbox {
+	position: absolute;
+	left: 50%;
+	top: 6%;
+	-webkit-transform: translate(-50%, 0);
+	-moz-transform: translate(-50%, 0);
+	-ms-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+	display: inline-block;
+	width: 220px;
+	height: 35px;
+	z-index: 999
+}
+
+.preview-box .toolbox span {
+	position: absolute;
+	top: 5%;
+	display: inline-block;
+	border: 2px solid #555;
+	color: #fff
+}
+
+.preview-box .toolbox .original-scale {
+	position: absolute;
+	left: 10px;
+	top: 5%;
+	width: 35px;
+	height: 35px;
+	cursor: pointer;
+	border: 2px solid #555;
+	background: url(../images/full_screen.png) center center no-repeat
+}
+
+.preview-box .toolbox .percent {
+	left: 60px;
+	width: 100px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	font-size: 20px;
+	border-radius: 10px
+}
+
+.preview-box .toolbox .rotate-btn {
+	left: 170px;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	cursor: pointer;
+	background: url(../images/rotate.png) center center no-repeat
+}
+
+.preview-box .preview-close {
+	width: 50px;
+	height: 50px;
+	line-height: 30px;
+	text-align: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: rgba(0, 0, 0, .8);
+	border-bottom-left-radius: 50px;
+	cursor: pointer;
+	z-index: 99
+}
+
+.preview-box .preview-close span {
+	display: inline-block;
+	width: 50px;
+	height: 40px;
+	margin-left: 10px;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	font-size: 50px;
+	-moz-transition: all 3s ease-in-out;
+	transition: all 3s ease-in-out;
+	color: #888
+}
+
+.preview-box .preview-close:hover span {
+	-webkit-transform: rotate(3645deg);
+	-moz-transform: rotate(3645deg);
+	-ms-transform: rotate(3645deg);
+	transform: rotate(3645deg)
+}
+
+.collapse-btn {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-left: 20px;
+	font-size: 20px;
+	font-weight: 100;
+	padding-left: 20px;
+	cursor: pointer;
+	background: url(../images/collapse.png) center 0 no-repeat;
+	background-size: 100% 100%
+}
+
+.collapse-btn.expanded {
+	background-image: url(../images/expand.png)
+}
+
+.collapse-box .hidden {
+	display: none
+}
+
+.nav-foot {
+	width: 100%;
+	height: 18px;
+	margin: 0 auto;
+	background: #3c88ef;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+}
+
+.nav-foot>b, .nav-foot>b>a {
+	color: #fff;
+}
+
+.head-sub-menu:hover {
+	color: #3c88ef;
+}

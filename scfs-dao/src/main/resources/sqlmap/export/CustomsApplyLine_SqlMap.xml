@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.export.CustomsApplyLineDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.export.entity.CustomsApplyLine">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="customs_apply_id" jdbcType="INTEGER" property="customsApplyId" />
+		<result column="bill_id" jdbcType="INTEGER" property="billId" />
+		<result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+		<result column="bill_affiliate_no" jdbcType="VARCHAR" property="billAffiliateNo" />
+		<result column="bill_dtl_id" jdbcType="INTEGER" property="billDtlId" />
+		<result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+		<result column="customs_num" jdbcType="DECIMAL" property="customsNum" />
+		<result column="customs_price" jdbcType="DECIMAL" property="customsPrice" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, customs_apply_id, bill_id, bill_no, bill_affiliate_no,
+		bill_dtl_id,
+		goods_id,
+		customs_num, customs_price, remark, creator_id,
+		creator, create_at, update_at
+	</sql>
+
+	<select id="queryAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_customs_apply_line
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_customs_apply_line
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_customs_apply_line
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.scfs.domain.export.entity.CustomsApplyLine"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_customs_apply_line
+		(id, customs_apply_id, bill_id,
+		bill_no, bill_affiliate_no,
+		bill_dtl_id,
+		goods_id, customs_num, customs_price,
+		remark, creator_id,
+		creator)
+		values (#{id,jdbcType=INTEGER},
+		#{customsApplyId,jdbcType=INTEGER},
+		#{billId,jdbcType=INTEGER},
+		#{billNo,jdbcType=VARCHAR}, #{billAffiliateNo,jdbcType=VARCHAR},
+		#{billDtlId,jdbcType=INTEGER},
+		#{goodsId,jdbcType=INTEGER},
+		#{customsNum,jdbcType=DECIMAL},
+		#{customsPrice,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.export.entity.CustomsApplyLine">
+		update tb_customs_apply_line
+		<set>
+			<if test="customsApplyId != null">
+				customs_apply_id = #{customsApplyId,jdbcType=INTEGER},
+			</if>
+			<if test="billId != null">
+				bill_id = #{billId,jdbcType=INTEGER},
+			</if>
+			<if test="billNo != null">
+				bill_no = #{billNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billAffiliateNo != null">
+				bill_affiliate_no = #{billAffiliateNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billDtlId != null">
+				bill_dtl_id = #{billDtlId,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=INTEGER},
+			</if>
+			<if test="customsNum != null">
+				customs_num = #{customsNum,jdbcType=DECIMAL},
+			</if>
+			<if test="customsPrice != null">
+				customs_price = #{customsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="querySumByCustomsApplyId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.export.entity.CustomsApplyLineSum">
+		select IFNULL(sum(customs_num*customs_price), 0) as
+		customsAmount,
+		IFNULL(sum(customs_num), 0) as customsNum
+		from
+		tb_customs_apply_line
+		where customs_apply_id =
+		#{customsApplyId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryResultsByCustomsApplyId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_customs_apply_line
+		where customs_apply_id =
+		#{customsApplyId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryCountByCustomsApplyId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(1)
+		from tb_customs_apply_line
+		where
+		customs_apply_id = #{customsApplyId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryCustomsDeclareNumByBillDtlId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select IFNULL(sum(tcal.customs_num), 0) as
+		customsDeclareNum
+		from tb_customs_apply_line tcal
+		left join
+		tb_customs_apply tca
+		on tcal.customs_apply_id = tca.id
+		where
+		tca.is_delete = 0
+		and tcal.bill_dtl_id = #{billDtlId,jdbcType=INTEGER}
+	</select>
+
+</mapper>

@@ -1,0 +1,99 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>基础信息</li>
+			<li>客户维护管理</li>
+			<li>跟进</li>
+			<li class="active">添加跟进记录</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="customerMaintain/edit">
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered table-hover no-margin">
+							     <input type="hidden" class="form-control js-initform" id="id" name="id">
+								 <tr>
+				                     <td width="180" class="text-right" ><b>所处阶段：<em class="text-star">*</em></b></td>
+				                     <td class="text-left">
+				                       <select class="form-control js-initform" data-url="MATTER_STAGE" id="stage" name="stage"></select>
+				                     </td>
+				                  </tr>
+								 <tr>
+				                     <td class="text-right" ><b>客户简称：</b></td>
+				                     <td class="text-left">
+				                     	<label class="js-initform" id="abbreviation" name="abbreviation">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>中文全称：</b></td>
+				                     <td class="text-left">
+				                        <label class="js-initform" id="chineseName" name="chineseName">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>英文全称：</b></td>
+				                     <td class="text-left">
+				                        <label class="js-initform" id="englishName" name="englishName">
+				                     </td>
+				                  </tr>
+				                  <tr>
+				                     <td class="text-right"><b>跟进人：</b></td>
+	                                 <td class="text-left">
+	                                     <label class="js-initform" id="fllowName" name="fllowName">
+	                               	 </td>
+				                  </tr>
+				                  <tr>
+									<td  width="180" class="text-right"><b>跟进内容：<em class="text-star">*</em</b></td>
+									<td class="text-left" colspan="3">
+										<textarea class="form-control" id="content" name="content"></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center"><!--  -->
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/customerFollow/add">保存</button>
+					<button type="button" id="back" data-url="html/baseinfo/customer/customerFollow.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		$("#form1").validate({
+			rules : {
+				stage : {
+					required : true
+				},
+				remark : {
+					content : 200
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				
+				GLOBAL.ajax("customerFollow/add", data, function(e) {
+					if (e.success) {
+						layer.msg("新增成功！");
+						GLOBAL.go("html/baseinfo/customer/customerFollow.html");
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+	}
+	GLOBAL.goBack();
+</script>

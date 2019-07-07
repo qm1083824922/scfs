@@ -1,0 +1,122 @@
+<style>
+	.nav>li.state{
+		display: none;
+	}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>资金</li>
+			<li>付款</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item"
+							data-url="payBaseInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item"
+							id="orderDtlLink" data-url="payFeeScan.html">费用信息</a></li>
+						<li role="presentation" ><a class="tab-item"  data-url="payAdvanceScan.html">预收单信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="attachmentScan.html">附件</a></li>
+						<li role="presentation" class="state"><a class="tab-item" data-url="payVoucherScan.html">付款凭证</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="payFeeRela/query">
+			
+					</table>
+				</div>
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title: '序号',
+		  	   field: 'columnsNumber',  
+		  	   width: 10
+			},
+			{
+				title : '费用编号',
+				field : 'feeNo',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '费用类型',
+				field : 'feeTypeName',
+				width : 210,
+				align : 'center'
+			},
+			{
+				title : '费用日期',
+				field : 'payDate',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '费用金额',
+				field : 'expPayAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '已收票金额',
+				field : 'acceptInvoiceAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '已付款金额',
+				field : 'oldPayAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '本次付款金额',
+				field : 'payAmount',
+				width : 70,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			}
+    		}
+		options.param.payId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			payId : options.param.id
+		},false,option);
+		
+		var stateInt = options.param.stateInt;
+		if(stateInt==6){
+			$(".nav>li.state").show();	
+		}
+	};
+
+	GLOBAL.goBack();
+</script>

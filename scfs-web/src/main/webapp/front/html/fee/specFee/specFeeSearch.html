@@ -1,0 +1,137 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>费用</li>
+            <li class="active">费用科目</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">	
+							<label class="control-label ml10">费用科目编号：</label>
+                            <input type="text" class="form-control" id="feeSpecNo" name="feeSpecNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">费用科目名称：</label>
+                            <input type="text" class="form-control" id="feeSpecName" name="feeSpecName">
+						</div>
+						<div class="search-item">	
+							<label class="control-label ml10">费用科目类型：</label>
+							<select class="form-control js-select" data-url="FEE_TYPE" id="feeType" name="feeType"></select>
+                        </div>
+                        <div class="search-item">	         
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/fee/specFee/specFeeCreate.html" data-permissionUrl="/fee/spec/add"  class="btn btn-warning btn-sm ml10">新建</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="fee/spec/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script >
+window.operateEvents = {
+    'click .delete': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要删除吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("fee/spec/delete", {id: id}, function(){
+	    		layer.msg("删除成功", {
+	                icon: 1
+	            })
+	            $('#js_dataTable').bootstrapTable('refresh');
+	    	})
+	    }, function() {});
+    },
+    'click .edit': function(e, value, row, index){
+		options.param.id = row.id;
+		GLOBAL.go("html/fee/specFee/specFeeEdit.html");
+    },
+    'click .scan': function(e, value, row, index){
+		options.param.id = row.id;
+		GLOBAL.go("html/fee/specFee/specFeeScan.html");
+    }
+};
+
+/*数据表格*/
+var tabCols = [
+	{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '费用科目编号',
+	     field: 'feeSpecNo',
+	     width: 100,
+	     align: 'center'
+     }, {
+	     title: '费用科目类型',
+	     field: 'feeTypeName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '费用科目名称',
+	     field: 'feeSpecName',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '管理一级名称',
+	     field: 'feeOneNameValue',
+	     width: 85,
+	     align: 'center'
+	 }, {
+	     title: '管理二级名称',
+	     field: 'feeTwoNameValue',
+	     width: 96,
+	     align: 'center'
+	 }, {
+	     title: '财务科目编码',
+	     field: 'financeCode',
+	     width: 88,
+	     align: 'center'
+	   }, {
+	     title: '操作',
+         field: 'opertaList',
+         width: 160,
+         align: 'center',
+         events: operateEvents
+	 }
+];
+
+
+options.initPage = function(){
+	GLOBAL.initOptionsParam('id,cid,hip');
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null);
+
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable'));
+ };
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+</script>

@@ -1,0 +1,164 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            
+            <li class="active">事项管理</li>
+        </ol>
+    </section>
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="matterManage/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" id="btnNew" class="btn btn-primary btn-sm" data-permissionUrl="/customerMaintain/add" data-url="html/baseinfo/matter/matterManageCreate.html" id="add">添加</button> 
+              <button type="button" id="back" data-url="html/baseinfo/customer/customerFollow.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+
+<script>
+
+window.operateEvents = {
+	'click .submit': function (e, value, row, index) {
+    	var id = row.id;
+	    if(id){
+	    	layer.confirm('确定要提交吗？', {
+		        btn: ['确定', '取消'] //按钮
+		    }, function() {
+		         GLOBAL.ajax("matterManage/submit", {id: id}, function(e) {
+	                if (e.success) {
+	                    layer.msg("提交成功！");
+	                    $('#js_dataTable').bootstrapTable('refresh');
+	                } else {
+	                    layer.msg(e.msg);
+	                }
+	            });
+		    }, function() {});
+	    }
+    },
+    'click .delete': function (e, value, row, index) {
+        var id = row.id;
+	    layer.confirm('确定要删除吗？', {
+	        btn: ['确定', '取消'] //按钮
+	    }, function() {
+	    	GLOBAL.ajax("matterManage/delete", {id: id}, function(){
+	    		layer.msg("删除成功", {
+	                icon: 1
+	            })
+	            $('#js_dataTable').bootstrapTable('refresh');
+	    	})
+	    }, function() {});
+    },
+    'click .edit': function(e, value, row, index){
+    	options.param.id = row.id;
+    	options.param.matterName = row.matterName;
+    	options.param.show=2;
+		GLOBAL.go("html/baseinfo/matter/matterManageEdit.html", options.param);
+    },
+    'click .scan': function(e, value, row, index){
+		options.param.id = row.id;
+		options.param.matterName = row.matterName;
+		options.param.show=2;
+		GLOBAL.go("html/baseinfo/matter/matterManageScan.html", options.param);
+    }
+};
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '事项编码',
+	     field: 'matterNo',
+	     width: 100,
+	     align: 'center'
+	 }, {
+	     title: '事项类型',
+	     field: 'matterTypeValue',
+	     width: 80,
+	     align: 'center'
+	 },{
+	     title: '事项名称',
+	     field: 'matterNameValue',
+	     width: 80,
+	     align: 'center'
+	  }, {
+		 title: '项目',
+		 field: 'projectName',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '客户',
+		 field: 'customerName',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '申请人',
+		 field: 'creator',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '申请时间',
+		 field: 'createAt',
+		 width: 80,
+		 align: 'center'
+	  }, {
+		 title: '状态',
+		 field: 'stateValue',
+		 width: 80,
+		 align: 'center'
+	  }, {
+	     title: '操作',
+	     field: 'opertaList',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents
+	 }
+];
+
+options.initPage = function() {
+	var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.total>0){
+    					$("#btnNew").hide();
+    				}else{
+    					$("#btnNew").show();
+    				}
+    			}
+    		}
+	GLOBAL.initTable($('#js_dataTable'), tabCols,  {
+		followId : options.param.followId
+	}, false , option);
+	
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	data.followId = options.param.followId;
+	if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})    
+
+$("#btnNew").click(function() {
+    var url = $(this).data("url");
+    options.param.matterName = 1;
+    GLOBAL.go(url, options.param);
+})
+
+GLOBAL.goBack(function() {
+	options.param.id = options.param.followId;
+});
+</script>

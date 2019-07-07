@@ -1,0 +1,628 @@
+<style>
+	.tree-wraper{
+		position:relative;
+	}
+	.treeBox{
+		border: 1px solid #ccc;
+    	background: #fff;
+	}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li>基础信息</li>
+        <li>铺货商品</li>
+        <li class="active">新建</li>
+    </ol>
+    </section>
+    <section class="product-wrap">
+    <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="form1">
+                    <div class="form-group-sm">
+                        
+                        <div class="search-item">
+                            <label class="control-label">编号：</label> 
+                            <input type="text" class="form-control" id="number" name="number">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">名称：</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">型号：</label>
+                            <input type="text" class="form-control" id="type" name="type">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">规格：</label>
+                            <input type="text" class="form-control" id="specification" name="specification">
+                        </div>
+
+                        <div class="search-item">
+                             <label class="control-label ml10">条码：</label>
+                            <input type="text" class="form-control" id="barCode" name="barCode">
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnQuery" class="btn btn-primary btn-sm ml20">查询</button>  
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                                     
+                        </div>
+                    </div>
+                                <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="distributeGoods/goods/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+            <button type="submit" id="save"  data-url="/distributeGoods/add" class="btn btn-primary btn-sm">批量保存</button>
+                      <button type="button" data-url="html/baseinfo/distribute/distributeGoodsSearch.html" id="js-back" class="btn btn-default btn-sm">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+                </form>
+            </div>
+          
+        </div>
+    </section>
+</div>
+<script>
+var supplierOption;
+var option;
+window.operateEvents = {
+	'click .save' : function(e, value, row, index) {
+			if (row) {
+				var id = row.id;
+				var dtrArr=[];
+				var  isValid=true;
+				 //获取供应商的数据信息
+		        var $supplierId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplierId");
+		        var supplierId=$supplierId.val();
+		       //获取事业部主管 
+		        var $careerId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#careerId");
+		       var careerId= $careerId.val();
+		       //获取事业部主管 
+		       var $purchaseId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#purchaseId");
+		       var purchaseId= $purchaseId.val();
+		       //获取供应链小组
+		       var $supplyChainGroupId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplyChainGroupId");
+		       var supplyChainGroupId= $supplyChainGroupId.val();
+		       //获取供应链小组
+		       var $supplyChainServiceId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplyChainServiceId");
+		       var supplyChainServiceId= $supplyChainServiceId.val();
+		       //获取供应链服务部
+		       var $riskId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#riskId");
+		       var riskId= $riskId.val();
+		       //获取供应链服务部
+		       var $pledge = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#pledge");
+		       var pledge= $pledge.val();
+		       var $departmentId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#departmentId");
+		       var departmentId=$departmentId .val();
+				 if(supplierId== null  ||　supplierId==""){
+						layer.msg("请选择供应商");
+						 isValid=false;
+				 }
+				 if(careerId== null  || careerId==""){
+						layer.msg("请选择事业部主管");
+						 isValid=false;
+				 }
+				 if(purchaseId== null  ||　purchaseId==""){
+						layer.msg("请选择采购专员");
+						 isValid=false;
+				 }
+				 if(supplyChainGroupId== null  ||supplyChainGroupId==""){
+						layer.msg("请选择供应链小组");
+						 isValid=false;
+				 }
+				 if(supplyChainServiceId== null  ||supplyChainServiceId==""){
+						layer.msg("请选择供应链服务部");
+						 isValid=false;
+				 }
+				 if(riskId== null  ||　riskId==""){
+						layer.msg("请选择风控专员");
+						 isValid=false;
+				 }
+				 if(departmentId== null || departmentId==""){
+						layer.msg("请选择事业部");
+						 isValid=false;
+				 }
+				 if(pledge== null  ||pledge==""  || pledge>1){
+						layer.msg("请填写质押比例或不能大于1");
+						 isValid=false;
+				 }
+			      var row = new Object();
+			         row.id = id;
+		            row.supplierId = supplierId;
+		            row.careerId = careerId;
+		            row.purchaseId = purchaseId;
+		            row.supplyChainGroupId = supplyChainGroupId;
+		            row.supplyChainServiceId = supplyChainServiceId;
+		            row.pledge = pledge;
+		            row.riskId = riskId;
+		            row.departmentId=departmentId;
+		            dtrArr.push(row);
+                 if(isValid){
+             		var saveData = {
+							disList : dtrArr,
+						};
+     				layer.confirm("确定提交吗?", {
+    					btn : [ "确定", "取消" ]
+    				}, function() {
+    					GLOBAL.ajax("/distributeGoods/add", JSON.stringify(saveData), function(e) {
+    					if(e.success){
+    						layer.msg("保存成功！", {
+    							icon : 1,
+    							time : 1500,
+    						}, function() {
+    							GLOBAL.go("html/baseinfo/distribute/distributeGoodsSearch.html");
+    						});
+    					}else{
+    						layer.msg(e.msg);
+    					}
+    					},true)
+    				}, function() {
+    				})
+                 }
+			}
+		},
+};
+// 供应商列表查询
+function operateFormatter(value, row, index) {
+	var supplierTr = '<select class="form-control"  id="supplierId" name="supplierId">'+supplierOption+'</select>';
+    return supplierTr;	
+}
+//事业部主管
+function operateFormatter1_1(value, row, index) {
+	var careerIdTr= '<select class="form-control"  id="careerId" name="careerId">'+option+'</select>';
+    return careerIdTr;
+}
+//采购专员
+function operateFormatter1_2(value, row, index) {
+	var careerIdTr= '<select class="form-control"  id="purchaseId" name="purchaseId">'+option+'</select>';
+    return careerIdTr;
+}
+//供应链小组
+function operateFormatter1_3(value, row, index) {
+	var careerIdTr= '<select class="form-control"  id="supplyChainGroupId" name="supplyChainGroupId">'+option+'</select>';
+    return careerIdTr;
+}
+//供应链服务部
+function operateFormatter1_4(value, row, index) {
+	var careerIdTr= '<select class="form-control"  id="supplyChainServiceId" name="supplyChainServiceId">'+option+'</select>';
+    return careerIdTr;
+}
+//风控专员
+function operateFormatter1_5(value, row, index) {
+	var careerIdTr= '<select class="form-control"  id="riskId" name="riskId">'+option+'</select>';
+    return careerIdTr;
+}
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			},
+			{
+				title : '序号',
+				field : 'columnsNumber',
+			},
+			{
+				title : '编号',
+				field : 'number',
+				align : 'center'
+			},
+			{
+				title : '名称',
+				field : 'name',
+				align : 'center'
+			},
+			{
+				title : '品牌',
+				field : 'brand',
+				align : 'center'
+			},
+			{
+				title : '型号',
+				field : 'type',
+				align : 'center'
+			},
+			{
+				title : '条码',
+				field : 'barCode',
+				align : 'center'
+			},
+			{
+				title : '规格',
+				field : 'specification',
+				align : 'center'
+			},
+			{
+				title : '税收分类',
+				field : 'taxClassification',
+				align : 'center'
+			},
+			{
+				title : '国内税率',
+				field : 'taxRate',
+				align : 'center'
+			},
+			{
+				title : '供应商',
+				align : 'center',
+			    events: operateEvents,
+		        formatter: operateFormatter
+			}, {
+				title : '质押比例',
+				align : 'center',
+			     events: operateEvents,
+				formatter : function(value, row, index) {
+						return '<input type="text"class="form-control" id="pledge" name="pledge" >';
+					}
+			}, {
+				title : '事业部',
+				align : 'center',
+			     events: operateEvents,
+				formatter : function(value, row, index) {
+						return '<div class="tree-wraper"><input type="text" class="form-control js-center  js-initform" name="departmentName" id="departmentName" data-id="departmentId" data-index="'+index+'" data-url="common/department/tree" style="width: 80px"><div class="treeBox" id="dataTree'+index+'" class="treeBox" style="position:absolute;display:none;"><ul class="dataTree ztree" id="dataTree'+index+'" style="margin-top:0;"></ul></div></div>';
+					}
+			}, {
+				title : '事业部主管',
+				align : 'center',
+			     events: operateEvents,
+		        formatter: operateFormatter1_1
+			}, {
+				title : '采购部专员',
+				align : 'center',
+			     events: operateEvents,
+		        formatter: operateFormatter1_2
+			}, {
+				title : '供应链小组',
+				align : 'center',
+			     events: operateEvents,
+		        formatter: operateFormatter1_3
+			}, {
+				title : '供应链服务部',
+				align : 'center',
+			     events: operateEvents,
+			     formatter: operateFormatter1_4
+			}, {
+				title : '风控专员',
+				align : 'center',
+			     events: operateEvents,
+			     formatter: operateFormatter1_5
+			}, {
+				title : '操作',
+				field : 'opertaList',
+				align : 'center',
+				events : operateEvents,
+			} ];
+	var options = {
+		param : {
+			id : 0,
+			cid : 0
+		},
+		initPage : function() {
+			$("#form1")
+					.validate(
+							{
+								rules : {
+									departmentName : {
+										required : true
+									},
+									supplierId : {
+										required : true
+									},
+									number : {
+										required : true
+									},
+									name : {
+										required : true
+									},
+									pledge : {
+										required : true,
+										number : true
+									},
+									type : {
+										required : true
+									},
+									barCode : {
+										required : true
+									},
+									specification : {
+										required : true
+									},
+									taxRate : {
+										required : true
+									},
+									unit : {
+										required : true
+									},
+									volume : {
+										required : true,
+										number : true
+									},
+									grossWeight : {
+										required : true,
+										number : true
+									},
+									netWeight : {
+										required : true,
+										number : true
+									},
+									purchasePrice : {
+										required : true,
+										number : true
+									},
+									salePrice : {
+										required : true,
+										number : true
+									},
+									purCurrencyType : {
+										required : true
+									},
+									careerId : {
+										required : true
+									},
+									purchaseId : {
+										required : true
+									},
+									supplyChainGroupId : {
+										required : true
+									},
+									supplyChainServiceId : {
+										required : true
+									},
+									riskId : {
+										required : true
+									}
+								},
+							});
+		}
+	}
+
+	options.initPage = function() {
+	// 初始化加载供应商的列表数据
+	    GLOBAL.ajax(GLOBAL.selectUrl +"SUPPLIER", null, function(data) {
+		 	   	supplierOption = "<option value=''>请选择</option>";
+		        var items = data.items;
+		        if (items) {
+		            for (var k = 0; k < items.length; k++) {
+		            	supplierOption += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+		            }
+		        }
+		    });
+	  // 初始化加载
+	     GLOBAL.ajax(GLOBAL.selectUrl +"USER", null, function(data) {
+		 	    option= "<option value=''>请选择</option>";
+		        var items = data.items;
+		        if (items) {
+		            for (var k = 0; k < items.length; k++) {
+		            	option += '<option value="' + items[k].code + '">' + items[k].value + '</option>';
+		            }
+		        }
+		    });
+		GLOBAL.initTable($('#js_dataTable'),  tabCols, null, null,{
+			onPostBody: function(data){
+				$.ajax({
+		            type: "get",
+		            url: GLOBAL.host + "common/department/tree",
+		            dataType: "json",
+		            async: false,
+		            success: function(e){
+		                if (e.login) {
+		                    location.href = location.protocol + "//" + location.host + "/login.html";
+		                    return;
+		                }
+		                var data = e.items;
+		                if(data.id){
+		                    $(".js-center").each(function(){
+		                    	var $this = $(this);
+		                        var url = $this.data("url");
+		                        var dataId = $this.data("id");
+		                        var domId = $this.attr("id");
+		                        var dataIdx = $this.data("index");
+		                        var needAllNodes = $(this).hasClass("need-all-nodes");
+		                        $this.after('<input type="hidden" class="js-initform" id="' + dataId + '" name="' + dataId + '"/>');
+
+		                        //获取当前节点及所有子节点的id
+		                        function getChildren(ids,treeNode){
+		                            treeNode.id &&　ids.push(treeNode.id);
+		                            if (treeNode.isParent){
+		                                for(var obj in treeNode.children){
+		                                    getChildren(ids,treeNode.children[obj]);
+		                                }
+		                            }
+		                            return ids;
+		                        }
+
+		                        var setting = {
+		                                view: {
+		                                    dblClickExpand: false
+		                                },
+		                                data: {
+		                                    simpleData: {
+		                                        enable: true
+		                                    }
+		                                },
+		                                callback: {
+		                                    onClick: function(e, treeId, treeNode) {
+		                                    	
+		                                        var zTree = $.fn.zTree.getZTreeObj("dataTree"+dataIdx),
+		                                            nodes = zTree.getSelectedNodes(),
+		                                            v = "", ids="";
+		                                        var idsArr = [];
+		                                        var allNodesIds = getChildren(idsArr,treeNode).join(",");
+
+		                                        nodes.sort(function compare(a, b) {
+		                                            return a.id - b.id;
+		                                        });
+		                                        for (var i = 0, l = nodes.length; i < l; i++) {
+		                                            v += nodes[i].name + ",";
+		                                            ids += nodes[i].id + ",";
+		                                        }
+		                                        if (v.length > 0){
+		                                           v = v.substring(0, v.length - 1);
+		                                           ids = ids.substring(0, ids.length - 1);
+		                                        }
+		                                        $("#"+dataId).val(needAllNodes ? allNodesIds : ids);
+		                                        if(window["onTreeSelect"]){
+		                                        	onTreeSelect(needAllNodes ? allNodesIds : ids);
+		                                        }
+		                                        $this.val(v).change();
+		                                    }
+		                                }
+		                            };
+
+		                    	var $treeBox = $this.parent().find(".treeBox")
+		                    	$this.attr("placeholder", "单击选择数据").focus(function() {
+		                    		$(".treeBox").css("z-index", "1").hide()
+		                    		$treeBox.css("z-index", "9999").slideDown("fast");
+			                    });
+			                    $.fn.zTree.init($treeBox.find(".dataTree"), setting, data);
+		                    	
+		                    	$("body").mousedown(function(event) {
+		                            if ($(event.target).closest(".treeBox").length <= 0 && $(event.target).attr('id') !== domId) {
+		                            	$treeBox.fadeOut("fast");
+		                            }
+		                        })
+		                    })
+		                }else{
+		                	layer.msg("暂无数据...");
+		                }
+		            },
+		            error: function(e){
+		            	layer.msg("暂无数据...");
+		            }
+		        })
+			},
+			onLoadSuccess : function(data) {
+				console.log(data.rows.length);
+				GLOBAL.initSelect();
+				$('select').select2({
+				    minimumResultsForSearch: 0 // at least 20 results must be displayed
+				});
+			}
+		});
+        
+		//还原查询条件及过滤后的数据
+		GLOBAL.restoreQuery($('#js_dataTable'));
+	}
+	$(".js_datePicker").datetimepicker();
+
+	$("#btnQuery").click(function() {
+		var data = $("#form1").serializeObject();
+		if (data) {
+			console.log("商品查询参数：", data)
+			var url = $('#js_dataTable').data("url");
+			GLOBAL.local(url, data);
+		}
+		GLOBAL.tableRefresh($('#js_dataTable'), data);
+	})
+
+	
+	$("#js-back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+	
+//数据批量提交
+$("#save").click(function(){
+	var saveUrl = $(this).data("url");
+	var isValid=true;
+	var  dtrArr=[];
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+	if(selectedRows.length==0){
+		layer.msg("请选择商品");
+		 isValid=false;
+	}
+	for(var i=0; i<selectedRows.length; i++){
+        var id = selectedRows[i].id;
+        //获取供应商的数据信息
+        var $supplierId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplierId");
+        var supplierId=$supplierId.val();
+       //获取事业部主管 
+        var $careerId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#careerId");
+       var careerId= $careerId.val();
+       //获取事业部主管 
+       var $purchaseId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#purchaseId");
+       var purchaseId= $purchaseId.val();
+       //获取供应链小组
+       var $supplyChainGroupId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplyChainGroupId");
+       var supplyChainGroupId= $supplyChainGroupId.val();
+       //获取供应链小组
+       var $supplyChainServiceId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#supplyChainServiceId");
+       var supplyChainServiceId= $supplyChainServiceId.val();
+       //获取供应链服务部
+       var $riskId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#riskId");
+       var riskId= $riskId.val();
+       //获取供应链服务部
+       var $pledge = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#pledge");
+       var pledge= $pledge.val();
+       var $departmentId = $('#js_dataTable tbody tr[data-uniqueid="'+id+'"]').find("#departmentId");
+       var departmentId=$departmentId .val();
+		 if(supplierId== null  ||　supplierId==""){
+				layer.msg("请选择供应商");
+				 isValid=false;
+		 }
+		 if(careerId== null  || careerId==""){
+				layer.msg("请选择事业部主管");
+				 isValid=false;
+		 }
+		 if(purchaseId== null  ||　purchaseId==""){
+				layer.msg("请选择采购专员");
+				 isValid=false;
+		 }
+		 if(supplyChainGroupId== null  ||supplyChainGroupId==""){
+				layer.msg("请选择供应链小组");
+				 isValid=false;
+		 }
+		 if(supplyChainServiceId== null  ||supplyChainServiceId==""){
+				layer.msg("请选择供应链服务部");
+				 isValid=false;
+		 }
+		 if(riskId== null  ||　riskId==""){
+				layer.msg("请选择风控专员");
+				 isValid=false;
+		 }
+		 if(pledge== null  ||pledge==""  || pledge>1){
+				layer.msg("请填写质押比例或不能大于1");
+				 isValid=false;
+		 }
+		 if(departmentId== null  ||departmentId=="" ){
+				layer.msg("请选择事业部");
+				 isValid=false;
+		 }
+		 i
+		 dtrArr.push({
+			 "id": id,
+			 "supplierId" :supplierId,
+			 "careerId" :careerId,
+			 "purchaseId" :purchaseId,
+			 "supplyChainGroupId" :supplyChainGroupId,
+			 "supplyChainServiceId" :supplyChainServiceId,
+			 "pledge" :pledge,
+			 "departmentId":departmentId,
+			 "riskId" :riskId,
+		 });
+		}
+	if(isValid){
+		var saveData = {
+				disList : dtrArr,
+			};
+		GLOBAL.ajax(saveUrl,JSON.stringify(saveData), function(e){
+			if(e.success){
+				layer.msg("保存成功！", {
+					icon : 1,
+					time : 1500,
+				}, function() {
+					GLOBAL.go("html/baseinfo/distribute/distributeGoodsSearch.html");
+				});
+			}else{
+				layer.msg(e.msg, {
+					icon : 5,
+					time : 1500,
+				});
+			}
+		},true);
+	}
+});
+</script>

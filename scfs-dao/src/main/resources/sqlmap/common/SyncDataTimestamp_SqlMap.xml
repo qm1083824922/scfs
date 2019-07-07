@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.common.SyncDataTimestampDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.common.entity.SyncDataTimestamp">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="max_update_at" jdbcType="TIMESTAMP" property="maxUpdateAt" />
+		<result column="business_type" jdbcType="TINYINT" property="businessType" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, max_update_at, business_type, create_at, update_at
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_sync_data_timestamp
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryEntityByBusinessType" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_sync_data_timestamp
+		where business_type =
+		#{businessType,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.common.entity.SyncDataTimestamp">
+		insert into
+		tb_sync_data_timestamp (id, max_update_at, business_type,
+		create_at,
+		update_at)
+		values (#{id,jdbcType=INTEGER},
+		#{maxUpdateAt,jdbcType=TIMESTAMP},
+		#{businessType,jdbcType=TINYINT},
+		#{createAt,jdbcType=TIMESTAMP}, #{updateAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.common.entity.SyncDataTimestamp">
+		update tb_sync_data_timestamp
+		<set>
+			<if test="maxUpdateAt != null">
+				max_update_at = #{maxUpdateAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="businessType != null">
+				business_type = #{businessType,jdbcType=TINYINT},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateAt != null">
+				update_at = #{updateAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+</mapper>

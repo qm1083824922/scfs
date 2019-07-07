@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseUserProjectDao">
+
+	<resultMap id="BaseResultMap" type="com.scfs.domain.base.entity.BaseUserProject">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="assigner" property="assigner" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="assign_at" property="assignAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, user_id, project_id, creator, assigner, deleter,
+		create_at,
+		assign_at, update_at,
+		delete_at, state, is_delete
+	</sql>
+
+	<insert id="insertUserProject" parameterType="com.scfs.domain.base.entity.BaseUserProject">
+		insert into
+		tb_base_user_project (id, user_id, project_id,
+		creator, assigner,
+		deleter,
+		create_at, assign_at, update_at,
+		delete_at, state
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{projectId,jdbcType=BIGINT},
+		#{creator,jdbcType=VARCHAR},
+		#{assigner,jdbcType=VARCHAR}, #{deleter,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}, #{assignAt,jdbcType=TIMESTAMP},
+		#{updateAt,jdbcType=TIMESTAMP},
+		#{deleteAt,jdbcType=TIMESTAMP},
+		#{state,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<update id="updateUserProject" parameterType="com.scfs.domain.base.entity.BaseUserProject">
+		update tb_base_user_project
+		<set>
+			<if test="deleter != null">deleter=#{deleter,jdbcType=VARCHAR},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="state != null">state=#{state,jdbcType=TINYINT},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<update id="batchUpdateUserProject" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update tb_base_user_project
+			<set>
+				<if test="item.deleter != null">deleter=#{item.deleter,jdbcType=VARCHAR},</if>
+				<if test="item.deleteAt != null">delete_at=#{item.deleteAt,jdbcType=TIMESTAMP},</if>
+				<if test="item.isDelete != null">is_delete=#{item.isDelete,jdbcType=TINYINT},</if>
+				<if test="item.state != null">state=#{item.state,jdbcType=TINYINT},</if>
+			</set>
+			<where>
+				id = ${item.id}
+			</where>
+		</foreach>
+	</update>
+
+	<select id="queryAllUserProject" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT id,user_id,project_id,is_delete,state
+		FROM tb_base_user_project
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_user_project
+	</select>
+	<select id="queryUserProjectById" parameterType="Integer"
+		resultMap="BaseResultMap">
+
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_project
+		WHERE id = #{id}
+	</select>
+	<select id="queryUserProjectByCon" parameterType="com.scfs.domain.base.entity.BaseUserProject"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_project
+		WHERE is_delete = 0
+		<if test="userId != null">
+			AND user_id =#{userId}
+		</if>
+		<if test="projectId != null">
+			AND project_id =#{projectId}
+		</if>
+	</select>
+
+</mapper>

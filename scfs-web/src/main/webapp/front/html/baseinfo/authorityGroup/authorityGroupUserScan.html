@@ -1,0 +1,32 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+            <li>权限组浏览</li>
+            <li class="active">用户信息</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+            <div class="box"> 
+                <!-- /.box-header -->
+                <div class="box-body">
+	                 <ul class="nav nav-tabs">
+	                	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupScan.html">基本信息</a></li>
+	                  	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityScan.html">权限信息</a></li>
+	                     <li role="presentation" ><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupRoleScan.html">角色信息</a></li>
+	                    <li role="presentation"  class="active"><a class="tab-item" data-url="html/baseinfo/authorityGroup/authorityGroupUserScan.html">用户信息</a></li>
+	                
+	                 </ul> 
+                    <table id="js_dataTable" data-url="permissionGroup/user/query">
+                    </table>
+                </div>
+                <!-- .box-body -->
+                  <div class="box-footer text-center">   
+              <button type="button" id="back" data-url="html/baseinfo/authorityGroup/authorityGroupSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            </div>
+    </section>
+</div>
+
+<script src="../../../js/baseinfo/authorityGroup/permissionGroupUserScan.js"></script>

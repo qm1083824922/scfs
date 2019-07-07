@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>供应链金融</title>
+<!-- FontAwesome 4.3.0 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--bootstrap-->
+<link href="../../../css/bootstrap_min.css" rel="stylesheet"
+	type="text/css" />
+<!--AdminLTE theme-->
+<link href="../../../css/AdminLTE_min.css" rel="stylesheet"
+	type="text/css" />
+<!-- <link href="css/AdminLT_skins/_all-skins.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="../../../css/jquery.tag-editor.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="../../../css/sys_setting_min.css">
+<link rel="stylesheet" href="../../../css/mainframe_min.css">
+<link rel="stylesheet"
+	href="../../../js/plugins/bootstrap-table/bootstrap-table.min.css">
+</head>
+
+<body>
+	<div class="wrapper">
+		<section class="product-wrap">
+			<div class="box no-margin">
+				<div class="box-body">
+					<div class="box-header">
+						<h3>
+							应收明细(对账日期：<span id="dateRange"></span>)
+						</h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<table id="js_dataTable" data-url="receive/detail/report/query">
+						</table>
+					</div>
+					<!-- .box-body -->
+					<div class="box-footer text-center">
+						<button type="button" id="closeWin" class="btn btn-default btn-sm">关闭</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<script src="../../../js/lib/jquery-1.9.1.min.js"
+		type="text/javascript"></script>
+	<script src="../../../js/lib/bootstrap.min.js" type="text/javascript"></script>
+	<script src="../../../js/lib/qrcode.min.js" type="text/javascript"></script>
+	<script src='../../../js/plugins/bootstrap-table/bootstrap-table.js'
+		type='text/javascript'></script>
+	<script
+		src='../../../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js'
+		type='text/javascript'></script>
+	<script src='../../../js/plugins/layer/layer.js' type='text/javascript'></script>
+	<script src="../../../js/common.js"></script>
+</body>
+<script>
+/* 数据表格 */
+window.operateEvents = {
+	'click .scan': function(e, value, row, index){
+		var open_url = "id=";
+		if (row.billType == 1) {
+			open_url = open_url + row.feeId;
+			open_url = open_url + "&reportFeeType=1";	//只展示应收部分
+			window.open("feeDetail.html?" + open_url);
+		}else if (row.billType == 3) {
+			open_url = open_url + row.outStoreId;
+			window.open("/html/report/receive/billOutStoreDetail.html?" + open_url);
+		}
+	}
+}	 
+var tabCols = [ {
+	title : '序号',
+	field : 'columnsNumber',
+	width : '2%'
+}, {
+	title : '项目',
+	field : 'projectName',
+	width : '10%',
+	align : 'center'
+}, {
+	title : '客户',
+	field : 'custName',
+	width : '10%',
+	align : 'center'
+}, {
+	title : '业务员',
+	field : 'bizManagerName',
+	width : '10%',
+	align : 'center'
+}, {
+	title : '单据类型',
+	field : 'billTypeName',
+	width : '4%',
+	align : 'center'
+},{
+	title : '单据编号',
+	field : 'billNo',
+	width : '4%',
+	align : 'center',
+	formatter : function(value , row , index) {
+		if (value == null) {
+			return "";
+		}
+		return "<a href='javascript:void(0);' class='scan'>" + value + "</a>";
+	},
+	events: operateEvents
+},{
+	title : '记账日期',
+	field : 'checkDate',
+	width : '4%',
+	align : 'center'
+},{
+	title : '应收到期日期',
+	field : 'expireDate',
+	width : '4%',
+	align : 'center'
+},{
+	title : '币种',
+	field : 'currencyTypeName',
+	width : '4%',
+	align : 'center'
+}, {
+	title : '应收金额',
+	field : 'balance',
+	width : '6%',
+	align : 'center'
+}, {
+	title : '超期天数',
+	field : 'expireDay',
+	width : '6%',
+	align : 'center'
+}, {
+	title : '临期天数',
+	field : 'adventDay',
+	width : '6%',
+	align : 'center'
+}];
+var param = GLOBAL.getUrlParams();
+var option = {
+	onLoadSuccess : function(data) {
+		if(data.options.totalStr != null){
+			$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>合计：" + data.options.totalStr + "</td></tr>");
+		}
+	}
+}
+var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols , param , null , option);
+
+if (param.startCheckDate && param.endCheckDate) {
+  	$('#dateRange').text(param.startCheckDate + '--' + param.endCheckDate);
+} else if (param.startCheckDate) {
+	$('#dateRange').text('从' + param.startCheckDate + '至今');
+} else if (param.endCheckDate) {
+	$('#dateRange').text('截止' + param.endCheckDate);
+} else {
+  	$('#dateRange').text("无");
+}
+$("#closeWin").click(function(){
+	window.close();
+});
+</script>
+</html>

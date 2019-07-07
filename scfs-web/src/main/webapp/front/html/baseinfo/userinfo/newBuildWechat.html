@@ -1,0 +1,37 @@
+<div class="wrapper">
+   <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+    		<li class="active">微信</li>
+        </ol>
+   </section>
+   <section class="product-wrap">
+        <div class="box no-margin">  
+	        <div class="box-header">
+	                <form method="post" action="###" class="form-inline" id="searchForm">
+	                    <div class="form-group-sm">
+	                        <div class="search-item">
+	                            <label class="control-label">微信昵称：</label> 
+								<input type="text" class="form-control" id="userName" name="userName"> 
+	                        </div>
+                            <div class="search-item">
+                                <label class="control-label">真实姓名：</label>
+                                <input type="text" class="form-control" id="chineseName" name="chineseName">
+                            </div>
+	                        <div class="search-item">  
+	                     		<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+	                            <button type="reset" class="btn btn-success btn-sm ml10 mr10">清空</button>
+	                        </div>
+	                    </div>
+	                </form>
+	         </div>
+            <div class="box-body"> 
+                 <table id="js_dataTable" data-url="user/wechat/unbind/query">
+                </table>
+            </div>
+        </div>
+  </section>
+</div>
+
+<script src="../../../js/baseinfo/userinfo/newbuildWechat.js"></script>

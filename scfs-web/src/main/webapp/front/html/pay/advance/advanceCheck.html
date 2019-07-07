@@ -1,0 +1,154 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>资金</li>
+		<li>预收管理</li>
+		<li class="active">预收核销</li>
+	</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1"
+				data-url="advance/manager/edit">
+				<div class="box-body">
+					<input class="form-control js-initform" type="hidden" id="id" name="preRecId"> 
+					<input class="form-control js-initform" type="hidden" id="preRecAmount" name="amount"> 
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>项目：</b></td>
+							<td class="text-left"><label
+								class="js-initform" id="projectName"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>客户：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="custName" ></label></td>
+						</tr>
+						
+						<tr>
+							<td  class="text-right"><b>经营单位：</b></td>
+							<td class="text-left">
+							    <label class=" js-initform" id="busiUnit"></label>
+							  </td>
+						</tr>
+						
+						<tr>
+							<td  class="text-right"><b>预收类型：</b></td>
+							<td class="text-left">
+							    <label class=" js-initform" id="advanceTypeName"></label>
+							  </td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>币种：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="currencyTypeName"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>核销总额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="preRecSum"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>已核销总额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="writeOffSum"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>待核销金额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="writingOffAmount"></label>
+							</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right"><b>可核销余额：</b></td>
+							<td class="text-left">
+								<label class="js-initform" id="preRecAmount"></label>
+							</td>
+						</tr>
+						
+						<tr>
+	                      <td class="text-right"><b>转水单日期：<em class="text-star">*</em></b></td>
+	                      <td class="text-left">
+	                        <input type="text" class="form-control js_datePicker" id="receiptDate" name="receiptDate">
+	                      </td>
+	                    </tr>
+						
+						<tr>
+							<td class="text-right"><b>本次核销金额：<em class="text-star">*</em></b></td>
+							<td class="text-left">
+								<input type="text" class="form-control" id="receiptAmount" name="receiptAmount">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					 <button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/advance/manager/add">保存</button>
+					<button type="button" data-url="html/pay/advance/advanceManage.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+	};
+
+	$("#form1").validate({
+        rules: {
+        	receiptDate: {
+                  	required:true
+            },
+            receiptAmount: {
+                required: true
+            }
+        },
+        submitHandler: function() {
+          	var data = $("#form1").serialize();
+          	var pattern = /^[0-9]*(\.[0-9]{1,2})?$/;
+			var receiptAmount = $("#receiptAmount");
+			var preRecAmount = $("[name='amount']").val();
+			var isValid = true;
+			if (!pattern.test(receiptAmount.val())) {
+				layer.msg("请输入正确格式");
+				receiptAmount.focus();
+				isValid = false;
+			} 
+			if(preRecAmount*1 < receiptAmount.val()*1){
+				layer.msg("核销金额不足!");
+				receiptAmount.focus();
+				isValid = false;
+			}
+			if(isValid) {
+		          GLOBAL.ajax("advance/manager/add",data, function(e){
+		        	  if (e.success) {
+		            	  layer.msg("保存成功！", {
+		                      icon: 1,
+		                      time: 1500
+		                  },function(){
+		                	  GLOBAL.go("html/pay/advance/advanceManage.html");
+		                  });
+		              } else {
+		                  layer.msg(e.msg);
+		              }
+		          },false,$("#save"));
+			}
+        }
+    });
+    
+	GLOBAL.goBack();
+</script>
+

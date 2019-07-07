@@ -1,0 +1,99 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>帐套</li>
+			<li class="active">新建</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="accountBookForm">
+				<div class="box-body">
+					<table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td width="180" class="text-right"><b>经营单位：<em
+									class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="BUSI_UNIT"
+								id="busiUnit" name="busiUnit"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>财务编号：<em class="text-star">*</em></b></td>
+							<td class="text-left"><input class="form-control"
+								id="fiNo" name="fiNo" /></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>帐套名称：<em class="text-star">*</em></b></td>
+							<td class="text-left"><input class="form-control"
+								id="accountBookName" name="accountBookName"></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>是否国内：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="PROMPT_STATUS"
+								id="isHome" name="isHome"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>财务主管：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="USER"
+								id="auditorId" name="auditorId"></select></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>本位币：<em class="text-star">*</em></b></td>
+							<td class="text-left"><select
+								class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE"
+								id="standardCoin" name="standardCoin"></select></td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" id="save"
+						data-url="html/fi/accountBook/accountBookSearch.html"
+						class="btn btn-primary btn-sm" data-permissionUrl="/accountBook/add">保存</button>
+					<button type="button" 
+						data-url="html/fi/accountBook/accountBookSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function(){
+		$("#accountBookForm").validate({
+			rules : {
+				busiUnit : {
+					required : true
+				},
+				fiNo : {
+					required : true
+				},
+				accountBookName : {
+					required : true
+				},
+				isHome : {
+					required : true
+				}
+			},
+			submitHandler : function() {
+				var data = $("#accountBookForm").serializeObject();
+				GLOBAL.ajax("accountBook/add", data, function(e) {
+					if (e.success) {
+						layer.msg("新增成功！");
+						options.param.id = e.items;
+						GLOBAL.go("html/fi/accountBook/abBaseEdit.html");
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+	}
+	GLOBAL.goBack();
+</script>

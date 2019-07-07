@@ -1,0 +1,273 @@
+<link rel="stylesheet" href="css/bootstrap-table-fixed-columns.css">
+
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>报表</li>
+            <li class="active">采购订单报表</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="js_busiUnit" name="businessUnitId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="js_project" name="projectId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="js_supplier" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单编号：</label>
+                            <input type="text" class="form-control" id="orderNo" name="orderNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单附属编号：</label>
+                            <input type="text" class="form-control" id="attachNo" name="appendNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="PO_STS" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">订单日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startOrderTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endOrderTime">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="js_warehouse" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="js_customer" name="customerId"></select>
+                        </div>
+                        <div class="search-item">
+
+                            <label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="table" data-height="600" data-show-columns="true" data-url="po/query"></table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="js/plugins/bootstrap-table/bootstrap-table-fixed-columns.js"></script>
+<script>
+
+    /*数据表格*/
+    var tabCols = [
+        {  
+             title: '序号',
+             field: 'columnsNumber',  
+             width: 20
+        }, {
+             title: '订单编号',
+             field: 'orderNo',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单附属编号',
+             field: 'appendNo',
+             width: 85,
+             align: 'center'
+         }, {
+             title: '经营单位',
+             field: 'businessUnitName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '项目',
+             field: 'projectName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '供应商',
+             field: 'supplierName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '仓库',
+             field: 'warehouseName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '客户',
+             field: 'customerName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单日期',
+             field: 'orderTime',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '预计到货日期',
+             field: 'perdictTime',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单数量',
+             field: 'orderTotalNum',
+             width: 70,
+             align: 'center'
+         }, {
+            title: '订单金额',
+            field: 'orderTotalAmount',
+            width: 70,
+            align: 'center'
+        }, {
+            title: '币种',
+            field: 'currencyName',
+            width: 70,
+            align: 'center'
+        }, {
+             title: '状态',
+             field: 'stateName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '地址',
+             field: 'wareAddrName',
+             width: 180,
+             align: 'center'
+         }, {
+             title: '支付总额',
+             field: 'payAmount',
+             width: 80,
+             align: 'center'
+         },{
+             title: '状态',
+             field: 'stateName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '地址',
+             field: 'wareAddrName',
+             width: 180,
+             align: 'center'
+         }, {
+             title: '支付总额',
+             field: 'payAmount',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单编号',
+             field: 'orderNo',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单附属编号',
+             field: 'appendNo',
+             width: 85,
+             align: 'center'
+         }, {
+             title: '经营单位',
+             field: 'businessUnitName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '项目',
+             field: 'projectName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '供应商',
+             field: 'supplierName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '仓库',
+             field: 'warehouseName',
+             width: 110,
+             align: 'center'
+         }, {
+             title: '客户',
+             field: 'customerName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单日期',
+             field: 'orderTime',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '预计到货日期',
+             field: 'perdictTime',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '订单数量',
+             field: 'orderTotalNum',
+             width: 70,
+             align: 'center'
+         }, {
+            title: '订单金额',
+            field: 'orderTotalAmount',
+            width: 70,
+            align: 'center'
+        }, {
+            title: '币种',
+            field: 'currencyName',
+            width: 70,
+            align: 'center'
+        }, {
+             title: '状态',
+             field: 'stateName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '地址',
+             field: 'wareAddrName',
+             width: 180,
+             align: 'center'
+         }, {
+             title: '支付总额',
+             field: 'payAmount',
+             width: 80,
+             align: 'center'
+         },{
+             title: '状态',
+             field: 'stateName',
+             width: 80,
+             align: 'center'
+         }, {
+             title: '地址',
+             field: 'wareAddrName',
+             width: 180,
+             align: 'center'
+         }, {
+             title: '支付总额',
+             field: 'payAmount',
+             width: 80,
+             align: 'center'
+         }
+    ];
+
+    options.initPage = function(){
+        GLOBAL.reportTable($('#table'), tabCols, 5);
+    }
+
+    $("#btnSearch").click(function() {
+        var data = $("#searchForm").serializeObject();
+        GLOBAL.tableRefresh($('#table'), data);
+    })
+
+</script>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseUserRoleDao">
+
+	<resultMap id="BaseUserRoleMap" type="com.scfs.domain.base.entity.BaseUserRoles">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="user_id" property="userId" jdbcType="BIGINT" />
+		<id column="role_id" property="roleId" jdbcType="BIGINT" />
+		<id column="creator" property="creator" jdbcType="VARCHAR" />
+		<id column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<id column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+		<id column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<id column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<id column="state" property="status" jdbcType="TINYINT" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, user_id, role_id, state, creator, deleter, create_at,
+		update_at,
+		delete_at, is_delete
+	</sql>
+
+	<insert id="insertUserRole" parameterType="com.scfs.domain.base.entity.BaseUserRoles">
+		insert into
+		tb_base_user_roles(
+		user_id,
+		role_id,
+		state,
+		creator,
+		create_at
+		)
+		values(
+		#{userId,jdbcType=BIGINT},
+		#{roleId,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateUserRole" parameterType="com.scfs.domain.base.entity.BaseUserRoles">
+		update tb_base_user_roles
+		<set>
+			<if test="deleter != null">deleter=#{deleter,jdbcType=VARCHAR},</if>
+			<if test="deleteAt != null">delete_at=#{deleteAt,jdbcType=TIMESTAMP},</if>
+			<if test="isDelete != null">is_delete=#{isDelete,jdbcType=TINYINT},</if>
+			<if test="updateAt != null">update_at=#{updateAt,jdbcType=TIMESTAMP},</if>
+			<if test="status != null">state=#{status,jdbcType=TINYINT},</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=BIGINT}
+		</where>
+	</update>
+
+	<update id="batchUpdateUserRole" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update tb_base_user_roles
+			<set>
+				<if test="item.deleter != null">deleter=#{item.deleter,jdbcType=VARCHAR},</if>
+				<if test="item.deleteAt != null">delete_at=#{item.deleteAt,jdbcType=TIMESTAMP},</if>
+				<if test="item.isDelete != null">is_delete=#{item.isDelete,jdbcType=TINYINT},</if>
+				<if test="item.status != null">state=#{item.status,jdbcType=TINYINT},</if>
+			</set>
+			<where>
+				id = ${item.id}
+			</where>
+		</foreach>
+	</update>
+
+	<select id="queryUserRoleById" parameterType="Integer"
+		resultMap="BaseUserRoleMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_roles
+		WHERE id = #{id}
+	</select>
+
+	<select id="queryUserRoleByCon" parameterType="com.scfs.domain.base.entity.BaseUserRoles"
+		resultMap="BaseUserRoleMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tb_base_user_roles
+		WHERE is_delete = 0
+		<if test="userId != null">
+			AND user_id =#{userId}
+		</if>
+		<if test="roleId != null">
+			AND role_id =#{roleId}
+		</if>
+	</select>
+
+	<!--查询所有，用于缓存 -->
+	<select id="queryAll" resultMap="BaseUserRoleMap" parameterType="java.lang.String">
+		SELECT
+		DISTINCT user_id, role_id,state, is_delete
+		FROM
+		tb_base_user_roles
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_user_roles
+	</select>
+
+</mapper>

@@ -1,0 +1,151 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+		<li>当前位置</li>
+		<li>发票</li>
+		<li>开票</li>
+		<li class="active">修改销售信息</li>
+	 	</ol>
+    </section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal form-inline" id="form1" data-url="invoiceSale/edit">
+				<div class="box-body">
+					 <input class="form-control js-initform" type="hidden" id="id" name="id">  
+					 <input class="form-control js-initform" type="hidden" id="invoiceApplyId" name="invoiceApplyId">  
+					 <input class="form-control js-initform" type="hidden" id="provideInvoicePrice" name="provideInvoicePrice">  					
+					 <table class="table table-bordered table-hover no-margin">
+						<tr>
+							<td class="text-right"><b>销售/退货单编号：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="billNo"></label></td>
+						</tr>
+						<tr>
+							<td width="180" class="text-right"><b>日期：</b></td>
+							<td class="text-left"><label
+								class=" js-initform" id="billDate"></label></td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>商品编号：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="goodsNumber"></label>
+							</td>
+						</tr> 
+						<tr>
+							<td class="text-right"><b>商品描述：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="goodsName"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>总开票数量：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="recNum"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已开票数量：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="invoiceNum"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可开票数量：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="useNum"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>总开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="recAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>已开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="invoiceAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>可开票金额：</b></td>
+							<td class="text-left">
+								<label class=" js-initform" id="useAmount"></label>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票数量：</b></td>
+							<td class="text-left">
+								<input type="text"
+									class="form-control js-initform" id="provideInvoiceNum"
+									name="provideInvoiceNum">
+							</td>
+						</tr>
+						<tr>
+							<td class="text-right"><b>开票金额：</b></td>
+							<td class="text-left">
+								<input type="text"
+									class="form-control js-initform" id="provideInvoiceAmount"
+									name="provideInvoiceAmount">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="submit" id="save" class="btn btn-primary btn-sm" data-permissionUrl="/invoiceSale/update"  >保存</button>
+					<button type="button" data-url="html/invoice/makeinvoice/saleInfoSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+	options.initPage = function() {
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		 $("#form1").validate({
+			 rules: {
+				 provideInvoiceNum: {
+	               required: true
+	             },
+	             provideInvoiceAmount: {
+	                 required: true 
+	             }
+	         	},
+		        submitHandler: function() {
+		          var data = $("#form1").serialize();
+		          GLOBAL.ajax("invoiceSale/update",data, function(e){
+		        	  if (e.success) {
+		            	  layer.msg("更新成功！", {
+		                      icon: 1,
+		                      time: 1500
+		                  },function(){
+		                	  options.param.id=options.param.cid;
+		                	  GLOBAL.go("html/invoice/makeinvoice/saleInfoSearch.html",options.param.id);
+		                  })
+		              } else {
+		                  layer.msg(e.msg);
+		              }
+		          });
+		        }
+		    });
+	};
+
+	  $("#provideInvoiceNum").on("input",function(){
+	      var $provideInvoicePrice = $("#provideInvoicePrice");
+	      var $provideInvoiceAmount = $("#provideInvoiceAmount");
+	      var provideInvoiceNum = $(this).val();
+	      var provideInvoicePrice = $provideInvoicePrice.val();
+	      $provideInvoiceAmount.val((provideInvoiceNum * provideInvoicePrice).toFixed(2));
+	  })
+	  
+	GLOBAL.goBack(function() {
+		options.param.id = options.param.cid
+	});
+</script>
+

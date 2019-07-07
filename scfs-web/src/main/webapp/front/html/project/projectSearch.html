@@ -1,0 +1,73 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li class="active">项目管理</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">经营单位：</label>
+                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">编号：</label>
+                            <input type="text" class="form-control" id="projectNo" name="projectNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">简称：</label>
+                            <input type="text" class="form-control" id="projectName" name="projectName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">项目编号类型：</label>
+                       		<select class="form-control js-select" data-url="PROJECT_NO_TYPE" id="projectNoType" name="projectNoType"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">业务员：</label>
+                       		<select class="form-control js-select" data-url="USER" id="bizSpecialId" name="bizSpecialId"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">全称：</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName">
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">所属部门：</label>
+                        	  <input type="text" class="form-control js-tree js-initform need-all-nodes" name="departmentName" id="departmentName" data-id="departmentId" data-url="common/department/tree">
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">商务：</label>
+                            <select class="form-control  js-select" data-url="USER" id="businessManagerId" name="businessManagerId"></select>
+                        </div>
+                        <div class="search-item">
+                        	<label class="control-label">业务类别：</label>
+                            <select class="form-control  js-select" data-url="PROJECT_BIZTYPE" id="bizType" name="bizType"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control  js-select" data-url="PROJECT_STATUS" id="status" name="status"></select>
+                        </div>
+                        <div class="search-item">    
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset"  class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/project/projectCreate.html" data-permissionUrl="/project/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <button type="button" id="btnExport" data-url="/project/excel/collect.xls" data-permissionUrl="/project/excel/collect.xls" class="btn btn-warning btn-sm ml10">导出excel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="project/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/project/projectSearch.js"></script>

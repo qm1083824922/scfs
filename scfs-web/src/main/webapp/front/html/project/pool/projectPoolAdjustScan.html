@@ -1,0 +1,131 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>项目</li>
+			<li>临时额度</li>
+			<li class="active">浏览</li>
+		</ol>
+	</section>
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1" data-url="projectPoolAdjust/detail">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation" class="active"><a class="tab-item"
+							data-url="html/project/pool/projectPoolAdjustScan.html">基础信息</a></li>
+						<li role="presentation"><a class="tab-item"
+							data-url="html/project/pool/attachmentScan.html">附件</a></li>
+					</ul>
+					<input class="form-control js-initform" type="hidden" id="id"
+						name="id">
+						<table class="table table-bordered table-hover no-margin">
+							<tr>
+								<td width="180" class="text-right"><b>项目：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="projectName" name="projectName"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>项目当前总额度：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="projectAmount" name="projectAmount"></label></td>
+							</tr>
+							<tr>
+								<td class="text-right"><b>项目当前可用额度：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="remainFundAmount" name="remainFundAmount"></label></td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>项目当前资金占用：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="usedFundAmount" name="usedFundAmount"></label></td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>临时调整额度：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="adjustAmount" name="adjustAmount"></label></td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>币种：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="currencyTypeName" name="currencyTypeName"></label></td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>有效期：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="startValidDate" name="startValidDate"></label> - <label
+									class="js-initform" id="endValidDate" name="endValidDate"></label>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="text-right"><b>备注：</b></td>
+								<td class="text-left"><label class="js-initform"
+									id="remark" name="remark"></label></td>
+							</tr>
+						</table>
+						<div class="mt15">
+                        <h4 class="mb10">审核记录</h4>
+                        <table id="js_audit_dataTable" data-url="projectPoolAdjust/auditflow/audit/query"></table>
+                    </div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="box-footer text-center">
+					<button type="button" id="js-back"
+						data-url="html/project/pool/projectPoolAdjustSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		/*数据表格*/
+		var tabColsLog = [{
+		    title: '序号',
+		    field: 'columnsNumber',
+		    width: '5%'
+		}, {
+		    title: '流程节点',
+		    field: "stateName",
+		    width: '15%'
+		}, {
+		    title: '处理人',
+		    field: "dealName",
+		    width: '15%'
+		}, {
+		    title: '处理意见',
+		    field: "suggestion",
+		    width: '25%'
+		}, {
+		    title: '开始时间',
+		    field: "createTime",
+		    width: '15%'
+		}, {
+		    title: "处理时间",
+		    field: "dealTime",
+		    width: '15%'
+		}, {
+		    title: "处理状态",
+		    field: "auditStateName",
+		    width: '10%'
+		}];
+		
+		GLOBAL.getEditData($("#form1"), options.param.id);
+		
+		GLOBAL.initTable($('#js_audit_dataTable'), tabColsLog, {
+			poId: options.param.id
+	    }, null, {
+	        pagination: false
+	    });
+	};
+	GLOBAL.goBack();
+</script>

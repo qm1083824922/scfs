@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceCollectDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.invoice.entity.InvoiceCollect">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="apply_no" property="applyNo" jdbcType="VARCHAR" />
+		<result column="business_unit" property="businessUnit"
+			jdbcType="INTEGER" />
+		<result column="project_id" property="projectId" jdbcType="INTEGER" />
+		<result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+		<result column="invoice_type" property="invoiceType" jdbcType="TINYINT" />
+		<result column="bill_type" property="billType" jdbcType="TINYINT" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="invoice_no" property="invoiceNo" jdbcType="VARCHAR" />
+		<result column="invoice_date" property="invoiceDate" jdbcType="TIMESTAMP" />
+		<result column="approve_date" property="approveDate" jdbcType="TIMESTAMP" />
+		<result column="approve_amount" property="approveAmount"
+			jdbcType="DECIMAL" />
+		<result column="un_approve_amount" property="unApproveAmount"
+			jdbcType="DECIMAL" />
+		<result column="invoice_tax_rate" property="invoiceTaxRate"
+			jdbcType="DECIMAL" />
+		<result column="invoice_remark" property="invoiceRemark"
+			jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="print_num" property="printNum" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		apply_no,
+		business_unit,
+		project_id,
+		supplier_id,
+		invoice_type,
+		bill_type,
+		invoice_amount,
+		invoice_no,
+		invoice_date,
+		approve_date,
+		approve_amount,
+		un_approve_amount,
+		invoice_tax_rate,
+		invoice_remark,
+		state,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		is_delete,
+		print_num
+	</sql>
+
+	<!-- 查询分页数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		c.id,
+		c.apply_no,
+		c.business_unit,
+		c.project_id,
+		c.supplier_id,
+		c.invoice_type,
+		c.bill_type,
+		c.invoice_amount,
+		c.invoice_no,
+		c.invoice_date,
+		c.approve_date,
+		c.approve_amount,
+		c.un_approve_amount,
+		c.invoice_tax_rate,
+		c.invoice_remark,
+		c.state,
+		c.remark,
+		c.creator_id,
+		c.creator,
+		c.create_at,
+		c.is_delete
+		from
+		tb_invoice_collect c INNER
+		JOIN
+		tb_base_user_project b on
+		c.project_id=b.project_id
+		where c.is_delete=0
+		AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and c.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and c.project_id = #{projectId}
+		</if>
+		<if test="supplierId != null">
+			and c.supplier_id = #{supplierId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and c.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and c.invoice_no like CONCAT('%',#{invoiceNo},'%')
+		</if>
+		<if test="invoiceType != null">
+			and c.invoice_type = #{invoiceType}
+		</if>
+		<if test="billType != null">
+			and c.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and c.state = #{state}
+		</if>
+		order by c.id desc
+	</select>
+
+
+	<!-- 统计 -->
+	<select id="sumInvoiceCollect"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		SUM(c.invoice_amount) invoice_amount,
+		SUM(c.approve_amount)
+		approve_amount,
+		SUM(c.un_approve_amount) un_approve_amount
+		from
+		tb_invoice_collect c
+		INNER
+		JOIN tb_base_user_project b on
+		c.project_id=b.project_id
+		where
+		c.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and c.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and c.project_id = #{projectId}
+		</if>
+		<if test="supplierId != null">
+			and c.supplier_id = #{supplierId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and c.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and c.invoice_no like CONCAT('%',#{invoiceNo},'%')
+		</if>
+		<if test="invoiceType != null">
+			and c.invoice_type = #{invoiceType}
+		</if>
+		<if test="billType != null">
+			and c.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and c.state = #{state}
+		</if>
+		order by c.id desc
+	</select>
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect
+		where id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceCollect"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoice_collect (
+		apply_no,
+		business_unit,
+		project_id,
+		supplier_id,
+		invoice_type,
+		bill_type,
+		invoice_amount,
+		invoice_no,
+		invoice_date,
+		approve_date,
+		approve_amount,
+		un_approve_amount,
+		invoice_tax_rate,
+		invoice_remark,
+		state,
+		remark,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{applyNo,jdbcType=VARCHAR},
+		#{businessUnit,jdbcType=INTEGER},
+		#{projectId,jdbcType=INTEGER},
+		#{supplierId,jdbcType=INTEGER},
+		#{invoiceType,jdbcType=TINYINT},
+		#{billType,jdbcType=TINYINT},
+		#{invoiceAmount,jdbcType=DECIMAL},
+		#{invoiceNo,jdbcType=VARCHAR},
+		#{invoiceDate,jdbcType=TIMESTAMP},
+		#{approveDate,jdbcType=TIMESTAMP},
+		#{approveAmount,jdbcType=DECIMAL},
+		#{unApproveAmount,jdbcType=DECIMAL},
+		#{invoiceTaxRate,jdbcType=DECIMAL},
+		#{invoiceRemark,jdbcType=VARCHAR},
+		#{state,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceCollect">
+		update tb_invoice_collect
+		<set>
+			id = #{id}
+			<if test="applyNo != null and applyNo != ''">
+				,apply_no = #{applyNo,jdbcType=VARCHAR}
+			</if>
+			<if test="businessUnit != null">
+				, business_unit = #{businessUnit,jdbcType=INTEGER}
+			</if>
+			<if test=" projectId != null ">
+				, project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="supplierId != null ">
+				, supplier_id = #{supplierId,jdbcType=INTEGER}
+			</if>
+			<if test="invoiceType != null">
+				, invoice_type = #{invoiceType,jdbcType=TINYINT}
+			</if>
+			<if test="billType != null">
+				, bill_type = #{billType,jdbcType=TINYINT}
+			</if>
+			<if test="invoiceAmount != null">
+				, invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="invoiceNo != null and invoiceNo != ''">
+				, invoice_no = #{invoiceNo,jdbcType=VARCHAR}
+			</if>
+			<if test="invoiceDate != null">
+				, invoice_date = #{invoiceDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="approveDate != null">
+				, approve_date = #{approveDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="approveAmount != null">
+				, approve_amount = #{approveAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="unApproveAmount != null">
+				, un_approve_amount = #{unApproveAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="invoiceTaxRate != null">
+				, invoice_tax_rate = #{invoiceTaxRate,jdbcType=DECIMAL}
+			</if>
+			<if test="invoiceRemark != null and invoiceRemark != ''">
+				, invoice_remark = #{invoiceRemark,jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				, remark = #{remark,jdbcType=VARCHAR}
+			</if>
+			<if test="state != null ">
+				, state=#{state,jdbcType=TINYINT}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePrintNum" parameterType="com.scfs.domain.invoice.entity.InvoiceCollect">
+		update tb_invoice_collect
+		<set>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 获取总行数 -->
+	<select id="isOverasyncMaxLine"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceCollectSearchReqDto"
+		resultType="int">
+		select
+		count(*)
+		from
+		tb_invoice_collect c INNER
+		JOIN tb_base_user_project
+		b on
+		c.project_id=b.project_id
+		where c.is_delete=0 AND b.state=1
+		<if test="userId != null">
+			AND b.user_id=#{userId}
+		</if>
+		<if test="businessUnit != null">
+			and c.business_unit = #{businessUnit}
+		</if>
+		<if test="projectId != null">
+			and c.project_id = #{projectId}
+		</if>
+		<if test="supplierId != null">
+			and c.supplier_id = #{supplierId}
+		</if>
+		<if test="applyNo != null and applyNo != ''">
+			and c.apply_no like CONCAT('%',#{applyNo},'%')
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and c.invoice_no like CONCAT('%',#{invoiceNo},'%')
+		</if>
+		<if test="invoiceType != null">
+			and c.invoice_type = #{invoiceType}
+		</if>
+		<if test="billType != null">
+			and c.bill_type = #{billType}
+		</if>
+		<if test="state != null">
+			and c.state = #{state}
+		</if>
+	</select>
+
+	<!-- 通过参数获取详情 -->
+	<select id="queryEntityByParam" parameterType="com.scfs.domain.invoice.entity.InvoiceCollect"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_invoice_collect
+		where 1=1
+		<if test="applyNo != null and applyNo != ''">
+			and apply_no =#{applyNo}
+		</if>
+		<if test="invoiceNo != null and invoiceNo != ''">
+			and invoice_no =#{invoiceNo}
+		</if>
+	</select>
+</mapper>

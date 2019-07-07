@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseAddressDao">
+	<resultMap id="AddressResultMap" type="com.scfs.domain.base.entity.BaseAddress">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="subject_id" property="subjectId" jdbcType="TINYINT" />
+		<result column="address_type" property="addressType" jdbcType="TINYINT" />
+		<result column="nation_id" property="nationId" jdbcType="TINYINT" />
+		<result column="nation_name" property="nationName" jdbcType="VARCHAR" />
+		<result column="province_id" property="provinceId" jdbcType="TINYINT" />
+		<result column="province_name" property="provinceName"
+			jdbcType="VARCHAR" />
+		<result column="city_id" property="cityId" jdbcType="TINYINT" />
+		<result column="city_name" property="cityId" jdbcType="VARCHAR" />
+		<result column="county_id" property="countyId" jdbcType="TINYINT" />
+		<result column="county_name" property="countyName" jdbcType="VARCHAR" />
+		<result column="address_detail" property="addressDetail"
+			jdbcType="VARCHAR" />
+		<result column="contact_person" property="contactPerson"
+			jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone" jdbcType="VARCHAR" />
+		<result column="fax" property="fax" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="TINYINT" />
+		<result column="default_currency" property="defaultCurrency"
+			jdbcType="TINYINT" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<sql id="address_column_list">
+		id, subject_id, address_type, nation_id, nation_name,
+		province_id, province_name, city_id, city_name, county_id,
+		county_name,
+		address_detail, contact_person, mobile_phone, telephone,
+		fax, state, note, create_at, update_at
+	</sql>
+	<insert id="insertBaseAddress" parameterType="com.scfs.domain.base.subject.dto.req.AddAddressDto">
+		INSERT INTO
+		tb_base_address(
+		subject_id,
+		address_type,
+		nation_id,
+		nation_name,
+		province_id,
+		province_name,
+		city_id,
+		city_name,
+		county_id,
+		county_name,
+		address_detail,
+		contact_person,
+		mobile_phone,
+		telephone,
+		fax,
+		state,
+		note,
+		creator)
+		VALUES (#{subjectId , jdbcType=TINYINT},
+		#{addressType ,
+		jdbcType=TINYINT},
+		#{nationId , jdbcType=TINYINT},
+		#{nationName},
+		#{provinceId , jdbcType=TINYINT},
+		#{provinceName},
+		#{cityId ,
+		jdbcType=TINYINT},
+		#{cityName},
+		#{countyId},
+		#{countyName},
+		#{addressDetail},
+		#{contactPerson},
+		#{mobilePhone},
+		#{telephone},
+		#{fax},
+		#{state , jdbcType=TINYINT},
+		#{note},
+		#{creator})
+	</insert>
+
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.base.entity.BaseAddress">
+		select
+		<include refid="address_column_list" />
+		from tb_base_address
+		where id = #{id} for UPDATE
+	</select>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.base.entity.BaseAddress">
+		select
+		<include refid="address_column_list" />
+		from tb_base_address
+		where id = #{id}
+	</select>
+
+	<select id="queryAddressBySubjectId"
+		parameterType="com.scfs.domain.base.subject.dto.req.QueryAddressReqDto"
+		resultType="com.scfs.domain.base.entity.BaseAddress">
+		select
+		<include refid="address_column_list" />
+		from tb_base_address
+		where subject_id = #{id,jdbcType=INTEGER}
+		order by
+		id desc
+	</select>
+
+	<select id="queryResultsyBySubjectId" parameterType="java.lang.Integer"
+		resultType="com.scfs.domain.base.entity.BaseAddress">
+		select
+		<include refid="address_column_list" />
+		from tb_base_address
+		where subject_id = #{subjectId,jdbcType=INTEGER}
+		and state = 1
+		order by id desc
+	</select>
+
+	<select id="queryAllSubjectAddress" resultMap="AddressResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="address_column_list" />
+		from tb_base_address
+		<where>
+			<if test="updateAt != null">
+				<![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_address
+	</select>
+
+	<update id="updateBaseAddressById" parameterType="com.scfs.domain.base.entity.BaseAddress">
+		update tb_base_address
+		<set>
+			<if test="nationId != null">
+				nation_id=#{nationId},
+			</if>
+			<if test="nationName != null">
+				nation_name=#{nationName},
+			</if>
+			<if test="provinceId != null">
+				province_id=#{provinceId},
+			</if>
+			<if test="provinceName != null">
+				province_name=#{provinceName},
+			</if>
+			<if test="cityId != null">
+				city_id=#{cityId},
+			</if>
+			<if test="cityName != null">
+				city_name=#{cityName},
+			</if>
+			<if test="countyId != null">
+				county_id=#{countyId},
+			</if>
+			<if test="countyName != null">
+				county_name=#{countyName},
+			</if>
+			<if test="addressDetail != null">
+				address_detail=#{addressDetail},
+			</if>
+			<if test="contactPerson != null">
+				contact_person=#{contactPerson},
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone=#{mobilePhone},
+			</if>
+			<if test="telephone != null">
+				telephone=#{telephone},
+			</if>
+			<if test="fax != null">
+				fax=#{fax},
+			</if>
+			<if test="note != null">
+				note=#{note},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="invalidAddressById" parameterType="com.scfs.domain.base.entity.BaseAddress">
+		update
+		tb_base_address
+		set state=#{state} , deleter=#{deleter} ,
+		delete_at=#{deleteAt}
+		where
+		id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,139 @@
+<style>
+.nav>li.two {
+	display: none;
+}
+</style>
+<div class="wrapper">
+  <section class="content-header my-content-header">
+	  <ol class="breadcrumb">
+	    <li>当前位置</li>
+	    <li>资金</li>
+	    <li>水单</li>
+	    <li class="active">核销</li>
+	  </ol>
+  </section>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                 <li role="presentation"><a class="tab-item" id="orderDtlLink"  data-url="html/pay/receipt/receiptCheck.html">基础信息</a></li>
+                 <li role="presentation" class="one"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/receiptRelCheck.html">应收核销</a></li>
+                  	<li role="presentation" class="two"><a class="tab-item"  data-url="html/pay/receipt/receiptOutStoreCheck.html">核销</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" data-url="html/pay/receipt/receiptAdvanCheck.html">预收明细</a></li>
+                  <li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/pay/receipt/attachment.html">附件</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="advance/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" class="btn btn-warning btn-sm" data-permissionUrl="/advance/deleteAll" id="multDel">批量删除</button> 
+              <button type="button" class="btn btn-primary btn-sm" data-permissionUrl="/advance/add" data-url="html/pay/receipt/receiptAdvanCheckAdd.html" id="add">添加</button> 
+              <button type="button" id="back" data-url="html/pay/receipt/receiptSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+
+    /*数据表格*/
+    var tabCols = [
+      {
+           field: 'checkItem',
+           checkbox: true,
+      }, {
+           title: '项目',
+           field: 'projectName',
+           width: 80,
+           align: 'center'
+       }, {
+           title: '客户',
+           field: 'custName',
+           width: 210,
+           align: 'center'
+       }, {
+           title: '经营单位',
+           field: 'busiUnit',
+           width: 100,
+           align: 'center'
+       }, {
+           title: '预收类型',
+           field: 'advanceTypeName',
+           width: 70,
+           align: 'center'
+       }, {
+           title: '预收金额',
+           field: 'preRecAmount',
+           width: 70,
+           align: 'center',
+	       	formatter : function(value , row , index) {
+	    		return value==null ? "": value.toThounds();
+	        }
+       }
+   ];
+
+    options.initPage = function(){
+        options.param.id = options.param.id;
+        var tabId = options.param.type;
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {receiptId: options.param.id}, false, {
+            onPostBody: function(){
+                if($(".modify").length){
+                    GLOBAL.permissionBtn($(".modify .btn"));
+                }
+            },
+            onLoadSuccess : function(data) {
+				if(data.options.totalStr != null){
+					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+				}
+			}
+        });
+       // 供应商退款类型的水单不显示应收
+        var tabArr = ["one","two","three"];
+        if(tabId == 7 || tabId ==8){
+        	$(".nav>li." + tabArr[0]).hide();
+        	$(".nav>li." + tabArr[1]).show();
+        }
+    };
+
+    
+    $(".tab-item").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    $("#add").click(function(){
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+    
+    $("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("advance/deleteAll", {
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+
+    GLOBAL.goBack();
+  
+
+</script>

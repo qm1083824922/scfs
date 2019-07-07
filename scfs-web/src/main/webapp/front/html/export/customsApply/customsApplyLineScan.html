@@ -1,0 +1,81 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>出口</li>
+    <li>报关申请</li>  
+    <li>报关明细</li>
+    <li class="active">浏览</li>
+  </ol>
+  <!--引入面包屑-->
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal">
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a class="tab-item" data-url="html/export/customsApply/customsApplyScan.html">基础信息</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" data-url="html/export/customsApply/customsApplyLineScan.html">报关明细</a></li>
+                </ul>
+                <table id="js_dataTable" data-url="customsApplyLine/query">
+                          
+                </table>              
+            </div>
+            <!-- /.box-body --> 
+            <div class="box-footer text-center">
+              <button type="button" data-url="html/export/customsApply/customsApplySearch.html" class="btn btn-default btn-sm js-back">返回</button> 
+            </div>
+            <!-- /.box-footer --> 
+          </form>          
+        </div>
+  </section>
+</div>
+
+<script>
+    /*数据表格*/
+    var tabCols = [{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     }, {
+         title: '报关数量',
+         field: 'customsNum',
+         align: 'center'
+     }, {
+         title: '报关单价',
+         field: 'customsPrice',
+         align: 'center'
+     }, {
+         title: '报关金额',
+         field: 'customsAmount',
+         align: 'center'
+     }, {
+         title: '税率',
+         field: 'taxRate',
+         align: 'center'
+     }, {
+         title: '出库编号',
+         field: 'billNo',
+         align: 'center'
+     }, {
+         title: '出库附属编号',
+         field: 'billAffiliateNo',
+         align: 'center'
+     }];
+
+    options.initPage = function(){
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {customsApplyId: options.param.id});
+    }
+   
+    GLOBAL.goBack();
+</script>

@@ -1,0 +1,52 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li class="active">科目</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="get" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">科目编号：</label>
+                            <input class="form-control" id="accountLineNo" name="accountLineNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">科目名称：</label>
+                            <input type="text" class="form-control" id="accountLineName" name="accountLineName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">科目分类：</label>
+                            <select class="form-control js-select" data-url="ACCOUNT_LINE_TYPE" id="accountLineType" name="accountLineType"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">科目级别：</label>
+                            <select class="form-control js-select" data-url="ACCOUNT_LINE_LEVEL" id="accountLineLevel" name="accountLineLevel"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">末级科目：</label>
+                            <select class="form-control js-select" data-url="PROMPT_STATUS" id="isLast" name="isLast"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">借贷：</label>
+                            <select class="form-control js-select" data-url="DEBIT_OR_CREDIT" id="debitOrCredit" name="debitOrCredit"></select>
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/fi/accountLine/accountLineCreate.html" class="btn btn-warning btn-sm ml10" data-permissionUrl="/accountLine/add">新建</button>
+                            <button type="button" id="btnExcelExport" class="btn btn-warning btn-sm ml10" data-permissionUrl="/accountLine/excel/accountLine.xls">导出excel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="accountLine/query">
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="../js/fi/accountLine/accountLineSearch.js"></script>

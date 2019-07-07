@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.invoice.InvoiceOverseasPoDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.invoice.entity.InvoiceOverseasPo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="overseas_id" property="overseasId" jdbcType="INTEGER" />
+		<result column="bill_delivery_id" property="billDeliveryId"
+			jdbcType="INTEGER" />
+		<result column="invoice_num" property="invoiceNum" jdbcType="DECIMAL" />
+		<result column="invoice_amount" property="invoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="rate_amount" property="rateAmount" jdbcType="DECIMAL" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<resultMap type="com.scfs.domain.invoice.entity.InvoiceOverseasPo"
+		id="ModoleResultMap" extends="BaseResultMap">
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="required_send_date" property="requiredSendDate"
+			jdbcType="TIMESTAMP" />
+		<result column="number" property="goodsNumber" jdbcType="DECIMAL" />
+		<result column="name" property="goodsName" jdbcType="VARCHAR" />
+
+		<result column="required_send_num" property="requiredSendNum"
+			jdbcType="DECIMAL" />
+		<result column="required_send_price" property="requiredSendPrice"
+			jdbcType="DECIMAL" />
+		<result column="provide_invoice_num" property="provideInvoiceNum"
+			jdbcType="DECIMAL" />
+		<result column="provide_invoice_amount" property="provideInvoiceAmount"
+			jdbcType="DECIMAL" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="reg_place" property="regPlace" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		overseas_id,
+		bill_delivery_id,
+		invoice_num,
+		invoice_amount,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 获取查询数据 -->
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasPoReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		p.id,
+		p.overseas_id,
+		p.bill_delivery_id,
+		p.invoice_num,
+		p.invoice_amount,
+		p.creator_id,
+		p.creator,
+		p.create_at,
+		p.is_delete,
+		d.bill_no,
+		d.required_send_date,
+		g.number,
+		g.name,
+		g.unit,
+		b.required_send_num,
+		b.required_send_price,
+		b.provide_invoice_num,
+		b.provide_invoice_amount,
+		bs.reg_place
+
+		FROM
+		tb_invoice_overseas_po p
+		LEFT
+		JOIN tb_bill_delivery_dtl b ON
+		p.bill_delivery_id=b.id
+		LEFT JOIN
+		tb_bill_delivery d ON
+		d.id=b.bill_delivery_id LEFT JOIN tb_base_goods
+		g
+		ON
+		g.id =b.goods_id
+		LEFT JOIN tb_stl s ON b.stl_id=s.id
+		LEFT JOIN
+		tb_base_subject bs ON
+		s.supplier_id=bs.id
+		WHERE
+		p.is_delete = 0
+		<if test="overseasId != null ">
+			and p.overseas_id = #{overseasId,jdbcType=INTEGER}
+		</if>
+		order by p.id desc
+	</select>
+
+
+	<!-- 获取查询所有合并数据 -->
+	<select id="queryAllResultsByCon"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasPoReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		p.id,
+		p.overseas_id,
+		p.bill_delivery_id,
+		SUM(p.invoice_num)
+		invoice_num,
+		SUM(p.invoice_amount) invoice_amount,
+		p.creator_id,
+		p.creator,
+		p.create_at,
+		p.is_delete,
+		d.bill_no,
+		d.required_send_date,
+		g.number,
+		g.name,
+		g.unit,
+		b.required_send_num ,
+		b.required_send_price,
+		b.provide_invoice_num,
+		b.provide_invoice_amount,
+		bs.reg_place
+		FROM
+		tb_invoice_overseas_po p
+		LEFT JOIN tb_bill_delivery_dtl
+		b ON
+		p.bill_delivery_id=b.id
+		LEFT JOIN
+		tb_bill_delivery d ON
+		d.id=b.bill_delivery_id LEFT JOIN tb_base_goods
+		g ON
+		g.id =b.goods_id
+		LEFT JOIN tb_stl s ON b.stl_id=s.id
+		LEFT JOIN tb_base_subject bs ON
+		s.supplier_id=bs.id
+		WHERE
+		p.is_delete = 0
+		<if test="overseasId != null ">
+			and p.overseas_id = #{overseasId,jdbcType=INTEGER}
+		</if>
+		GROUP BY g.number,
+		g.name,b.required_send_price
+		order by p.id desc
+	</select>
+
+
+	<!-- 获取销售编号分组数据 -->
+	<select id="queryAllResultsGroupByBillNo"
+		parameterType="com.scfs.domain.invoice.dto.req.InvoiceOverseasPoReqDto"
+		resultMap="ModoleResultMap">
+		SELECT
+		p.id,
+		p.overseas_id,
+		p.bill_delivery_id,
+		p.invoice_num,
+		p.invoice_amount,
+		p.creator_id,
+		p.creator,
+		p.create_at,
+		p.is_delete,
+		d.bill_no,
+		d.required_send_date,
+		g.number,
+		g.name,
+		g.unit,
+		b.required_send_num,
+		b.required_send_price,
+		b.provide_invoice_num,
+		b.provide_invoice_amount,
+		bs.reg_place
+		FROM
+		tb_invoice_overseas_po p
+		LEFT
+		JOIN tb_bill_delivery_dtl b ON
+		p.bill_delivery_id=b.id
+		LEFT JOIN
+		tb_bill_delivery d ON
+		d.id=b.bill_delivery_id LEFT JOIN tb_base_goods
+		g
+		ON
+		g.id =b.goods_id
+		LEFT JOIN tb_stl s ON b.stl_id=s.id
+		LEFT JOIN
+		tb_base_subject bs ON
+		s.supplier_id=bs.id
+		WHERE
+		p.is_delete = 0
+		<if test="overseasId != null ">
+			and p.overseas_id = #{overseasId,jdbcType=INTEGER}
+		</if>
+		group by d.bill_no
+		order by p.id desc
+	</select>
+
+
+	<!-- 获取详情 -->
+	<select id="queryEntityById" resultMap="ModoleResultMap"
+		parameterType="java.lang.Integer">
+		select
+		p.id,
+		p.overseas_id,
+		p.bill_delivery_id,
+		p.invoice_num,
+		p.invoice_amount,
+		p.creator_id,
+		p.creator,
+		p.create_at,
+		p.is_delete,
+		d.bill_no,
+		d.required_send_date,
+		g.number,
+		g.name,
+		b.required_send_num,
+		b.required_send_price,
+		b.provide_invoice_num,
+		b.provide_invoice_amount
+		FROM
+		tb_invoice_overseas_po p
+		LEFT JOIN
+		tb_bill_delivery_dtl b ON
+		p.bill_delivery_id=b.id
+		LEFT JOIN
+		tb_bill_delivery d ON
+		d.id=b.bill_delivery_id LEFT JOIN tb_base_goods
+		g
+		ON
+		g.id =b.goods_id
+		where p.id = #{id,jdbcType=INTEGER}
+		for update
+	</select>
+
+	<!-- 添加数据 -->
+	<insert id="insert" parameterType="com.scfs.domain.invoice.entity.InvoiceOverseasPo"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tb_invoice_overseas_po
+		(
+		overseas_id,
+		bill_delivery_id,
+		invoice_num,
+		invoice_amount,
+		creator_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		VALUES
+		(
+		#{overseasId,jdbcType=INTEGER},
+		#{billDeliveryId,jdbcType=INTEGER},
+		#{invoiceNum,jdbcType=DECIMAL},
+		#{invoiceAmount,jdbcType=DECIMAL},
+		#{creatorId,jdbcType=INTEGER},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="updateById" parameterType="com.scfs.domain.invoice.entity.InvoiceOverseasPo">
+		update tb_invoice_overseas_po
+		<set>
+			id = #{id}
+			<if test="invoiceNum != null">
+				, invoice_num = #{invoiceNum,jdbcType=DECIMAL}
+			</if>
+			<if test="invoiceAmount != null">
+				, invoice_amount = #{invoiceAmount,jdbcType=DECIMAL}
+			</if>
+			<if test="isDelete != null">
+				,is_delete = #{isDelete,jdbcType=TINYINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

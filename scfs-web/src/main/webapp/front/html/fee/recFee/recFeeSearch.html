@@ -1,0 +1,71 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li class="active">应收费用</li>
+		</ol>
+	</section>
+	<section class="web-setting-wrap">
+		<div class="box">
+			<div class="box-header">
+				<form method="post" action="###" class="form-inline"
+					id="searchForm">
+					<div class="form-group-sm">
+						<div class="search-item">	
+							<label class="control-label ml10">项目：</label> 
+							<select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select> 
+						</div> 
+						<div class="search-item">
+							<label class="control-label ml10">经营单位：</label> 
+							<select class="form-control js-select" data-url="BUSI_UNIT" id="busiUnit" name="busiUnit"></select>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">应收客户：</label> 
+							<select class="form-control js-select" data-url="BCS" id="custPayer" name="custPayer"></select> 
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">应收费用科目：</label> 
+							<select class="form-control js-select" data-url="REC_FEE_SPEC" id="recFeeSpec" name="recFeeSpec"></select> 
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">费用编号：</label> 
+							<input class="form-control" id="feeNo" name="feeNo" />
+						</div>
+                        <div class="search-item">	
+							<label class="control-label">开票方式：</label> 
+							<select class="form-control js-select" data-url="PROVIDE_INVOICE_TYPE" id="provideInvoiceType" name="provideInvoiceType"></select>
+						</div>
+                        <div class="search-item">
+							<label class="control-label ml10">状态：</label> 
+							<select class="form-control js-select" data-url="FEE_STATE" id="state" name="state"></select>
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">应收日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="startRecDate" value="" name="startRecDate"> -
+                            <input type="text" class="form-control js_datePicker" id="endRecDate" value="" name="endRecDate">
+						</div>
+                        <div class="search-item">	
+							<label class="control-label ml10">应收方式：</label> 
+							<select class="form-control js-select" data-url="REC_TYPE" id="recType" name="recType"></select>
+						</div>
+                        <div class="search-item">	
+                        	<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="PROMPT_STATUS" id="needSum" name="needSum"></select>
+							<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+							<button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+							<button type="button" id="btnNew" data-url="html/fee/recFee/recFeeCreate.html" class="btn btn-warning btn-sm ml20" data-permissionUrl="/fee/receive/add">新建</button>
+							<button type="button" id="import" data-url="html/fee/recFee/recFeeImport.html" data-permissionUrl="/fee/receive/import" class="btn btn-warning btn-sm ml10">导入</button>
+							<button type="button" id="btnExcelExport" class="btn btn-warning btn-sm ml10" data-permissionUrl="/fee/excel/recFee.xls">导出excel</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table id="js_dataTable" data-url="fee/receive/query"></table>
+			</div>
+		</div>
+	</section>
+</div>
+<script type='text/javascript' src="../../../js/fee/recFee/recFeeSearch.js"></script>

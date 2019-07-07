@@ -1,0 +1,219 @@
+<div class="wrapper">
+    <section class="content-header my-content-header">
+	    <ol class="breadcrumb">
+	        <li>当前位置</li>
+	        <li>采购</li>
+	        <li>采购退货单</li>
+	        <li class="active">退货单明细编辑</li>
+	    </ol>
+    </section>
+    <!--引入面包屑-->
+    <section class="product-wrap">
+        <div class="box no-margin">
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation"><a class="tab-item" data-url="html/purchaseReturn/poReturnBaseInfoEdit.html">基础信息</a></li>
+                        <li role="presentation" class="active"> <a class="tab-item" id="orderDtlLink"   data-url="html/purchaseReturn/poReturnDtlEdit.html">退货单明细信息</a></li>
+                        <li role="presentation"><a class="tab-item" data-url="html/purchaseReturn/attachment.html">附件信息</a></li>
+                     </ul>
+                    <table id="js_dataTable" data-url="poReturn/billInStoreLine/query">  </table>
+                </div>
+                <!--box-body-->
+                <div class="box-footer text-center">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            data-url="html/purchaseReturn/poReturnDtlEditAdd.html" id="add" data-permissionUrl="/poReturn/line/add">添加
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-url="html/purchaseReturn/poReturnSearch.html"
+                            id="poSubmit" data-permissionUrl="/po/submit">提交
+                    </button>
+                    <button type="button" data-url="html/purchaseReturn/poReturnSearch.html"
+                            class="btn btn-default btn-sm js-back">返回
+                    </button>  
+                    <button type="button" class="btn btn-danger btn-sm" id="multDel" data-url="poReturn/line/delete" data-permissionUrl="/po/line/delete">批量删除
+                    </button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+    window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            options.param.lineId = row.id; 
+            GLOBAL.go("html/purchaseReturn/poReturnDtlEditModify.html");
+        }
+    };
+    /*数据表格*/
+    var tabCols = [
+        {
+            field: 'checkItem',
+            checkbox: true,
+        }, {
+            title: '商品编号',
+            field: 'goodsNumber',
+            width: 80,
+            align: 'center'
+        }, {
+            title: '商品条码',
+            field: "goodsBarCode",
+            width: 80,
+            align: 'center'
+        }, {
+            title: '名称',
+            field: 'goodsName',
+            width: 110,
+            align: 'center'
+        }, {
+            title: '型号',
+            field: 'goodsType',
+            width: 100,
+            align: 'center'
+        },{
+            title: '规格',
+            field: 'specification',
+            width: 100,
+            align: 'center'
+        }, {
+            title: '库存数量',
+            field: 'tallyNum',
+            width: 70,
+            align: 'center',
+            formatter: function (value, row, index) {
+                return value == null ? "" : value.toThounds();
+            }
+
+        }, {
+            title: '成本单价',
+            field: 'receivePrice',
+            width: 70,
+            align: 'center',
+            formatter: function (value, row, index) {
+                return value == null ? "" : value.toThounds();
+            }
+        }, {
+            title: '退货数量',
+            field: 'returnNum',
+            width: 70,
+            align: 'center',
+            formatter: function (value, row, index) {
+                return value == null ? "" : value.toThounds();
+            }
+
+        }, {
+            title: '退货单价',
+            field: 'returnPrice',
+            width: 70,
+            align: 'center',
+            formatter: function (value, row, index) {
+                return value == null ? "" : value.toThounds();
+            }
+
+        },{
+            title: '币种',
+            field: "currencyTypeName",
+            width: 70,
+            align: 'center'
+        },{
+            title: '批次',
+            field: 'batchNo',
+            width: 80,
+            align: 'center'
+        },{
+            title: '库存状态',
+            field: 'goodsStatusName',
+            width: 80,
+            align: 'center'
+        },{
+            title: '操作',
+            field: 'opertaList2',
+            width: 60,
+            align: 'center',
+            events: operateEvents,
+            formatter: function (value, row, index) {
+                return '<span class="btn btn-primary btn-xs mr5 edit" data-url="">编辑</span>';
+            }
+        }
+    ];
+
+    options.initPage = function () {
+        GLOBAL.initTable($('#js_dataTable'), tabCols, {id: options.param.id}, null,{
+            onLoadSuccess: function(data){
+                if(data.options.totalStr != null){
+                    $('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>"+data.options.totalStr+"</b></td></tr>");
+                }
+            }
+        });
+    };
+
+    $(".tab-item").click(function () {
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    $("#add").click(function () {
+        var url = $(this).data("url");
+        GLOBAL.go(url);
+    })
+
+    $("#multDel").click(function () {
+        var url = $(this).data("url");
+        var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+        var idsLen = selectedRows.length;
+        if (idsLen == 0) {
+            layer.msg("请选择！", {icon: 2});
+            return false;
+        }
+        var ids = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            ids[i] = selectedRows[i].id;
+        }
+        if (ids) {
+            layer.confirm('确定要批量删除这些订单明细吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                GLOBAL.ajax(url, JSON.stringify({ids: ids, id: options.param.id}), function (e) {
+                    $('#js_dataTable').bootstrapTable('refresh');
+                    layer.msg("删除成功！", {
+                        icon: 1,
+                        time: 1500
+                    })
+                }, true);
+            });
+        }
+    })
+    
+    $("#export").click(function () {
+        var count_url = "poLine/excel/export/count";
+        GLOBAL.ajax(count_url, {id:options.param.id}, function(e) {
+            if (e.success) {
+                var url = "poLine/excel/export.xls?id="+options.param.id;
+                location.href = GLOBAL.host + url;
+            } else {
+                layer.msg(e.msg);
+            }
+        });
+    })
+    
+    $("#poSubmit").click(function () {
+        var url = $(this).data("url");
+        GLOBAL.ajax("poReturn/submit", {id: options.param.id}, function (e) {
+            layer.msg("提交成功！", {
+                icon: 1,
+                time: 1500
+            }, function () {
+                GLOBAL.go(url);
+            })
+        });
+    })
+    
+    $("#import").click(function() {
+	    var url = $(this).data("url");
+	    GLOBAL.go(url, options.param);
+    
+	})
+	
+    GLOBAL.goBack();
+</script>

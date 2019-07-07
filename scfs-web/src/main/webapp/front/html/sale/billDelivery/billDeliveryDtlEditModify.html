@@ -1,0 +1,191 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>销售</li>
+    <li>销售单</li>  
+    <li>销售明细</li>
+    <li class="active">编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="billDeliveryDtlEditModifyForm" data-url="billDeliveryDtl/edit">
+            <div class="box-body">
+                 <input class="js-initform" type="hidden" id="id" name="id">
+                 <input class="js-initform" type="hidden" id="stlId" name="stlId">
+                 <input class="js-initform" type="hidden" id="goodsId" name="goodsId">
+                
+                 <table class="table table-bordered table-hover no-margin">
+                    <tr>
+                      <td width="180" class="text-right"><b>商品编号：</b></td>
+                      <td class="text-left">
+                         <label class="js-initform" id="goodsNumber" name="goodsNumber"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品条码：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="goodsBarCode" name="goodsBarCode"></label>                      
+                      </td> 
+                    </tr>
+                    
+                    <tr>
+                      <td class="text-right"><b>商品名称：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsName" name="goodsName"></label>
+                      </td>
+                      
+                      <td class="text-right"><b>商品型号：</b></td>
+                      <td class="text-left">
+                      	  <label class="js-initform" id="goodsType" name="goodsType"></label>
+                      </td>
+                    </tr>
+                            
+                    <tr>             
+                      <td class="text-right"><b>销售数量：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="requiredSendNum" name="requiredSendNum">                      
+                      </td>
+                               
+                      <td class="text-right"><b>销售单价：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="requiredSendPrice" name="requiredSendPrice">                      
+                      </td>                     
+                    </tr>      
+
+                    <tr>                    
+                      <td class="text-right"><b>销售金额：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="requiredSendAmount" name="requiredSendAmount"></label>                  
+                      </td>
+                      
+                      <td class="text-right"><b>可用库存数量：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="availableNum" name="availableNum"></label>                      
+                      </td>                      
+                    </tr>  
+                    
+                    <tr>
+                      <td class="text-right"><b>库存状态：</b></td>
+                      <td class="text-left">
+                      	<select style="width:300px" class="form-control js-initform" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                      </td>
+                      
+                      <td class="text-right"><b>批次：</b></td>
+                      <td class="text-left">
+                        <input style="width:300px" type="text" class="form-control js-initform" id="batchNo" name="batchNo">                      
+                      </td>
+                    </tr>
+                    <tr>                  
+                      <td class="text-right"><b>是否指定库存：</b></td>
+                      <td class="text-left">
+                        <label class="js-initform" id="assignStlFlagName" name="assignStlFlagName"></label>                      
+                      </td>
+                    </tr>
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/billDeliveryDtl/update" id="save" class="btn btn-primary btn-sm" data-url="">保存</button>
+              <button type="button" data-url="html/sale/billDelivery/billDeliveryDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  GLOBAL.getEditData($("#billDeliveryDtlEditModifyForm"), options.param.cid);
+  	  var stlId = $("#stlId").val();
+  	  var goodsId = $("#goodsId").val();
+  	  if (stlId) {
+  		  $("#batchNo").attr("readonly", true);
+  		  $("#goodsStatus").attr("disabled", true);
+  	  }
+      var requiredSendNum = $("#requiredSendNum").val();
+	  if (requiredSendNum) {
+	      $("#requiredSendNum").val(requiredSendNum.replace(/,/g, ""));
+	  }
+      var requiredSendPrice = $("#requiredSendPrice").val();
+	  if (requiredSendPrice) {
+	      $("#requiredSendPrice").val(requiredSendPrice.replace(/,/g, ""));
+	  }
+  	  
+  	  if (goodsId) {
+  		var $availableNum = $("#availableNum");
+  		var params = {
+      		  billDeliveryId : options.param.id,
+     	      goodsId : goodsId,
+     	      querySource : 6
+  		  };
+  		  GLOBAL.ajax("stl/available/goodsId/query", params, function(e){
+  	          if (e.success) {
+  	        	  var items = e.items;
+  	        	  if (items) {
+  	        		 $availableNum.text(null == items.availableNum ? 0 : items.availableNum);
+  	        	  } else {
+  	        		 $availableNum.text(0);
+  	        	  }
+  	          }
+  	      });
+  	  }
+  	  
+  	  $("#billDeliveryDtlEditModifyForm").validate({
+        rules: {
+        	requiredSendNum: {
+            	required: true,
+            	number: true,
+            	min: 0
+            },
+            requiredSendPrice: {
+            	required: true,
+            	number: true,
+            	min: 0
+            }
+        },
+        submitHandler: function() {
+	       	var requiredSendNum = $("#requiredSendNum").val() || 0;
+	    	if (requiredSendNum*1 == 0) {
+	    		layer.msg("销售数量不能为零，请重新输入");
+	    		return;
+	    	}
+            var rows = new Array();
+            var formData = $("#billDeliveryDtlEditModifyForm").serializeObject();
+            rows.push(formData);
+            var params = {
+          	  id: options.param.id,
+          	  billDeliveryDtlList : rows
+            }
+            GLOBAL.ajax("billDeliveryDtl/update", JSON.stringify(params), function(e) {
+                  if (e.success) {
+                      layer.msg("保存成功！");
+                      GLOBAL.go("html/sale/billDelivery/billDeliveryDtlEdit.html", options.param);
+                  } else {
+                      layer.msg(e.msg);
+                  }
+              }, true);
+        }
+     });
+  }
+  
+  $("#requiredSendNum").on("input",function(){
+      var $requiredSendPrice = $("#requiredSendPrice");
+      var $requiredSendAmount = $("#requiredSendAmount");
+      var requiredSendNum = $(this).val();
+      var requiredSendPrice = $requiredSendPrice.val();
+      $requiredSendAmount.text((requiredSendNum * requiredSendPrice).toFixed(2));
+  })
+
+  $("#requiredSendPrice").on("input",function(){
+      var $requiredSendNum = $("#requiredSendNum");
+      var $requiredSendAmount = $("#requiredSendAmount");
+      var requiredSendPrice = $(this).val();
+      var requiredSendNum = $requiredSendNum.val();
+      $requiredSendAmount.text((requiredSendNum * requiredSendPrice).toFixed(2));
+  })
+
+  GLOBAL.goBack();
+
+</script>

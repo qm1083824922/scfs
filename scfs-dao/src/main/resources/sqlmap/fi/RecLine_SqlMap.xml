@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.fi.RecLineDao">
+	<resultMap id="BaseResultMap" type="com.scfs.domain.fi.entity.RecLine">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="rec_id" jdbcType="INTEGER" property="recId" />
+		<result column="voucher_line_id" jdbcType="INTEGER" property="voucherLineId" />
+		<result column="amount_check" jdbcType="DECIMAL" property="amountCheck" />
+		<result column="write_off_amount" jdbcType="DECIMAL" property="writeOffAmount" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="busi_unit" jdbcType="INTEGER" property="busiUnit" />
+		<result column="cust_id" jdbcType="INTEGER" property="custId" />
+		<result column="voucher_date" jdbcType="DATE" property="voucherDate" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="currency_type" jdbcType="TINYINT" property="currencyType" />
+
+		<result column="bill_type" property="billType" jdbcType="INTEGER" />
+		<result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+		<result column="bill_date" property="billDate" jdbcType="DATE" />
+		<result column="fee_id" property="feeId" jdbcType="INTEGER" />
+		<result column="out_store_id" property="outStoreId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, rec_id, voucher_line_id, amount_check, creator,
+		creator_id,
+		create_at, update_at, write_off_amount, currency_type,
+		bill_type,
+		bill_no, bill_date, fee_id, out_store_id
+	</sql>
+
+	<sql id="Ext_Column_List">
+		tfrl.id, tfrl.rec_id, tfrl.voucher_line_id,
+		tfrl.amount_check, tfrl.creator,
+		tfrl.creator_id, tfrl.create_at,
+		tfrl.update_at, tfrl.write_off_amount, tfrl.currency_type,
+		tfrl.bill_type,
+		tfrl.bill_no, tfrl.bill_date,
+		tfrl.fee_id,
+		tfrl.out_store_id
+	</sql>
+
+	<sql id="Alias_Base_Column_List">
+		rl.id, rl.rec_id, rl.voucher_line_id, rl.amount_check,
+		rl.creator,
+		rl.creator_id, rl.create_at, rl.update_at,
+		rl.currency_type, rl.write_off_amount, rl.bill_type, rl.bill_no,
+		rl.fee_id,
+		rl.out_store_id,
+		vl.bill_date, vl.project_id, vl.cust_id,
+		vl.busi_unit, fv.voucher_date
+	</sql>
+
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_rec_line
+		where id = #{id,jdbcType=INTEGER} for update
+	</select>
+
+	<select id="querySumByBillNo" resultType="java.math.BigDecimal">
+		select IFNULL(sum(frl.amount_check),0) amount
+		from tb_fi_rec_line frl
+		left join tb_fi_voucher_line fvl
+		on frl.voucher_line_id = fvl.id
+		<where>
+			<if test="billType != null">
+				and fvl.bill_type = #{billType}
+			</if>
+			<if test="billNo != null and billNo != ''">
+				and fvl.bill_no = #{billNo}
+			</if>
+		</where>
+	</select>
+	<select id="queryRecLineByCon" parameterType="com.scfs.domain.fi.dto.req.RecLineSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_rec_line frl
+		where 1=1
+		<if test="recId != null">
+			AND frl.rec_id = #{recId}
+		</if>
+		<if test="billType != null">
+			AND frl.bill_type = #{billType}
+		</if>
+		<if test="outStoreId != null">
+			AND frl.out_store_id = #{outStoreId}
+		</if>
+	</select>
+
+	<select id="queryResultsRecLineByCon" parameterType="com.scfs.domain.fi.dto.req.RecLineSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_fi_rec_line frl
+		where 1=1
+		<if test="recId != null">
+			AND frl.rec_id = #{recId}
+		</if>
+		<if test="billType != null">
+			AND frl.bill_type = #{billType}
+		</if>
+		<if test="outStoreId != null">
+			AND frl.out_store_id = #{outStoreId}
+		</if>
+	</select>
+
+	<select id="queryResultsByRecId" parameterType="com.scfs.domain.fi.dto.req.RecLineSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_rec_line rl , tb_fi_voucher_line vl , tb_fi_voucher fv
+		where rl.voucher_line_id = vl.id and rec_id = #{recId} and
+		vl.voucher_id = fv.id
+		<if test="searchType == 1">
+			and rl.write_off_amount = 0
+		</if>
+		<if test="searchType == 2">
+  			<![CDATA[
+				and rl.write_off_amount != 0 and ABS(rl.write_off_amount) < ABS(rl.amount_check)
+			]]>
+		</if>
+		<if test="searchType == 3">
+			and rl.write_off_amount = rl.amount_check
+		</if>
+		<if test="searchType == 4">
+  			<![CDATA[
+  				and ABS(rl.write_off_amount) < ABS(rl.amount_check)
+  			]]>
+		</if>
+		<if test="searchType == 5">
+			and rl.write_off_amount != 0
+		</if>
+	</select>
+
+	<select id="queryListByRecId" parameterType="com.scfs.domain.fi.dto.req.RecLineSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Alias_Base_Column_List" />
+		from tb_fi_rec_line rl , tb_fi_voucher_line vl , tb_fi_voucher fv
+		where rl.voucher_line_id = vl.id and rec_id = #{recId} and
+		vl.voucher_id = fv.id
+		<if test="searchType == 1">
+			and rl.write_off_amount = 0
+		</if>
+		<if test="searchType == 2">
+  			<![CDATA[
+				and rl.write_off_amount != 0 and ABS(rl.write_off_amount) < ABS(rl.amount_check)
+			]]>
+		</if>
+		<if test="searchType == 3">
+			and rl.write_off_amount = rl.amount_check
+		</if>
+		<if test="searchType == 4">
+  			<![CDATA[
+  				and ABS(rl.write_off_amount) < ABS(rl.amount_check)
+  			]]>
+		</if>
+		<if test="searchType == 5">
+			and rl.write_off_amount != 0
+		</if>
+		order by fv.voucher_date
+	</select>
+
+	<insert id="insert" parameterType="com.scfs.domain.fi.entity.RecLine"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_fi_rec_line (id,
+		rec_id, voucher_line_id,
+		amount_check, creator, creator_id,
+		currency_type, bill_type, bill_no, bill_date, fee_id, out_store_id)
+		values (#{id,jdbcType=INTEGER}, #{recId,jdbcType=INTEGER},
+		#{voucherLineId,jdbcType=INTEGER},
+		#{amountCheck,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+		#{currencyType,jdbcType=TINYINT}, #{billType,jdbcType=TINYINT},
+		#{billNo,jdbcType=VARCHAR}, #{billDate,jdbcType=DATE},
+		#{feeId,jdbcType=INTEGER}, #{outStoreId,jdbcType=INTEGER})
+	</insert>
+
+	<update id="updateById" parameterType="com.scfs.domain.fi.entity.RecLine">
+		update tb_fi_rec_line
+		<set>
+			<if test="amountCheck != null">
+				amount_check = #{amountCheck,jdbcType=DECIMAL},
+			</if>
+			<if test="writeOffAmount != null">
+				write_off_amount = #{writeOffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="currencyType != null">
+				currency_type = #{currencyType,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from tb_fi_rec_line
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<select id="queryRecLineByVirtualReceiptNo" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select distinct
+		<include refid="Ext_Column_List" />
+		from tb_fi_rec_line tfrl
+		inner join tb_fi_rec tfr
+		on tfrl.rec_id =
+		tfr.id
+		inner join tb_fi_rec_receipt_rel tfrrr
+		on tfrrr.rec_id = tfr.id
+		inner join tb_fi_bank_receipt tfbr
+		on tfbr.id = tfrrr.receipt_id
+		where
+		tfbr.receipt_no = #{receiptNo}
+		and tfrrr.is_delete = 0
+		and
+		tfbr.is_delete = 0
+	</select>
+
+</mapper>

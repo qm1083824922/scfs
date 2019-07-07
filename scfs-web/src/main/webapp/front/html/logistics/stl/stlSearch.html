@@ -1,0 +1,302 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>物流</li>
+            <li class="active">库存</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+	                            <label class="control-label ml10">经营单位：</label>
+	                            <select class="form-control js-select" data-url="BUSI_UNIT" id="businessUnitId" name="businessUnitId"></select>
+	                    </div>
+                        <div class="search-item">                                
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId" name="projectId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">仓库：</label>
+                            <select class="form-control js-select" data-url="WAREHOUSE" id="warehouseId" name="warehouseId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="customerId" name="customerId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单编号：</label>
+                            <input type="text" class="form-control" id="orderNo" name="orderNo">
+                        </div>
+                        <div class="search-item">               
+                            <label class="control-label ml10">订单附属编号：</label>
+                            <input type="text" class="form-control" id="appendNo" name="appendNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">入库编号：</label>
+                            <input type="text" class="form-control" id="billInStoreNo" name="billInStoreNo">     
+                        </div>
+                        <div class="search-item">                                                            
+                            <label class="control-label ml10">入库附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">       
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">收货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartReceive" name="startReceiveDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndReceive" name="endReceiveDate">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label">入库日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartAccept" name="startAcceptTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndAccept" name="endAcceptTime">           
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">     
+                        </div>
+                        <div class="search-item">                                        
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">                                         
+                        </div>
+                        <div class="search-item">   
+                            <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">  
+                        </div>
+                        <div class="search-item">                                                                                          
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">                                        
+						</div>
+                        <div class="search-item">                                                                                             
+                            <label class="control-label ml10">库存状态：</label>
+                            <select class="form-control js-select" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">币种：</label>
+                            <select class="form-control js-select" data-url="DEFAULT_CURRENCY_TYPE" id="currencyType" name="currencyType"></select>    
+                        </div>
+                        <div class="search-item">
+							<label class="control-label ml10">是否合计：</label>
+                            <select class="form-control js-select" data-url="IS_NEED" id="needSum" name="needSum"></select> 
+                            
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnSummary" data-url="html/logistics/stl/stlSummarySearch.html" class="btn btn-warning btn-sm ml10">汇总</button>                                
+                        </div>
+                        <div class="search-item">	
+                        	<!-- Single button -->
+                            <div class="btn-group">
+                              <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown">
+                               	导出 <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="javascript:" data-permissionUrl="/stl/excel/stl.xls" id="btnExport">导出库存</a></li>
+                              </ul>
+                            </div>   
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="stl/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .edit': function (e, value, row, index) {
+  		options.param.id = row.id;
+  		GLOBAL.go("html/logistics/stl/stlEdit.html", options.param);
+    },
+    'click .split': function (e, value, row, index) {
+  		options.param.id = row.id;
+  		GLOBAL.go("html/logistics/stl/stlSplit.html", options.param);
+    }
+};
+/*数据表格*/
+var tabCols = [
+	{  
+	     title: '序号',
+	     field: 'columnsNumber'
+     }, {
+	     title: '项目',
+	     field: 'projectName',
+	     align: 'center'
+	 }, {
+	     title: '仓库',
+	     field: 'warehouseName',
+	     align: 'center'
+	 }, {
+	     title: '供应商',
+	     field: 'supplierName',
+	     align: 'center'
+	 }, {
+	     title: '客户',
+	     field: 'customerName',
+	     align: 'center'
+	 }, {
+         title: '商品编号',
+         field: 'goodsNumber',
+         align: 'center'
+     }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+         title: '商品名称',
+         field: 'goodsName',
+         align: 'center'
+     }, {
+         title: '商品型号',
+         field: 'goodsType',
+         align: 'center'
+     }, {
+         title: '规格',
+         field: 'specification',
+         align: 'center'
+     }, {
+	     title: '库存数量',
+	     field: 'storeNum',
+	     align: 'center'
+	 }, {
+	     title: '出库锁定数量',
+	     field: 'lockNum',
+	     align: 'center'
+	 }, {
+	     title: '销售锁定数量',
+	     field: 'saleLockNum',
+	     align: 'center'
+	 }, {
+	     title: '可用数量',
+	     field: 'availableNum',
+	     align: 'center'
+	 }, {
+	     title: '库存金额',
+	     field: 'storeAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '出库锁定金额',
+	     field: 'lockAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '销售锁定金额',
+	     field: 'saleLockAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '可用金额',
+	     field: 'availableAmountStr',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+	     title: '批次',
+	     field: 'batchNo',
+	     align: 'center'
+	 }, {
+	     title: '库存状态',
+	     field: 'goodsStatusName',
+	     align: 'center'
+	 }, {
+	     title: '订单单价',
+	     field: 'poPriceStr',
+	     align: 'center'
+	 }, {
+         title: '成本单价',
+         field: 'costPriceStr',
+         align: 'center'
+     }, {
+         title: '订单编号',
+         field: 'orderNo',
+         align: 'center'
+     }, {
+         title: '订单附属编号',
+         field: 'appendNo',
+         align: 'center'
+     }, {
+	     title: '入库编号',
+	     field: 'billInStoreNo',
+	     align: 'center'
+	 }, {
+	     title: '入库附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '收货日期',
+	     field: 'receiveDate',
+	     align: 'center'
+	 }, {
+	     title: '入库日期',
+	     field: 'acceptTime',
+	     align: 'center'
+	 }, {
+	     title: '创建人',
+	     field: 'creator',
+	     align: 'center'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center'
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents 
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, null, null, {
+		onLoadSuccess: function(data){
+			if (data.options.totalStr) {
+				$('#js_dataTable tbody').append("<tr><td style='text-align:left' colspan='" + tabCols.length + "'><b>合计：" + data.options.totalStr + "</b></td></tr>");
+			}
+		}
+	});
+    //还原查询条件及过滤后的数据
+    GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+    if(data){
+        var url = $('#js_dataTable').data("url");
+        GLOBAL.local(url, data);
+    }
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#btnSummary").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+})
+
+$("#btnExport").click(function() {
+    var count_url = "stl/excel/stl/count";
+    var data = $("#searchForm").serializeObject();
+	var url = "stl/excel/stl.xls";
+	url = url + "?" + $("#searchForm").serialize();
+    GLOBAL.ajax(count_url, data, function(e) {
+        if (e.success) {
+        	location.href = GLOBAL.host + url;
+        } else {
+            layer.msg(e.msg);
+        }
+    });
+})
+
+</script>

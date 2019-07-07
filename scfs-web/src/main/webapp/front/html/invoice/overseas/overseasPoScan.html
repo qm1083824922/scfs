@@ -1,0 +1,119 @@
+<style>
+.nav>li.state {
+    display: none;
+}
+</style>
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		  <ol class="breadcrumb">
+	          <li>当前位置</li>
+	          <li>发票</li>
+	          <li>境外开票</li>
+	          <li class="active">浏览</li>
+	      </ol>
+     </section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/overseas/overseasInfoScan.html">基础信息</a></li>
+						<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink"  data-url="html/invoice/overseas/overseasPoScan.html">销售单信息</a></li>
+						<li role="presentation"><a class="tab-item" data-url="html/invoice/overseas/attachmentScan.html">附件</a></li> 
+					</ul>
+					<table id="js_dataTable" data-url="invoiceOverseasPo/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-url="html/invoice/overseas/overseasInfoSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				title : '提货/退货单编号',
+				field : 'billNo',
+				width : 100,
+				align : 'center'
+			},
+			{
+				title : '日期',
+				field : 'requiredSendDate',
+				width : 120,
+				align : 'center'
+			},
+			{
+				title : '商品编号',
+				field : 'goodsNumber',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '商品描述',
+				field : 'goodsName',
+				width : 120,
+				align : 'center'
+			},
+			{
+				title : '可开票数量',
+				field : 'provideMaxNum',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '可开票金额',
+				field : 'provideMaxAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '开票数量',
+				field : 'invoiceNum',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '开票金额',
+				field : 'invoiceAmount',
+				width : 80,
+				align : 'center',
+				formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			}];
+
+	options.initPage = function() {
+		var option = {
+    			onLoadSuccess : function(data) {
+    				if(data.options.totalStr != null){
+    					$('#js_dataTable tbody').append("<tr><td style='text-align:left;font-weight:bold' colspan='" + tabCols.length + "'>" + data.options.totalStr + "</td></tr>");
+    				}
+    			}
+    		}
+		options.param.overseasId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			overseasId : options.param.id
+		}, false, option);
+	};
+
+	GLOBAL.goBack();
+</script>

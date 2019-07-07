@@ -1,0 +1,53 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>项目</li>
+            <li class="active">临时额度管理</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label">项目：</label>
+                            <select class="form-control js-select" data-url="USER_PROJECT" id="projectId"  name="projectId"> </select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control  js-select" data-url="PROJECT_POOL_ADJUST_STATE" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">申请人：</label>
+                            <input type="text" class="form-control" id="creator" name="creator">
+                        </div>
+                        <div class="search-item">	
+                        	<label class="control-label">申请日期开始：</label>
+                            <input type="text" class="form-control js_datePicker" id="startApplyDate" value="" name="startApplyDate">
+                        </div>
+                        <div class="search-item">	
+                        	<label class="control-label">申请日期结束：</label>
+                            <input type="text" class="form-control js_datePicker" id="endApplyDate" value="" name="endApplyDate">
+                        </div>
+                        <div class="search-item">    
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                            <button type="button" id="btnNew" data-url="html/project/pool/projectPoolAdjustCreate.html" data-permissionUrl="/projectPoolAdjust/add" class="btn btn-warning btn-sm ml10">新建</button>
+                            <!--  <button type="button" id="btnExport" data-url="/project/excel/collect.xls" data-permissionUrl="/project/excel/collect.xls" class="btn btn-warning btn-sm ml10">导出excel</button>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="projectPoolAdjust/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script src="../../js/project/pool/projectPoolAdjust.js"></script>

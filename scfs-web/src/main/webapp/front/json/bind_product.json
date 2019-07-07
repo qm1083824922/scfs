@@ -1,0 +1,12 @@
+[{
+    "product_sku":"160025402",
+    "product_name": "佳能（Canon）EOS 5DS R 单反机身 （约5060万像素 3.0英寸液晶屏 全画幅CMOS图像感应器 消除低通滤镜）",
+    "product_purchase_price" :10.08,
+    "product_sale_price" :20.08
+},
+{
+    "product_sku":"161025402",
+    "product_name": "徕卡（Leica）X-Vario（Typ 107） 数码相机 （银色）数码相机精选套装（ONA欧纳摄影包+专用保护贴膜)",
+    "product_purchase_price" :20.08,
+    "product_sale_price" :30.08
+}]

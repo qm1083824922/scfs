@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.BaseGoodsDao">
+
+	<resultMap id="BaseGoodsMap" type="com.scfs.domain.base.entity.BaseGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="number" property="number" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+		<result column="specification" property="specification"
+			jdbcType="VARCHAR" />
+		<result column="tax_classification" property="taxClassification"
+			jdbcType="VARCHAR" />
+		<result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="volume" property="volume" jdbcType="DECIMAL" />
+		<result column="gross_weight" property="grossWeight" jdbcType="DECIMAL" />
+		<result column="net_weight" property="netWeight" jdbcType="DECIMAL" />
+		<result column="purchase_price" property="purchasePrice"
+			jdbcType="DECIMAL" />
+		<result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="deleter" property="deleter" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="DATE" />
+		<result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="delete_at" property="createAt" jdbcType="DATE" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="locker" property="locker" jdbcType="VARCHAR" />
+		<result column="lock_at" property="lockAt" jdbcType="DATE" />
+		<result column="sale_currency_type" property="saleCurrencyType"
+			jdbcType="TINYINT" />
+		<result column="pur_currency_type" property="purCurrencyType"
+			jdbcType="TINYINT" />
+		<result column="brand" property="brand" jdbcType="VARCHAR" />
+		<result column="pledge" property="pledgeProportion" jdbcType="DECIMAL" />
+		<result column="good_type" property="goodType" jdbcType="TINYINT" />
+		<result column="grow" property="grow" jdbcType="DECIMAL" />
+		<result column="broad" property="broad" jdbcType="DECIMAL" />
+
+	</resultMap>
+	<sql id="detail_goods_column_list">
+		id, number, name, type, bar_code, specification,
+		tax_classification, tax_rate, unit, volume,
+		gross_weight, net_weight,
+		purchase_price, sale_price, status, creator, deleter, create_at,
+		update_at, delete_at, is_delete,lock_at,locker,
+		pur_currency_type,sale_currency_type,brand,good_type,pledge,grow,broad
+	</sql>
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.BaseGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_base_goods(
+		number,
+		name,
+		type,
+		bar_code,
+		specification,
+		tax_classification,
+		tax_rate,
+		unit,
+		volume,
+		gross_weight,
+		net_weight,
+		purchase_price,
+		sale_price,
+		status,
+		creator,
+		pur_currency_type,
+		sale_currency_type,
+		brand,
+		grow,
+		broad
+		)
+		values(
+		#{number,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		IFNULL(#{type,jdbcType=VARCHAR},'') ,
+		#{barCode,jdbcType=VARCHAR},
+		#{specification,jdbcType=VARCHAR},
+		#{taxClassification,jdbcType=VARCHAR},
+		#{taxRate,jdbcType=DECIMAL},
+		#{unit,jdbcType=VARCHAR},
+		#{volume,jdbcType=DECIMAL},
+		#{grossWeight,jdbcType=DECIMAL},
+		#{netWeight,jdbcType=DECIMAL},
+		#{purchasePrice,jdbcType=DECIMAL},
+		#{salePrice,jdbcType=DECIMAL},
+		#{status,jdbcType=TINYINT},
+		#{creator,jdbcType=VARCHAR},
+		#{purCurrencyType,jdbcType=TINYINT},
+		#{saleCurrencyType,jdbcType=TINYINT},
+		#{brand,jdbcType=VARCHAR},
+		#{grow,jdbcType=DECIMAL},
+		#{broad,jdbcType=DECIMAL}
+		)
+	</insert>
+	<update id="update" parameterType="com.scfs.domain.base.entity.BaseGoods">
+		update tb_base_goods
+		<set>
+			<if test="number != null">
+				number=#{number},
+			</if>
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="type != null">
+				type=#{type},
+			</if>
+			<if test="barCode != null">
+				bar_code = #{barCode},
+			</if>
+			<if test="specification != null">
+				specification = #{specification},
+			</if>
+			<if test="taxClassification != null ">
+				tax_classification = #{taxClassification},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate},
+			</if>
+			<if test="unit != null">
+				unit = #{unit},
+			</if>
+			<if test="volume != null">
+				volume = #{volume},
+			</if>
+			<if test="grossWeight != null">
+				gross_weight = #{grossWeight},
+			</if>
+			<if test="netWeight != null">
+				net_weight = #{netWeight},
+			</if>
+			<if test="purchasePrice != null">
+				purchase_price = #{purchasePrice},
+			</if>
+			<if test="salePrice != null">
+				sale_price = #{salePrice},
+			</if>
+			<if test="status != null">
+				status = #{status}
+			</if>
+			<if test="creator != null">
+				creator = #{creator},
+			</if>
+			<if test="createAt != null">
+				create_at = #{createAt},
+			</if>
+			<if test="saleCurrencyType != null">
+				sale_currency_type = #{saleCurrencyType},
+			</if>
+			<if test="purCurrencyType != null">
+				pur_currency_type = #{purCurrencyType},
+			</if>
+			<if test="brand != null">
+				brand = #{brand},
+			</if>
+			<if test="grow != null">
+				grow = #{grow},
+			</if>
+			<if test="broad != null">
+				broad = #{broad},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="delete" parameterType="com.scfs.domain.base.entity.BaseGoods">
+		update tb_base_goods
+		set
+		is_delete=#{isDelete} , deleter=#{deleter} , delete_at=#{deleteAt}
+		where id=#{id}
+	</update>
+	<update id="submit" parameterType="com.scfs.domain.base.entity.BaseGoods">
+		update tb_base_goods
+		set
+		status=#{status}
+		where id=#{id}
+	</update>
+	<update id="lock" parameterType="com.scfs.domain.base.entity.BaseGoods">
+		update tb_base_goods
+		set
+		status=#{status}, locker=#{locker} , lock_at=#{lockAt}
+		where id=#{id}
+	</update>
+	<update id="unlock" parameterType="com.scfs.domain.base.entity.BaseGoods">
+		update tb_base_goods
+		set
+		status=#{status}, locker=#{locker} , lock_at=#{lockAt}
+		where id=#{id}
+	</update>
+	<select id="getGoodsList" resultMap="BaseGoodsMap"
+		parameterType="com.scfs.domain.base.entity.BaseGoods">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		<where>
+			is_delete = 0
+			<if test="number != null and number != '' ">
+				and number like CONCAT('%',#{number},'%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''">
+				and type like CONCAT('%',#{type},'%')
+			</if>
+			<if test="specification != null and specification != ''">
+				and specification like CONCAT('%',#{specification},'%')
+			</if>
+			<if test="barCode != null and barCode != '' ">
+				and bar_code like CONCAT('%',#{barCode},'%')
+			</if>
+			<if test="status != null">
+				and status=#{status}
+			</if>
+			<if test="goodType != null">
+				and good_type = #{goodType}
+			</if>
+		</where>
+		order by number desc, create_at desc
+	</select>
+	<select id="getExistCountByCon" resultType="java.lang.Integer"
+		parameterType="com.scfs.domain.base.entity.BaseGoods">
+		select count(1)
+		from tb_base_goods
+		<where>
+			is_delete = 0
+			<if test="number != null and number != ''">
+				and number = #{number}
+			</if>
+			<if test="id != null">
+				and id != #{id}
+			</if>
+			<if test="goodType != null">
+				and good_type = #{goodType}
+			</if>
+		</where>
+	</select>
+	<select id="queryAllGoodsList" resultMap="BaseGoodsMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		<where>
+			<if test="updateAt != null">
+                <![CDATA[
+                update_at > #{updateAt}
+                ]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="queryLastUpdateAt" resultType="java.util.Date">
+		select
+		max(update_at)
+		from tb_base_goods
+	</select>
+
+	<select id="queryBaseGoodsById" resultMap="BaseGoodsMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods
+		WHERE id=#{id}
+	</select>
+	<select id="loadAndLockEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods where id=#{id} for update
+	</select>
+
+	<select id="queryGoodsByNumber" parameterType="java.lang.String"
+		resultMap="BaseGoodsMap">
+		select
+		<include refid="detail_goods_column_list" />
+		from tb_base_goods where number=#{number}
+		and is_delete=0 and status=2
+		and good_type=1
+	</select>
+
+</mapper>

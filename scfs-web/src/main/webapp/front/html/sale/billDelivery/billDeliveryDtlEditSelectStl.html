@@ -1,0 +1,310 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>销售</li>
+            <li>销售单</li>             
+            <li>销售明细</li>
+            <li class="active">选择库存</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item"> 
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="supplierId" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">                                       
+                            <label class="control-label ml10">订单编号：</label>
+                            <input type="text" class="form-control" id="orderNo" name="orderNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">订单附属编号：</label>
+                            <input type="text" class="form-control" id="appendNo" name="appendNo">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">入库编号：</label>
+                            <input type="text" class="form-control" id="billInStoreNo" name="billInStoreNo">     
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">入库附属编号：</label>
+                            <input type="text" class="form-control" id="affiliateNo" name="affiliateNo">  
+                        </div>
+                        <div class="search-item">
+                         	<label class="control-label">收货日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartReceive" name="startReceiveDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndReceive" name="endReceiveDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label">入库日期：</label>
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeStartAccept" name="startAcceptTime"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEndAccept" name="endAcceptTime">           
+                        </div>
+                        <div class="search-item">                                        
+                            <label class="control-label ml10">商品编号：</label>
+                            <input class="form-control" id="goodsNumber" name="goodsNumber">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">商品条码：</label>
+                            <input class="form-control" id="goodsBarCode" name="goodsBarCode">    
+                         </div>
+                        <div class="search-item">   
+                            <label class="control-label ml10">商品名称：</label>
+                            <input class="form-control" id="goodsName" name="goodsName">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">商品型号：</label>
+                            <input class="form-control" id="goodsType" name="goodsType">  
+                        </div>
+                        <div class="search-item">    
+                        	<label class="control-label ml10">库存状态：</label>
+                            <select class="form-control js-select" data-url="BILL_IN_STORE_GOODS_STATUS" id="goodsStatus" name="goodsStatus"></select>
+                        	<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button> 
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>                              	
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="stl/available/query">
+                </table>
+                <b><span class="total_sum"></span></b>
+            </div>
+            <!-- .box-body -->
+            <div class="box-footer text-center">
+      			<button type="button" data-permissionUrl="/billDeliveryDtl/stl/add" class="btn btn-primary btn-sm" id="batchAdd">选择库存</button> 
+      			<button type="button" data-url="html/sale/billDelivery/billDeliveryDtlEdit.html" class="btn btn-default btn-sm js-back">返回</button> 
+    		</div>
+    		<!-- /.box-footer --> 
+        </div>
+    </section>
+</div>
+
+<script>
+
+function requiredSendNumFormatter(value, row, index) {
+    return "<input type='number' class='requiredSendNum' style='text-align:center;color:red' value=" + row.defaultAvailableNum + "></input>";
+}
+
+function requiredSendPriceFormatter(value, row, index) {
+    return "<input type='number' class='requiredSendPrice' style='text-align:center;color:red' value=" + row.defaultPrice + "></input>";
+}
+
+/*数据表格*/
+var tabCols = [
+	{
+         field: 'checkItem',
+         checkbox: true,
+    }, {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     }, {
+	     title: '商品编号',
+	     field: 'goodsNumber',
+	     align: 'center'
+	 }, {
+         title: '商品条码',
+         field: 'goodsBarCode',
+         align: 'center'
+     }, {
+	     title: '商品名称',
+	     field: 'goodsName',
+	     align: 'center'
+	 }, {
+	     title: '商品型号',
+	     field: 'goodsType',
+	     align: 'center'
+	 }, {
+	     title: '订单编号',
+	     field: 'orderNo',
+	     align: 'center'
+	 }, {
+	     title: '订单附属编号',
+	     field: 'appendNo',
+	     align: 'center'
+	 }, {
+	     title: '入库编号',
+	     field: 'billInStoreNo',
+	     align: 'center'
+	 }, {
+	     title: '入库附属编号',
+	     field: 'affiliateNo',
+	     align: 'center'
+	 }, {
+	     title: '收货日期',
+	     field: 'receiveDate',
+	     align: 'center'
+	 }, {
+	     title: '入库日期',
+	     field: 'acceptTime',
+	     align: 'center'
+	 }, {
+	     title: '批次',
+	     field: 'batchNo',
+	     align: 'center'
+	 }, {
+	     title: '库存状态',
+	     field: 'goodsStatusName',
+	     align: 'center'
+	 }, {
+	     title: '币种',
+	     field: 'currencyTypeName',
+	     align: 'center'
+	 }, {
+         title: '成本单价',
+         field: 'costPriceStr',
+         align: 'center'
+     }, {
+         title: '库存数量',
+         field: 'storeNum',
+         align: 'center'
+     }, {
+         title: '可用库存数量',
+         field: 'availableNum',
+         align: 'center'
+     }, {
+         title: '销售数量',
+         field: 'requiredSendNum',
+         align: 'center',
+         formatter: requiredSendNumFormatter
+     }, {
+         title: '销售单价',
+         field: 'requiredSendPrice',
+         align: 'center',
+         formatter: requiredSendPriceFormatter
+     }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols, {
+	  	billDeliveryId : options.param.id,
+	    querySource : 1
+	}, null, {
+		pagination: false,
+		onCheck: function(row, $element){
+			sum();
+        },
+        onUncheck:function(row, $element){
+            sum();
+        },
+        onCheckAll: function(){
+            sum();
+        },
+        onUncheckAll: function(){
+            sum();
+        },
+        onLoadSuccess: function(data) {
+        	sum();
+        }
+	});
+	$('#js_dataTable').on("input", ".requiredSendNum", function(){
+        sum();
+    });
+	$('#js_dataTable').on("input", ".requiredSendPrice", function(){
+        sum();
+    });
+	$(".js_datePicker").datetimepicker({format:"Y-m-d", timepicker:false});
+}
+
+function sum(){
+    var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+  	var totalRequiredSendNum = 0;
+  	var totalRequiredSendAmount = 0;
+  	for(var i= 0; i < selectedRows.length; i++){
+        var id = selectedRows[i].id;
+      	var requiredSendNum = $('#js_dataTable tr[data-uniqueid='+id+']').find(".requiredSendNum").val().replace(/,/g, "");
+      	var requiredSendPrice = $('#js_dataTable tr[data-uniqueid='+id+']').find(".requiredSendPrice").val().replace(/,/g, "");
+      	var requiredSendAmount = 0;
+      	if(requiredSendNum){
+      		totalRequiredSendNum += parseFloat(requiredSendNum);
+      	}
+      	if(requiredSendNum && requiredSendPrice) {
+          	requiredSendAmount = requiredSendNum * requiredSendPrice;
+          	totalRequiredSendAmount += parseFloat(requiredSendAmount);
+      	}
+  	}
+  	totalRequiredSendNum = totalRequiredSendNum.toFixed(2);
+  	totalRequiredSendAmount = totalRequiredSendAmount.toFixed(2);
+  	$(".total_sum").text("合计：销售数量：" + totalRequiredSendNum + "；销售金额：" + totalRequiredSendAmount);
+}
+
+$("#btnSearch").click(function() {
+	var data = $("#searchForm").serializeObject();
+	$.extend(data, {
+	  	billDeliveryId : options.param.id,
+	    querySource : 1
+	});
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+
+$("#batchAdd").click(function() {
+	var selectedRows = $('#js_dataTable').bootstrapTable('getSelections');
+    var idsLen = selectedRows.length;
+    if (idsLen == 0) {
+      	layer.msg("请选择！");
+      	return;
+    }
+    var rows = [];
+    for (var i = 0; i < idsLen; i++) {
+    	var row = new Object();
+    	var id = selectedRows[i].id;
+    	row.id = id;
+    	
+    	var requiredSendNum = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".requiredSendNum").val();
+    	var requiredSendPrice = $('#js_dataTable tbody tr[data-uniqueid="' + id + '"]').find(".requiredSendPrice").val();
+    	if (!requiredSendNum) {
+    		layer.msg("销售数量必填且正确，请重新输入");
+    		return;
+    	}
+    	if (requiredSendNum*1 <= 0) {
+    		layer.msg("销售数量不能为负数和零，请重新输入");
+    		return;
+    	}
+    	if (!requiredSendPrice) {
+    		layer.msg("销售单价必填且正确，请重新输入");
+    		return;
+    	}
+    	if (requiredSendPrice*1 < 0) {
+    		layer.msg("销售单价不能为负数，请重新输入");
+    		return;
+    	}
+    	var availableNum = selectedRows[i].availableNum;
+  	  	if (availableNum) {
+  	  		availableNum = availableNum.replace(/,/g, "");
+  	  	}
+    	if (requiredSendNum*1 > availableNum*1) {
+    		layer.msg("销售数量大于可用库存数量，请重新输入");
+    		return;
+    	}
+    	row.requiredSendNum = requiredSendNum;
+    	row.requiredSendPrice = requiredSendPrice;
+    	rows.push(row);
+    }
+    add(rows);
+})
+
+function add(rows) {
+	var params = {
+		id: options.param.id,
+		stlList: rows
+	}
+	GLOBAL.ajax("billDeliveryDtl/stl/add", JSON.stringify(params), function(e){
+        if (e.success) {
+       		layer.msg("选择库存成功", {
+               icon: 1
+         	});
+         	$("#btnSearch").click();
+        } else {
+           layer.msg(e.msg);
+        } 		
+  	}, true)
+}
+
+GLOBAL.goBack();
+
+</script>

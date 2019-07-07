@@ -1,0 +1,37 @@
+<style>
+	.nav>li.state{
+		display: none;
+	}
+</style>
+
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>发票</li>
+            <li>开票申请</li>
+            <li class="active">浏览</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box"> 
+            <!-- /.box-header -->
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                	<li role="presentation" ><a class="tab-item" data-url="html/invoice/makeinvoice/invoiceScan.html">基本信息</a></li>
+                  	<li role="presentation" class="active"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/feeInfoScan.html">费用信息</a></li> 
+                    <li role="presentation"><a class="tab-item" id="project" data-url="html/invoice/makeinvoice/invoiceInfoScan.html">发票信息</a></li> 
+                    <li role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/attachmentScan.html">附件</a></li>
+                    <li class="state" role="presentation"><a class="tab-item" data-url="html/invoice/makeinvoice/invoiceVoucherScan.html">开票凭证浏览</a></li>
+              	</ul>
+                <table id="js_dataTable" data-url="invoiceFeeSelect/query">
+                </table>
+            </div>
+             <div class="box-footer text-center">  
+   			   <button type="button" id="back" data-url="html/invoice/makeinvoice/invoiceSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+   			</div> 
+        </div>
+    </section>
+</div>
+
+<script src="../../../js/invoice/makeinvoice/feeInfoScan.js"></script>

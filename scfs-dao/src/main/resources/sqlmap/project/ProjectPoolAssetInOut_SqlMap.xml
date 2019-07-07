@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.project.ProjectPoolAssetInOutDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.project.entity.ProjectPoolAssetInOut">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="asset_in_id" jdbcType="INTEGER" property="assetInId" />
+		<result column="asset_out_id" jdbcType="INTEGER" property="assetOutId" />
+		<result column="asset_redant" jdbcType="DECIMAL" property="assetRedant" />
+		<result column="business_date" jdbcType="DATE" property="businessDate" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, asset_in_id, asset_out_id, asset_redant, business_date,
+		create_at
+	</sql>
+	<select id="selectByCon"
+		parameterType="com.scfs.domain.project.entity.ProjectPoolAssetInOut"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_project_pool_asset_inout
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_project_pool_asset_inout
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.scfs.domain.project.entity.ProjectPoolAssetInOut"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_project_pool_asset_inout
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="assetInId != null">
+				asset_in_id,
+			</if>
+			<if test="assetOutId != null">
+				asset_out_id,
+			</if>
+			<if test="assetRedant != null">
+				asset_redant,
+			</if>
+			<if test="businessDate != null">
+				business_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="assetInId != null">
+				#{assetInId,jdbcType=INTEGER},
+			</if>
+			<if test="assetOutId != null">
+				#{assetOutId,jdbcType=INTEGER},
+			</if>
+			<if test="assetRedant != null">
+				#{assetRedant,jdbcType=DECIMAL},
+			</if>
+			<if test="businessDate != null">
+				#{businessDate,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateById"
+		parameterType="com.scfs.domain.project.entity.ProjectPoolAssetInOut">
+		update tb_project_pool_asset_inout
+		<set>
+			<if test="assetInId != null">
+				asset_in_id = #{assetInId,jdbcType=INTEGER},
+			</if>
+			<if test="assetOutId != null">
+				asset_out_id = #{assetOutId,jdbcType=INTEGER},
+			</if>
+			<if test="assetRedant != null">
+				asset_redant = #{assetRedant,jdbcType=DECIMAL},
+			</if>
+			<if test="businessDate != null">
+				business_date = #{businessDate,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

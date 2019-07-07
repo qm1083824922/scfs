@@ -1,0 +1,126 @@
+<div class="wrapper">
+  <ol class="breadcrumb">
+    <li>当前位置</li>
+    <li>出口</li>
+    <li>报关申请</li>  
+    <li class="active">基本信息编辑</li>
+  </ol>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="customsApplyEditForm" data-url="customsApply/edit">
+            <div class="box-body">
+                <ul class="nav nav-tabs"> 	  
+               	  <li role="presentation" class="active"><a class="tab-item" data-url="html/export/customsApply/customsApplyEdit.html">基础信息</a></li>
+                  <li role="presentation"><a class="tab-item" data-url="html/export/customsApply/customsApplyLineEdit.html">报关明细</a></li>
+                </ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                
+                 <table class="table table-bordered table-hover no-margin">
+            	  <tr>
+                    <td width="180" class="text-right"><b>报关编号：</b></td>
+                    <td class="text-left">
+                      <label class="js-initform" id="applyNo" name="applyNo"></label>
+                    </td>
+                  </tr>
+            	  <tr>
+                    <td class="text-right"><b>报关附属编号：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" type="text" class="form-control js-initform" id="affiliateNo" name="affiliateNo">
+                    </td>
+                  </tr>
+               	  <tr>
+                    <td class="text-right"><b>项目：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="projectName" name="projectName"></label>
+                    	<input type="hidden" id="projectId" name="projectId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>代理公司：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="proxyCompanyName" name="proxyCompanyName"></label>
+                    	<input type="hidden" id="proxyCompanyId" name="proxyCompanyId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>客户：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="customerName" name="customerName"></label>
+                    	<input type="hidden" id="customerId" name="customerId">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>收货地址：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                        <label class="js-initform" id="customerAddressName" name="customerAddressName"></label>
+                    	<input type="hidden" id="customerAddressId" name="customerAddressId">
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td class="text-right"><b>报关时间：<em class="text-star">*</em></b></td>
+                    <td class="text-left">
+                      <input style="width:300px" type="text" class="form-control js-initform js_datePicker" id="customsDate" name="customsDate">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-right"><b>备注：</b></td>
+                    <td class="text-left">
+                      <textarea class="form-control js-initform" id="remark" cols="50" rows="5" name="remark"></textarea>  
+                    </td>
+                  </tr>
+               </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+              <button type="submit" data-permissionUrl="/customsApply/update" id="save" class="btn btn-primary btn-sm" data-url="customsApply/update">保存</button>
+              <button type="button" data-url="html/export/customsApply/customsApplySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+  options.initPage = function(){
+  	  GLOBAL.getEditData($("#customsApplyEditForm"), options.param.id);
+      
+      $("#customsApplyEditForm").validate({
+          rules: {
+         	affiliateNo: {
+       			required: true
+       		},
+       		projectId: {
+             	required: true
+           	},
+       		proxyCompanyId: {
+       			required: true
+       		},
+           	customerId: {
+               	required: true
+           	},
+           	customerAddressId: {
+           		required: true
+           	},
+           	customsDate: {
+           		required: true
+           	}
+          },
+          submitHandler: function() {
+        	  var formData = $("#customsApplyEditForm").serializeObject();
+              GLOBAL.ajax("customsApply/update", formData, function(e) {
+                  if (e.success) {
+                      layer.msg("保存成功！");
+                  } else {
+                      layer.msg(e.msg);
+                  }
+              });
+           }
+      });
+  }
+
+  GLOBAL.goBack();
+
+</script>

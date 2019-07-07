@@ -1,0 +1,70 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+		<ol class="breadcrumb">
+			<li>当前位置</li>
+			<li>费用</li>
+			<li>人工费用</li>
+			<li class="active">分摊</li>
+		</ol>
+	</section>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal" id="form1">
+				<div class="box-body" >
+					<div class="row">
+						<div class="col-md-3">
+							<table class="table table-bordered table-hover no-margin">
+								<tr>
+									<td class="text-right"><b>日期：<em class="text-star">*</em></b></td>
+									<td class="text-left"><input
+										class="form-control js_datePicker" id="shareDate" name="shareDate"></td>
+								     <input class="form-control js-initform" type="hidden" id="ids" name="ids">
+								     <input class="form-control js-initform" type="hidden" id="feeType" name="feeType">
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-body -->
+
+				<div class="col-md-8 box-footer text-center">
+					<button id="save" class="btn btn-primary btn-sm" data-permissionUrl="/fee/artificial/addShare">保存</button>
+					<button type="button" id="back" data-url="html/fee/artificialFee/artificialFeeSearch.html"
+						class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+	options.initPage = function() {
+		var ids = options.param.ids;
+		$("#ids").val(ids);
+		$("#feeType").val(5);//人工费类型
+		$("#form1").validate({
+			rules : {
+				shareDate : {
+					required : true
+				}
+			},
+			submitHandler : function() {
+				var data = $("#form1").serializeObject();
+				GLOBAL.ajax("fee/artificial/addShare", data, function(e) {
+					if (e.success) {
+						layer.msg("分摊成功！");
+						GLOBAL.go("html/fee/artificialFee/artificialFeeSearch.html");
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false, $("#save"));
+			}
+		});
+		$(".js_datePicker").datetimepicker({
+	        format:'Y-m-d'
+	    });
+	}
+	
+	GLOBAL.goBack();
+</script>

@@ -1,0 +1,1164 @@
+<link rel="stylesheet" href="../css/index.css">
+
+<style>
+	.base-container{display: flex;align-items: stretch;flex-flow: row nowrap;height: 320px;width:100%px}
+	.container-one{width: 25%;height: 320px;background-color: #fff;padding-top: 5px;}
+	.container-two{width: 25%;height: 320px;margin-left: 5px; background-color: #fff;padding-top: 5px;}
+	.container-three{width: 25%;height: 320px;margin-left: 5px;}
+	.container-four{width: 24%;height: 320px;margin-left: 5px;}
+	#zjzzl{position:relative}
+	.show-number{position: absolute;top: 43px;left: 0;font-size: 19px; color: orange;font-weight: bold;width: 157px;text-align: center;}
+	.info-box{
+		margin-top:15px;
+	}
+	.info-box-text{
+		text-align:left;
+	}
+	.info-box-number {
+	    display: block;
+	    font-weight: bold;
+	    font-size: 25px;
+	    margin-top: 8px;
+	    color: green;
+	}
+	.info-box-number-over {
+	    display: block;
+	    font-weight: bold;
+	    font-size: 25px;
+	    margin-top: 8px;
+	    color: orange;
+	}
+	.more:hover{
+		color: orange;
+	}
+</style>
+<!-- .base-container{display: flex;align-items: stretch;flex-flow: row nowrap;height: 400px;width:100%px}.container-one{width: 32%px;height: 400px;}.container-two{width:32%px;height: 400px;margin-left: 5px;} -->
+<div class="warper">
+	<form class="form-horizontal form-inline" id="form1" data-url="entryInfo/query">
+	    <div class="top-overview"  id="entryInfo" data-permissionUrl="/entryInfo/query">
+	    	<div class="tov-item zjzzl" style="width:157px;height: 130px;" id="capital" data-permissionUrl="/capitalTurnover/query">
+	            <div id="zjzzl">
+	            	<div id="zjzzlchart"  style="width: 160px; height: 120px;"></div>
+	            	<span class="show-number">0%</span>
+	                <!-- <canvas id="zjzzlchart" width="100" height="100"></canvas> -->
+	            </div>
+	            <span class="tov-tip">资金周转率</span>
+	        </div> 
+	        
+	        <div class="info-box tov-item ddhpo" id="poShow" data-permissionUrl="/poWaitOrder/query">
+			  <span class="info-box-icon bg-aqua"><i class="fa fa-yen"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">待到货PO单</span>
+			    <span class="info-box-number" style="color: #00c0ef !important"><label class="js-initform" id="poAmountStr" name="poAmountStr"></label>万</span>
+			  </div>
+			</div>
+			<div class="info-box tov-item kc" id="stlAmountShow" data-permissionUrl="/inSenateStl/query">
+			  <span class="info-box-icon bg-green"><i class="fa fa-yen"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">在仓库存</span>
+			    <span class="info-box-number"><label class="js-initform" id="stlAmountStr" name="stlAmountStr"></label>万</span>
+			  </div>
+			</div>
+	        <div class="info-box tov-item pjkl" id="avgAgeShow" data-permissionUrl="/avgStlAge/query">
+			  <span class="info-box-icon bg-green"><i class="fa fa-calendar-times-o"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">平均库龄</span>
+			    <span class="info-box-number"><label class="js-initform" id="avgStlAgeStr" name="avgStlAgeStr"></label>天</span>
+			  </div>
+			</div>
+	        <div class="info-box tov-item cq" id="overStlShow" data-permissionUrl="/overStlAge/query">
+			  <span class="info-box-icon bg-orange"><i class="fa fa-yen"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">超期库存</span>
+			    <span class="info-box-number-over"><label class="js-initform" id="overStlAmountStr" name="overStlAmountStr"></label>万</span>
+			  </div>
+			</div>
+	        <div class="info-box tov-item lq" id="overRecShow" data-permissionUrl="/overReceive/query">
+			  <span class="info-box-icon bg-orange"><i class="fa fa-yen"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">超期应收</span>
+			    <span class="info-box-number-over"><label class="js-initform" id="overReceiveStr" name="overReceiveStr"></label>万</span>
+			  </div>
+			</div>
+			<div class="info-box tov-item dxzxfx" id="riskShow" data-permissionUrl="/riskStl/query">
+			  <span class="info-box-icon bg-red"><i class="fa fa-yen"></i></span>
+			  <div class="info-box-content">
+			    <span class="info-box-text">动销滞销风险</span>
+			    <span class="info-box-number-over" style="color: red"><label class="js-initform" id="riskAmountStr" name="riskAmountStr"></label>万</span>
+			  </div>
+			</div>
+	    </div>
+    </form>
+    <div class="base-table" style="flex-flow: row nowrap;">
+        <div class="i-not-check" style="width: 49%;height:350px; overflow:auto">
+            <section class="baseTable">
+                <div class="tab-top">
+                   	<span class="table-title">待我审核的单据</span>
+                   	<div style="margin-top: -20px;margin-left: 35%;">
+                   		<button type="button" class="btn btn-sm btn-warning mult-pass-btn mr10" data-url="audit/batch">批量通过</button>
+                   		<button type="button" class="btn btn-sm btn-danger mult-turndown-btn" data-url="audit/batch">批量驳回</button>
+                   		<a href="javascript:" class="more" data-url="html/audit/audit.html" style="float:right">更多 &gt;&gt;</a>       
+                   	</div>
+                </div>
+                 <!-- <form method="post" action="###" class="form-inline mb10" id="searchForm">
+                    <div class="form-group-sm">
+                        <div class="search-item">
+                            <label class="control-label ml10">项目：</label>
+                            <select class="form-control js-select" data-url="PROJECT" id="js_project" name="projectId"></select>
+                        </div>
+                        <div class="search-item">        
+                            <label class="control-label ml10">客户：</label>
+                            <select class="form-control js-select" data-url="CUSTOMER" id="js_customer" name="customerId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">供应商：</label>
+                            <select class="form-control js-select" data-url="SUPPLIER" id="js_supplier" name="supplierId"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据编号：</label>
+                            <input type="text" class="form-control" id="poNo" name="poNo">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">单据类型：</label>
+                            <select class="form-control js-select" data-url="AUDIT_POTYPE" id="js_supplier" name="poType"></select>
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">状态：</label>
+                            <select class="form-control js-select" data-url="AUDIT_STATE" id="state" name="state"></select>
+                        </div>
+                        <div class="search-item">
+                            <button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+                             <button type="button" class="btn btn-sm btn-warning mult-pass-btn mr10" data-url="audit/batch">批量通过</button>
+                             <button type="button" class="btn btn-sm btn-danger mult-turndown-btn" data-url="audit/batch">批量驳回</button>
+                        </div>
+                    </div>
+                </form> -->
+                <table class="table my-no-audit" data-url="audit/entry1/query"></table>
+            </section>
+        </div>
+        <div class="i-checking" style="width: 50%; height:350px; overflow:auto;    margin-top:0px;">
+            <section class="baseTable">
+                <div class="tab-top">
+                    <span class="table-title">我申请中的单据</span>
+                    <div class="pager-box">
+                        <a href="javascript:" class="more" data-url="html/audit/proposer.html">更多 &gt;&gt;</a>
+                    </div>
+                </div>
+                <table class="table my-auditing" data-url="audit/entry2/query"></table>
+            </section>
+        </div>
+    </div>
+
+    <div class="audit-pop-wraper" style="display:none;">
+
+    </div>
+	
+	<div data-permissionUrl="/month/query">
+		<div class="box-header">
+			<form method="post" action="###" class="form-inline" id="searchMonth">
+				<div class="form-group-sm">
+					<div class="search-item" >
+					     <label class="control-label">统计期限：</label>
+				    	 <select class="form-control" id="bizType" name="bizType">
+				    	 	<option id="" value="1">月度</option>
+				    	 	<option id="" value="2">季度</option>
+				    	 	<option id="" value="3">年度</option>
+				    	 </select>
+			    	 </div>
+					 <div class="search-item">	
+		             	 <label class="control-label">统计时间：</label>
+		                 <input type="text" class="form-control period_datePicker" id="startStatisticsDate" value="" name="startStatisticsDate"> -
+		                 <input type="text" class="form-control period_datePicker" id="endStatisticsDate" value="" name="endStatisticsDate">
+		             </div>	    	 
+			    	 <button type="button" id="btnMonthSearch" class="btn btn-primary btn-sm ml20">查询</button>
+			    	 <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>
+			    	 
+			    	 
+			    </div>
+	   		</form>
+		</div>
+		<!-- <div class="base-container">  
+			<div id="container" class="container-one" data-permissionUrl="/month/query"></div>
+		    <div id="containerBudget" class="container-two" data-permissionUrl="/month/query"></div>
+		    <div id="containerProject"  class="container-two" data-permissionUrl="/monthGroupProject/query"></div>
+		</div> -->
+		
+		<div class="base-container" data-permissionUrl="/month/query">
+			<!-- /.col -->
+		    <div class="col-md-4 container-one"  id="container">
+		      <p class="text-center" style="font-size:19px;">
+		      		<strong>我的绩效</strong> 
+		      </p>
+		      <div class="progress-group">
+		        <span class="progress-text">净利润</span>
+		        <span class="progress-number"><b id="profitAmount">0</b>/<label id="targetProfitAmount">0</label>/<b id="profitAmountProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-aqua" id="profitAmountPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <!-- /.progress-group -->
+		      <div class="progress-group">
+		        <span class="progress-text">经营利润</span>
+		        <span class="progress-number"><b id="bizManagerAmount">0</b>/<label id="targetBizManager">0</label>/<b id="bizManagerProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-red" id="bizManagerPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <!-- /.progress-group -->
+		      <div class="progress-group">
+		        <span class="progress-text">毛利</span>
+		        <span class="progress-number"><b id="saleBlanceAmount" >0</b>/<label id="targetSaleBlance" >0</label>/<b id="saleBlanceProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-green" id="saleBlancePro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <!-- /.progress-group -->
+		      <div class="progress-group">
+		        <span class="progress-text">经营收入</span>
+		        <span class="progress-number"><b id="saleAmount" >0</b>/<label id="targetSaleAmount">0</label>/<b id="saleAmountProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-yellow" id="saleAmountPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <p class="text-center" style="font-size:10px;padding-top:57px;" >
+		      		<strong>完成值/目标值/完成比例</strong> 
+		      </p>
+		      <!-- /.progress-group -->
+		    </div>
+		    <!-- /.col -->
+		    
+		    
+		    <!-- /.col -->
+		    <div class="col-md-4 container-two" id="containerBudget">
+		      <p class="text-center" style="font-size:19px;">
+		        <strong>预算情况</strong>
+		      </p>
+		      <div class="progress-group">
+		        <span class="progress-text">管理费用</span>
+		        <span class="progress-number"><b id="manageAmount">0</b>/<label id="targetManageAmount">0</label>/<b id="saleAmountProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-aqua" id="manageAmountPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <!-- /.progress-group -->
+		      <div class="progress-group">
+		        <span class="progress-text">经营费用</span>
+		        <span class="progress-number"><b id="warehouseAmount">0</b>/<label id="targetWarehouseAmount">0</label>/<b id="warehouseAmountProShow">100%</b></span>
+		        <div class="progress sm">
+		          	<div class="progress-bar progress-bar-red" id="warehouseAmountPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <!-- /.progress-group -->
+		      <div class="progress-group">
+		        <span class="progress-text">资金成本</span>
+		        <span class="progress-number"><b id="fundCost">0</b>/<label id="targetFundVost">0</label>/<b id="fundVostProShow">100%</b></span>
+		
+		        <div class="progress sm">
+		          <div class="progress-bar progress-bar-green" id="fundVostPro" style="width: 0%"></div>
+		        </div>
+		      </div>
+		      <p class="text-center" style="font-size:10px;padding-top:105px;">
+		      		<strong>完成值/目标值/完成比例</strong> 
+		      </p>
+		    </div>
+		    <!-- /.col -->
+		    
+		    <div id="containerProject"  class="container-three" data-permissionUrl="/monthGroupProject/query"></div>
+		    
+		    <div id="containerPieOne"  class="container-four" data-permissionUrl="/entryPoolList/query"></div>
+	</div>
+	
+	
+    <script>
+    
+	    Date.prototype.Format = function (fmt) { //author: meizz 
+	        var o = {
+	            "M+": this.getMonth() + 1, //月份 
+	            "d+": this.getDate(), //日 
+	            "h+": this.getHours(), //小时 
+	            "m+": this.getMinutes(), //分 
+	            "s+": this.getSeconds(), //秒 
+	            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	            "S": this.getMilliseconds() //毫秒 
+	        };
+	        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	        for (var k in o)
+	        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	        return fmt;
+	    }
+	    var time = new Date().Format("yyyyMM");
+		document.getElementById("startStatisticsDate").value = time;
+		document.getElementById("endStatisticsDate").value = time;
+    	
+		$("#container").click(function(){
+			window.location.href="html/chart/monthProfitProject.html";
+		});
+		$("#containerBudget").click(function(){
+			 window.location.href="html/chart/monthProfitProject.html";
+		});
+		/* $("#containerProject").click(function(){
+			 window.location.href="html/chart/monthProfitAmount.html";
+		}); */
+		
+		//主要是下面这些点击要跳转。
+		$("#capital").click(function(e){
+			GLOBAL.go("html/entryInfo/capitalTurnoverSearch.html"); 
+		});
+		$("#poShow").click(function(){
+			GLOBAL.go("html/entryInfo/poWaitOrderSearch.html"); 
+		});
+		$("#stlAmountShow").click(function(){
+			GLOBAL.go("html/entryInfo/inSenateStlSearch.html"); 
+		});
+		$("#avgAgeShow").click(function(){
+			GLOBAL.go("html/entryInfo/avgStlAgeSearch.html"); 
+		});
+		$("#overStlShow").click(function(){
+			GLOBAL.go("html/entryInfo/overStlAgeSearch.html"); 
+		});
+		$("#overRecShow").click(function(){
+			GLOBAL.go("html/entryInfo/overReceiveSearch.html"); 
+		});
+		$("#riskShow").click(function(){
+			GLOBAL.go("html/entryInfo/riskStlSearch.html"); 
+		});
+		/* $("#containerPieOne").click(function(){
+			window.location.href="html/entryInfo/receiptPoolAmount.html";
+		}); */
+	 	
+	    var dataInfo = GLOBAL.getEditData($("#form1"), null);
+     	var canvas = document.getElementById("zjzzlchart");
+        //画一个起始角度为45度，结束角度为270度，绘图方向顺时针的填充扇形
+        var valueOfWit = 0;
+        if (dataInfo) {
+        	valueOfWit = dataInfo.turnoverRate;
+        	getHighSolidgauge(valueOfWit);
+        	$(".show-number").text(valueOfWit+"%");
+        	//getHighPies(valueOfWit);
+            //crawSector(canvas, 0.5 * Math.PI, 0.999 * Math.PI, 50, true, true);
+        }
+	    
+        window.operateEvents = {
+            'click .audit': function (e, value, row, index) {
+                if (row) {
+                    var id = row.id;
+                    var state = row.state;
+                    var poId = row.poId;
+                    var poType = row.poType;
+
+                    options.param.id = id;
+                    options.param.poId = poId;
+                    options.param.entryType = 1;	//入口-首页
+                    if (poType && state) {
+                        console.log("html/audit/audit_" + poType + "_" + state + ".html");
+                        GLOBAL.go("html/audit/audit_" + poType + "_" + state + ".html");
+                    }
+                }
+            },
+            'click .poNo': function (e, value, row, index) {
+                if (row) {
+                    var id = row.id;
+                    var state = row.state;
+                    var poId = row.poId;
+                    var poType = row.poType;
+
+                    options.param.id = id;
+                    options.param.poId = poId;
+                    options.param.entryType = 1;    //入口-首页
+                    if (poType && state) {
+                        console.log("html/audit/audit_" + poType + "_" + state + ".html");
+                        var url = "html/audit/audit_" + poType + "_" + state + ".html";
+                        $(".audit-pop-wraper").load(url, function (e) {
+
+                            options.initPage && options.initPage();
+
+                            $(".audit-pop-wraper .box-footer").hide();
+
+                            var loadingIdx = layer.load(3, {
+                                shade: [0.1, '#fff'] //0.1透明度的白色背景
+                            });
+
+                            setTimeout(function () {
+                                //关闭加载图标
+                                layer.close(loadingIdx);
+
+                                var index = layer.open({
+                                    type: 1,
+                                    skin: 'layui-layer-rim', //加上边框
+                                    area: ["200px", $(window).height() - 30], //宽高
+                                    content: $(".audit-pop-wraper")
+                                });
+
+                                layer.style(index, {
+                                    width: $(window).width() * 0.8,
+                                    height: $(window).height() - 30,
+                                    top: "10px",
+                                    left: $(window).width() * 0.1,
+                                    overflow: "auto"
+                                });
+                            }, 1200);
+                        })
+                    }
+                }
+            }
+        };
+
+        function formatter(value, row, index) {
+            var optStr = "";
+            value = value == null ? "" : value;
+            if (row.warn) {
+                return '<span style="color:red">' + value + '</span>'
+            } else {
+                return value;
+            }
+        }
+
+        /*数据表格*/
+        var tabCols = [
+            {
+                field : 'checkItem',
+                checkbox : true,
+                width : '1%'
+            }, {
+                title: '序号',
+                field: 'columnsNumber',
+                width: 10
+            } , {
+                title: '单据编号',
+                field: 'poNo',
+                width: 92,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '单据类型',
+                field: 'poTypeName',
+                width: 85,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '项目',
+                field: 'projectName',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '币种',
+                field: 'currencyName',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }/*, {
+                title: '客户',
+                field: 'customerName',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '供应商',
+                field: 'supplierName',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            } */, {
+                title: '金额',
+                field: 'amount',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    value = value == null ? "" : value.toThounds();
+                    if (row.warn) {
+                        return '<span style="color:red">' + value + '</span>'
+                    } else {
+                        return value;
+                    }
+
+                }
+            }, {
+                title: '申请时间',
+                field: 'proposerDayTime',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '申请人',
+                field: 'proposer',
+                width: 70,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '状态',
+                field: 'stateName',
+                width: 70,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return formatter(value, row, index)
+                }
+            }, {
+                title: '操作',
+                field: 'opertaList2',
+                width: 60,
+                align: 'center',
+                events: operateEvents,
+                formatter: function () {
+                    return '<span class="btn btn-xs btn-primary audit">审核</span>';
+                }
+            } 
+        ];
+
+        /*数据表格*/
+        var tabCols2 = [
+            {
+                title: '序号',
+                field: 'columnsNumber',
+                width: 10
+            }, {
+                title: '单据编号',
+                field: 'poNo',
+                width: 92,
+                align: 'center',
+                events: operateEvents,
+                formatter: function (value, row, index) {
+                    return '<a href="javascript:" class="poNo" >' + value + '</a>'
+                }
+            } , {
+                title: '单据类型',
+                field: 'poTypeName',
+                width: 85,
+                align: 'center'
+            }/* , {
+                title: '项目',
+                field: 'projectName',
+                width: 100,
+                align: 'center'
+            } */, {
+                title: '客户',
+                field: 'customerName',
+                width: 100,
+                align: 'center'
+            }, {
+                title: '币种',
+                field: 'currencyName',
+                width: 100,
+                align: 'center'
+            }, {
+                title: '金额',
+                field: 'amount',
+                width: 100,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value == null ? "" : value.toThounds();
+                }
+            }/* , {
+                title: '供应商',
+                field: 'supplierName',
+                width: 100,
+                align: 'center'
+            } */, {
+                title: '审核人',
+                field: 'auditor',
+                width: 70,
+                align: 'center'
+            }, {
+                title: '状态',
+                field: 'stateName',
+                width: 70,
+                align: 'center'
+            }
+        ];
+
+        options.initPage = function () {
+            // GLOBAL.ajax("", null, function(e){
+            //     var data = e.items;
+            //     $(".preview-data").each(function(){
+            //         var id = $(this).attr("id");
+            //         $(this).text(data[id]);
+            //     })
+            // });
+            $('.period_datePicker').datepicker({
+		        format: "yyyymm",
+		        minViewMode: 1,
+		        maxViewMode: 2,
+		        language: 'zh-CN',
+		        clearBtn: true
+		    });
+
+
+            GLOBAL.initTable($('.my-no-audit'), tabCols, null);
+            GLOBAL.initTable($('.my-auditing'), tabCols2, null);
+        }
+
+        function crawSector(canvas, start_angle, angle, radius, fill, anticlockwise) {
+            var centerPoint = {x: 50, y: 50};
+            start_angle = start_angle || 0;
+            if (canvas.getContext) {
+                //开始绘制路径
+                ctx = canvas.getContext("2d");
+                ctx2 = canvas.getContext("2d");
+                //ctx.beginPath();
+
+                //画出弧线
+                ctx.arc(centerPoint.x, centerPoint.y, radius, start_angle, angle, anticlockwise);
+                //画出结束半径
+                ctx.lineTo(centerPoint.x, centerPoint.y);
+
+                ctx2.fillStyle = "green";
+                ctx2.font = "16px serif";
+                ctx2.fillText("23.45", 10, 50);
+
+
+                //如果需要填充就填充，不需要就算了
+                if (fill) {
+                    ctx.fillStyle = "orange";
+                    ctx.fill();
+
+
+                } else {
+                    ctx.closePath();
+                    ctx.stroke();
+                    ctx2.stroke();
+                }
+            }
+        }
+
+        $("#btnSearch").click(function() {
+            var data = $("#searchForm").serializeObject();
+            GLOBAL.tableRefresh($('.my-no-audit'), data);
+        })
+
+        $(".mult-pass-btn").click(function() {
+            var ids = GLOBAL.selectIds($(".my-no-audit"));
+            var $this = $(this);
+            if (ids) {
+                var layerIdx = layer.confirm("确定要批量通过审核吗？", function(){
+                    var url = $this.data("url");
+                    GLOBAL.ajax(url, {ids: ids, checkAudit: 0});
+                    layer.close(layerIdx);
+                    GLOBAL.tableRefresh($('.my-no-audit'));
+                })
+            }
+        })
+            
+        
+
+        $(".mult-turndown-btn").click(function() {
+            var ids = GLOBAL.selectIds($(".my-no-audit"));
+            var $this = $(this);
+            if (ids) {
+                var layerIdx = layer.confirm("确定要批量驳回吗？", function(){
+                    var url = $this.data("url");
+                    GLOBAL.ajax(url, {ids: ids, checkAudit: 1});
+                    layer.close(layerIdx);
+                    GLOBAL.tableRefresh($('.my-no-audit'));
+                })
+            }
+        })
+
+
+        $(".more").click(function () {
+            var url = $(this).data("url");
+            GLOBAL.go(url);
+        });
+        
+        getHighcharts(null,null,null); 
+        getPriejctHighcharts(1,null,null);
+        getPieHighcharts();
+        
+        $("#btnMonthSearch").click(function() {
+        	var data = $("#searchMonth").serializeObject();
+        	if(data){
+        		var bizType = data.bizType;
+        		var startDate = data.startStatisticsDate;
+        		var endDate = data.endStatisticsDate;
+        		if(!bizType && !startDate && !endDate){
+        			getHighcharts(1,null,null);
+        		}else{
+        			getHighcharts(bizType,startDate,endDate);
+        		}
+        		getPriejctHighcharts(bizType,startDate,endDate);
+        	}
+        })
+        
+        
+        
+        $("#bizType").change(
+   			function() {
+   				if($(this).val()==2 || $(this).val()==3){
+   					$("#startStatisticsDate").val("");
+   					$("#endStatisticsDate").val("");
+   				}
+   			}
+   		);
+        
+        function getHighcharts(type,startDate,endDate){
+        	GLOBAL.ajax("month/query",{bizType: type, startStatisticsDate: startDate, endStatisticsDate: endDate},function(data){
+        		var profitAmount = 0;
+        		var bizManagerAmount = 0;
+        		var saleBlanceAmount = 0;
+            	var saleAmount = 0; 
+            	var manageAmount = 0;
+            	var warehouseAmount = 0;
+            	var fundCost = 0;
+            	
+            	var targetProfitAmount = 0;
+        		var targetBizManager = 0;
+        		var targetSaleBlance = 0;
+            	var targetSaleAmount = 0; 
+            	var targetManageAmount = 0;
+            	var targetWarehouseAmount = 0;
+            	var targetFundVost = 0;
+            	
+            	var profitAmountPro = 0;
+            	var bizManagerPro = 0;
+            	var saleBlancePro = 0;
+            	var saleAmountPro = 0;
+            	var manageAmountPro = 0;
+            	var warehouseAmountPro = 0;
+            	var fundVostPro = 0;
+            	
+            	if(data.items){
+            		profitAmount = data.items.profitAmount;
+            		bizManagerAmount = data.items.bizManagerAmount;
+            		saleBlanceAmount = data.items.saleBlanceAmount;
+            		saleAmount = data.items.saleAmount;
+            		manageAmount = data.items.manageAmount;
+            		warehouseAmount = data.items.warehouseAmount;
+            		fundCost = data.items.fundCost;
+            		
+            		targetProfitAmount = data.items.targetProfitAmount;
+            		targetBizManager = data.items.targetBizManager;
+            		targetSaleBlance = data.items.targetSaleBlance;
+            		targetSaleAmount = data.items.targetSaleAmount;
+            		targetManageAmount = data.items.targetManageAmount;
+            		targetWarehouseAmount = data.items.targetWarehouseAmount;
+            		targetFundVost = data.items.targetFundVost;
+            		
+            		profitAmountPro = data.items.profitAmountPro;
+            		bizManagerPro = data.items.bizManagerPro;
+            		saleBlancePro = data.items.saleBlancePro;
+            		saleAmountPro = data.items.saleAmountPro;
+            		manageAmountPro = data.items.manageAmountPro;
+            		warehouseAmountPro = data.items.warehouseAmountPro;
+            		fundVostPro = data.items.fundVostPro;
+            	}
+            	$("#profitAmount").text(profitAmount.toThounds());
+            	$("#targetProfitAmount").text(targetProfitAmount.toThounds());
+            	$("#profitAmountPro").css("width",profitAmountPro+"%");
+            	$("#profitAmountProShow").text(profitAmountPro+"%");
+            	
+            	$("#bizManagerAmount").text(bizManagerAmount.toThounds());
+            	$("#targetBizManager").text(targetBizManager.toThounds());
+            	$("#bizManagerPro").css("width",bizManagerPro+"%");
+            	$("#bizManagerProShow").text(bizManagerPro+"%");
+            	
+            	$("#saleBlanceAmount").text(saleBlanceAmount.toThounds());
+            	$("#targetSaleBlance").text(targetSaleBlance.toThounds());
+            	$("#saleBlancePro").css("width",saleBlancePro+"%");
+            	$("#saleBlanceProShow").text(saleBlancePro+"%");
+            	
+            	$("#saleAmount").text(saleAmount.toThounds());
+            	$("#targetSaleAmount").text(targetSaleAmount.toThounds());
+            	$("#saleAmountPro").css("width",saleAmountPro+"%");
+            	$("#saleAmountProShow").text(saleAmountPro+"%");
+            	
+            	
+            	
+            	$("#manageAmount").text(manageAmount.toThounds());
+            	$("#targetManageAmount").text(targetManageAmount.toThounds());
+            	$("#manageAmountPro").css("width",manageAmountPro+"%");
+            	$("#manageAmountProShow").text(manageAmountPro+"%");
+            	
+            	$("#warehouseAmount").text(warehouseAmount.toThounds());
+            	$("#targetWarehouseAmount").text(targetWarehouseAmount.toThounds());
+            	$("#warehouseAmountPro").css("width",warehouseAmountPro+"%");
+            	$("#warehouseAmountProShow").text(warehouseAmountPro+"%");
+            	
+            	$("#fundCost").text(fundCost.toThounds());
+            	$("#targetFundVost").text(targetFundVost.toThounds());
+            	$("#fundVostPro").css("width",fundVostPro+"%");
+            	$("#fundVostProShow").text(fundVostPro+"%");
+            	/* Highcharts.chart('container', {
+            	    credits: {  
+                        enabled:false  
+              		},  
+                    chart: {
+                        type: 'bar'
+                    },
+                    title: {
+                        text: '我的绩效'
+                    },
+                    xAxis: {
+                        categories: ['净利润', '经营利润', '毛利', '经营收入']
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        labels: {
+                            formatter: function() {
+                                return this.value / 10000 +'万';
+                            }
+                        }
+                    },
+                    legend: {
+                        reversed: true
+                    },
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal'
+                        }
+                    },
+                    series: [{
+                        name: '任务值',
+                        data: [targetProfitAmount,targetBizManager,targetSaleBlance,targetSaleAmount]
+                    },{
+                        name: '完成值',
+                        data: [profitAmount,bizManagerAmount,saleBlanceAmount,saleAmount],color:"#058DC7"
+                    }]
+                });
+            	Highcharts.chart('containerBudget', {
+            	    credits: {  
+                        enabled:false  
+              		},  
+                    chart: {
+                        type: 'bar'
+                    },
+                    title: {
+                        text: '预算情况'
+                    },
+                    xAxis: {
+                        categories: ['管理费用', '经营费用', '资金成本']
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                        labels: {
+                            formatter: function() {
+                                return this.value / 10000 +'万';
+                            }
+                        }
+                    },
+                    legend: {
+                        reversed: true
+                    },
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal'
+                        }
+                    },
+                    series: [{
+                        name: '任务值',
+                        data: [targetManageAmount,targetWarehouseAmount,targetFundVost]
+                    } ,{
+                        name: '完成值',
+                        data: [manageAmount,warehouseAmount,fundCost],color:"#058DC7"
+                    }]
+                }); */
+            });
+        }
+        function getPriejctHighcharts(type,startDate,endDate){
+        	GLOBAL.ajax("monthType/query",{bizType: type,startStatisticsDate: startDate, endStatisticsDate: endDate},function(data){
+               	var titles = [];
+               	var profitData = [];//利润
+               	var bizData = [];//业务利润
+               	var saleData = [];//销售利润
+               	var saleBlanceRate=[];//销售毛利润
+               	var fundCost=[];//资金成本
+               	if(data){
+               		for(var i = 0; i < data.length;i++){  
+               			titles[i] = data[i].bizTypeName;  
+               			profitData[i] = data[i].profitAmount;
+               			bizData[i] = data[i].bizManagerAmount;
+               			saleData[i] = data[i].saleBlanceAmount;
+               			saleBlanceRate[i] = data[i].saleBlanceRate;
+               			fundCost[i] = data[i].fundCost;
+                    }  
+               	}
+               	Highcharts.chart('containerProject', {
+           		    title: {
+           		        text: '项目类别利润额',
+		                style:{
+		                	fontSize:'19px',
+		                	fontWeight:'bold'
+		                }
+           		    },
+           		    xAxis: {
+           		        categories: titles 
+           		    },
+        	   		 yAxis: [{ // Secondary yAxis
+        	   	        title: {
+        	   	            text: '',
+        	   	            style: {
+        	   	                color: Highcharts.getOptions().colors[1]
+        	   	            }
+        	   	        },
+        	   	        labels: {
+        	   	        	 formatter: function() {
+        	                     return this.value +'%';
+        	                 },
+        	   	            style: {
+        	   	                color: Highcharts.getOptions().colors[1]
+        	   	            }
+        	   	        },
+        	   	        opposite: true
+        	   	    },{ // Primary yAxis
+        	   	        labels: {
+        	   	        	formatter: function() {
+        	                     return this.value / 10000 +'万';
+        	                 },
+        	   	            style: {
+        	   	                color: Highcharts.getOptions().colors[0]
+        	   	            }
+        	   	        },
+        	   	        title: {
+        	   	            text: '',
+        	   	            style: {
+        	   	                color: Highcharts.getOptions().colors[0]
+        	   	            }
+        	   	        }
+        	   	    }],
+        	   		/* yAxis: [{
+        	             title: {
+        	                 text: ''
+        	             },
+        	             labels: {
+        	                 formatter: function() {
+        	                     return this.value / 10000 +'万';
+        	                 }
+        	             }
+        	         },{
+        	             title: {
+        	                 text: ''
+        	             },
+        	             labels: {
+        	                 formatter:'{value}',
+        	                 style: {
+        	                     color: Highcharts.getOptions().colors[2]
+        	                 }
+        	             }
+        	         }], */
+                    legend: {
+                        reversed: true
+                    },
+                    plotOptions: {
+            	        series: {
+            	        	cursor: 'pointer',
+                            events: {
+                                click: function (e) {
+                                    /* alert('X轴的值：' + e.point.category + ' 指标的名称:' + this.name); */
+                                    window.location.href="html/chart/monthProfitAmount.html?bizTypeName="+e.point.category;
+                                }
+                            }
+            	        }
+            	    },
+           		    credits: {
+           		        enabled: false
+           		    },
+           		    series: [{
+           		        name: '销售利润',
+           		    	type: 'column',
+           		    	yAxis: 1,
+           		        data: saleData
+           		    }, {
+           		        name: '资金成本',
+           		     	type: 'column',
+        		    	yAxis: 1,
+           		        data: fundCost
+           		    }, {
+           		        type: 'line',
+           		        name: '毛利润',
+           		        data: saleBlanceRate,
+           		        tooltip: {
+           		            valueSuffix: ' %'
+           		        },
+           		        marker: {
+           		            lineWidth: 2,
+           		            lineColor: Highcharts.getOptions().colors[3],
+           		            fillColor: 'white'
+           		        }
+           		    }]
+           		});
+             });
+        	
+           }
+        
+        
+        function getHighSolidgauge(pieValue){
+        	Highcharts.chart('zjzzlchart', {
+
+        	    chart: {
+        	        type: 'solidgauge'
+        	    },
+
+        	    title: {
+        	        text: ''
+        	    },
+        	    credits: {
+      	             enabled: false
+      	        },
+        	    tooltip: {
+        	    	enabled:false,
+        	    	borderWidth: 0,
+        	        backgroundColor: 'none',
+        	        shadow: false,
+        	        style: {
+        	            fontSize: '3px'
+        	        },
+        	        pointFormat: '{series.name}<br><span style="font-size:3em; color:blue; font-weight: bold">{point.y}%</span>',
+        	        positioner: function (labelWidth) {
+        	            return {
+        	            	x: 80 - labelWidth / 2,
+        	                y: 35
+        	            };
+        	        }
+        	    },
+
+        	    pane: {
+        	    	center: ['50%', '50%'],
+        	    	size: '90%',
+        	        startAngle: 0,
+        	        endAngle: 360,
+        	        background: [{ // Track for Move
+        	            outerRadius: '112%',
+        	            innerRadius: '88%',
+        	            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
+        	                .setOpacity(0.3)
+        	                .get(),
+        	            borderWidth: 0
+        	        }]
+        	    },
+
+        	    yAxis: {
+        	        min: 0,
+        	        max: 300,
+        	        lineWidth: 0,
+        	        tickPositions: []
+        	    },
+
+        	    plotOptions: {
+        	        solidgauge: {
+        	            dataLabels: {
+        	                enabled: false
+        	            },
+        	            linecap: 'round',
+        	            stickyTracking: false,
+        	            rounded: true
+        	        }
+        	    },
+
+        	    series: [{
+        	        name: '资金',
+        	        data: [{
+        	            color: 'red',
+        	            radius: '112%',
+        	            innerRadius: '88%',
+        	            y: pieValue
+        	        }]
+        	    }]
+        	},
+
+        	/**
+        	 * In the chart load callback, add icons on top of the circular shapes
+        	 */
+        	function callback() {
+        	    // Move icon
+        	    this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
+        	        .attr({
+        	            'stroke': '#303030',
+        	            'stroke-linecap': 'round',
+        	            'stroke-linejoin': 'round',
+        	            'stroke-width': 2,
+        	            'zIndex': 10
+        	        })
+        	        .translate(190, 26);
+        	});
+        }
+        function getPieHighcharts(){
+        	GLOBAL.ajax("entryPoolList/query",null,function(data){
+        		if(data.items){
+        			var poolList=[];
+            		var busList = data.items.busList;
+            		if(busList){
+            			for(var i = 0; i < busList.length;i++){  
+            				poolList[i]={name:busList[i].businessUnitName,y:busList[i].countRecriptAmount};  
+                        }
+            		}
+            		var showList = [poolList];
+            		//console.info(poolList);
+    		        // Build the chart
+    		        Highcharts.chart('containerPieOne', {
+    		            chart: {
+    		                plotBackgroundColor: null,
+    		                plotBorderWidth: null,
+    		                plotShadow: false,
+    		                type: 'pie'
+    		            },
+    		            colors:[
+    		                    '#FF2D2D',//第一个颜色
+    		                     '#79FF79',//第二个颜色
+    		                 ],
+    		            colors: ['#7cb5ec','#90ed7d', '#f7a35c', '#8085e9', 
+    		                     '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1',], 
+    		            title: {
+    		                text: '经营主体资金',
+    		                style:{
+    		                	fontSize:'19px',
+    		                	fontWeight:'bold'
+    		                }
+    		            },
+    		            credits: {
+    		 	             enabled: false
+    		 	        },
+    		            tooltip: {
+    		                pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+    		            },
+    		            plotOptions: {
+    		                pie: {
+    		                    allowPointSelect: true,
+    		                    cursor: 'pointer',
+    		                    dataLabels: {
+    		                        enabled: true,
+    		                        format : '<b>{point.name}</b>: {point.percentage:.1f} %' 
+    		                    },
+    		                    showInLegend: true,
+                                events: {
+                                    click: function (e) {
+                                        /* alert('X轴的值：' + e.point.category + ' 指标的名称:' + this.name); */
+                                        window.location.href="html/entryInfo/receiptPoolAmount.html?businName="+e.point.name;
+                                    }
+                                }
+    		                }
+    		            },
+    		            series: [{
+    		                name: 'Proportion',
+    		                colorByPoint: true,
+    		                data: poolList
+    		            }]
+    		        });
+        		}
+        	});
+        }
+    </script>
+</div>

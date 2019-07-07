@@ -1,0 +1,94 @@
+<div class="wrapper">
+  
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+    		<li class="active">用户</li>
+        </ol>
+   </section>
+  <section class="product-wrap">
+        <div class="box no-margin"> 
+          <form class="form-horizontal form-inline" id="form1" data-url="user/detail">
+            <div class="box-body">
+               <ul class="nav nav-tabs">
+                	<li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/userinfo/userInfoScan.html">用户信息浏览</a></li>
+                 	<li role="presentation"><a class="tab-item" id="role" data-url="html/baseinfo/userinfo/roleManager.html">角色信息</a></li>
+                  	<li role="presentation" ><a class="tab-item" id="project" data-url="html/baseinfo/userinfo/projectManager.html">项目信息</a></li> 
+             	    <li role="presentation" ><a class="tab-item" id="project" data-url="html/baseinfo/userinfo/wechatScan.html">微信信息</a></li>  
+             		<li role="presentation" ><a class="tab-item" id="project" data-url="html/baseinfo/userinfo/subjectScan.html">仓库信息</a></li> 
+             	    <li role="presentation"><a class="tab-item" data-url="html/baseinfo/userinfo/supplierScan.html">供应商信息</a></li>             	
+             	</ul>
+                <input class="form-control js-initform" type="hidden" id="id" name="id">
+                  <table class="table table-bordered table-hover no-margin">
+                  	<tr>
+                      <td width="180" class="text-right"><b>工号：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="employeeNumber" name="employeeNumber"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>用户名：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="userName" name="userName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>中文名：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="chineseName" name="chineseName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>英文名：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="englishName" name="englishName"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>手机：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="mobilePhone" name="mobilePhone"></label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right"><b>邮箱：</b></td>
+                      <td class="text-left">
+                          <label class="js-initform" id="email"></label>
+                      </td>
+                    </tr> 
+                    <tr>
+                      <td class="text-right"><b>所属部门： </b></td> 
+                      <td class="text-left">
+                           <label class="js-initform" id="departmentName"></label> 
+                       </td>
+                    </tr> 
+                  </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center">
+               <button type="button" id="back" data-url="html/baseinfo/userinfo/userManager.html" class="btn btn-default btn-sm">返回</button>
+            </div>
+            <!-- /.box-footer -->
+
+          </form>
+        </div>
+  </section>
+</div>
+ 
+<script>
+options.initPage = function() {
+	GLOBAL.getEditData($("#form1"), options.param.id);
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+
+	$("#back").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	});
+}   
+</script>

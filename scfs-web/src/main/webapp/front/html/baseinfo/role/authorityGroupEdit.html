@@ -1,0 +1,32 @@
+<div class="wrapper">
+   <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>基础信息</li>
+    		<li class="active">角色</li>
+        </ol>
+   </section>
+   <section class="product-wrap">
+        <div class="box no-margin">  
+            <div class="box-body">
+                <ul class="nav nav-tabs">
+                	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/role/roleEdit.html">基本信息</a></li>
+                 	<li role="presentation" class="active"><a class="tab-item" data-url="html/baseinfo/role/authorityGroupEdit.html">权限组信息</a></li> 
+                 	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/role/authorityInfo.html">权限信息</a></li>
+                  	<li role="presentation" ><a class="tab-item" data-url="html/baseinfo/role/userInfo.html">用户信息</a></li>
+                </ul> 
+                 <table id="js_dataTable" data-url="/role/permissionGroup/divid/query">
+                </table>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer text-center"> 
+              <button type="button" id="batchDelete" class="btn btn-warning btn-sm ml10" data-url="permissionGroup/invalid" data-permissionUrl="/permissionGroup/invalid">批量作废</button>
+              <button type="button" id="newbuild" data-url="html/baseinfo/role/distributeAuthorityGroup.html" data-permissionUrl="/role/permissionGroup/divid" class="btn btn-primary btn-sm">分配权限组</button>
+              <button type="button" id="back" data-url="html/baseinfo/role/rolesearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+        </div>
+  </section>
+</div>
+<script src="../../../js/baseinfo/role/authorityGroupEdit.js"></script> 

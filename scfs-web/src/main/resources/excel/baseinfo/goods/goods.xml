@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet idx="0">
+		<section startRow="0" endRow="0" />
+		<loop startRow="2" endRow="2" items="goodsList" var="goods"
+			varType="com.scfs.domain.base.dto.resp.BaseGoodsResDto">
+			<section startRow="2" endRow="2">
+				<mapping row="2" col="0">goods.number</mapping>
+				<mapping row="2" col="1">goods.name</mapping>
+				<mapping row="2" col="2">goods.brand</mapping>
+				<mapping row="2" col="3">goods.type</mapping>
+				<mapping row="2" col="4">goods.barCode</mapping>
+				<mapping row="2" col="5">goods.specification</mapping>
+				<mapping row="2" col="6">goods.taxClassification</mapping>
+				<mapping row="2" col="7">goods.taxRate</mapping>
+				<mapping row="2" col="8">goods.unit</mapping>
+				<mapping row="2" col="9">goods.grow</mapping>
+				<mapping row="2" col="10">goods.broad</mapping>
+				<mapping row="2" col="11">goods.volume</mapping>
+				<mapping row="2" col="12">goods.grossWeight</mapping>
+				<mapping row="2" col="13">goods.netWeight</mapping>
+				<mapping row="2" col="14">goods.purchasePrice</mapping>
+				<mapping row="2" col="15">goods.salePrice</mapping>
+				<mapping row="2" col="16">goods.purCurrencyTypeName</mapping>
+				<mapping row="2" col="17">goods.saleCurrencyTypeName</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+					<cellcheck offset="0"></cellcheck>
+				</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

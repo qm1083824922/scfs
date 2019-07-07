@@ -1,0 +1,173 @@
+<div class="wrapper">
+	<section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>接口</li>
+            <li class="active">pms请款单</li>
+        </ol>
+    </section>
+    <section class="web-setting-wrap">
+        <div class="box">
+            <div class="box-header">
+                <form method="post" action="###" class="form-inline" id="searchForm">
+                    <div class="form-group-sm">
+                    	<div class="search-item">
+                            <label class="control-label ml10">付款编号：</label> 
+								<input class="form-control" id="payNo"  name="payNo"> 
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款法人代码：</label> 
+								<input class="form-control" id="corporation_code"  name="corporation_code">
+                        </div>
+                        <div class="search-item">
+                            <label class="control-label ml10">付款法人名称：</label> 
+								<input class="form-control" id="corporation_name"  name="corporation_name">
+                        </div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">供应商编号：</label> 
+								<input class="form-control"  id="vendorNo"  name="vendorNo">
+                        </div>
+                        <div class="search-item">	
+                            <label class="control-label ml10">请款日期：</label> 
+								<input type="text" class="form-control js_datePicker" id="js_form_datetimeStart" value="" name="startPayDate"> -
+                            <input type="text" class="form-control js_datePicker" id="js_form_datetimeEnd" value="" name="endPayDate">
+                        </div>
+                        <div class="search-item">    
+                            <label class="control-label ml10">状态：</label>                       
+								<select class="form-control js-select" data-url="PMS_PAY_ORDER_STATE" id="state"  name="state"> </select>
+                        </div>
+                        <div class="search-item">
+								<button type="button" id="btnSearch" class="btn btn-primary btn-sm ml20">查询</button>
+                            <button type="reset" class="btn btn-success btn-sm ml10 mr20">清空</button>  
+                        </div> 
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="js_dataTable" data-url="pmsPayOrderTitle/query">
+                </table>
+            </div>
+            <!-- .box-body -->
+        </div>
+    </section>
+</div>
+
+<script>
+window.operateEvents = {
+    'click .deal': function (e, value, row, index) {
+  		var id = $(this).closest("tr").data('uniqueid');
+  		if (id) {
+  			GLOBAL.ajax("pmsPayOrder/deal", {
+				id : id
+			}, function(e) {
+				if (e.success) {
+					layer.msg("处理成功！");
+				} else {
+					layer.msg(e.msg);
+				}
+				$("#btnSearch").click();
+			})
+		}
+    },
+    'click .scan': function (e, value, row, index) {
+    	var id = $(this).closest("tr").data('uniqueid');
+		if (id) {
+			options.param.id = id;
+			GLOBAL.go("html/interface/pmsPayOrder/pmsPayOrderDtlScan.html");
+		}
+    }
+};
+/*数据表格*/
+var tabCols = [
+	 {  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: '1%'
+     }, {
+	     title: '付款编号',
+	     field: 'payNo',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '付款法人代码',
+	     field: 'corporation_code',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '付款法人名称',
+	     field: 'corporation_name',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '供应商编号',
+	     field: 'vendorNo',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '请款日期',
+	     field: 'payDate',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '预计内部打款日期',
+	     field: 'innerPayDate',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '抵扣金额',
+	     field: 'deduction_money',
+	     align: 'center',
+	     width: '6%'
+	 }, {
+	     title: '付款总金额',
+	     field: 'payMoney',
+	     align: 'center',
+	     width: '6%'
+	 }, {
+	     title: '付款币种',
+	     field: 'payCurrency',
+	     align: 'center',
+	     width: '3%'
+	 }, {
+	     title: '状态',
+	     field: 'stateName',
+	     align: 'center',
+	     width: '4%'
+	 }, {
+	     title: '描述',
+	     field: 'message',
+	     align: 'center',
+	     width: '15%'
+	 }, {
+	     title: '创建时间',
+	     field: 'createAt',
+	     align: 'center',
+	     width: '8%'
+	 }, {
+	     title: '操作',
+         field: 'opertaList',
+         align: 'center',
+         events: operateEvents ,
+         width: '15%'
+	 }
+];
+
+options.initPage = function(){
+	GLOBAL.initTable($('#js_dataTable'), tabCols);
+	//还原查询条件及过滤后的数据
+	GLOBAL.restoreQuery($('#js_dataTable')); 
+
+	$(".js_datePicker").datetimepicker({
+	    format:'Y-m-d',
+	});
+}
+$("#btnSearch").click(function() {
+    var data = $("#searchForm").serializeObject();
+    if(data){
+		var url = $('#js_dataTable').data("url");
+		GLOBAL.local(url, data);
+	}
+    GLOBAL.tableRefresh($('#js_dataTable'), data);
+})
+</script>

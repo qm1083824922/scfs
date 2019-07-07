@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scfs.dao.logistics.VerificationAdvanceDao">
+	<resultMap id="BaseResultMap"
+		type="com.scfs.domain.logistics.entity.VerificationAdvance">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="bill_delivery_id" jdbcType="INTEGER" property="billDeliveryId" />
+		<result column="advance_id" jdbcType="INTEGER" property="advanceId" />
+		<result column="receipt_id" jdbcType="INTEGER" property="receiptId" />
+		<result column="amount" jdbcType="DECIMAL" property="amount" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+		<result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+		<result column="update_at" jdbcType="TIMESTAMP" property="updateAt" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="advance_receipt_rel_id" jdbcType="TINYINT"
+			property="advanceReceiptRelId" />
+		<result column="advance_receipt_id" jdbcType="TINYINT"
+			property="advanceReceiptId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, bill_delivery_id, advance_id, receipt_id, amount,
+		creator,
+		creator_id, create_at,
+		update_at, remark, is_delete, status ,
+		advance_receipt_rel_id ,
+		advance_receipt_id
+	</sql>
+	<select id="queryEntityById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_verification_advance
+		where id = #{id,jdbcType=INTEGER} for
+		update
+	</select>
+	<select id="queryResultByBillDeliveryId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_verification_advance
+		where is_delete = 0
+		and bill_delivery_id =
+		#{billDeliveryId,jdbcType=INTEGER}
+	</select>
+	<select id="querySumByBillDeliveryId" parameterType="java.lang.Integer"
+		resultType="java.math.BigDecimal">
+		select IFNULL(sum(amount),0) amount
+		from
+		tb_verification_advance
+		where is_delete = 0
+		and bill_delivery_id =
+		#{billDeliveryId,jdbcType=INTEGER}
+	</select>
+	<select id="queryResultsByCon"
+		parameterType="com.scfs.domain.logistics.dto.req.VeriAdvanceSearchReqDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_verification_advance
+		where is_delete = 0
+		<if test="receiptId != null">
+			and receipt_id = #{receiptId}
+		</if>
+		<if test="billDeliveryId != null">
+			and bill_delivery_id = #{billDeliveryId}
+		</if>
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+		tb_verification_advance
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.scfs.domain.logistics.entity.VerificationAdvance"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		tb_verification_advance (bill_delivery_id, advance_id,
+		receipt_id,
+		amount, creator,
+		creator_id, create_at,
+		remark, is_delete,
+		status,advance_receipt_rel_id,advance_receipt_id
+		)
+		values (
+		#{billDeliveryId,jdbcType=INTEGER}, #{advanceId,jdbcType=INTEGER},
+		#{receiptId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL},
+		#{creator,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=INTEGER},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR},
+		#{isDelete,jdbcType=TINYINT},
+		#{status,jdbcType=TINYINT},#{advanceReceiptRelId,jdbcType=INTEGER},
+		#{advanceReceiptId,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="updateById"
+		parameterType="com.scfs.domain.logistics.entity.VerificationAdvance">
+		update tb_verification_advance
+		<set>
+			<if test="billDeliveryId != null">
+				bill_delivery_id = #{billDeliveryId,jdbcType=INTEGER},
+			</if>
+			<if test="advanceId != null">
+				advance_id = #{advanceId,jdbcType=INTEGER},
+			</if>
+			<if test="receiptId != null">
+				receipt_id = #{receiptId,jdbcType=INTEGER},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=DECIMAL},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test=" advanceReceiptRelId != null">
+				advance_receipt_rel_id = #{advanceReceiptRelId}
+			</if>
+			<if test=" advanceReceiptId != null">
+				advance_receipt_id = #{advanceReceiptId}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="../../../js/plugins/jquery.upload/jquery.upload.css">
+<div class="wrapper">
+  <section class="content-header my-content-header">
+        <ol class="breadcrumb">
+            <li>当前位置</li>
+            <li>采购</li>
+            <li>铺货退货单</li>
+    		<li class="active">附件</li>
+        </ol>
+   </section>
+  <section class="product-wrap">
+        <div class="box no-margin">  
+            <div class="box-body">
+                 <ul class="nav nav-tabs">
+                	<li role="presentation" ><a class="tab-item" data-url="html/distriReturn/distriReturnBaseInfoScan.html">基础信息</a></li>
+                 	<li role="presentation"><a class="tab-item" id="orderDtlLink" data-url="html/distriReturn/distriReturnDtlScan.html">铺货退货单明细信息</a></li>                 	
+                 	<li role="presentation" class="active"><a class="tab-item" data-url="html/distriReturn/attachmentScan.html">附件</a></li> 
+                  </ul>	
+                 <input class="form-control js-initform" type="hidden" id="id" name="id">
+                 <table id="js_dataTable" data-url="/distriReturn/file/query"></table>
+                 <form class="form-horizontal form-inline" id="form1"  data-url="distriReturn/file/upload"  enctype="multipart/form-data">
+                  <div class="box-body">  
+
+                     <table class="table table-bordered table-hover no-margin">  
+                        <tr>
+                          <td width="180" class="text-right"><b>上传附件： </b></td> 
+                           <td class="text-left"> 
+                              <span type="button" id="upload">导入文件</span>
+                           </td>
+                        </tr>
+                      </table>
+                 </div>
+          </form>
+                
+            </div>
+            <!-- /.box-body -->
+ 
+            <div class="box-footer text-center">  
+               <button type="button" id="download"  data-permissionUrl="/distriReturn/fileList/download" class="btn btn-primary btn-sm">批量下载</button>             
+               <button type="button" id="back" data-url="html/distriReturn/distriReturnSearch.html" class="btn btn-default btn-sm js-back">返回</button>
+            </div>
+            <!-- /.box-footer --> 
+        </div>
+  </section>
+</div> 
+<script src="../../../js/plugins/jquery.upload/jquery.upload.js"></script>
+<script>
+window.operateEvents = {
+	'click .download': function(e, value, row, index){
+		var url = GLOBAL.host + "distriReturn/file/download?fileId="+row.id;
+		GLOBAL.preview({type: row.type, url: url});
+    }
+};
+function operateFormatter(value, row, index) {
+    return [
+            '<a class="download" href="javascript:void(0)">',
+            '<span class="btn btn-primary btn-sm">下载</span>',
+            '</a>  '
+        ].join('');
+}
+/*数据表格*/
+var tabCols = [
+      {
+		 field: 'checkItem',
+		 checkbox: true,
+       },{  
+	     title: '序号',
+	     field: 'columnsNumber',  
+	     width: 10
+     },{
+	     title: '文件名称',
+	     field: 'name',
+	     width: 92,
+	     align: 'center'
+	 },  {
+	     title: '文件类型',
+	     field: 'type',
+	     width: 80,
+	     align: 'center'
+	 },  {
+	     title: '上传时间',
+	     field: 'createAt',
+	     width: 80,
+	     align: 'center'
+	 }, {
+	     title: '操作',
+	     field: 'operta',
+	     width: 100,
+	     align: 'center',
+	     events: operateEvents,
+         formatter: operateFormatter
+	 }
+];
+
+options.initPage = function() {
+	var dataTable = GLOBAL.initTable($('#js_dataTable'), tabCols, {busId: options.param.id});
+}
+ 
+$("#back").click(function() {
+    var url = $(this).data("url");
+    GLOBAL.go(url, options.param);
+}) 
+
+$("#upload").upload({
+  url: GLOBAL.host + "distriReturn/file/upload",
+  param: {
+    busId: options.param.id
+  },
+  success: function(){
+    GLOBAL.tableRefresh($('#js_dataTable'),{busId: options.param.id});
+    }
+}); 
+
+$("#download").click(function(){
+	var ids = GLOBAL.selectIds($('#js_dataTable'));
+	if(ids){
+		var url = GLOBAL.host + "distriReturn/fileList/download?ids="+ids;
+		window.open(url);
+	}	 
+}); 
+</script>
+

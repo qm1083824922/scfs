@@ -1,0 +1,132 @@
+<div class="wrapper">
+	<ol class="breadcrumb">
+		<li>当前位置</li>
+   		<li>出口</li>
+		<li class="active">退税明细</li>
+	</ol>
+	<!--引入面包屑-->
+	<section class="product-wrap">
+		<div class="box no-margin">
+			<form class="form-horizontal">
+				<div class="box-body">
+					<ul class="nav nav-tabs">
+						<li role="presentation" ><a class="tab-item" data-url="html/export/refundApply/refundApplyEdit.html">基础信息</a></li>
+          				<li role="presentation" class="active"><a class="tab-item" id="orderDtlLink" data-url="html/export/refundApply/refundApplyLineEdit.html">退税明细</a></li>
+					</ul>
+					<table id="js_dataTable" data-url="refundApplyLine/query">
+
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer text-center">
+					<button type="button" data-permissionUrl="/refundApplyLine/deleteAll" class="btn btn-danger btn-sm" id="multDel">批量删除</button>
+					<button type="button" data-permissionUrl="/refundApplyLine/divid" class="btn btn-primary btn-sm" data-url="html/export/refundApply/refundApplyLineAdd.html" id="add">添加</button>
+					<button type="button" data-url="html/export/refundApply/refundApplySearch.html" class="btn btn-default btn-sm js-back">返回</button>
+				</div>
+				<!-- /.box-footer -->
+			</form>
+		</div>
+	</section>
+</div>
+
+<script>
+
+	/*数据表格*/
+	var tabCols = [
+			{
+				field : 'checkItem',
+				checkbox : true,
+			},
+			{
+				title : '退税数量',
+				field : 'applyNum',
+				width : 80,
+				align : 'center'
+			},
+			{
+				title : '退税含税金额',
+				field : 'applyAmount',
+				width : 210,
+				align : 'center',
+			 	formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '未税金额',
+				field : 'exRateAmount',
+				width : 100,
+				align : 'center',
+			 	formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '税率',
+				field : 'taxTate',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '退税额',
+				field : 'applyTax',
+				width : 80,
+				align : 'center',
+			 	formatter : function(value , row , index) {
+					return value==null ? "": value.toThounds();
+			    }
+			},
+			{
+				title : '报关编号',
+				field : 'applyNo',
+				width : 70,
+				align : 'center'
+			},
+			{
+				title : '报关附属编号',
+				field : 'affiliateNo',
+				width : 70,
+				align : 'center'
+			},
+			];
+
+	options.initPage = function() {
+		options.param.refundApplyId = options.param.id;
+		GLOBAL.initTable($('#js_dataTable'), tabCols, {
+			refundApplyId : options.param.id
+		});
+	};
+
+	$(".tab-item").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#add").click(function() {
+		var url = $(this).data("url");
+		GLOBAL.go(url);
+	})
+
+	$("#multDel").click(function() {
+		var ids = GLOBAL.selectIds($('#js_dataTable'));
+		if(ids){
+			layer.confirm('确定要批量删除吗？', {
+				btn : [ '确定', '取消' ]
+			//按钮
+			}, function() {
+				GLOBAL.ajax("refundApplyLine/deleteAll", {
+					ids : ids
+				}, function(e) {
+					if (e.success) {
+						layer.msg("删除成功！");
+						$('#js_dataTable').bootstrapTable('refresh');
+					} else {
+						layer.msg(e.msg);
+					}
+				}, false);
+			});
+		}
+	})
+
+	GLOBAL.goBack();
+</script>

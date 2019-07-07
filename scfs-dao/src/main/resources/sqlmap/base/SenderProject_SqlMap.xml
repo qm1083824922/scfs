@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.scfs.dao.base.entity.SenderProjectDao">
+	<resultMap id="SenderProjectMap" type="com.scfs.domain.base.entity.SenderProject">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="sender_id" property="senderId" jdbcType="BIGINT" />
+		<result column="project_id" property="projectId" jdbcType="BIGINT" />
+		<result column="creator" property="creator" jdbcType="VARCHAR" />
+		<result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		sender_id,
+		project_id,
+		creator,
+		create_at,
+		is_delete
+	</sql>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.scfs.domain.base.entity.SenderProject"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_sender_project(
+		sender_id,
+		project_id,
+		creator,
+		create_at,
+		is_delete
+		)
+		values(
+		#{senderId,jdbcType=BIGINT},
+		#{projectId,jdbcType=BIGINT},
+		#{creator,jdbcType=VARCHAR},
+		#{createAt,jdbcType=TIMESTAMP},
+		#{isDelete,jdbcType=TINYINT}
+		)
+	</insert>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE
+		FROM
+		tb_sender_project
+		WHERE id = #{id}
+	</delete>
+
+	<!-- 获取数据 -->
+	<select id="queryResultsByCon" resultMap="SenderProjectMap"
+		parameterType="com.scfs.domain.base.dto.req.SenderProjectReqDto">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_sender_project
+		<where>
+			is_delete = 0
+			<if test="senderId != null">
+				and sender_id =#{senderId}
+			</if>
+			<if test="projectId != null">
+				and project_id =#{projectId}
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<select id="queryBaseProject" parameterType="com.scfs.domain.base.dto.req.SenderProjectReqDto"
+		resultType="com.scfs.domain.base.entity.BaseProject">
+		SELECT
+		pro.id, pro.project_name AS
+		projectName,pro.status,pro.business_unit_id AS
+		businessUnitId
+		FROM
+		tb_base_project pro
+		WHERE pro.is_delete=0 AND pro.status=2
+		<if test="senderId != null">
+			AND pro.id NOT IN(SELECT project_id FROM tb_sender_project
+			WHERE sender_id=#{senderId})
+		</if>
+		<if test="projectName != null and projectName !=''">
+			AND pro.project_name like
+			CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="projectNo != null and projectNo !=''">
+			AND pro.project_no like CONCAT('%',#{projectNo},'%')
+		</if>
+		order by pro.id
+	</select>
+</mapper>
