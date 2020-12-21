@@ -70,7 +70,7 @@
 		<httpasyncclient.version>4.1</httpasyncclient.version>
 
 		<!-- XML & JSON -->
-		<xstream.version>1.4.8</xstream.version>
+		<xstream.version>1.4.15</xstream.version>
 		<jaxb-api.version>2.2.12</jaxb-api.version>
 		<jaxb-impl.version>2.2.7</jaxb-impl.version>
 		<dom4j.version>1.6.1</dom4j.version>
