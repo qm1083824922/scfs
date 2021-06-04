@@ -65,7 +65,7 @@
 		<!-- Web -->
 		<servlet.api.version>3.1.0</servlet.api.version>
 		<servlet.jsp.api.version>2.2.1</servlet.jsp.api.version>
-		<httpclient.version>4.5</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<httpmime.version>4.5</httpmime.version>
 		<httpasyncclient.version>4.1</httpasyncclient.version>
 
