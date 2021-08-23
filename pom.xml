@@ -118,7 +118,7 @@
 		<!-- quartz -->
 		<quartz.version>2.2.1</quartz.version>
 		<!-- jsoup -->
-		<jsoup.version>1.9.2</jsoup.version>
+		<jsoup.version>1.14.2</jsoup.version>
 
 		<!-- Validation & Security -->
 		<hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
