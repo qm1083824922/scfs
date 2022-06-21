@@ -60,7 +60,7 @@
 		<mchange-commons-java.version>0.2.10</mchange-commons-java.version>
 		<mybatis.spring.version>1.2.3</mybatis.spring.version>
 		<mybatis.version>3.3.0</mybatis.version>
-		<mysql-connector-java.version>5.1.40</mysql-connector-java.version>
+		<mysql-connector-java.version>8.0.28</mysql-connector-java.version>
 
 		<!-- Web -->
 		<servlet.api.version>3.1.0</servlet.api.version>
