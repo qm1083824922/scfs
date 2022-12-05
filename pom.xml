@@ -87,7 +87,7 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-compress.version>1.9</commons-compress.version>
 		<commons-codec.version>1.9</commons-codec.version>
-		<commons-net.version>3.1</commons-net.version>
+		<commons-net.version>3.9.0</commons-net.version>
 		<commons-digester.version>1.8</commons-digester.version>
 
 		<!-- Testing -->
